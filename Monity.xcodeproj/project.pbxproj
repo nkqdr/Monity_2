@@ -24,6 +24,10 @@
 		60BD9F5228F35D52001FF5FF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5128F35D52001FF5FF /* SettingsView.swift */; };
 		60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5328F35D66001FF5FF /* TransactionsView.swift */; };
 		60BD9F5628F35D7A001FF5FF /* WealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5528F35D7A001FF5FF /* WealthView.swift */; };
+		60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */; };
+		60BD9F5A28F35F28001FF5FF /* AddTransactionCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */; };
+		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
+		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +69,10 @@
 		60BD9F5128F35D52001FF5FF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		60BD9F5328F35D66001FF5FF /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
 		60BD9F5528F35D7A001FF5FF /* WealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WealthView.swift; sourceTree = "<group>"; };
+		60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryFormView.swift; sourceTree = "<group>"; };
+		60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionCategoryViewModel.swift; sourceTree = "<group>"; };
+		60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsViewModel.swift; sourceTree = "<group>"; };
+		60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +123,7 @@
 		60BD9F1028F35B6F001FF5FF /* Monity */ = {
 			isa = PBXGroup;
 			children = (
+				60BD9F5D28F36239001FF5FF /* Extensions */,
 				60BD9F4728F35CB7001FF5FF /* View */,
 				60BD9F4428F35C66001FF5FF /* ViewModel */,
 				60BD9F4128F35B81001FF5FF /* Model */,
@@ -165,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				60BD9F4528F35C77001FF5FF /* AddTransactionViewModel.swift */,
+				60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */,
+				60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -179,6 +190,7 @@
 				60BD9F5128F35D52001FF5FF /* SettingsView.swift */,
 				60BD9F5328F35D66001FF5FF /* TransactionsView.swift */,
 				60BD9F5528F35D7A001FF5FF /* WealthView.swift */,
+				60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -189,6 +201,14 @@
 				60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		60BD9F5D28F36239001FF5FF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,16 +342,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				60BD9F5028F35D41001FF5FF /* SettingsTransactionsView.swift in Sources */,
+				60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */,
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
 				60BD9F4628F35C77001FF5FF /* AddTransactionViewModel.swift in Sources */,
 				60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */,
 				60BD9F5628F35D7A001FF5FF /* WealthView.swift in Sources */,
+				60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */,
 				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
+				60BD9F5A28F35F28001FF5FF /* AddTransactionCategoryViewModel.swift in Sources */,
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
 				60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */,
+				60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */,
 				60BD9F5228F35D52001FF5FF /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

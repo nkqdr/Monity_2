@@ -10,20 +10,31 @@ import SwiftUI
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
     @ObservedObject private var viewModel = AddTransactionViewModel()
+    private let numberFormatter: NumberFormatter = NumberFormatter()
+        
+    init(isPresented: Binding<Bool>) {
+        self._isPresented = isPresented
+        numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 2
+    }
     
     var body: some View {
         NavigationView {
             Form {
                 Section("Details") {
                     Picker("Choose a category", selection: $viewModel.selectedCategory) {
-                        Text("Test").tag("Test")
+                        Text("None").tag(Optional<String>.none)
+                        ForEach(viewModel.categories) { category in
+                            Text(category.wrappedName).tag(category.name)
+                        }
                     }
                     Picker("Pick a transaction type", selection: $viewModel.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
                     }
                     .pickerStyle(.segmented)
-                    TextField("0.00", text: $viewModel.givenAmount)
+                    TextField("0.00€", value: $viewModel.givenAmount, formatter: numberFormatter)
+                        .keyboardType(.numberPad)
                 }
                 Section("Optional") {
                     TextField("Description", text: $viewModel.description)

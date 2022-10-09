@@ -1,5 +1,5 @@
 //
-//  AddTransactionViewModel.swift
+//  SettingsTransactionsViewModel.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 09.10.22.
@@ -8,11 +8,8 @@
 import Foundation
 import Combine
 
-class AddTransactionViewModel: ObservableObject {
-    @Published var isExpense: Bool = true
-    @Published var selectedCategory: String?
-    @Published var givenAmount: String = ""
-    @Published var description: String = ""
+class SettingsTransactionsViewModel: ObservableObject {
+    @Published var monthlyLimit: Double = 12.0
     @Published var categories: [TransactionCategory] = []
     
     private var categoryCancellable: AnyCancellable?

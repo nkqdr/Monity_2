@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct Settings_TransactionsView: View {
+    @StateObject private var content = SettingsTransactionsViewModel()
     @State private var showAddCategorySheet: Bool = false
-    @State private var newCategoryName: String = ""
     
     var body: some View {
         List {
@@ -19,27 +19,9 @@ struct Settings_TransactionsView: View {
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAddCategorySheet) {
-            NavigationView {
-                Form {
-                    TextField("Category name", text: $newCategoryName)
-                }
-                .navigationTitle("New category")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            showAddCategorySheet = false
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Save") {
-                            showAddCategorySheet = false
-                        }
-                    }
-                }
-            }
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.hidden)
+            TransactionCategoryFormView(isPresented: $showAddCategorySheet)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
         }
     }
     
@@ -48,7 +30,7 @@ struct Settings_TransactionsView: View {
             HStack {
                 Text("Your monthly limit:")
                 Spacer()
-                Text(12, format: .currency(code: "EUR"))
+                Text(content.monthlyLimit, format: .currency(code: "EUR"))
                     .foregroundColor(.green)
                     .fontWeight(.bold)
             }
@@ -76,7 +58,9 @@ struct Settings_TransactionsView: View {
                 Image(systemName: "plus")
             }
         }, footer: Text("These will help you categorize all of your expenses and income")) {
-            Text("Test")
+            ForEach(content.categories) { category in
+                Text(category.wrappedName)
+            }
         }
     }
 }
