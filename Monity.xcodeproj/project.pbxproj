@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1128F35B6F001FF5FF /* MonityApp.swift */; };
+		60BD9F1428F35B6F001FF5FF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1328F35B6F001FF5FF /* ContentView.swift */; };
+		60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1528F35B70001FF5FF /* Assets.xcassets */; };
+		60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */; };
+		60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1A28F35B70001FF5FF /* Persistence.swift */; };
+		60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */; };
+		60BD9F2928F35B70001FF5FF /* MonityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F2828F35B70001FF5FF /* MonityTests.swift */; };
+		60BD9F3328F35B70001FF5FF /* MonityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3228F35B70001FF5FF /* MonityUITests.swift */; };
+		60BD9F3528F35B70001FF5FF /* MonityUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		60BD9F2528F35B70001FF5FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60BD9F0628F35B6F001FF5FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60BD9F0D28F35B6F001FF5FF;
+			remoteInfo = Monity;
+		};
+		60BD9F2F28F35B70001FF5FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60BD9F0628F35B6F001FF5FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60BD9F0D28F35B6F001FF5FF;
+			remoteInfo = Monity;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		60BD9F0E28F35B6F001FF5FF /* Monity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monity.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		60BD9F1128F35B6F001FF5FF /* MonityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityApp.swift; sourceTree = "<group>"; };
+		60BD9F1328F35B6F001FF5FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		60BD9F1528F35B70001FF5FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		60BD9F1A28F35B70001FF5FF /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		60BD9F1D28F35B70001FF5FF /* Monity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Monity.xcdatamodel; sourceTree = "<group>"; };
+		60BD9F1F28F35B70001FF5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60BD9F2428F35B70001FF5FF /* MonityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MonityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		60BD9F2828F35B70001FF5FF /* MonityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityTests.swift; sourceTree = "<group>"; };
+		60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MonityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		60BD9F3228F35B70001FF5FF /* MonityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITests.swift; sourceTree = "<group>"; };
+		60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		60BD9F0B28F35B6F001FF5FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2128F35B70001FF5FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2B28F35B70001FF5FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		60BD9F0528F35B6F001FF5FF = {
+			isa = PBXGroup;
+			children = (
+				60BD9F1028F35B6F001FF5FF /* Monity */,
+				60BD9F2728F35B70001FF5FF /* MonityTests */,
+				60BD9F3128F35B70001FF5FF /* MonityUITests */,
+				60BD9F0F28F35B6F001FF5FF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		60BD9F0F28F35B6F001FF5FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F0E28F35B6F001FF5FF /* Monity.app */,
+				60BD9F2428F35B70001FF5FF /* MonityTests.xctest */,
+				60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		60BD9F1028F35B6F001FF5FF /* Monity */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F1128F35B6F001FF5FF /* MonityApp.swift */,
+				60BD9F1328F35B6F001FF5FF /* ContentView.swift */,
+				60BD9F1528F35B70001FF5FF /* Assets.xcassets */,
+				60BD9F1A28F35B70001FF5FF /* Persistence.swift */,
+				60BD9F1F28F35B70001FF5FF /* Info.plist */,
+				60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */,
+				60BD9F1728F35B70001FF5FF /* Preview Content */,
+			);
+			path = Monity;
+			sourceTree = "<group>";
+		};
+		60BD9F1728F35B70001FF5FF /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		60BD9F2728F35B70001FF5FF /* MonityTests */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F2828F35B70001FF5FF /* MonityTests.swift */,
+			);
+			path = MonityTests;
+			sourceTree = "<group>";
+		};
+		60BD9F3128F35B70001FF5FF /* MonityUITests */ = {
+			isa = PBXGroup;
+			children = (
+				60BD9F3228F35B70001FF5FF /* MonityUITests.swift */,
+				60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */,
+			);
+			path = MonityUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		60BD9F0D28F35B6F001FF5FF /* Monity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60BD9F3828F35B70001FF5FF /* Build configuration list for PBXNativeTarget "Monity" */;
+			buildPhases = (
+				60BD9F0A28F35B6F001FF5FF /* Sources */,
+				60BD9F0B28F35B6F001FF5FF /* Frameworks */,
+				60BD9F0C28F35B6F001FF5FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Monity;
+			productName = Monity;
+			productReference = 60BD9F0E28F35B6F001FF5FF /* Monity.app */;
+			productType = "com.apple.product-type.application";
+		};
+		60BD9F2328F35B70001FF5FF /* MonityTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60BD9F3B28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityTests" */;
+			buildPhases = (
+				60BD9F2028F35B70001FF5FF /* Sources */,
+				60BD9F2128F35B70001FF5FF /* Frameworks */,
+				60BD9F2228F35B70001FF5FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60BD9F2628F35B70001FF5FF /* PBXTargetDependency */,
+			);
+			name = MonityTests;
+			productName = MonityTests;
+			productReference = 60BD9F2428F35B70001FF5FF /* MonityTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		60BD9F2D28F35B70001FF5FF /* MonityUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60BD9F3E28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityUITests" */;
+			buildPhases = (
+				60BD9F2A28F35B70001FF5FF /* Sources */,
+				60BD9F2B28F35B70001FF5FF /* Frameworks */,
+				60BD9F2C28F35B70001FF5FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60BD9F3028F35B70001FF5FF /* PBXTargetDependency */,
+			);
+			name = MonityUITests;
+			productName = MonityUITests;
+			productReference = 60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		60BD9F0628F35B6F001FF5FF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1400;
+				LastUpgradeCheck = 1400;
+				TargetAttributes = {
+					60BD9F0D28F35B6F001FF5FF = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
+					60BD9F2328F35B70001FF5FF = {
+						CreatedOnToolsVersion = 14.0.1;
+						TestTargetID = 60BD9F0D28F35B6F001FF5FF;
+					};
+					60BD9F2D28F35B70001FF5FF = {
+						CreatedOnToolsVersion = 14.0.1;
+						TestTargetID = 60BD9F0D28F35B6F001FF5FF;
+					};
+				};
+			};
+			buildConfigurationList = 60BD9F0928F35B6F001FF5FF /* Build configuration list for PBXProject "Monity" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 60BD9F0528F35B6F001FF5FF;
+			productRefGroup = 60BD9F0F28F35B6F001FF5FF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				60BD9F0D28F35B6F001FF5FF /* Monity */,
+				60BD9F2328F35B70001FF5FF /* MonityTests */,
+				60BD9F2D28F35B70001FF5FF /* MonityUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		60BD9F0C28F35B6F001FF5FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */,
+				60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2228F35B70001FF5FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2C28F35B70001FF5FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		60BD9F0A28F35B6F001FF5FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
+				60BD9F1428F35B6F001FF5FF /* ContentView.swift in Sources */,
+				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
+				60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2028F35B70001FF5FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60BD9F2928F35B70001FF5FF /* MonityTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60BD9F2A28F35B70001FF5FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60BD9F3528F35B70001FF5FF /* MonityUITestsLaunchTests.swift in Sources */,
+				60BD9F3328F35B70001FF5FF /* MonityUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		60BD9F2628F35B70001FF5FF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60BD9F0D28F35B6F001FF5FF /* Monity */;
+			targetProxy = 60BD9F2528F35B70001FF5FF /* PBXContainerItemProxy */;
+		};
+		60BD9F3028F35B70001FF5FF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60BD9F0D28F35B6F001FF5FF /* Monity */;
+			targetProxy = 60BD9F2F28F35B70001FF5FF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		60BD9F3628F35B70001FF5FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		60BD9F3728F35B70001FF5FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		60BD9F3928F35B70001FF5FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Monity/Preview Content\"";
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.Monity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		60BD9F3A28F35B70001FF5FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Monity/Preview Content\"";
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.Monity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		60BD9F3C28F35B70001FF5FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Monity.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Monity";
+			};
+			name = Debug;
+		};
+		60BD9F3D28F35B70001FF5FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Monity.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Monity";
+			};
+			name = Release;
+		};
+		60BD9F3F28F35B70001FF5FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Monity;
+			};
+			name = Debug;
+		};
+		60BD9F4028F35B70001FF5FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BW79HX26Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Monity;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		60BD9F0928F35B6F001FF5FF /* Build configuration list for PBXProject "Monity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60BD9F3628F35B70001FF5FF /* Debug */,
+				60BD9F3728F35B70001FF5FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60BD9F3828F35B70001FF5FF /* Build configuration list for PBXNativeTarget "Monity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60BD9F3928F35B70001FF5FF /* Debug */,
+				60BD9F3A28F35B70001FF5FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60BD9F3B28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60BD9F3C28F35B70001FF5FF /* Debug */,
+				60BD9F3D28F35B70001FF5FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60BD9F3E28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60BD9F3F28F35B70001FF5FF /* Debug */,
+				60BD9F4028F35B70001FF5FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				60BD9F1D28F35B70001FF5FF /* Monity.xcdatamodel */,
+			);
+			currentVersion = 60BD9F1D28F35B70001FF5FF /* Monity.xcdatamodel */;
+			path = Monity.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 60BD9F0628F35B6F001FF5FF /* Project object */;
+}
