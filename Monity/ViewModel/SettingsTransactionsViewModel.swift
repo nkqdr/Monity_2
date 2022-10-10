@@ -11,6 +11,7 @@ import Combine
 class SettingsTransactionsViewModel: ObservableObject {
     @Published var monthlyLimit: Double = 12.0
     @Published var categories: [TransactionCategory] = []
+    @Published var currentCategory: TransactionCategory? = nil
     
     private var categoryCancellable: AnyCancellable?
     
@@ -18,5 +19,11 @@ class SettingsTransactionsViewModel: ObservableObject {
         categoryCancellable = categoryPublisher.sink { categories in
             self.categories = categories
         }
+    }
+    
+    // MARK: - Intents
+    
+    func deleteCategory(_ category: TransactionCategory) {
+        TransactionCategoryStorage.shared.delete(category)
     }
 }

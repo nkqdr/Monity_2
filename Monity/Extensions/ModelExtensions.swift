@@ -11,4 +11,8 @@ extension TransactionCategory {
     var wrappedName: String {
         self.name ?? ""
     }
+    
+    var wrappedTransactionsCount: Int {
+        self.transactions?.count ?? 0
+    }
 }

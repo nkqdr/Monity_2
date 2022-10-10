@@ -9,14 +9,14 @@ import SwiftUI
 
 struct TransactionCategoryFormView: View {
     @Binding var isPresented: Bool
-    @StateObject private var editor = AddTransactionCategoryViewModel()
+    @StateObject var editor: AddTransactionCategoryViewModel
     
     var body: some View {
         NavigationView {
             Form {
                 TextField("Category name", text: $editor.name)
             }
-            .navigationTitle("New category")
+            .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -37,6 +37,6 @@ struct TransactionCategoryFormView: View {
 
 struct TransactionCategoryFormView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionCategoryFormView(isPresented: .constant(true))
+        TransactionCategoryFormView(isPresented: .constant(true), editor: AddTransactionCategoryViewModel())
     }
 }

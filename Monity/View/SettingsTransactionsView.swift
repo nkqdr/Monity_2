@@ -19,9 +19,14 @@ struct Settings_TransactionsView: View {
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAddCategorySheet) {
-            TransactionCategoryFormView(isPresented: $showAddCategorySheet)
+            TransactionCategoryFormView(isPresented: $showAddCategorySheet, editor: AddTransactionCategoryViewModel(category: content.currentCategory))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
+        }
+        .onChange(of: showAddCategorySheet) { newValue in
+            if !newValue {
+                content.currentCategory = nil
+            }
         }
     }
     
@@ -48,6 +53,11 @@ struct Settings_TransactionsView: View {
         }
     }
     
+    func showEditSheetForCategory(_ category: TransactionCategory) {
+        content.currentCategory = category
+        showAddCategorySheet.toggle()
+    }
+    
     private var transactionCategorySection: some View {
         Section(header: HStack {
             Text("Categories")
@@ -59,7 +69,7 @@ struct Settings_TransactionsView: View {
             }
         }, footer: Text("These will help you categorize all of your expenses and income")) {
             ForEach(content.categories) { category in
-                Text(category.wrappedName)
+                TransactionCategoryListTile(category: category, onEdit: showEditSheetForCategory, onDelete: content.deleteCategory)
             }
         }
     }

@@ -42,21 +42,32 @@ class TransactionCategoryStorage: NSObject, ObservableObject {
         return category
     }
     
-//    func delete(_ task: Task) {
-//        PersistenceController.shared.persistentContainer.viewContext.delete(task)
-//        do {
-//            try PersistenceController.shared.persistentContainer.viewContext.save()
-//        } catch {
-//            PersistenceController.shared.persistentContainer.viewContext.rollback()
-//            print("Failed to save context \(error.localizedDescription)")
-//        }
-//    }
+    func update(_ category: TransactionCategory, name: String?) -> Bool {
+        PersistenceController.shared.container.viewContext.performAndWait {
+            category.name = name ?? category.name
+            if let _ = try? PersistenceController.shared.container.viewContext.save() {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    func delete(_ category: TransactionCategory) {
+        PersistenceController.shared.container.viewContext.delete(category)
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            PersistenceController.shared.container.viewContext.rollback()
+            print("Failed to save context \(error.localizedDescription)")
+        }
+    }
 }
 
 extension TransactionCategoryStorage: NSFetchedResultsControllerDelegate {
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let categories = controller.fetchedObjects as? [TransactionCategory] else { return }
-        print("Context has changed, reloading tasks")
+        print("Context has changed, reloading categories")
         self.categories.value = categories
     }
 }
