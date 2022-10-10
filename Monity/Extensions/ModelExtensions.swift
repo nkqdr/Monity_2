@@ -16,3 +16,9 @@ extension TransactionCategory {
         self.transactions?.count ?? 0
     }
 }
+
+extension Transaction {
+    var wrappedText: String {
+        self.text ?? ""
+    }
+}

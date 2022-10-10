@@ -9,12 +9,14 @@ import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        List {
-            generalSection
-            configurationSection
-            helpSection
+        NavigationView {
+            List {
+                generalSection
+                configurationSection
+                helpSection
+            }
+            .navigationTitle("Settings")
         }
-        .navigationTitle("Settings")
     }
     
     private var generalSection: some View {

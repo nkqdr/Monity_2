@@ -10,22 +10,15 @@ import SwiftUI
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
     @ObservedObject private var viewModel = AddTransactionViewModel()
-    private let numberFormatter: NumberFormatter = NumberFormatter()
-        
-    init(isPresented: Binding<Bool>) {
-        self._isPresented = isPresented
-        numberFormatter.numberStyle = .currency
-        numberFormatter.maximumFractionDigits = 2
-    }
     
     var body: some View {
         NavigationView {
             Form {
                 Section("Details") {
                     Picker("Choose a category", selection: $viewModel.selectedCategory) {
-                        Text("None").tag(Optional<String>.none)
+                        Text("None").tag(Optional<TransactionCategory>.none)
                         ForEach(viewModel.categories) { category in
-                            Text(category.wrappedName).tag(category.name)
+                            Text(category.wrappedName).tag(category as TransactionCategory?)
                         }
                     }
                     Picker("Pick a transaction type", selection: $viewModel.isExpense) {
@@ -33,8 +26,8 @@ struct AddTransactionView: View {
                         Text("Expense").tag(true)
                     }
                     .pickerStyle(.segmented)
-                    TextField("0.00€", value: $viewModel.givenAmount, formatter: numberFormatter)
-                        .keyboardType(.numberPad)
+                    TextField("Amount", value: $viewModel.givenAmount, format: .currency(code: "EUR"))
+                        .keyboardType(.decimalPad)
                 }
                 Section("Optional") {
                     TextField("Description", text: $viewModel.description)
@@ -50,7 +43,8 @@ struct AddTransactionView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        
+                        viewModel.save()
+                        isPresented.toggle()
                     }
                 }
             }

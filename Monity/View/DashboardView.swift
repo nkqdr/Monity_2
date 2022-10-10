@@ -31,15 +31,15 @@ struct DashboardView: View {
                 }
                 .padding()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: {
-                        SettingsView()
-                    }, label: {
-                        Image(systemName: "gearshape.fill")
-                    })
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    NavigationLink(destination: {
+//                        SettingsView()
+//                    }, label: {
+//                        Image(systemName: "gearshape.fill")
+//                    })
+//                }
+//            }
             .navigationTitle("Dashboard")
         }
     }

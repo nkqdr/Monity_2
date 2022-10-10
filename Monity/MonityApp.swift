@@ -30,6 +30,11 @@ struct MonityApp: App {
                             Label("Wealth", systemImage: "chart.line.uptrend.xyaxis")
                         }
                         .tag(2)
+                    SettingsView()
+                        .tabItem {
+                            Label("Settings", systemImage: "gear")
+                        }
+                        .tag(3)
                 }
                 
             }

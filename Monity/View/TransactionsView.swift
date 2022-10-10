@@ -10,11 +10,12 @@ import SwiftUI
 struct TransactionsView: View {
     @State var searchString = ""
     @State var showAddTransactionView = false
+    @StateObject var content = TransactionsViewModel()
     
     var body: some View {
         NavigationView {
-            List {
-                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            List(content.transactions) { transaction in
+                TransactionListTile(transaction: transaction)
             }
             .searchable(text: $searchString)
             .navigationTitle("Transactions")
