@@ -10,7 +10,9 @@ import SwiftUI
 struct TransactionsView: View {
     @State var searchString = ""
     @State var showAddTransactionView = false
+    @State private var showFilterSettings = false
     @StateObject var content = TransactionsViewModel()
+    @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
     
     func showEditSheetForTransaction(_ transaction: Transaction) {
         content.currentTransaction = transaction
@@ -25,6 +27,14 @@ struct TransactionsView: View {
             .searchable(text: $searchString)
             .navigationTitle("Transactions")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        temporaryDateSelection = content.filteredSelectedDate
+                        showFilterSettings.toggle()
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showAddTransactionView.toggle()
@@ -32,6 +42,26 @@ struct TransactionsView: View {
                         Image(systemName: "plus")
                     }
                 }
+            }
+            .sheet(isPresented: $showFilterSettings) {
+                VStack {
+                    Form {
+                        Section("Selected month") {
+                            MonthYearPicker(dateSelection: $temporaryDateSelection)
+                                .frame(height: 100)
+                        }
+//                        Section("Advanced filters") {
+//
+//                        }
+                    }
+                    Button("Apply") {
+                        content.filteredSelectedDate = temporaryDateSelection
+                        print(content.filteredSelectedDate)
+                        showFilterSettings = false
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .presentationDetents([.medium])
             }
             .sheet(isPresented: $showAddTransactionView) {
                 AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: content.currentTransaction))

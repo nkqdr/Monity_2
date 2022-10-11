@@ -11,6 +11,11 @@ import Combine
 class TransactionsViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var currentTransaction: Transaction? = nil
+    @Published var filteredSelectedDate = Calendar.current.dateComponents([.month, .year], from: Date()) {
+        didSet {
+            print("Now filtering transactions...")
+        }
+    }
     
     private var transactionCancellable: AnyCancellable?
     
