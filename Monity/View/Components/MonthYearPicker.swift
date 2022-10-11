@@ -29,7 +29,7 @@ struct MonthYearPicker: View {
                 if let title = titleKey {
                     Text(title)
                 }
-                HStack {
+                HStack(spacing: 0) {
                     Picker(selection: $month, label: Text("")) {
                         ForEach(1 ..< 13) { index in
                             Text(Calendar.current.monthSymbols[index-1]).tag(index)

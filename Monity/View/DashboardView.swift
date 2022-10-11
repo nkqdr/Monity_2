@@ -13,20 +13,28 @@ struct DashboardView: View {
             ScrollView(showsIndicators: false) {
                 Grid {
                     GridRow {
-                        DashboardBox(title: "Monthly overview")
-                        DashboardBox(title: "Performance")
+                        CurrentMonthOverviewTile()
+                        DashboardBox {
+                            Text("Performance")
+                        }
                     }
                     GridRow {
-                        DashboardBox(title: "Income")
-                            .gridCellColumns(2)
+                        DashboardBox {
+                            Text("Income")
+                        }
+                        .gridCellColumns(2)
                     }
                     GridRow {
-                        DashboardBox(title: "Expenses")
-                            .gridCellColumns(2)
+                        DashboardBox {
+                            Text("Expenses")
+                        }
+                        .gridCellColumns(2)
                     }
                     GridRow {
-                        DashboardBox(title: "Cashflow")
-                            .gridCellColumns(2)
+                        DashboardBox {
+                            Text("Cashflow")
+                        }
+                        .gridCellColumns(2)
                     }
                 }
                 .padding()
