@@ -19,7 +19,7 @@ struct Settings_TransactionsView: View {
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAddCategorySheet) {
-            TransactionCategoryFormView(isPresented: $showAddCategorySheet, editor: AddTransactionCategoryViewModel(category: content.currentCategory))
+            TransactionCategoryFormView(isPresented: $showAddCategorySheet, editor: TransactionCategoryEditor(category: content.currentCategory))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
         }

@@ -19,4 +19,10 @@ class TransactionsViewModel: ObservableObject {
             self.transactions = transactions
         }
     }
+    
+    // MARK: - Intents
+    
+    func deleteTransaction(_ transaction: Transaction) {
+        TransactionStorage.shared.delete(transaction)
+    }
 }

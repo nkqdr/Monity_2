@@ -50,26 +50,30 @@ class TransactionStorage: NSObject, ObservableObject {
         return transaction
     }
     
-//    func update(_ category: TransactionCategory, name: String?) -> Bool {
-//        PersistenceController.shared.container.viewContext.performAndWait {
-//            category.name = name ?? category.name
-//            if let _ = try? PersistenceController.shared.container.viewContext.save() {
-//                return true
-//            } else {
-//                return false
-//            }
-//        }
-//    }
-//
-//    func delete(_ category: TransactionCategory) {
-//        PersistenceController.shared.container.viewContext.delete(category)
-//        do {
-//            try PersistenceController.shared.container.viewContext.save()
-//        } catch {
-//            PersistenceController.shared.container.viewContext.rollback()
-//            print("Failed to save context \(error.localizedDescription)")
-//        }
-//    }
+    func update(_ transaction: Transaction, editor: TransactionEditor) -> Bool {
+        PersistenceController.shared.container.viewContext.performAndWait {
+            transaction.text = editor.description
+            transaction.category = editor.selectedCategory
+            transaction.isExpense = editor.isExpense
+            transaction.amount = editor.givenAmount
+            transaction.date = editor.selectedDate
+            if let _ = try? PersistenceController.shared.container.viewContext.save() {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+
+    func delete(_ transaction: Transaction) {
+        PersistenceController.shared.container.viewContext.delete(transaction)
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            PersistenceController.shared.container.viewContext.rollback()
+            print("Failed to save context \(error.localizedDescription)")
+        }
+    }
 }
 
 extension TransactionStorage: NSFetchedResultsControllerDelegate {

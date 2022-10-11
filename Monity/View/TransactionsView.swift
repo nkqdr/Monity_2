@@ -12,10 +12,15 @@ struct TransactionsView: View {
     @State var showAddTransactionView = false
     @StateObject var content = TransactionsViewModel()
     
+    func showEditSheetForTransaction(_ transaction: Transaction) {
+        content.currentTransaction = transaction
+        showAddTransactionView.toggle()
+    }
+    
     var body: some View {
         NavigationView {
             List(content.transactions) { transaction in
-                TransactionListTile(transaction: transaction)
+                TransactionListTile(transaction: transaction, onDelete: content.deleteTransaction, onEdit: showEditSheetForTransaction)
             }
             .searchable(text: $searchString)
             .navigationTitle("Transactions")
@@ -29,7 +34,12 @@ struct TransactionsView: View {
                 }
             }
             .sheet(isPresented: $showAddTransactionView) {
-                AddTransactionView(isPresented: $showAddTransactionView)
+                AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: content.currentTransaction))
+            }
+            .onChange(of: showAddTransactionView) { newValue in
+                if !newValue {
+                    content.currentTransaction = nil
+                }
             }
         }
     }

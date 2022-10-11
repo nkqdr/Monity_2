@@ -9,32 +9,34 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
-    @ObservedObject private var viewModel = AddTransactionViewModel()
+    @ObservedObject var editor: TransactionEditor
     
     var body: some View {
         NavigationView {
             Form {
                 Section("Details") {
-                    Picker("Choose a category", selection: $viewModel.selectedCategory) {
+                    Picker("Choose a category", selection: $editor.selectedCategory) {
                         Text("None").tag(Optional<TransactionCategory>.none)
-                        ForEach(viewModel.categories) { category in
+                        ForEach(editor.categories) { category in
                             Text(category.wrappedName).tag(category as TransactionCategory?)
                         }
                     }
-                    Picker("Pick a transaction type", selection: $viewModel.isExpense) {
+                    Picker("Pick a transaction type", selection: $editor.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
                     }
                     .pickerStyle(.segmented)
-                    TextField("Amount", value: $viewModel.givenAmount, format: .currency(code: "EUR"))
+                    TextField("Amount", value: $editor.givenAmount, format: .currency(code: "EUR"))
                         .keyboardType(.decimalPad)
+                    if let _ = editor.transaction {
+                        DatePicker("Transaction date", selection: $editor.selectedDate, displayedComponents: .date)
+                    }
                 }
                 Section("Optional") {
-                    TextField("Description", text: $viewModel.description)
-                    //TextField("Tag", text: $viewModel.tag)
+                    TextField("Description", text: $editor.description)
                 }
             }
-            .navigationTitle("Add transaction")
+            .navigationTitle(editor.navigationFormTitle)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -43,7 +45,7 @@ struct AddTransactionView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        viewModel.save()
+                        editor.save()
                         isPresented.toggle()
                     }
                 }
@@ -54,6 +56,6 @@ struct AddTransactionView: View {
 
 struct AddTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTransactionView(isPresented: .constant(true))
+        AddTransactionView(isPresented: .constant(true), editor: TransactionEditor())
     }
 }

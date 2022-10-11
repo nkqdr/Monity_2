@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TransactionCategoryFormView: View {
     @Binding var isPresented: Bool
-    @StateObject var editor: AddTransactionCategoryViewModel
+    @StateObject var editor: TransactionCategoryEditor
     
     var body: some View {
         NavigationView {
@@ -37,6 +37,6 @@ struct TransactionCategoryFormView: View {
 
 struct TransactionCategoryFormView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionCategoryFormView(isPresented: .constant(true), editor: AddTransactionCategoryViewModel())
+        TransactionCategoryFormView(isPresented: .constant(true), editor: TransactionCategoryEditor())
     }
 }

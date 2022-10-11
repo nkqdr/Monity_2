@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AddTransactionCategoryViewModel: ObservableObject {
+class TransactionCategoryEditor: ObservableObject {
     @Published var name: String
     @Published var navigationFormTitle: String
     var category: TransactionCategory?

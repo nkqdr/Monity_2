@@ -20,23 +20,13 @@ struct TransactionCategoryListTile: View {
                 .font(.callout)
                 .foregroundColor(.secondary)
         }
-        .swipeActions(edge: .trailing) {
-            Button {
-                showConfirmationDialog.toggle()
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-            .tint(.red)
+        .deleteSwipeAction {
+            showConfirmationDialog.toggle()
         }
-        .swipeActions(edge: .leading) {
-            Button {
-                if let editFunc = onEdit {
-                    editFunc(category)
-                }
-            } label: {
-                Label("Edit", systemImage: "pencil")
+        .editSwipeAction {
+            if let editFunc = onEdit {
+                editFunc(category)
             }
-            .tint(.indigo)
         }
         .confirmationDialog("Are you sure you want to delete \(category.wrappedName)?", isPresented: $showConfirmationDialog, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {

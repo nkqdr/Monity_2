@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		600C39B728F53D1000688149 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600C39B628F53D1000688149 /* ViewExtensions.swift */; };
 		60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */; };
 		60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */; };
 		60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */; };
@@ -21,7 +22,7 @@
 		60BD9F3328F35B70001FF5FF /* MonityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3228F35B70001FF5FF /* MonityUITests.swift */; };
 		60BD9F3528F35B70001FF5FF /* MonityUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */; };
 		60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4228F35C27001FF5FF /* TransactionCategoryStorage.swift */; };
-		60BD9F4628F35C77001FF5FF /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4528F35C77001FF5FF /* AddTransactionViewModel.swift */; };
+		60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */; };
 		60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */; };
 		60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4A28F35D02001FF5FF /* DashboardView.swift */; };
 		60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */; };
@@ -30,7 +31,7 @@
 		60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5328F35D66001FF5FF /* TransactionsView.swift */; };
 		60BD9F5628F35D7A001FF5FF /* WealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5528F35D7A001FF5FF /* WealthView.swift */; };
 		60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */; };
-		60BD9F5A28F35F28001FF5FF /* AddTransactionCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */; };
+		60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */; };
 		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
 		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		600C39B628F53D1000688149 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryListTile.swift; sourceTree = "<group>"; };
 		60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStorage.swift; sourceTree = "<group>"; };
 		60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -71,7 +73,7 @@
 		60BD9F3228F35B70001FF5FF /* MonityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITests.swift; sourceTree = "<group>"; };
 		60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		60BD9F4228F35C27001FF5FF /* TransactionCategoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryStorage.swift; sourceTree = "<group>"; };
-		60BD9F4528F35C77001FF5FF /* AddTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewModel.swift; sourceTree = "<group>"; };
+		60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditor.swift; sourceTree = "<group>"; };
 		60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		60BD9F4A28F35D02001FF5FF /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBox.swift; sourceTree = "<group>"; };
@@ -80,7 +82,7 @@
 		60BD9F5328F35D66001FF5FF /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
 		60BD9F5528F35D7A001FF5FF /* WealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WealthView.swift; sourceTree = "<group>"; };
 		60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryFormView.swift; sourceTree = "<group>"; };
-		60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionCategoryViewModel.swift; sourceTree = "<group>"; };
+		60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryEditor.swift; sourceTree = "<group>"; };
 		60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,8 +195,8 @@
 		60BD9F4428F35C66001FF5FF /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				60BD9F4528F35C77001FF5FF /* AddTransactionViewModel.swift */,
-				60BD9F5928F35F28001FF5FF /* AddTransactionCategoryViewModel.swift */,
+				60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */,
+				60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */,
 				60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */,
 				60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */,
 			);
@@ -230,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */,
+				600C39B628F53D1000688149 /* ViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				600C39B728F53D1000688149 /* ViewExtensions.swift in Sources */,
 				60587B8828F3E7F60097D4F4 /* TransactionListTile.swift in Sources */,
 				60BD9F5028F35D41001FF5FF /* SettingsTransactionsView.swift in Sources */,
 				60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */,
@@ -372,14 +376,14 @@
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
 				60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */,
-				60BD9F4628F35C77001FF5FF /* AddTransactionViewModel.swift in Sources */,
+				60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */,
 				60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */,
 				60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */,
 				60BD9F5628F35D7A001FF5FF /* WealthView.swift in Sources */,
 				60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */,
 				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
-				60BD9F5A28F35F28001FF5FF /* AddTransactionCategoryViewModel.swift in Sources */,
+				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
 				60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */,
 				60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */,
