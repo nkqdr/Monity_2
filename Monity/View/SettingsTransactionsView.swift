@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct Settings_TransactionsView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @AppStorage("monthly_limit") private var monthlyLimit: Double?
     @StateObject private var content = SettingsTransactionsViewModel()
     @State private var showAddCategorySheet: Bool = false
+    @State private var showingEditAlert: Bool = false
+    @State private var showingDeleteConfirmation: Bool = false
     
     var body: some View {
         List {
@@ -35,20 +39,41 @@ struct Settings_TransactionsView: View {
             HStack {
                 Text("Your monthly limit:")
                 Spacer()
-                Text(content.monthlyLimit, format: .currency(code: "EUR"))
-                    .foregroundColor(.green)
-                    .fontWeight(.bold)
+                if let limit = monthlyLimit {
+                    Text(limit, format: .currency(code: "EUR"))
+                        .foregroundColor(.green)
+                        .fontWeight(.bold)
+                } else {
+                    Text("None")
+                        .foregroundColor(.gray)
+                }
             }
             HStack {
                 Button("Change limit") {
-                    
+                    showingEditAlert.toggle()
                 }
                 .buttonStyle(.borderless)
                 Spacer()
                 Button("Delete limit", role: .destructive) {
-                    
+                    showingDeleteConfirmation.toggle()
                 }
                 .buttonStyle(.borderless)
+            }
+        }
+        .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
+            TextField("Limit", value: $content.monthlyLimit, format: .currency(code: "EUR"))
+            Button("Save") {
+                UserDefaults.standard.set(content.monthlyLimit, forKey: "monthly_limit")
+            }
+            Button("Cancel", role: .cancel, action: {})
+        }, message: {
+            Text("Please enter your desired limit.")
+        })
+        .confirmationDialog("Delete monthly limit", isPresented: $showingDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                withAnimation(.easeInOut) {
+                    UserDefaults.standard.removeObject(forKey: "monthly_limit")
+                }
             }
         }
     }

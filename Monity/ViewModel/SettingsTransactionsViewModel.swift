@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class SettingsTransactionsViewModel: ObservableObject {
-    @Published var monthlyLimit: Double = 12.0
+    @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: "monthly_limit")
     @Published var categories: [TransactionCategory] = []
     @Published var currentCategory: TransactionCategory? = nil
     
