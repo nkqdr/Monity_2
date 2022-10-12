@@ -38,13 +38,30 @@ struct CurrentMonthOverviewTile: View {
             .padding()
         }
         .contextMenu { contextMenu } preview: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.secondary)
-                Text("Preview")
+            if monthlyLimit > 0 {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Predicted total expenses:")
+                            .font(.system(size: 18, weight: .semibold))
+                            .frame(maxWidth: .infinity)
+                        Text(content.predictedTotalSpendings, format: .currency(code: "EUR"))
+                    }
+                    .frame(maxWidth: .infinity)
+                    Spacer(minLength: 60)
+                    budgetBattery
+                }
+                .frame(maxWidth: .infinity, maxHeight: 350)
+                .padding()
+            } else {
+                VStack {
+                    Text("Please set a monthly limit in the settings in order to use this.")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.secondary)
+                }
+                .frame(height: 350)
+                .frame(maxWidth: .infinity)
+                .padding()
             }
-            .frame(maxWidth: .infinity)
-            .frame(minWidth: 400, minHeight: 350)
         }
         .onChange(of: monthlyLimit) { newValue in
             remainingAmount = newValue - content.spentThisMonth
@@ -55,9 +72,31 @@ struct CurrentMonthOverviewTile: View {
     }
     
     @ViewBuilder
+    private var budgetBattery: some View {
+        let remainingPercentage: Double = (1 - content.spentThisMonth / monthlyLimit)
+        let batteryColor: Color = remainingPercentage > 0.1 ? .green : .red
+        let remainingBatteryHeight: Double = remainingPercentage > 0 ? 120 * remainingPercentage : 0
+        let textColor: Color? = remainingPercentage > 0 ? nil : .red
+        ZStack {
+            ZStack(alignment: .bottom) {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(width: 70, height: 120)
+                    .foregroundColor(.clear)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(width: 70, height: remainingBatteryHeight)
+                    .foregroundColor(batteryColor)
+            }
+            Text(String(format: "%.1f", 100 * remainingPercentage) + "%")
+                .fontWeight(.bold)
+                .foregroundColor(textColor)
+        }
+    }
+    
+    @ViewBuilder
     private var contextMenu: some View {
         Button {
-            // Add this item to a list of favorites.
+            // Do nothing because contextMenu closes automatically
         } label: {
             Label("Hide", systemImage: "eye.slash.fill")
         }

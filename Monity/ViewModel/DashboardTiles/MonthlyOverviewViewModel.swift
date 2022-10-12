@@ -9,7 +9,14 @@ import Foundation
 import Combine
 
 class MonthlyOverviewViewModel: ObservableObject {
-    @Published var spentThisMonth: Double = 0
+    @Published var spentThisMonth: Double = 0 {
+        didSet {
+            let currentDay: Int = Calendar.current.dateComponents([.day], from: Date()).day ?? 1
+            let spendingsPerDay: Double = spentThisMonth / Double(currentDay)
+            let daysInMonth: Int = Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 0
+            predictedTotalSpendings = spendingsPerDay * Double(daysInMonth)
+        }
+    }
     @Published var remainingDays: Int = 0
     @Published var thisMonthTransactions: [Transaction] = [] {
         didSet {
@@ -24,6 +31,7 @@ class MonthlyOverviewViewModel: ObservableObject {
             }
         }
     }
+    @Published var predictedTotalSpendings: Double = 0
     
     private let currentComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     private var startOfNextMonth: Date {
