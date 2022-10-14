@@ -19,9 +19,7 @@ struct DashboardView: View {
                         }
                     }
                     GridRow {
-                        DashboardBox {
-                            Text("Income")
-                        }
+                        IncomeTile()
                         .gridCellColumns(2)
                     }
                     GridRow {

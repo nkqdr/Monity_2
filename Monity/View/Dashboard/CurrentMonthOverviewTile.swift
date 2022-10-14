@@ -85,7 +85,7 @@ struct CurrentMonthOverviewTile: View {
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
                 RoundedRectangle(cornerRadius: 10)
                     .frame(width: 70, height: remainingBatteryHeight)
-                    .foregroundColor(batteryColor)
+                    .foregroundStyle(batteryColor.gradient)
             }
             Text(String(format: "%.1f", 100 * remainingPercentage) + "%")
                 .fontWeight(.bold)

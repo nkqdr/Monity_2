@@ -16,7 +16,7 @@ struct DashboardBox<Content>: View where Content: View {
     
     var body: some View {
         content()
-            .frame(minHeight: 230)
+            .frame(height: 230)
             .frame(maxWidth: .infinity)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
     }
