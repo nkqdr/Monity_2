@@ -18,10 +18,13 @@ class MonthlyOverviewViewModel: ObservableObject {
             predictedTotalSpendings = spendingsPerDay * Double(daysInMonth)
         }
     }
+    @Published var earnedThisMonth: Double = 0
     @Published var remainingDays: Int = 0
     @Published var thisMonthTransactions: [Transaction] = [] {
         didSet {
-            spentThisMonth = thisMonthTransactions.filter { $0.isExpense }.map { $0.amount }.reduce(0, +)
+            thisMonthExpenses = thisMonthTransactions.filter { $0.isExpense }
+            thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
+            createTransactionByCategoryDict()
         }
     }
     @Published var transactions: [Transaction] = [] {
@@ -33,6 +36,19 @@ class MonthlyOverviewViewModel: ObservableObject {
         }
     }
     @Published var predictedTotalSpendings: Double = 0
+    @Published var thisMonthExpenses: [Transaction] = [] {
+        didSet {
+            spentThisMonth = thisMonthExpenses.map { $0.amount }.reduce(0, +)
+        }
+    }
+    @Published var thisMonthIncome: [Transaction] = [] {
+        didSet {
+            earnedThisMonth = thisMonthIncome.map { $0.amount }.reduce(0, +)
+        }
+    }
+    
+    let incomePieChartColors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6), .green.opacity(0.4), .green.opacity(0.2), .green.opacity(0.1)]
+    let expensePieChartColors: [Color] = [.red, .red.opacity(0.8), .red.opacity(0.6), .red.opacity(0.4), .red.opacity(0.2), .red.opacity(0.1)]
     
     private let currentComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     private var startOfNextMonth: Date {
@@ -43,27 +59,26 @@ class MonthlyOverviewViewModel: ObservableObject {
     private var transactionCancellable: AnyCancellable?
     
     // MARK: - TO BE REFINED
-    
-    @Published var sumInTimeframe: Double = 5226.71
-    @Published var expenseSumInTimeframe: Double = 2521.10
-    @Published var values: [Double] = [108.42, 95.12, 48.01]
-    let colors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6)]
-    @Published var expenseValues: [Double] = [18.42, 85.12, 8.01, 50.1, 85.02, 142.01]
-    let expenseColors: [Color] = [.red, .red.opacity(0.8), .red.opacity(0.6), .red.opacity(0.4), .red.opacity(0.2), .red.opacity(0.1)]
-    var dataPoints: [PieChartDataPoint] {
-        var dps: [PieChartDataPoint] = []
-        for (index, color) in colors.enumerated() {
-            dps.append(PieChartDataPoint(title: "Category \(index)", value: values[index], color: color))
-        }
-        return dps
-    }
-    var expenseDataPoints: [PieChartDataPoint] {
-        var dps: [PieChartDataPoint] = []
-        for (index, color) in expenseColors.enumerated() {
-            dps.append(PieChartDataPoint(title: "Expense \(index)", value: expenseValues[index], color: color))
-        }
-        return dps
-    }
+//    @Published var values: [Double] = [108.42, 95.12, 48.01]
+//    let colors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6)]
+//    @Published var expenseValues: [Double] = [18.42, 85.12, 8.01, 50.1, 85.02, 142.01]
+//    let expenseColors: [Color] = [.red, .red.opacity(0.8), .red.opacity(0.6), .red.opacity(0.4), .red.opacity(0.2), .red.opacity(0.1)]
+    @Published var incomeDataPoints: [PieChartDataPoint] = []
+//    {
+//        var dps: [PieChartDataPoint] = []
+//        for (index, color) in colors.enumerated() {
+//            dps.append(PieChartDataPoint(title: "Category \(index)", value: values[index], color: color))
+//        }
+//        return dps
+//    }
+    @Published var expenseDataPoints: [PieChartDataPoint] = []
+//    {
+//        var dps: [PieChartDataPoint] = []
+//        for (index, color) in expenseColors.enumerated() {
+//            dps.append(PieChartDataPoint(title: "Expense \(index)", value: expenseValues[index], color: color))
+//        }
+//        return dps
+//    }
     
     // MARK: - Constructor(s)
     
@@ -72,5 +87,31 @@ class MonthlyOverviewViewModel: ObservableObject {
             self.transactions = transactions
         }
         remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
+    }
+    
+    // MARK: - Helper functions
+    private func createTransactionByCategoryDict() {
+        var expenseByCategory: [String?:Double] = [:]
+        var incomeByCategory: [String?:Double] = [:]
+        let usedExpenseCategoryNames: Set<String?> = Set(thisMonthExpenses.map { $0.category?.name })
+        let usedIncomeCategoryNames: Set<String?> = Set(thisMonthIncome.map { $0.category?.name })
+        for usedExpenseCategoryName in usedExpenseCategoryNames {
+            expenseByCategory[usedExpenseCategoryName] = thisMonthExpenses.filter { $0.category?.name == usedExpenseCategoryName }.map { $0.amount }.reduce(0, +)
+        }
+        for usedIncomeCategoryName in usedIncomeCategoryNames {
+            incomeByCategory[usedIncomeCategoryName] = thisMonthIncome.filter { $0.category?.name == usedIncomeCategoryName }.map { $0.amount }.reduce(0, +)
+        }
+        var expense_dps: [PieChartDataPoint] = []
+        var income_dps: [PieChartDataPoint] = []
+        for (index, (categoryName, sum)) in expenseByCategory.enumerated() {
+            expense_dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: sum, color: expensePieChartColors[index]))
+        }
+        expense_dps.sort(by: {one, two in one.value > two.value})
+        for (index, (categoryName, sum)) in incomeByCategory.enumerated() {
+            income_dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: sum, color: incomePieChartColors[index]))
+        }
+        income_dps.sort(by: {one, two in one.value > two.value})
+        expenseDataPoints = expense_dps
+        incomeDataPoints = income_dps
     }
 }

@@ -22,10 +22,3 @@ class IncomeTileViewModel: ObservableObject {
     }
     let colors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6), .green.opacity(0.4), .green.opacity(0.2), .green.opacity(0.1)]
 }
-
-struct PieChartDataPoint: Identifiable {
-    var id: UUID = UUID()
-    var title: String
-    var value: Double
-    var color: Color
-}

@@ -77,8 +77,13 @@ struct CurrentMonthDetailView: View {
                     Circle()
                         .frame(width: 10, height: 10)
                         .foregroundColor(dataPoint.color)
-                    Text(dataPoint.title)
-                        .font(.subheadline)
+                    VStack(alignment: .leading) {
+                        Text(dataPoint.title)
+                            .font(.subheadline)
+                        Text(dataPoint.value, format: .currency(code: "EUR"))
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                    }
                 }
             }
         }
@@ -91,9 +96,9 @@ struct CurrentMonthDetailView: View {
             }
             Section(header: Text("Income")) {
                 HStack {
-                    legend(dps: content.dataPoints)
+                    legend(dps: content.incomeDataPoints)
                     Spacer()
-                    CurrencyPieChart(values: content.values, colors: content.colors, backgroundColor: .clear, centerLabel: content.sumInTimeframe)
+                    CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth)
                         .frame(maxHeight: 150)
                 }
                 .frame(maxHeight: 177)
@@ -102,7 +107,7 @@ struct CurrentMonthDetailView: View {
                 HStack {
                     legend(dps: content.expenseDataPoints)
                     Spacer()
-                    CurrencyPieChart(values: content.expenseValues, colors: content.expenseColors, backgroundColor: .clear, centerLabel: content.expenseSumInTimeframe)
+                    CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth)
                         .frame(maxHeight: 150)
                 }
                 .frame(maxHeight: 177)

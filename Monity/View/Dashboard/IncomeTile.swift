@@ -41,7 +41,7 @@ struct IncomeTile: View {
                 HStack {
                     legend
                     Spacer()
-                    CurrencyPieChart(values: content.values, colors: content.colors, backgroundColor: .clear, centerLabel: content.sumInTimeframe)
+                    CurrencyPieChart(values: content.dataPoints, backgroundColor: .clear, centerLabel: content.sumInTimeframe)
                 }
                 .frame(maxHeight: 170)
             }
