@@ -12,7 +12,7 @@ struct CurrentMonthOverviewTile: View {
     @State private var remainingAmount: Double = 0
     @StateObject private var content = MonthlyOverviewViewModel()
     
-    var body: some View {
+    var actualTile: some View {
         PreviewDashboardBox {
             VStack(alignment: .leading) {
                 HStack {
@@ -22,18 +22,23 @@ struct CurrentMonthOverviewTile: View {
                     Spacer()
                 }
                 Spacer()
-                Text("Days left:")
-                    .font(.system(size: 18, weight: .semibold))
-                Text("\(content.remainingDays)")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text("Budget:")
-                    .font(.system(size: 18, weight: .semibold))
-                Text(remainingAmount, format: .currency(code: "EUR"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(remainingAmount >= 0 ? .green : .red)
-                Spacer()
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Days left:")
+                            .font(.system(size: 18, weight: .semibold))
+                        Text("\(content.remainingDays)")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    VStack {
+                        Text("Budget:")
+                            .font(.system(size: 18, weight: .semibold))
+                        Text(remainingAmount, format: .currency(code: "EUR"))
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(remainingAmount >= 0 ? .green : .red)
+                    }
+                }
             }
             .padding()
         } previewContent: {
@@ -68,6 +73,13 @@ struct CurrentMonthOverviewTile: View {
         .onAppear {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
+    }
+    
+    var body: some View {
+        NavigationLink(destination: CurrentMonthDetailView()) {
+            actualTile
+        }
+        .buttonStyle(.plain)
     }
     
     @ViewBuilder

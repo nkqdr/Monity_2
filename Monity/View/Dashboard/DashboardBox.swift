@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DashboardBox<Content>: View where Content: View {
+    var minHeight: CGFloat = 0
     var content: () -> Content
     
     init(@ViewBuilder content: @escaping () -> Content) {
@@ -16,13 +17,14 @@ struct DashboardBox<Content>: View where Content: View {
     
     var body: some View {
         content()
-            .frame(height: 230)
+            .frame(minHeight: minHeight)
             .frame(maxWidth: .infinity)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
     }
 }
 
 struct PreviewDashboardBox<AContent, BContent>: View where AContent: View, BContent : View {
+    var minHeight: CGFloat = 0
     var content: () -> AContent
     var previewContent: (() -> BContent)?
     
@@ -37,7 +39,7 @@ struct PreviewDashboardBox<AContent, BContent>: View where AContent: View, BCont
     
     var body: some View {
         content()
-            .frame(height: 230)
+            .frame(minHeight: minHeight)
             .frame(maxWidth: .infinity)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
             .contextMenu { contextMenu } preview: { if let c = previewContent {

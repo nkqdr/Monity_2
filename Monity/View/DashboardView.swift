@@ -14,26 +14,33 @@ struct DashboardView: View {
                 Grid {
                     GridRow {
                         CurrentMonthOverviewTile()
+                            .gridCellColumns(2)
+                    }
+                    GridRow {
                         DashboardBox {
                             Text("Performance")
-                        }
-                    }
-                    GridRow {
-                        IncomeTile()
-                        .gridCellColumns(2)
-                    }
-                    GridRow {
-                        DashboardBox {
-                            Text("Expenses")
+                                .padding()
                         }
                         .gridCellColumns(2)
                     }
-                    GridRow {
-                        DashboardBox {
-                            Text("Cashflow")
-                        }
-                        .gridCellColumns(2)
-                    }
+//                    GridRow {
+//                        IncomeTile()
+//                        .gridCellColumns(2)
+//                    }
+//                    GridRow {
+//                        DashboardBox {
+//                            Text("Expenses")
+//                                .padding()
+//                        }
+//                        .gridCellColumns(2)
+//                    }
+//                    GridRow {
+//                        DashboardBox {
+//                            Text("Cashflow")
+//                                .padding()
+//                        }
+//                        .gridCellColumns(2)
+//                    }
                 }
                 .padding()
             }

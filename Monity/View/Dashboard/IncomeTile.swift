@@ -7,29 +7,12 @@
 
 import SwiftUI
 
-struct PieChartDataPoint: Identifiable {
-    var id: UUID = UUID()
-    var title: String
-    var value: Double
-    var color: Color
-}
-
 struct IncomeTile: View {
-    @State private var timeframe: String = ""
-    let values: [Double] = [108.42, 95.12, 48.01, 50.1, 85.02, 42.01]
-    let colors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6), .green.opacity(0.4), .green.opacity(0.2), .green.opacity(0.1)]
-    
-    var dataPoints: [PieChartDataPoint] {
-        var dps: [PieChartDataPoint] = []
-        for (index, color) in colors.enumerated() {
-            dps.append(PieChartDataPoint(title: "Category \(index)", value: values[index], color: color))
-        }
-        return dps
-    }
+    @StateObject private var content = IncomeTileViewModel()
     
     var legend: some View {
         VStack(alignment: .leading) {
-            ForEach(dataPoints) { dataPoint in
+            ForEach(content.dataPoints) { dataPoint in
                 HStack {
                     Circle()
                         .frame(width: 10, height: 10)
@@ -49,7 +32,7 @@ struct IncomeTile: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Picker("Timeframe", selection: $timeframe) {
+                    Picker("Timeframe", selection: $content.timeframe) {
                         Text("This month").tag("this-month")
                         Text("This year").tag("this-year")
                     }
@@ -58,12 +41,32 @@ struct IncomeTile: View {
                 HStack {
                     legend
                     Spacer()
-                    CurrencyPieChart(values: values, colors: colors, backgroundColor: .clear, centerLabel: 5221.45)
+                    CurrencyPieChart(values: content.values, colors: content.colors, backgroundColor: .clear, centerLabel: content.sumInTimeframe)
                 }
+                .frame(maxHeight: 170)
             }
             .padding()
         } previewContent: {
-            Text("Preview")
+            ScrollView {
+                HStack {
+                    Text("Categories:")
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(maxWidth: .infinity)
+                    Spacer(minLength: 60)
+                    Text(content.timeframe)
+                        .foregroundColor(.secondary)
+                }
+                ForEach(content.dataPoints) { dataPoint in
+                    VStack(alignment: .leading) {
+                        Text(dataPoint.title)
+                            .font(.footnote)
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.green.gradient)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: 150)
+            .padding()
         }
     }
 }

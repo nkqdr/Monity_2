@@ -69,7 +69,7 @@ struct PieSliceView: View {
                         clockwise: false)
                     
                 }
-                .fill(pieSliceData.color)
+                .fill(pieSliceData.color.gradient)
                 if showLabels {
                     Text(pieSliceData.text)
                         .position(
