@@ -45,12 +45,17 @@ struct TransactionsView: View {
             }
             .sheet(isPresented: $showFilterSettings) {
                 VStack {
-                    Section("Selected month") {
-                        MonthYearPicker(dateSelection: $temporaryDateSelection)
-                            .frame(height: 150)
-                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    Text("Selected month")
+                        .padding()
+                    MonthYearPicker(dateSelection: $temporaryDateSelection)
+                        .frame(height: 150)
+                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+                        .padding()
+                    Button("Today") {
+                        withAnimation(.spring()) {
+                            temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
+                        }
                     }
-                    .padding()
                     Spacer()
                     Button("Apply") {
                         content.filteredSelectedDate = temporaryDateSelection

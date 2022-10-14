@@ -45,7 +45,7 @@ struct SettingsView: View {
         Section("About") {
             VStack(alignment: .leading) {
                 Group {
-                    Text("Monity")
+                    Text(Bundle.main.displayName)
                     Text("Version \(Bundle.main.appVersion)")
                 }
                 .foregroundColor(.secondary)
