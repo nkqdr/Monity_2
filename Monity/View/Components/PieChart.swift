@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct PieChart: View {
-    let values: [Double]
-    var colors: [Color]
-    var backgroundColor: Color = .clear
-    var showSliceLabels: Bool = false
+    public let values: [Double]
+    public var colors: [Color]
+    public var backgroundColor: Color = .clear
+    public var showSliceLabels: Bool = false
+    public var widthFraction: CGFloat = 1
+//    public var innerRadiusFraction: CGFloat
+    
+    @Binding var activeIndex: Int
     
     var slices: [PieSliceData] {
         let sum = values.reduce(0, +)
@@ -32,7 +36,27 @@ struct PieChart: View {
             ZStack{
                 ForEach(0..<values.count, id: \.self){ i in
                     PieSliceView(pieSliceData: slices[i], showLabels: showSliceLabels)
+                        .scaleEffect(activeIndex == i ? 1.08 : 1)
+                        .animation(.spring(), value: activeIndex)
                 }
+                .gesture(
+                    SpatialTapGesture()
+                        .onEnded { value in
+                            let radius = 0.5 * widthFraction * geometry.size.width
+                            let diff = CGPoint(x: value.location.x - radius, y: radius - value.location.y)
+                            var radians = Double(atan2(diff.x, diff.y))
+                            if (radians < 0) {
+                                radians = 2 * Double.pi + radians
+                            }
+
+                            for (i, slice) in slices.enumerated() {
+                                if (radians < slice.endAngle.radians) {
+                                    activeIndex = activeIndex == i ? -1 : i
+                                    break
+                                }
+                            }
+                        }
+                )
             }
 //            .foregroundColor(Color.white)
             .frame(width: minSize, height: minSize)

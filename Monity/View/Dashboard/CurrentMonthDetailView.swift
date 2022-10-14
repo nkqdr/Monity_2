@@ -70,47 +70,16 @@ struct CurrentMonthDetailView: View {
         }
     }
     
-    private func legend(dps: [PieChartDataPoint]) -> some View {
-        VStack(alignment: .leading) {
-            ForEach(dps) { dataPoint in
-                HStack {
-                    Circle()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(dataPoint.color)
-                    VStack(alignment: .leading) {
-                        Text(dataPoint.title)
-                            .font(.subheadline)
-                        Text(dataPoint.value, format: .currency(code: "EUR"))
-                            .foregroundColor(.secondary)
-                            .font(.caption)
-                    }
-                }
-            }
-        }
-    }
-    
     var body: some View {
         List {
             Section {
                 overviewHeader
             }
             Section(header: Text("Income")) {
-                HStack {
-                    legend(dps: content.incomeDataPoints)
-                    Spacer()
-                    CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth)
-                        .frame(maxHeight: 150)
-                }
-                .frame(maxHeight: 177)
+                CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth)
             }
             Section(header: Text("Expenses")) {
-                HStack {
-                    legend(dps: content.expenseDataPoints)
-                    Spacer()
-                    CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth)
-                        .frame(maxHeight: 150)
-                }
-                .frame(maxHeight: 177)
+                CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth)
             }
             Section(header: Text("Cashflow")) {
                 Text("To-Do")

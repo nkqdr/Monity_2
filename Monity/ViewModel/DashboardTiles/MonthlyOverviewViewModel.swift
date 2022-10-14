@@ -27,7 +27,8 @@ class MonthlyOverviewViewModel: ObservableObject {
         didSet {
             thisMonthExpenses = thisMonthTransactions.filter { $0.isExpense }
             thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
-            createTransactionByCategoryDict()
+            expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: expensePieChartColors)
+            incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: incomePieChartColors)
         }
     }
     @Published var transactions: [Transaction] = [] {
@@ -71,28 +72,20 @@ class MonthlyOverviewViewModel: ObservableObject {
     }
     
     // MARK: - Helper functions
-    private func createTransactionByCategoryDict() {
-        var expenseByCategory: [String?:Double] = [:]
-        var incomeByCategory: [String?:Double] = [:]
-        let usedExpenseCategoryNames: Set<String?> = Set(thisMonthExpenses.map { $0.category?.name })
-        let usedIncomeCategoryNames: Set<String?> = Set(thisMonthIncome.map { $0.category?.name })
-        for usedExpenseCategoryName in usedExpenseCategoryNames {
-            expenseByCategory[usedExpenseCategoryName] = thisMonthExpenses.filter { $0.category?.name == usedExpenseCategoryName }.map { $0.amount }.reduce(0, +)
+    
+    private func getPieChartDataPoints(for transactions: [Transaction], with colors: [Color]) -> [PieChartDataPoint] {
+        var byCategory: [String?:Double] = [:]
+        let usedCategoryNames: Set<String?> = Set(transactions.map { $0.category?.name })
+        for usedCategoryName in usedCategoryNames {
+            byCategory[usedCategoryName] = transactions.filter { $0.category?.name == usedCategoryName }.map { $0.amount }.reduce(0, +)
         }
-        for usedIncomeCategoryName in usedIncomeCategoryNames {
-            incomeByCategory[usedIncomeCategoryName] = thisMonthIncome.filter { $0.category?.name == usedIncomeCategoryName }.map { $0.amount }.reduce(0, +)
+        var dps: [PieChartDataPoint] = []
+        let sorted = byCategory.keys.sorted(by: {(first, second) in
+            return byCategory[first]! > byCategory[second]!
+        })
+        for (index, categoryName) in sorted.enumerated() {
+            dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: colors[index]))
         }
-        var expense_dps: [PieChartDataPoint] = []
-        var income_dps: [PieChartDataPoint] = []
-        for (index, (categoryName, sum)) in expenseByCategory.enumerated() {
-            expense_dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: sum, color: expensePieChartColors[index]))
-        }
-        expense_dps.sort(by: {one, two in one.value > two.value})
-        for (index, (categoryName, sum)) in incomeByCategory.enumerated() {
-            income_dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: sum, color: incomePieChartColors[index]))
-        }
-        income_dps.sort(by: {one, two in one.value > two.value})
-        expenseDataPoints = expense_dps
-        incomeDataPoints = income_dps
+        return dps
     }
 }
