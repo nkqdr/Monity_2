@@ -122,7 +122,7 @@ struct CurrentMonthDetailView: View {
         .onAppear {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
-        .navigationTitle("Monthly overview")
+        .navigationTitle("Month Overview")
     }
 }
 

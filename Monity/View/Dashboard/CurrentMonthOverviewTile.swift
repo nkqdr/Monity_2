@@ -16,7 +16,7 @@ struct CurrentMonthOverviewTile: View {
         PreviewDashboardBox {
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Monthly Overview")
+                    Text("Month Overview")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()

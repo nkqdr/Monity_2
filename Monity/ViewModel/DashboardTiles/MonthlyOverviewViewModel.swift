@@ -10,6 +10,9 @@ import Combine
 import SwiftUI
 
 class MonthlyOverviewViewModel: ObservableObject {
+    @Published var incomeDataPoints: [PieChartDataPoint] = []
+    @Published var expenseDataPoints: [PieChartDataPoint] = []
+    
     @Published var spentThisMonth: Double = 0 {
         didSet {
             let currentDay: Int = Calendar.current.dateComponents([.day], from: Date()).day ?? 1
@@ -57,28 +60,6 @@ class MonthlyOverviewViewModel: ObservableObject {
         return Calendar.current.date(from: DateComponents(year: correctYear, month: correctMonth, day: 1)) ?? Date()
     }
     private var transactionCancellable: AnyCancellable?
-    
-    // MARK: - TO BE REFINED
-//    @Published var values: [Double] = [108.42, 95.12, 48.01]
-//    let colors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6)]
-//    @Published var expenseValues: [Double] = [18.42, 85.12, 8.01, 50.1, 85.02, 142.01]
-//    let expenseColors: [Color] = [.red, .red.opacity(0.8), .red.opacity(0.6), .red.opacity(0.4), .red.opacity(0.2), .red.opacity(0.1)]
-    @Published var incomeDataPoints: [PieChartDataPoint] = []
-//    {
-//        var dps: [PieChartDataPoint] = []
-//        for (index, color) in colors.enumerated() {
-//            dps.append(PieChartDataPoint(title: "Category \(index)", value: values[index], color: color))
-//        }
-//        return dps
-//    }
-    @Published var expenseDataPoints: [PieChartDataPoint] = []
-//    {
-//        var dps: [PieChartDataPoint] = []
-//        for (index, color) in expenseColors.enumerated() {
-//            dps.append(PieChartDataPoint(title: "Expense \(index)", value: expenseValues[index], color: color))
-//        }
-//        return dps
-//    }
     
     // MARK: - Constructor(s)
     
