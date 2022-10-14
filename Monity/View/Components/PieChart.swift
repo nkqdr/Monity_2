@@ -42,6 +42,7 @@ struct PieChart: View {
                 .gesture(
                     SpatialTapGesture()
                         .onEnded { value in
+                            Haptics.shared.play(.medium)
                             let radius = 0.5 * widthFraction * geometry.size.width
                             let diff = CGPoint(x: value.location.x - radius, y: radius - value.location.y)
                             var radians = Double(atan2(diff.x, diff.y))

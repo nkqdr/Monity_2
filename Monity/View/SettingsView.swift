@@ -22,14 +22,11 @@ struct SettingsView: View {
     private var generalSection: some View {
         Section("General") {
             NavigationLink("System") {
-                
+                Settings_SystemView()
             }
-            NavigationLink("Options") {
-                
-            }
-            NavigationLink("Appearance") {
-                
-            }
+//            NavigationLink("Options") {
+//
+//            }
         }
     }
     
@@ -38,16 +35,21 @@ struct SettingsView: View {
             NavigationLink("Transactions") {
                 Settings_TransactionsView()
             }
-            NavigationLink("Investments") {
+            NavigationLink("Savings") {
                 
             }
         }
     }
     
     private var helpSection: some View {
-        Section("Help") {
-            NavigationLink("About") {
-                
+        Section("About") {
+            VStack(alignment: .leading) {
+                Group {
+                    Text("Monity")
+                    Text("Version \(Bundle.main.appVersion)")
+                }
+                .foregroundColor(.secondary)
+                .font(.caption)
             }
         }
     }

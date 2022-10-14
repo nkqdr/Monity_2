@@ -81,9 +81,9 @@ struct CurrentMonthDetailView: View {
             Section(header: Text("Expenses")) {
                 CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth)
             }
-            Section(header: Text("Cashflow")) {
-                Text("To-Do")
-            }
+//            Section(header: Text("Cashflow")) {
+//                Text("To-Do")
+//            }
         }
         .onChange(of: monthlyLimit) { newValue in
             remainingAmount = newValue - content.spentThisMonth

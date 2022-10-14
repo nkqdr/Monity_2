@@ -25,9 +25,9 @@ struct MonityApp: App {
                             Label("Dashboard", systemImage: "chart.bar.xaxis")
                         }
                         .tag(1)
-                    WealthView()
+                    SavingsView()
                         .tabItem {
-                            Label("Wealth", systemImage: "chart.line.uptrend.xyaxis")
+                            Label("Savings", systemImage: "dollarsign")
                         }
                         .tag(2)
                     SettingsView()

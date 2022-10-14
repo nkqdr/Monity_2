@@ -35,4 +35,30 @@ struct PersistenceController {
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
+    
+    public func getSqliteStoreSize() -> String {
+        guard let storeUrl = self.container.viewContext.persistentStoreCoordinator!.persistentStores.first?.url else {
+            print("There is no store url")
+            return ""
+        }
+        return self.getSqliteStoreSize(forPersistentContainerUrl: storeUrl)
+    }
+    
+    public func getSqliteStoreSize(forPersistentContainerUrl storeUrl: URL) -> String {
+        do {
+            let size = try Data(contentsOf: storeUrl)
+            if size.count < 1 {
+                print("Size could not be determined.")
+                return ""
+            }
+            let bcf = ByteCountFormatter()
+//            bcf.allowedUnits = [.useMB, .useKB, .useBytes] // This restricts possible units
+            bcf.countStyle = .file
+            let string = bcf.string(fromByteCount: Int64(size.count))
+            return string
+        } catch {
+            print("Failed to get size of store: \(error)")
+            return ""
+        }
+    }
 }

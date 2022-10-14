@@ -21,7 +21,7 @@ struct TransactionsView: View {
     
     var body: some View {
         NavigationView {
-            List(content.transactions) { transaction in
+            List(content.filteredTransactions ?? content.transactions) { transaction in
                 TransactionListTile(transaction: transaction, onDelete: content.deleteTransaction, onEdit: showEditSheetForTransaction)
             }
             .searchable(text: $searchString)
