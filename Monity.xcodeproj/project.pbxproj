@@ -26,6 +26,7 @@
 		60A4CFB628F9A446007F392D /* SettingsSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB528F9A446007F392D /* SettingsSystemView.swift */; };
 		60A4CFB928F9A685007F392D /* SettingsSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB828F9A685007F392D /* SettingsSystemViewModel.swift */; };
 		60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */; };
+		60A4CFC028F9C175007F392D /* SettingsSavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFBF28F9C175007F392D /* SettingsSavingsView.swift */; };
 		60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1128F35B6F001FF5FF /* MonityApp.swift */; };
 		60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1528F35B70001FF5FF /* Assets.xcassets */; };
 		60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */; };
@@ -86,6 +87,7 @@
 		60A4CFB528F9A446007F392D /* SettingsSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSystemView.swift; sourceTree = "<group>"; };
 		60A4CFB828F9A685007F392D /* SettingsSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSystemViewModel.swift; sourceTree = "<group>"; };
 		60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		60A4CFBF28F9C175007F392D /* SettingsSavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSavingsView.swift; sourceTree = "<group>"; };
 		60BD9F0E28F35B6F001FF5FF /* Monity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BD9F1128F35B6F001FF5FF /* MonityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityApp.swift; sourceTree = "<group>"; };
 		60BD9F1528F35B70001FF5FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				60BD9F4F28F35D41001FF5FF /* SettingsTransactionsView.swift */,
 				60A4CFB528F9A446007F392D /* SettingsSystemView.swift */,
+				60A4CFBF28F9C175007F392D /* SettingsSavingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */,
 				60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */,
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
+				60A4CFC028F9C175007F392D /* SettingsSavingsView.swift in Sources */,
 				60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,

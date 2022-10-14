@@ -36,7 +36,7 @@ struct SettingsView: View {
                 Settings_TransactionsView()
             }
             NavigationLink("Savings") {
-                
+                Settings_SavingsView()
             }
         }
     }

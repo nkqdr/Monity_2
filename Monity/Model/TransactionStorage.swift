@@ -17,7 +17,6 @@ class TransactionStorage: NSObject, ObservableObject {
     
     private override init() {
         let request = RichFetchRequest<Transaction>(entityName: "Transaction")
-//        let request = Transaction.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
         request.relationshipKeyPathsForRefreshing = [
             #keyPath(Transaction.category.name)

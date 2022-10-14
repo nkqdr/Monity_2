@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Settings_TransactionsView: View {
-    @Environment(\.colorScheme) var colorScheme
     @AppStorage("monthly_limit") private var monthlyLimit: Double?
     @StateObject private var content = SettingsTransactionsViewModel()
     @State private var showAddCategorySheet: Bool = false
@@ -27,6 +26,15 @@ struct Settings_TransactionsView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
         }
+        .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
+            TextField("Limit", value: $content.monthlyLimit, format: .currency(code: "EUR"))
+            Button("Save") {
+                UserDefaults.standard.set(content.monthlyLimit, forKey: "monthly_limit")
+            }
+            Button("Cancel", role: .cancel, action: {})
+        }, message: {
+            Text("Please enter your desired limit.")
+        })
         .onChange(of: showAddCategorySheet) { newValue in
             if !newValue {
                 content.currentCategory = nil
@@ -60,15 +68,6 @@ struct Settings_TransactionsView: View {
                 .buttonStyle(.borderless)
             }
         }
-        .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
-            TextField("Limit", value: $content.monthlyLimit, format: .currency(code: "EUR"))
-            Button("Save") {
-                UserDefaults.standard.set(content.monthlyLimit, forKey: "monthly_limit")
-            }
-            Button("Cancel", role: .cancel, action: {})
-        }, message: {
-            Text("Please enter your desired limit.")
-        })
         .confirmationDialog("Delete monthly limit", isPresented: $showingDeleteConfirmation) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {

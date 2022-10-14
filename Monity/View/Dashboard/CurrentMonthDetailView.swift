@@ -51,7 +51,7 @@ struct CurrentMonthDetailView: View {
     
     @ViewBuilder
     private var budgetBattery: some View {
-        let remainingPercentage: Double = (1 - content.spentThisMonth / monthlyLimit)
+        let remainingPercentage: Double = monthlyLimit > 0 ? (1 - content.spentThisMonth / monthlyLimit) : 0
         let batteryColor: Color = remainingPercentage > 0.1 ? .green : .red
         let remainingBatteryHeight: Double = remainingPercentage > 0 ? 120 * remainingPercentage : 0
         let textColor: Color? = remainingPercentage > 0 ? nil : .red
@@ -76,10 +76,10 @@ struct CurrentMonthDetailView: View {
                 overviewHeader
             }
             Section(header: Text("Income")) {
-                CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth)
+                CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
             }
             Section(header: Text("Expenses")) {
-                CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth)
+                CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
             }
 //            Section(header: Text("Cashflow")) {
 //                Text("To-Do")
