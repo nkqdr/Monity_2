@@ -19,9 +19,12 @@ class TransactionsViewModel: ObservableObject {
     @Published var filteredSelectedDate = Calendar.current.dateComponents([.month, .year], from: Date()) {
         didSet {
             filterTransactionList()
+            isCurrentMonthSelected = filteredSelectedDate.month == currentDateComps.month && filteredSelectedDate.year == currentDateComps.year
         }
     }
+    @Published var isCurrentMonthSelected: Bool = true
     
+    private let currentDateComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     private var transactionCancellable: AnyCancellable?
     
     init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {

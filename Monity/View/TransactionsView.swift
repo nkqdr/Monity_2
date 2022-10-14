@@ -32,7 +32,7 @@ struct TransactionsView: View {
                         temporaryDateSelection = content.filteredSelectedDate
                         showFilterSettings.toggle()
                     } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
+                        Image(systemName: content.isCurrentMonthSelected ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {

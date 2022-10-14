@@ -43,14 +43,17 @@ struct SettingsView: View {
     
     private var helpSection: some View {
         Section("About") {
-            VStack(alignment: .leading) {
-                Group {
-                    Text(Bundle.main.displayName)
-                    Text("Version \(Bundle.main.appVersion)")
+            HStack {
+                Image(systemName: "info.circle")
+                VStack(alignment: .leading) {
+                    Group {
+                        Text(Bundle.main.displayName)
+                        Text("Version \(Bundle.main.appVersion)")
+                    }
+                    .font(.caption)
                 }
-                .foregroundColor(.secondary)
-                .font(.caption)
             }
+            .foregroundColor(.secondary)
         }
     }
 }
