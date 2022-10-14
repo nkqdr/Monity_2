@@ -13,7 +13,7 @@ struct CurrentMonthOverviewTile: View {
     @StateObject private var content = MonthlyOverviewViewModel()
     
     var body: some View {
-        DashboardBox {
+        PreviewDashboardBox {
             VStack(alignment: .leading) {
                 HStack {
                     Text("Monthly Overview")
@@ -36,8 +36,7 @@ struct CurrentMonthOverviewTile: View {
                 Spacer()
             }
             .padding()
-        }
-        .contextMenu { contextMenu } preview: {
+        } previewContent: {
             if monthlyLimit > 0 {
                 HStack {
                     VStack(alignment: .leading) {
@@ -90,15 +89,6 @@ struct CurrentMonthOverviewTile: View {
             Text(String(format: "%.1f", 100 * remainingPercentage) + "%")
                 .fontWeight(.bold)
                 .foregroundColor(textColor)
-        }
-    }
-    
-    @ViewBuilder
-    private var contextMenu: some View {
-        Button {
-            // Do nothing because contextMenu closes automatically
-        } label: {
-            Label("Hide", systemImage: "eye.slash.fill")
         }
     }
 }

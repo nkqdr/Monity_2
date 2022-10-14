@@ -42,7 +42,7 @@ struct IncomeTile: View {
     }
     
     var body: some View {
-        DashboardBox {
+        PreviewDashboardBox {
             VStack(alignment: .leading) {
                 HStack {
                     Text("Income")
@@ -62,18 +62,8 @@ struct IncomeTile: View {
                 }
             }
             .padding()
-        }
-        .contextMenu { contextMenu } preview: {
+        } previewContent: {
             Text("Preview")
-        }
-    }
-    
-    @ViewBuilder
-    private var contextMenu: some View {
-        Button {
-            // Do nothing because contextMenu closes automatically
-        } label: {
-            Label("Hide", systemImage: "eye.slash.fill")
         }
     }
 }
