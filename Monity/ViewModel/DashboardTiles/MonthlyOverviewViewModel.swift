@@ -27,8 +27,8 @@ class MonthlyOverviewViewModel: ObservableObject {
         didSet {
             thisMonthExpenses = thisMonthTransactions.filter { $0.isExpense }
             thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
-            expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: expensePieChartColors)
-            incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: incomePieChartColors)
+            expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: .red)
+            incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: .green)
         }
     }
     @Published var transactions: [Transaction] = [] {
@@ -51,9 +51,6 @@ class MonthlyOverviewViewModel: ObservableObject {
         }
     }
     
-    let incomePieChartColors: [Color] = [.green, .green.opacity(0.8), .green.opacity(0.6), .green.opacity(0.4), .green.opacity(0.2), .green.opacity(0.1)]
-    let expensePieChartColors: [Color] = [.red, .red.opacity(0.8), .red.opacity(0.6), .red.opacity(0.4), .red.opacity(0.2), .red.opacity(0.1)]
-    
     private let currentComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     private var startOfNextMonth: Date {
         let correctYear: Int = currentComps.month == 12 ? (currentComps.year ?? 0) + 1 : currentComps.year ?? 1
@@ -73,7 +70,7 @@ class MonthlyOverviewViewModel: ObservableObject {
     
     // MARK: - Helper functions
     
-    private func getPieChartDataPoints(for transactions: [Transaction], with colors: [Color]) -> [PieChartDataPoint] {
+    private func getPieChartDataPoints(for transactions: [Transaction], with color: Color) -> [PieChartDataPoint] {
         var byCategory: [String?:Double] = [:]
         let usedCategoryNames: Set<String?> = Set(transactions.map { $0.category?.name })
         for usedCategoryName in usedCategoryNames {
@@ -83,8 +80,10 @@ class MonthlyOverviewViewModel: ObservableObject {
         let sorted = byCategory.keys.sorted(by: {(first, second) in
             return byCategory[first]! > byCategory[second]!
         })
+        let totalDataPoints: Double = Double(sorted.count)
         for (index, categoryName) in sorted.enumerated() {
-            dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: colors[index]))
+            let opacity: Double = 1.0 - (Double(index) / totalDataPoints)
+            dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: color.opacity(opacity)))
         }
         return dps
     }

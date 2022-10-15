@@ -23,36 +23,9 @@ struct DashboardView: View {
                         }
                         .gridCellColumns(2)
                     }
-//                    GridRow {
-//                        IncomeTile()
-//                        .gridCellColumns(2)
-//                    }
-//                    GridRow {
-//                        DashboardBox {
-//                            Text("Expenses")
-//                                .padding()
-//                        }
-//                        .gridCellColumns(2)
-//                    }
-//                    GridRow {
-//                        DashboardBox {
-//                            Text("Cashflow")
-//                                .padding()
-//                        }
-//                        .gridCellColumns(2)
-//                    }
                 }
                 .padding()
             }
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    NavigationLink(destination: {
-//                        SettingsView()
-//                    }, label: {
-//                        Image(systemName: "gearshape.fill")
-//                    })
-//                }
-//            }
             .navigationTitle("Dashboard")
         }
     }

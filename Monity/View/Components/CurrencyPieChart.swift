@@ -93,6 +93,6 @@ struct CurrencyPieChart: View {
     }
     
     private struct DrawingConstants {
-        static let maxCategories: Int = 6
+        static let maxCategories: Int = .max
     }
 }
