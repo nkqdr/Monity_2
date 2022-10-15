@@ -8,14 +8,23 @@
 import Foundation
 
 class TransactionCategoryEditor: ObservableObject {
-    @Published var name: String
+    @Published var name: String {
+        didSet {
+            disableSave = allCategories.map { $0.wrappedName }.contains(name) || name == ""
+        }
+    }
     @Published var navigationFormTitle: String
+    @Published var disableSave: Bool = true
+    private var allCategories: [TransactionCategory]
     var category: TransactionCategory?
     
     init(category: TransactionCategory? = nil) {
         self.name = category?.wrappedName ?? ""
         self.navigationFormTitle = (category != nil) ? "Edit category" : "New category"
         self.category = category
+        let fetchRequest = TransactionCategory.fetchRequest()
+        let categories = try? PersistenceController.shared.container.viewContext.fetch(fetchRequest)
+        self.allCategories = categories ?? []
     }
     
     // MARK: - Intent

@@ -29,6 +29,7 @@ struct TransactionCategoryFormView: View {
                         editor.save()
                         isPresented = false
                     }
+                    .disabled(editor.disableSave)
                 }
             }
         }
