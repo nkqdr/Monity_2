@@ -62,6 +62,18 @@ class TransactionCategoryStorage: NSObject, ObservableObject {
             print("Failed to save context \(error.localizedDescription)")
         }
     }
+    
+    func delete(allIn categories: [TransactionCategory]) {
+        for category in categories {
+            PersistenceController.shared.container.viewContext.delete(category)
+        }
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            PersistenceController.shared.container.viewContext.rollback()
+            print("Failed to save context \(error.localizedDescription)")
+        }
+    }
 }
 
 extension TransactionCategoryStorage: NSFetchedResultsControllerDelegate {

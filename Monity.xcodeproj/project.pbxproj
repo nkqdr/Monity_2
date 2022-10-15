@@ -14,6 +14,9 @@
 		6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		602E45C228F95D46003FD564 /* CurrentMonthDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */; };
 		602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C328F9608D003FD564 /* ShapeExtensions.swift */; };
+		6045379228FABB0E002EFC7F /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379128FABB0E002EFC7F /* DocumentPicker.swift */; };
+		6045379428FAC9A4002EFC7F /* ImportSummaryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */; };
+		6045379628FAD065002EFC7F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379528FAD065002EFC7F /* Utils.swift */; };
 		60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */; };
 		60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */; };
 		60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */; };
@@ -75,6 +78,9 @@
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMonthDetailView.swift; sourceTree = "<group>"; };
 		602E45C328F9608D003FD564 /* ShapeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeExtensions.swift; sourceTree = "<group>"; };
+		6045379128FABB0E002EFC7F /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSummaryRow.swift; sourceTree = "<group>"; };
+		6045379528FAD065002EFC7F /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryListTile.swift; sourceTree = "<group>"; };
 		60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStorage.swift; sourceTree = "<group>"; };
 		60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 				60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */,
 				6014FF4428F96E7F00413CE2 /* Structures.swift */,
 				60A4CFB128F99ED8007F392D /* Haptics.swift */,
+				6045379528FAD065002EFC7F /* Utils.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -287,6 +294,8 @@
 				600C39B828F54E9800688149 /* MonthYearPicker.swift */,
 				6097917628F935B400FA5621 /* PieChart.swift */,
 				6097917B28F944E600FA5621 /* CurrencyPieChart.swift */,
+				6045379128FABB0E002EFC7F /* DocumentPicker.swift */,
+				6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -438,8 +447,10 @@
 				60BD9F5028F35D41001FF5FF /* SettingsTransactionsView.swift in Sources */,
 				60A4CFB228F99ED8007F392D /* Haptics.swift in Sources */,
 				60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */,
+				6045379628FAD065002EFC7F /* Utils.swift in Sources */,
 				60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */,
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
+				6045379228FABB0E002EFC7F /* DocumentPicker.swift in Sources */,
 				60A4CFC028F9C175007F392D /* SettingsSavingsView.swift in Sources */,
 				60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
@@ -464,6 +475,7 @@
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				6000FF7A28F5FEDE0083595D /* MonthlyOverviewViewModel.swift in Sources */,
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
+				6045379428FAC9A4002EFC7F /* ImportSummaryRow.swift in Sources */,
 				602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */,
 				60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */,
 				60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */,
@@ -630,11 +642,13 @@
 				DEVELOPMENT_TEAM = 5BW79HX26Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Monity;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -659,11 +673,13 @@
 				DEVELOPMENT_TEAM = 5BW79HX26Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Monity;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

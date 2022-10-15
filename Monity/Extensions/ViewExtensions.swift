@@ -25,4 +25,14 @@ extension View {
             .tint(.indigo)
         }
     }
+    
+    func sync<T:Equatable>(_ published:Binding<T>, with binding:Binding<T>) -> some View{
+        self
+            .onChange(of: published.wrappedValue) { published in
+                binding.wrappedValue = published
+            }
+            .onChange(of: binding.wrappedValue) { binding in
+                published.wrappedValue = binding
+            }
+    }
 }

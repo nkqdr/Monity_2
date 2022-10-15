@@ -14,3 +14,10 @@ struct PieChartDataPoint: Identifiable {
     var value: Double
     var color: Color
 }
+
+struct ImportCSVSummary: Identifiable, Equatable {
+    var id: UUID = UUID()
+    var resourceName: LocalizedStringKey
+    var rowsAmount: Int
+    var rows: [String]
+}
