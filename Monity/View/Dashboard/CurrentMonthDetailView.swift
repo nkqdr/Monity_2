@@ -133,9 +133,8 @@ struct CurrentMonthDetailView: View {
           ZStack(alignment: .topLeading) {
               if selectedElement == nil {
                   let lastValue: Double = content.cashFlowData.last?.value ?? 0
-                  let label: LocalizedStringKey = lastValue >= 0 ? "This month you earned " : "This month you lost "
                   HStack(spacing: 0) {
-                      Text(label)
+                      Text("Current cashflow: ")
                       Text(lastValue, format: .currency(code: "EUR"))
                           .foregroundColor(lastValue >= 0 ? .green : .red)
                   }
