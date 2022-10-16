@@ -21,6 +21,7 @@ struct Settings_SystemView: View {
         .sync($content.importSummary, with: $importSummary)
         .sheet(isPresented: $content.showFilePicker) {
             DocumentPicker(fileContent: $content.csvFileContent)
+                .ignoresSafeArea()
         }
         .sheet(item: $importSummary) { summary in
             VStack {

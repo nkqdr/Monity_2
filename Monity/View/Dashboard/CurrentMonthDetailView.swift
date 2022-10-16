@@ -125,7 +125,6 @@ struct CurrentMonthDetailView: View {
                     }
                     .onEnded { _ in
                         selectedElement = nil
-                        Haptics.shared.play(.medium)
                     })
               )
           }
@@ -199,12 +198,10 @@ struct CurrentMonthDetailView: View {
         .onAppear {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
-        .navigationTitle("Month Overview")
+        .navigationTitle("Current Month")
     }
     
-    func findElement(location: CGPoint,
-                     proxy: ChartProxy,
-                     geometry: GeometryProxy) -> ValueTimeDataPoint? {
+    func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
       // Figure out the X position by offseting gesture location with chart frame
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
       // Use value(atX:) to find plotted value for the given X axis position.
@@ -213,12 +210,12 @@ struct CurrentMonthDetailView: View {
         // Find the closest date element.
         var minDistance: TimeInterval = .infinity
         var index: Int? = nil
-          for dataIndex in content.cashFlowData.indices {
-              let nthDataDistance = content.cashFlowData[dataIndex].date.distance(to: date)
-          if abs(nthDataDistance) < minDistance {
-            minDistance = abs(nthDataDistance)
-            index = dataIndex
-          }
+        for dataIndex in content.cashFlowData.indices {
+            let nthDataDistance = content.cashFlowData[dataIndex].date.distance(to: date)
+            if abs(nthDataDistance) < minDistance {
+                minDistance = abs(nthDataDistance)
+                index = dataIndex
+            }
         }
         if let index {
             return content.cashFlowData[index]

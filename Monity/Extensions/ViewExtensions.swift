@@ -35,4 +35,16 @@ extension View {
                 published.wrappedValue = binding
             }
     }
+    
+    func onlyHideContextMenu<T: View>(@ViewBuilder content: @escaping () -> T) -> some View {
+        self.contextMenu {
+            Button {
+                // Do nothing because contextMenu closes automatically
+            } label: {
+                Label("Hide", systemImage: "eye.slash.fill")
+            }
+        } preview: {
+            content()
+        }
+    }
 }

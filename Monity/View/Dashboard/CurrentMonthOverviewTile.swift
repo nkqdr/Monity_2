@@ -12,36 +12,30 @@ struct CurrentMonthOverviewTile: View {
     @State private var remainingAmount: Double = 0
     @StateObject private var content = MonthlyOverviewViewModel()
     
+    @ViewBuilder
     var actualTile: some View {
-        PreviewDashboardBox {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Month Overview")
-                        .font(.subheadline)
+        let label = Text("Current Month").font(.subheadline).foregroundColor(.secondary)
+        GroupBox(label: label) {
+            Spacer()
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Days left:")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text("\(content.remainingDays)")
+                        .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.secondary)
-                    Spacer()
                 }
                 Spacer()
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Days left:")
-                            .font(.system(size: 18, weight: .semibold))
-                        Text("\(content.remainingDays)")
-                            .font(.system(size: 22, weight: .bold))
-                            .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    VStack {
-                        Text("Budget:")
-                            .font(.system(size: 18, weight: .semibold))
-                        Text(remainingAmount, format: .currency(code: "EUR"))
-                            .font(.system(size: 22, weight: .bold))
-                            .foregroundColor(remainingAmount >= 0 ? .green : .red)
-                    }
+                VStack {
+                    Text("Budget:")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text(remainingAmount, format: .currency(code: "EUR"))
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(remainingAmount >= 0 ? .green : .red)
                 }
             }
-            .padding()
-        } previewContent: {
+        }
+        .onlyHideContextMenu {
             if monthlyLimit > 0 {
                 HStack {
                     VStack(alignment: .leading) {
@@ -49,6 +43,7 @@ struct CurrentMonthOverviewTile: View {
                             .font(.system(size: 18, weight: .semibold))
                             .frame(maxWidth: .infinity)
                         Text(content.predictedTotalSpendings, format: .currency(code: "EUR"))
+                            .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
                     }
                     .frame(maxWidth: .infinity)
                     Spacer(minLength: 60)
@@ -74,6 +69,64 @@ struct CurrentMonthOverviewTile: View {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
     }
+    
+//    var actualTile: some View {
+//        PreviewDashboardBox {
+//            VStack(alignment: .leading) {
+//                HStack {
+//                    Text("Month Overview")
+//                        .font(.subheadline)
+//                        .foregroundColor(.secondary)
+//                    Spacer()
+//                }
+//                Spacer()
+//                HStack {
+//                    VStack(alignment: .leading) {
+//                        Text("Days left:")
+//                            .font(.system(size: 18, weight: .semibold))
+//                        Text("\(content.remainingDays)")
+//                            .font(.system(size: 22, weight: .bold))
+//                            .foregroundColor(.secondary)
+//                    }
+//                    Spacer()
+//                    VStack {
+//                        Text("Budget:")
+//                            .font(.system(size: 18, weight: .semibold))
+//                        Text(remainingAmount, format: .currency(code: "EUR"))
+//                            .font(.system(size: 22, weight: .bold))
+//                            .foregroundColor(remainingAmount >= 0 ? .green : .red)
+//                    }
+//                }
+//            }
+//            .padding()
+//        } previewContent: {
+//            if monthlyLimit > 0 {
+//                HStack {
+//                    VStack(alignment: .leading) {
+//                        Text("Predicted total expenses:")
+//                            .font(.system(size: 18, weight: .semibold))
+//                            .frame(maxWidth: .infinity)
+//                        Text(content.predictedTotalSpendings, format: .currency(code: "EUR"))
+//                    }
+//                    .frame(maxWidth: .infinity)
+//                    Spacer(minLength: 60)
+//                    budgetBattery
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: 350)
+//                .padding()
+//            } else {
+//                VStack {
+//                    Text("Please set a monthly limit in the settings in order to use this.")
+//                        .multilineTextAlignment(.center)
+//                        .foregroundColor(.secondary)
+//                }
+//                .frame(height: 350)
+//                .frame(maxWidth: .infinity)
+//                .padding()
+//            }
+//        }
+//
+//    }
     
     var body: some View {
         NavigationLink(destination: CurrentMonthDetailView()) {
