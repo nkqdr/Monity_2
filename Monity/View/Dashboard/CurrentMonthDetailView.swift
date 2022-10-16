@@ -95,7 +95,7 @@ struct CurrentMonthDetailView: View {
             }
         }
         .chartYScale(domain: minValue ... absMaxValue)
-        .padding(.top, 40)
+        .padding(.top, 50)
         .padding(.bottom, 10)
         .chartOverlay { proxy in
           GeometryReader { geo in
@@ -109,9 +109,9 @@ struct CurrentMonthDetailView: View {
                     Haptics.shared.play(.medium)
                     if selectedElement?.date == element?.date {
                       // If tapping the same element, clear the selection.
-                      selectedElement = nil
+                      setSelectedElement(nil)
                     } else {
-                      selectedElement = element
+                      setSelectedElement(element)
                     }
                   }
                   .exclusively(before: DragGesture()
@@ -120,17 +120,28 @@ struct CurrentMonthDetailView: View {
                         if selectedElement == newElement {
                             return
                         }
-                        selectedElement = newElement
+                        setSelectedElement(newElement)
                         Haptics.shared.play(.medium)
                     }
                     .onEnded { _ in
-                        selectedElement = nil
+                        setSelectedElement(nil)
                     })
               )
           }
         }
         .chartBackground { proxy in
           ZStack(alignment: .topLeading) {
+              if selectedElement == nil {
+                  let lastValue: Double = content.cashFlowData.last?.value ?? 0
+                  let label: LocalizedStringKey = lastValue >= 0 ? "This month you earned " : "This month you lost "
+                  HStack(spacing: 0) {
+                      Text(label)
+                      Text(lastValue, format: .currency(code: "EUR"))
+                          .foregroundColor(lastValue >= 0 ? .green : .red)
+                  }
+                  .font(.headline.bold())
+                  .padding(.vertical, 10)
+              }
             GeometryReader { geo in
               if let selectedElement {
                 // Map date to chart X position
@@ -199,6 +210,10 @@ struct CurrentMonthDetailView: View {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
         .navigationTitle("Current Month")
+    }
+    
+    func setSelectedElement(_ value: ValueTimeDataPoint?) {
+        selectedElement = value
     }
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
