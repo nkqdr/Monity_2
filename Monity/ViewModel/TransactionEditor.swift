@@ -38,11 +38,9 @@ class TransactionEditor: ObservableObject {
     
     public func save() {
         if let t = transaction {
-            let res = TransactionStorage.shared.update(t, editor: self)
-            print(res)
+            let _ = TransactionStorage.shared.update(t, editor: self)
         } else {
-            let transaction = TransactionStorage.shared.add(text: description, isExpense: isExpense, amount: givenAmount, category: selectedCategory)
-            print("Added transaction \(transaction.description)")
+            let _ = TransactionStorage.shared.add(text: description, isExpense: isExpense, amount: givenAmount, category: selectedCategory)
         }
     }
 }

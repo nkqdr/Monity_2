@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import Charts
 
 struct CurrentMonthDetailView: View {
     @AppStorage("monthly_limit") private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
+    @State var selectedElement: ValueTimeDataPoint?
     @StateObject private var content = MonthlyOverviewViewModel()
     
     var overviewHeader: some View {
         VStack(alignment: .leading) {
-//            Divider()
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading) {
@@ -70,6 +71,113 @@ struct CurrentMonthDetailView: View {
         }
     }
     
+    @ViewBuilder
+    var cashFlowChart: some View {
+        let minValue: Double = (content.cashFlowData.map { $0.value }.min() ?? 10) * 1.2
+        let absMaxValue: Double = (content.cashFlowData.map { abs($0.value) }.max() ?? 10)
+        Chart(content.cashFlowData) {
+            AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
+                .opacity(0.5)
+                .interpolationMethod(.catmullRom)
+            LineMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
+                .lineStyle(StrokeStyle(lineWidth: 2))
+                .interpolationMethod(.catmullRom)
+                .symbol {
+                    Circle()
+                        .frame(width: 8)
+                }
+        }
+        .chartYAxis() {
+            AxisMarks { value in
+                if value.as(Double.self) == 0 {
+                    AxisGridLine()
+                }
+            }
+        }
+        .chartYScale(domain: minValue ... absMaxValue)
+        .padding(.top, 40)
+        .padding(.bottom, 10)
+        .chartOverlay { proxy in
+          GeometryReader { geo in
+            Rectangle()
+              .fill(.clear)
+              .contentShape(Rectangle())
+              .gesture(
+                SpatialTapGesture()
+                  .onEnded { value in
+                    let element = findElement(location: value.location, proxy: proxy, geometry: geo)
+                    Haptics.shared.play(.medium)
+                    if selectedElement?.date == element?.date {
+                      // If tapping the same element, clear the selection.
+                      selectedElement = nil
+                    } else {
+                      selectedElement = element
+                    }
+                  }
+                  .exclusively(before: DragGesture()
+                    .onChanged { value in
+                        let newElement = findElement(location: value.location, proxy: proxy, geometry: geo)
+                        if selectedElement == newElement {
+                            return
+                        }
+                        selectedElement = newElement
+                        Haptics.shared.play(.medium)
+                    }
+                    .onEnded { _ in
+                        selectedElement = nil
+                        Haptics.shared.play(.medium)
+                    })
+              )
+          }
+        }
+        .chartBackground { proxy in
+          ZStack(alignment: .topLeading) {
+            GeometryReader { geo in
+              if let selectedElement {
+                // Map date to chart X position
+                  let startPositionX = proxy.position(forX: selectedElement.date) ?? 0
+                // Offset the chart X position by chart frame
+                let midStartPositionX = startPositionX + geo[proxy.plotAreaFrame].origin.x
+                let lineHeight = geo[proxy.plotAreaFrame].maxY
+                let boxWidth: CGFloat = 85
+                let boxOffset = max(0, min(geo.size.width - boxWidth, midStartPositionX - boxWidth / 2))
+
+                // Draw the scan line
+                Rectangle()
+                  .fill(.quaternary)
+                  .frame(width: 2, height: lineHeight)
+                  .position(x: midStartPositionX, y: lineHeight / 2)
+
+                // Draw the data info box
+                VStack(alignment: .leading) {
+                  Text("\(selectedElement.date, format: .dateTime.month().day())")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                  Text(selectedElement.value, format: .currency(code: "EUR"))
+                    .font(.headline.bold())
+                    .foregroundColor(.primary)
+                }
+                .frame(width: boxWidth, alignment: .leading)
+                .background { // some styling
+                  ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                      .fill(.background)
+                    RoundedRectangle(cornerRadius: 8)
+                      .fill(.quaternary.opacity(0.7))
+                  }
+                  .padding([.leading, .trailing], -8)
+                  .padding([.top, .bottom], -4)
+                }
+                .offset(x: boxOffset)
+              }
+            }
+          }
+          .foregroundColor(nil)
+        }
+        .foregroundColor(content.cashFlowData.last?.value ?? 0 < 0 ? .red : .green)
+        .frame(minHeight: 180)
+    }
+    
     var body: some View {
         List {
             Section {
@@ -81,9 +189,9 @@ struct CurrentMonthDetailView: View {
             Section(header: Text("Expenses")) {
                 CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
             }
-//            Section(header: Text("Cashflow")) {
-//                Text("To-Do")
-//            }
+            Section(header: Text("Cashflow")) {
+                cashFlowChart
+            }
         }
         .onChange(of: monthlyLimit) { newValue in
             remainingAmount = newValue - content.spentThisMonth
@@ -92,6 +200,31 @@ struct CurrentMonthDetailView: View {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
         .navigationTitle("Month Overview")
+    }
+    
+    func findElement(location: CGPoint,
+                     proxy: ChartProxy,
+                     geometry: GeometryProxy) -> ValueTimeDataPoint? {
+      // Figure out the X position by offseting gesture location with chart frame
+      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+      // Use value(atX:) to find plotted value for the given X axis position.
+      // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
+      if let date = proxy.value(atX: relativeXPosition) as Date? {
+        // Find the closest date element.
+        var minDistance: TimeInterval = .infinity
+        var index: Int? = nil
+          for dataIndex in content.cashFlowData.indices {
+              let nthDataDistance = content.cashFlowData[dataIndex].date.distance(to: date)
+          if abs(nthDataDistance) < minDistance {
+            minDistance = abs(nthDataDistance)
+            index = dataIndex
+          }
+        }
+        if let index {
+            return content.cashFlowData[index]
+        }
+      }
+      return nil
     }
 }
 

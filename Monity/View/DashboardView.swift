@@ -18,8 +18,19 @@ struct DashboardView: View {
                     }
                     GridRow {
                         DashboardBox {
-                            Text("Performance")
-                                .padding()
+                            GroupBox(label: Label("Average Expenses", systemImage: "building.columns").foregroundColor(.secondary)) {
+                                Text("To-Do")
+                                    .padding()
+                            }
+                        }
+                        .gridCellColumns(2)
+                    }
+                    GridRow {
+                        DashboardBox {
+                            GroupBox(label: Label("Average Income", systemImage: "building.columns").foregroundColor(.secondary)) {
+                                Text("To-Do")
+                                    .padding()
+                            }
                         }
                         .gridCellColumns(2)
                     }

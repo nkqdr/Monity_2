@@ -12,6 +12,7 @@ import SwiftUI
 class MonthlyOverviewViewModel: ObservableObject {
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
+    @Published var cashFlowData: [ValueTimeDataPoint] = []
     
     @Published var spentThisMonth: Double = 0 {
         didSet {
@@ -29,6 +30,7 @@ class MonthlyOverviewViewModel: ObservableObject {
             thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
             expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: .red)
             incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: .green)
+            cashFlowData = getCashFlowDataPoints(for: thisMonthTransactions)
         }
     }
     @Published var transactions: [Transaction] = [] {
@@ -51,7 +53,7 @@ class MonthlyOverviewViewModel: ObservableObject {
         }
     }
     
-    private let currentComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
+    private let currentComps: DateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date())
     private var startOfNextMonth: Date {
         let correctYear: Int = currentComps.month == 12 ? (currentComps.year ?? 0) + 1 : currentComps.year ?? 1
         let correctMonth: Int = currentComps.month == 12 ? 1 : (currentComps.month ?? 0) + 1
@@ -86,5 +88,23 @@ class MonthlyOverviewViewModel: ObservableObject {
             dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: color.opacity(opacity)))
         }
         return dps
+    }
+    
+    private func getCashFlowDataPoints(for transactions: [Transaction]) -> [ValueTimeDataPoint] {
+        var dataPoints: [ValueTimeDataPoint] = []
+        let startOfMonthDate: Date = Calendar.current.date(from: DateComponents(year: currentComps.wrappedYear, month: currentComps.wrappedMonth, day: 1)) ?? Date()
+        let datesEntered: Set<Date> = Set(transactions.map { $0.date?.removeTimeStamp ?? Date() })
+        if !datesEntered.contains(startOfMonthDate) {
+            dataPoints.append(ValueTimeDataPoint(date: startOfMonthDate, value: 0))
+        }
+        for date in datesEntered {
+            dataPoints.append(ValueTimeDataPoint(
+                date: date,
+                value: transactions.filter { $0.date?.removeTimeStamp ?? Date() <= date}.map { $0.isExpense ? -$0.amount : $0.amount}.reduce(0, +))
+            )
+        }
+        return dataPoints.sorted {
+            $0.date < $1.date
+        }
     }
 }

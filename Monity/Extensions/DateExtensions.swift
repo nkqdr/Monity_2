@@ -8,7 +8,7 @@
 import Foundation
 
 extension DateComponents {
-    var wrappedMonth: Int {
+    public var wrappedMonth: Int {
         get {
             return self.month ?? Calendar.current.component(.month, from: Date())
         }
@@ -17,7 +17,7 @@ extension DateComponents {
         }
     }
     
-    var wrappedYear: Int {
+    public var wrappedYear: Int {
         get {
             return self.year ?? Calendar.current.component(.year, from: Date())
         }
@@ -25,4 +25,13 @@ extension DateComponents {
             self.year = newValue
         }
     }
+}
+
+extension Date {
+    public var removeTimeStamp : Date? {
+       guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else {
+        return nil
+       }
+       return date
+   }
 }

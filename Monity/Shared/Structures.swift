@@ -15,6 +15,12 @@ struct PieChartDataPoint: Identifiable {
     var color: Color
 }
 
+struct ValueTimeDataPoint: Identifiable, Equatable {
+    var id: UUID = UUID()
+    var date: Date
+    var value: Double
+}
+
 struct ImportCSVSummary: Identifiable, Equatable {
     var id: UUID = UUID()
     var resourceName: LocalizedStringKey
