@@ -10,19 +10,19 @@ import SwiftUI
 struct DashboardView: View {
     var body: some View {
         NavigationView {
-            ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: [GridItem()]) {
+            List {
+                Group {
                     CurrentMonthOverviewTile()
-                    GroupBox(label: Text("Average Expenses").groupBoxLabelTextStyle(.secondary)) {
-                        Text("To-Do")
-                            .padding()
-                    }
-                    .gridCellColumns(2)
-                    GroupBox(label: Text("Average Income").groupBoxLabelTextStyle(.secondary)) {
-                        Text("To-Do")
-                            .padding()
-                    }
+                    AverageExpensesTile()
+                    AverageIncomeTile()
+//                    Section {
+//                        VStack(alignment: .leading) {
+//                            Text("Savings").groupBoxLabelTextStyle(.secondary)
+//                            Text("To-Do")
+//                        }
+//                    }
                 }
+                .listRowInsets(EdgeInsets())
                 .padding()
             }
             .navigationTitle("Dashboard")

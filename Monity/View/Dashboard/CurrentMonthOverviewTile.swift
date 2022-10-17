@@ -15,7 +15,8 @@ struct CurrentMonthOverviewTile: View {
     @ViewBuilder
     var actualTile: some View {
         let label = Text("Current Month").groupBoxLabelTextStyle(.secondary)
-        GroupBox(label: label) {
+        VStack(alignment: .leading) {
+            label
             Spacer()
             HStack {
                 VStack(alignment: .leading) {
@@ -71,10 +72,11 @@ struct CurrentMonthOverviewTile: View {
     }
     
     var body: some View {
-        NavigationLink(destination: CurrentMonthDetailView()) {
-            actualTile
+        Section {
+            NavigationLink(destination: CurrentMonthDetailView()) {
+                actualTile
+            }
         }
-        .buttonStyle(.plain)
     }
 }
 
