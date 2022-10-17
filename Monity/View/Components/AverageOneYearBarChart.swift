@@ -26,11 +26,12 @@ struct AverageOneYearBarChart: View {
             BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
                 .foregroundStyle(tint.opacity(0.3))
         }
-        .chartYAxis {
-            AxisMarks { value in
-                AxisValueLabel()
-            }
-        }
+        .chartYAxis(.hidden)
+//        .chartYAxis {
+//            AxisMarks { value in
+//                AxisValueLabel()
+//            }
+//        }
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { value in
                 AxisGridLine()

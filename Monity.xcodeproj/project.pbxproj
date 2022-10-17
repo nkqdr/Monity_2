@@ -24,6 +24,7 @@
 		60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */; };
 		6097917728F935B400FA5621 /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6097917628F935B400FA5621 /* PieChart.swift */; };
 		6097917C28F944E600FA5621 /* CurrencyPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6097917B28F944E600FA5621 /* CurrencyPieChart.swift */; };
+		60A1DDD028FDA32800635F39 /* AverageExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */; };
 		60A4CFB228F99ED8007F392D /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB128F99ED8007F392D /* Haptics.swift */; };
 		60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB328F9A15D007F392D /* BundleExtensions.swift */; };
 		60A4CFB628F9A446007F392D /* SettingsSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB528F9A446007F392D /* SettingsSystemView.swift */; };
@@ -93,6 +94,7 @@
 		60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichFetchRequest.swift; sourceTree = "<group>"; };
 		6097917628F935B400FA5621 /* PieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChart.swift; sourceTree = "<group>"; };
 		6097917B28F944E600FA5621 /* CurrencyPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPieChart.swift; sourceTree = "<group>"; };
+		60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageExpenseDetailView.swift; sourceTree = "<group>"; };
 		60A4CFB128F99ED8007F392D /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		60A4CFB328F9A15D007F392D /* BundleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
 		60A4CFB528F9A446007F392D /* SettingsSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSystemView.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */,
 				60E7605B28FD454D00FAB25A /* AverageExpensesTile.swift */,
 				60E7606128FD5B6100FAB25A /* AverageIncomeTile.swift */,
+				60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -474,6 +477,7 @@
 				60E7606228FD5B6100FAB25A /* AverageIncomeTile.swift in Sources */,
 				60E7606028FD5AB400FAB25A /* AverageOneYearBarChart.swift in Sources */,
 				60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */,
+				60A1DDD028FDA32800635F39 /* AverageExpenseDetailView.swift in Sources */,
 				60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */,
 				60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */,
 				602E45C228F95D46003FD564 /* CurrentMonthDetailView.swift in Sources */,

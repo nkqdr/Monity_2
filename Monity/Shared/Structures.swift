@@ -15,6 +15,14 @@ struct PieChartDataPoint: Identifiable {
     var color: Color
 }
 
+struct CategoryRetroDataPoint: Identifiable, Equatable {
+    var id: UUID = UUID()
+    var category: TransactionCategory
+    var total: Double
+    var average: Double
+    var numTransactions: Int
+}
+
 struct ValueTimeDataPoint: Identifiable, Equatable {
     var id: UUID = UUID()
     var date: Date

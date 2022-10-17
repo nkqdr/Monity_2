@@ -14,19 +14,30 @@ class AverageMonthlyChartViewModel: ObservableObject {
     @Published var averageIncome: Double = 0
     @Published var monthlyExpenseDataPoints: [ValueTimeDataPoint] = []
     @Published var monthlyIncomeDataPoints: [ValueTimeDataPoint] = []
+    @Published var expenseCategoryRetroDataPoints: [CategoryRetroDataPoint] = []
+    @Published var totalExpensesThisYear: Double = 0
     
     private var transactions: [Transaction] = [] {
         didSet {
             monthlyExpenseDataPoints = getPastYearExpenseDataPoints()
             monthlyIncomeDataPoints = getPastYearIncomeDataPoints()
+            expenseCategoryRetroDataPoints = getExpenseRetroDataPoints()
             averageExpenses = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +) / Double(monthlyExpenseDataPoints.count)
             averageIncome = monthlyIncomeDataPoints.map { $0.value }.reduce(0, +) / Double(monthlyIncomeDataPoints.count)
+            totalExpensesThisYear = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +)
         }
     }
     
+    private var transactionCategories: [TransactionCategory] = []
+    
     private var transactionCancellable: AnyCancellable?
+    private var transactionCategoryCancellable: AnyCancellable?
     
     init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
+        let categoryPublisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+        transactionCategoryCancellable = categoryPublisher.sink { categories in
+            self.transactionCategories = categories
+        }
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
         }
@@ -53,5 +64,20 @@ class AverageMonthlyChartViewModel: ObservableObject {
     
     private func getPastYearIncomeDataPoints() -> [ValueTimeDataPoint] {
         return filterPastYearDataPointsBy(isExpense: false)
+    }
+    
+    private func getExpenseRetroDataPoints() -> [CategoryRetroDataPoint] {
+        var dataPoints: [CategoryRetroDataPoint] = []
+        for category in transactionCategories {
+            let usedTransactions: [Transaction] = transactions.filter { $0.category == category && $0.isExpense }
+            let totalSum: Double = usedTransactions.map { $0.amount}.reduce(0, +)
+            let average: Double = totalSum / Double(monthlyExpenseDataPoints.count)
+            if totalSum > 0 {
+                dataPoints.append(CategoryRetroDataPoint(category: category, total: totalSum, average: average, numTransactions: usedTransactions.count))
+            }
+        }
+        return dataPoints.sorted {
+            $0.total > $1.total
+        }
     }
 }

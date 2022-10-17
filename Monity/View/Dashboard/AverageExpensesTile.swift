@@ -26,7 +26,7 @@ struct AverageExpensesTile: View {
     }
     var body: some View {
         Section {
-            NavigationLink(destination: EmptyView()) {
+            NavigationLink(destination: AverageExpenseDetailView()) {
                 actualTile
             }
         }
