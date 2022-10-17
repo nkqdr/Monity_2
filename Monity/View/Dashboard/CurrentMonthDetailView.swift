@@ -34,7 +34,7 @@ struct CurrentMonthDetailView: View {
                     }
                 }
                 Spacer()
-                budgetBattery
+                BudgetBattery(monthlyLimit: monthlyLimit, alreadySpent: content.spentThisMonth)
             }
             Divider()
             HStack {
@@ -48,27 +48,6 @@ struct CurrentMonthDetailView: View {
         .padding(.vertical, 5)
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
-    }
-    
-    @ViewBuilder
-    private var budgetBattery: some View {
-        let remainingPercentage: Double = monthlyLimit > 0 ? (1 - content.spentThisMonth / monthlyLimit) : 0
-        let batteryColor: Color = remainingPercentage > 0.1 ? .green : .red
-        let remainingBatteryHeight: Double = remainingPercentage > 0 ? 120 * remainingPercentage : 0
-        let textColor: Color? = remainingPercentage > 0 ? nil : .red
-        ZStack {
-            ZStack(alignment: .bottom) {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.regularMaterial, strokeBorder: batteryColor.opacity(0.2))
-                    .frame(width: 70, height: 120)
-                RoundedRectangle(cornerRadius: 10)
-                    .frame(width: 70, height: remainingBatteryHeight)
-                    .foregroundStyle(batteryColor.gradient)
-            }
-            Text(String(format: "%.1f", 100 * remainingPercentage) + "%")
-                .fontWeight(.bold)
-                .foregroundColor(textColor)
-        }
     }
     
     @ViewBuilder
@@ -96,7 +75,7 @@ struct CurrentMonthDetailView: View {
         }
         .chartYScale(domain: minValue ... absMaxValue)
         .padding(.top, 50)
-        .padding(.bottom, 10)
+        .padding(.bottom, 8)
         .chartOverlay { proxy in
           GeometryReader { geo in
             Rectangle()
@@ -133,13 +112,9 @@ struct CurrentMonthDetailView: View {
           ZStack(alignment: .topLeading) {
               if selectedElement == nil {
                   let lastValue: Double = content.cashFlowData.last?.value ?? 0
-                  HStack(spacing: 0) {
-                      Text("Current cashflow: ")
-                      Text(lastValue, format: .currency(code: "EUR"))
-                          .foregroundColor(lastValue >= 0 ? .green : .red)
-                  }
-                  .font(.headline.bold())
-                  .padding(.vertical, 10)
+                  Text(lastValue, format: .currency(code: "EUR"))
+                      .foregroundColor(lastValue >= 0 ? .green : .red)
+                      .font(.title3.bold())
               }
             GeometryReader { geo in
               if let selectedElement {
@@ -168,14 +143,10 @@ struct CurrentMonthDetailView: View {
                 }
                 .frame(width: boxWidth, alignment: .leading)
                 .background { // some styling
-                  ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                      .fill(.background)
-                    RoundedRectangle(cornerRadius: 8)
-                      .fill(.quaternary.opacity(0.7))
-                  }
-                  .padding([.leading, .trailing], -8)
-                  .padding([.top, .bottom], -4)
+                        .fill(.regularMaterial)
+                        .padding([.leading, .trailing], -8)
+                        .padding([.top, .bottom], -4)
                 }
                 .offset(x: boxOffset)
               }
@@ -192,14 +163,24 @@ struct CurrentMonthDetailView: View {
             Section {
                 overviewHeader
             }
-            Section(header: Text("Income")) {
-                CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
+            Section {
+                VStack(alignment: .leading) {
+                    Text("Income").groupBoxLabelTextStyle()
+                    CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
+                }
             }
-            Section(header: Text("Expenses")) {
-                CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
+            Section {
+                VStack(alignment: .leading) {
+                    Text("Expenses").groupBoxLabelTextStyle()
+                    CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
+                }
             }
-            Section(header: Text("Cashflow")) {
-                cashFlowChart
+            Section {
+                VStack(alignment: .leading) {
+                    Text("Current cashflow").groupBoxLabelTextStyle()
+                        .padding(.top, 8)
+                    cashFlowChart
+                }
             }
         }
         .onChange(of: monthlyLimit) { newValue in

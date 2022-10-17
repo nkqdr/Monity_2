@@ -11,28 +11,16 @@ struct DashboardView: View {
     var body: some View {
         NavigationView {
             ScrollView(showsIndicators: false) {
-                Grid {
-                    GridRow {
-                        CurrentMonthOverviewTile()
-                            .gridCellColumns(2)
+                LazyVGrid(columns: [GridItem()]) {
+                    CurrentMonthOverviewTile()
+                    GroupBox(label: Text("Average Expenses").groupBoxLabelTextStyle(.secondary)) {
+                        Text("To-Do")
+                            .padding()
                     }
-                    GridRow {
-                        DashboardBox {
-                            GroupBox(label: Label("Average Expenses", systemImage: "building.columns").foregroundColor(.secondary)) {
-                                Text("To-Do")
-                                    .padding()
-                            }
-                        }
-                        .gridCellColumns(2)
-                    }
-                    GridRow {
-                        DashboardBox {
-                            GroupBox(label: Label("Average Income", systemImage: "building.columns").foregroundColor(.secondary)) {
-                                Text("To-Do")
-                                    .padding()
-                            }
-                        }
-                        .gridCellColumns(2)
+                    .gridCellColumns(2)
+                    GroupBox(label: Text("Average Income").groupBoxLabelTextStyle(.secondary)) {
+                        Text("To-Do")
+                            .padding()
                     }
                 }
                 .padding()

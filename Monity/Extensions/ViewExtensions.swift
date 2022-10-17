@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum GroupBoxLabelStyle {
+    case primary
+    case secondary
+}
+
 extension View {
     func deleteSwipeAction(callback: @escaping () -> Void) -> some View {
         self.swipeActions(edge: .trailing) {
@@ -34,6 +39,16 @@ extension View {
             .onChange(of: binding.wrappedValue) { binding in
                 published.wrappedValue = binding
             }
+    }
+    
+    @ViewBuilder
+    func groupBoxLabelTextStyle(_ style: GroupBoxLabelStyle = .primary) -> some View {
+        switch style {
+        case .primary:
+            self.font(.headline).bold()
+        case .secondary:
+            self.font(.subheadline).foregroundColor(.secondary)
+        }
     }
     
     func onlyHideContextMenu<T: View>(@ViewBuilder content: @escaping () -> T) -> some View {
