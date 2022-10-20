@@ -9,12 +9,26 @@ import Foundation
 import Combine
 
 class MonthSummaryViewModel: ObservableObject, PieChartViewModel {
+    struct IncomeExpenseRelationDataPoint: Identifiable {
+        var id = UUID()
+        var amount: Double
+        var type: String
+    }
+    
+    var incomeExpenseRelationData: [IncomeExpenseRelationDataPoint] {
+        [
+            IncomeExpenseRelationDataPoint(amount: spentThisMonth / (totalTransactionsAmount), type: "Expenses"),
+            IncomeExpenseRelationDataPoint(amount: earnedThisMonth / (totalTransactionsAmount), type: "Income")
+        ]
+    }
+    @Published var totalTransactionsAmount: Double = 0
     @Published var thisMonthTransactions: [Transaction] = [] {
         didSet {
             thisMonthExpenses = thisMonthTransactions.filter { $0.isExpense }
             thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
             expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: .red)
             incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: .green)
+            totalTransactionsAmount = thisMonthTransactions.map { $0.amount }.reduce(0, +)
         }
     }
     @Published var thisMonthExpenses: [Transaction] = [] {

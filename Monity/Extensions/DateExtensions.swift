@@ -62,4 +62,9 @@ extension Date {
         let oneYearAgoToday: Date = Calendar.current.date(from: oneYearAgoTodayComps) ?? Date()
         return self.removeTimeStampAndDay ?? Date() > oneYearAgoToday
     }
+    
+    public var startOfThisMonth: Date {
+        let myComps: DateComponents = Calendar.current.dateComponents([.year, .month], from: self)
+        return Calendar.current.date(from: DateComponents(year: myComps.wrappedYear, month: myComps.wrappedMonth, day: 1)) ?? Date()
+    }
 }

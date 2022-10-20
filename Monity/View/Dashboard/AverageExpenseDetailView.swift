@@ -12,6 +12,7 @@ struct AverageExpenseDetailView: View {
     @State private var showAverageBar: Bool = false
     @State private var selectedElement: ValueTimeDataPoint?
     @State private var ruleMarkOffset: Double = 0
+    @State private var showMonthSummarySheet: Bool = false
     @StateObject private var content = AverageMonthlyChartViewModel.shared
     
     var barChart: some View {
@@ -108,14 +109,14 @@ struct AverageExpenseDetailView: View {
             }
             .listRowBackground(Color.clear)
             Section {
-                if let selectedElement {
-                    NavigationLink(destination: MonthSummaryView(monthDate: selectedElement.date)) {
-                        VStack(alignment: .leading) {
-                            Text("View month summary")
-                            Text(selectedElement.date, format: .dateTime.year().month())
-                                .font(.footnote)
-                                .foregroundColor(.secondary)
+                if selectedElement != nil {
+                    HStack {
+                        Button("View month summary") {
+                            showMonthSummarySheet.toggle()
                         }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(Color.secondary)
                     }
                 }
                 Toggle("Show average mark", isOn: $showAverageBar)
@@ -144,6 +145,20 @@ struct AverageExpenseDetailView: View {
             }
         }
         .listStyle(.plain)
+        .sheet(isPresented: $showMonthSummarySheet) {
+            if let selectedElement {
+                NavigationView {
+                    MonthSummaryView(monthDate: selectedElement.date)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Close") {
+                                    showMonthSummarySheet.toggle()
+                                }
+                            }
+                        }
+                }
+            }
+        }
         .navigationTitle("Expenses")
     }
     

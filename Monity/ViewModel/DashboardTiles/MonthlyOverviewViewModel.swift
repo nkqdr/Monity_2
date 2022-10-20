@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class MonthlyOverviewViewModel: PieChartViewModel, ObservableObject {
+class MonthlyOverviewViewModel: ObservableObject, PieChartViewModel, CashflowViewModel {
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
     @Published var cashFlowData: [ValueTimeDataPoint] = []
@@ -68,25 +68,5 @@ class MonthlyOverviewViewModel: PieChartViewModel, ObservableObject {
             self.transactions = transactions
         }
         remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
-    }
-    
-    // MARK: - Helper functions
-    
-    private func getCashFlowDataPoints(for transactions: [Transaction]) -> [ValueTimeDataPoint] {
-        var dataPoints: [ValueTimeDataPoint] = []
-        let startOfMonthDate: Date = Calendar.current.date(from: DateComponents(year: currentComps.wrappedYear, month: currentComps.wrappedMonth, day: 1)) ?? Date()
-        let datesEntered: Set<Date> = Set(transactions.map { $0.date?.removeTimeStamp ?? Date() })
-        if !datesEntered.contains(startOfMonthDate) {
-            dataPoints.append(ValueTimeDataPoint(date: startOfMonthDate, value: 0))
-        }
-        for date in datesEntered {
-            dataPoints.append(ValueTimeDataPoint(
-                date: date,
-                value: transactions.filter { $0.date?.removeTimeStamp ?? Date() <= date}.map { $0.isExpense ? -$0.amount : $0.amount}.reduce(0, +))
-            )
-        }
-        return dataPoints.sorted {
-            $0.date < $1.date
-        }
     }
 }

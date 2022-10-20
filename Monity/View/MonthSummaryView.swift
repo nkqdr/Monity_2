@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct MonthSummaryView: View {
     var monthDate: Date
@@ -36,8 +37,33 @@ struct MonthSummaryView: View {
         }
     }
     
+    @ViewBuilder
+    private var incomeExpenseRelationChart: some View {
+        if let content {
+            Chart(content.incomeExpenseRelationData) {
+                BarMark(x: .value("Amount", $0.amount))
+                    .foregroundStyle(by: .value("Type", $0.type))
+                RuleMark(x: .value("Middle", 0.5))
+                    .foregroundStyle(Color.secondary)
+            }
+            .chartForegroundStyleScale(["Expenses": Color.red.gradient, "Income": Color.green.gradient])
+//            .chartLegend(.hidden)
+            .chartXScale(domain: 0 ... 1)
+            .chartXAxis(.hidden)
+            .frame(height: 50)
+        }
+    }
+    
     var body: some View {
         List {
+            Section {
+                VStack(alignment: .leading) {
+                    Text("Ratio").groupBoxLabelTextStyle()
+                    incomeExpenseRelationChart
+                }
+            }
+//            .listRowBackground(Color.clear)
+//            .listRowInsets(EdgeInsets())
             Section {
                 incomePieChart
             }
