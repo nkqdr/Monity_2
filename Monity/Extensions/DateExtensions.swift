@@ -42,10 +42,18 @@ extension Date {
         return date
     }
     
+    private func isSameXAs(_ otherDate: Date, comps: Set<Calendar.Component>) -> Bool {
+        let myComps: DateComponents = Calendar.current.dateComponents(comps, from: self)
+        let otherComps: DateComponents = Calendar.current.dateComponents(comps, from: otherDate)
+        return Calendar.current.date(from: myComps) == Calendar.current.date(from: otherComps)
+    }
+    
     public func isSameMonthAs(_ otherDate: Date) -> Bool {
-        let myComps: DateComponents = Calendar.current.dateComponents([.year, .month], from: self)
-        let otherComps: DateComponents = Calendar.current.dateComponents([.year, .month], from: otherDate)
-        return myComps.month == otherComps.month && myComps.year == otherComps.year
+        return isSameXAs(otherDate, comps: [.year, .month])
+    }
+    
+    public func isSameDayAs(_ otherDate: Date) -> Bool {
+        return isSameXAs(otherDate, comps: [.year, .month, .day])
     }
     
     public var isInLastYear: Bool {

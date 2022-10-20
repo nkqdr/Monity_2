@@ -33,9 +33,8 @@ struct AverageExpenseDetailView: View {
                     .lineStyle(StrokeStyle(lineWidth: 1))
             }
             BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
-                .foregroundStyle(.red.opacity(showAverageBar ? 0.3 : 1))
+                .foregroundStyle(.red.opacity(showAverageBar ? 0.3 : 1).gradient)
         }
-        .animation(.easeInOut, value: showAverageBar)
         .padding(.top, 25)
         .chartYAxis {
             AxisMarks { value in
@@ -64,7 +63,7 @@ struct AverageExpenseDetailView: View {
                       // If tapping the same element, clear the selection.
                       selectedElement = nil
                     } else {
-                      selectedElement = element
+                        selectedElement = element
                     }
                   }
                   .exclusively(before: DragGesture()
@@ -92,7 +91,7 @@ struct AverageExpenseDetailView: View {
                 ZStack(alignment: .topLeading) {
                     if let selectedElement {
                         VStack(alignment: .leading) {
-                            Text("\(selectedElement.date, format: .dateTime.year().month())")
+                            Text(selectedElement.date, format: .dateTime.year().month())
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                             Text(selectedElement.value, format: .currency(code: "EUR"))
@@ -108,7 +107,19 @@ struct AverageExpenseDetailView: View {
                 }
             }
             .listRowBackground(Color.clear)
-            Toggle("Show average mark", isOn: $showAverageBar)
+            Section {
+                if let selectedElement {
+                    NavigationLink(destination: MonthSummaryView(monthDate: selectedElement.date)) {
+                        VStack(alignment: .leading) {
+                            Text("View month summary")
+                            Text(selectedElement.date, format: .dateTime.year().month())
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                Toggle("Show average mark", isOn: $showAverageBar)
+            }
             Text("Categories").groupBoxLabelTextStyle(.secondary)
                 .padding(.top)
             ForEach(content.expenseCategoryRetroDataPoints) { dataPoint in
@@ -141,20 +152,13 @@ struct AverageExpenseDetailView: View {
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
       // Use value(atX:) to find plotted value for the given X axis position.
       // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
-      if let date = proxy.value(atX: relativeXPosition) as Date? {
-        // Find the closest date element.
-        var minDistance: TimeInterval = .infinity
-        var index: Int? = nil
-        for dataIndex in content.monthlyExpenseDataPoints.indices {
-            let nthDataDistance = content.monthlyExpenseDataPoints[dataIndex].date.distance(to: date)
-            if abs(nthDataDistance) < minDistance {
-                minDistance = abs(nthDataDistance)
-                index = dataIndex
-            }
-        }
-        if let index {
-            return content.monthlyExpenseDataPoints[index]
-        }
+        if let date: Date = proxy.value(atX: relativeXPosition) {
+          // Find the month for tapped date
+          for dataPoint in content.monthlyExpenseDataPoints {
+              if dataPoint.date.isSameMonthAs(date) {
+                  return dataPoint
+              }
+          }
       }
       return nil
     }

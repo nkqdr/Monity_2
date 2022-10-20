@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class MonthlyOverviewViewModel: ObservableObject {
+class MonthlyOverviewViewModel: PieChartViewModel, ObservableObject {
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
     @Published var cashFlowData: [ValueTimeDataPoint] = []
@@ -71,24 +71,6 @@ class MonthlyOverviewViewModel: ObservableObject {
     }
     
     // MARK: - Helper functions
-    
-    private func getPieChartDataPoints(for transactions: [Transaction], with color: Color) -> [PieChartDataPoint] {
-        var byCategory: [String?:Double] = [:]
-        let usedCategoryNames: Set<String?> = Set(transactions.map { $0.category?.name })
-        for usedCategoryName in usedCategoryNames {
-            byCategory[usedCategoryName] = transactions.filter { $0.category?.name == usedCategoryName }.map { $0.amount }.reduce(0, +)
-        }
-        var dps: [PieChartDataPoint] = []
-        let sorted = byCategory.keys.sorted(by: {(first, second) in
-            return byCategory[first]! > byCategory[second]!
-        })
-        let totalDataPoints: Double = Double(sorted.count)
-        for (index, categoryName) in sorted.enumerated() {
-            let opacity: Double = 1.0 - (Double(index) / totalDataPoints)
-            dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: color.opacity(opacity)))
-        }
-        return dps
-    }
     
     private func getCashFlowDataPoints(for transactions: [Transaction]) -> [ValueTimeDataPoint] {
         var dataPoints: [ValueTimeDataPoint] = []

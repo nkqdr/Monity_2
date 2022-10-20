@@ -9,12 +9,31 @@ import Foundation
 import Combine
 
 class TransactionsViewModel: ObservableObject {
+    struct TransactionsByDate: Identifiable {
+        var id = UUID()
+        var date: Date
+        var transactions: [Transaction]
+    }
+    @Published var currentTransactionsByDate: [TransactionsByDate] = []
     @Published var transactions: [Transaction] = [] {
         didSet {
             filterTransactionList()
         }
     }
-    @Published var filteredTransactions: [Transaction]?
+    @Published var filteredTransactions: [Transaction]? = nil {
+        didSet {
+            if let filteredTransactions {
+                var byDate: [TransactionsByDate] = []
+                let uniqueDates = Set(filteredTransactions.map { $0.date?.removeTimeStamp ?? Date() })
+                for uniqueDate in uniqueDates {
+                    byDate.append(TransactionsByDate(date: uniqueDate, transactions: filteredTransactions.filter { $0.date?.isSameDayAs(uniqueDate) ?? false}))
+                }
+                currentTransactionsByDate = byDate.sorted {
+                    $0.date > $1.date
+                }
+            }
+        }
+    }
     @Published var currentTransaction: Transaction? = nil
     @Published var filteredSelectedDate = Calendar.current.dateComponents([.month, .year], from: Date()) {
         didSet {

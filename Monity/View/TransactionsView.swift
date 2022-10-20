@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TransactionsView: View {
-    @State var searchString = ""
     @State var showAddTransactionView = false
     @State private var showFilterSettings = false
     @StateObject var content = TransactionsViewModel()
@@ -21,11 +20,15 @@ struct TransactionsView: View {
     
     var body: some View {
         NavigationView {
-            List(content.filteredTransactions ?? content.transactions) { transaction in
-                TransactionListTile(transaction: transaction, onDelete: content.deleteTransaction, onEdit: showEditSheetForTransaction)
+            List(content.currentTransactionsByDate) { date in
+                Section(header: Text(date.date, format: .dateTime.year().month().day())) {
+                    ForEach(date.transactions) { transaction in
+                        TransactionListTile(transaction: transaction, onDelete: content.deleteTransaction, onEdit: showEditSheetForTransaction)
+                    }
+                }
             }
-            .searchable(text: $searchString)
             .navigationTitle("Transactions")
+            .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
