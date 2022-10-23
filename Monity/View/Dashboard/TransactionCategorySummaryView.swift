@@ -9,10 +9,17 @@ import SwiftUI
 
 struct TransactionCategorySummaryView: View {
     @State var showEditTransactionView: Bool = false
+    @ObservedObject var content: TransactionsCategorySummaryViewModel
     var category: TransactionCategory
     
+    init(category: TransactionCategory) {
+        self.content = TransactionsCategorySummaryViewModel(category: category)
+        self.category = category
+    }
+    
     var body: some View {
-        TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: [])
+        TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: content.transactionsByDate, dateFormat: .dateTime.year().month())
+            .navigationTitle(category.wrappedName)
     }
 }
 
