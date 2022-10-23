@@ -14,6 +14,10 @@
 		6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		602E45C228F95D46003FD564 /* CurrentMonthDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */; };
 		602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C328F9608D003FD564 /* ShapeExtensions.swift */; };
+		603ADF90290554140075CB90 /* LargeValuePerMonthChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF8F290554140075CB90 /* LargeValuePerMonthChart.swift */; };
+		603ADF9229055D8D0075CB90 /* CategorySummaryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */; };
+		603ADF98290563AB0075CB90 /* TransactionCategorySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF97290563AB0075CB90 /* TransactionCategorySummaryView.swift */; };
+		603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF99290564F20075CB90 /* TransactionsList.swift */; };
 		603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FDE7529012F1F000398C7 /* PieChartViewModel.swift */; };
 		603FDE7B29013767000398C7 /* CashflowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FDE7A29013767000398C7 /* CashflowViewModel.swift */; };
 		6045379228FABB0E002EFC7F /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379128FABB0E002EFC7F /* DocumentPicker.swift */; };
@@ -57,10 +61,9 @@
 		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
 		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
 		60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605928FD412100FAB25A /* BudgetBattery.swift */; };
-		60E7605C28FD454D00FAB25A /* AverageExpensesTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605B28FD454D00FAB25A /* AverageExpensesTile.swift */; };
+		60E7605C28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605B28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift */; };
 		60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */; };
 		60E7606028FD5AB400FAB25A /* AverageOneYearBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605F28FD5AB400FAB25A /* AverageOneYearBarChart.swift */; };
-		60E7606228FD5B6100FAB25A /* AverageIncomeTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7606128FD5B6100FAB25A /* AverageIncomeTile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +91,10 @@
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMonthDetailView.swift; sourceTree = "<group>"; };
 		602E45C328F9608D003FD564 /* ShapeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeExtensions.swift; sourceTree = "<group>"; };
+		603ADF8F290554140075CB90 /* LargeValuePerMonthChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeValuePerMonthChart.swift; sourceTree = "<group>"; };
+		603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySummaryTile.swift; sourceTree = "<group>"; };
+		603ADF97290563AB0075CB90 /* TransactionCategorySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategorySummaryView.swift; sourceTree = "<group>"; };
+		603ADF99290564F20075CB90 /* TransactionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsList.swift; sourceTree = "<group>"; };
 		603FDE7529012F1F000398C7 /* PieChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewModel.swift; sourceTree = "<group>"; };
 		603FDE7A29013767000398C7 /* CashflowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashflowViewModel.swift; sourceTree = "<group>"; };
 		6045379128FABB0E002EFC7F /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
@@ -135,10 +142,9 @@
 		60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtensions.swift; sourceTree = "<group>"; };
 		60E7605928FD412100FAB25A /* BudgetBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetBattery.swift; sourceTree = "<group>"; };
-		60E7605B28FD454D00FAB25A /* AverageExpensesTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageExpensesTile.swift; sourceTree = "<group>"; };
+		60E7605B28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageExpenseAndIncomeTile.swift; sourceTree = "<group>"; };
 		60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageMonthlyChartViewModel.swift; sourceTree = "<group>"; };
 		60E7605F28FD5AB400FAB25A /* AverageOneYearBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageOneYearBarChart.swift; sourceTree = "<group>"; };
-		60E7606128FD5B6100FAB25A /* AverageIncomeTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageIncomeTile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,9 +207,9 @@
 				60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */,
 				6000FF7628F5FBF00083595D /* CurrentMonthOverviewTile.swift */,
 				602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */,
-				60E7605B28FD454D00FAB25A /* AverageExpensesTile.swift */,
-				60E7606128FD5B6100FAB25A /* AverageIncomeTile.swift */,
+				60E7605B28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift */,
 				60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */,
+				603ADF97290563AB0075CB90 /* TransactionCategorySummaryView.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -334,6 +340,9 @@
 				6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */,
 				60E7605928FD412100FAB25A /* BudgetBattery.swift */,
 				60E7605F28FD5AB400FAB25A /* AverageOneYearBarChart.swift */,
+				603ADF8F290554140075CB90 /* LargeValuePerMonthChart.swift */,
+				603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */,
+				603ADF99290564F20075CB90 /* TransactionsList.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -490,13 +499,13 @@
 				60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */,
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
 				6045379228FABB0E002EFC7F /* DocumentPicker.swift in Sources */,
+				603ADF98290563AB0075CB90 /* TransactionCategorySummaryView.swift in Sources */,
 				60A4CFC028F9C175007F392D /* SettingsSavingsView.swift in Sources */,
 				60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */,
-				60E7605C28FD454D00FAB25A /* AverageExpensesTile.swift in Sources */,
+				60E7605C28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
-				60E7606228FD5B6100FAB25A /* AverageIncomeTile.swift in Sources */,
 				60E7606028FD5AB400FAB25A /* AverageOneYearBarChart.swift in Sources */,
 				60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */,
 				60A1DDD028FDA32800635F39 /* AverageExpenseDetailView.swift in Sources */,
@@ -508,6 +517,7 @@
 				60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */,
 				60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */,
 				6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */,
+				603ADF90290554140075CB90 /* LargeValuePerMonthChart.swift in Sources */,
 				600C39B928F54E9800688149 /* MonthYearPicker.swift in Sources */,
 				60A4CFB628F9A446007F392D /* SettingsSystemView.swift in Sources */,
 				60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */,
@@ -517,10 +527,12 @@
 				60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */,
 				6000FF7728F5FBF00083595D /* CurrentMonthOverviewTile.swift in Sources */,
 				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
+				603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				6000FF7A28F5FEDE0083595D /* MonthlyOverviewViewModel.swift in Sources */,
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
+				603ADF9229055D8D0075CB90 /* CategorySummaryTile.swift in Sources */,
 				6045379428FAC9A4002EFC7F /* ImportSummaryRow.swift in Sources */,
 				603FDE7B29013767000398C7 /* CashflowViewModel.swift in Sources */,
 				602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */,

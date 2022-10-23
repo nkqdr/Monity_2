@@ -25,6 +25,10 @@ extension DateComponents {
             self.year = newValue
         }
     }
+    
+    public var toDate: Date {
+        Calendar.current.date(from: self) ?? Date()
+    }
 }
 
 extension Date {

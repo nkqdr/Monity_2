@@ -13,8 +13,7 @@ struct DashboardView: View {
             List {
                 Group {
                     CurrentMonthOverviewTile()
-                    AverageExpensesTile()
-                    AverageIncomeTile()
+                    AverageExpenseAndIncomeTile()
 //                    Section {
 //                        VStack(alignment: .leading) {
 //                            Text("Savings").groupBoxLabelTextStyle(.secondary)

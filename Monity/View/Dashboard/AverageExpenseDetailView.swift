@@ -11,171 +11,93 @@ import Charts
 struct AverageExpenseDetailView: View {
     @State private var showAverageBar: Bool = false
     @State private var selectedElement: ValueTimeDataPoint?
-    @State private var ruleMarkOffset: Double = 0
-    @State private var showMonthSummarySheet: Bool = false
+    @State private var showExpenseChart: Bool = true
     @StateObject private var content = AverageMonthlyChartViewModel.shared
     
-    var barChart: some View {
-        Chart(content.monthlyExpenseDataPoints) {
-            if showAverageBar {
-                RuleMark(y: .value("Average", content.averageExpenses))
-                    .foregroundStyle(.red)
-                    .lineStyle(StrokeStyle(lineWidth: 2))
-                    .annotation(position: .top, alignment: .leading) {
-                        Text("Ø \(content.averageExpenses.formatted(.currency(code: "EUR")))")
-                            .font(.footnote)
-                            .foregroundColor(.red)
-                    }
-            }
-            if let selectedElement, selectedElement.id == $0.id {
-                RuleMark(x: .value("Month", selectedElement.date))
-                    .offset(x: ruleMarkOffset)
-                    .foregroundStyle(Color.secondary)
-                    .lineStyle(StrokeStyle(lineWidth: 1))
-            }
-            BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
-                .foregroundStyle(.red.opacity(showAverageBar ? 0.3 : 1).gradient)
+    var expenseBarChart: some View {
+        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyExpenseDataPoints, showAverageBar: showAverageBar, average: content.averageExpenses, color: .red)
+            .padding(.vertical)
+    }
+    
+    var incomeBarChart: some View {
+        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyIncomeDataPoints, showAverageBar: showAverageBar, average: content.averageIncome, color: .green)
+            .padding(.vertical)
+    }
+    
+    var totalText: Double {
+        if showExpenseChart {
+            return content.totalExpensesThisYear
+        } else {
+            return content.totalIncomeThisYear
         }
-        .padding(.top, 25)
-        .chartYAxis {
-            AxisMarks { value in
-                AxisGridLine()
-                AxisValueLabel(format: .currency(code: "EUR"))
-            }
+    }
+    
+    var retroDataPoints: [CategoryRetroDataPoint] {
+        if showExpenseChart {
+            return content.expenseCategoryRetroDataPoints
+        } else {
+            return content.incomeCategoryRetroDataPoints
         }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .month)) { value in
-                AxisGridLine()
-                AxisValueLabel(format: .dateTime.month(.narrow))
-            }
+    }
+    
+    func barChartHeader(timeframe: String, value: Double) -> some View {
+        VStack(alignment: .leading) {
+            Text(timeframe)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Text(value, format: .currency(code: "EUR"))
+                .font(.headline.bold())
+                .foregroundColor(.primary)
         }
-        .chartOverlay { proxy in
-            ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(content.monthlyExpenseDataPoints.count) / 2
-        return GeometryReader { geo in
-            Rectangle()
-              .fill(.clear)
-              .contentShape(Rectangle())
-              .gesture(
-                SpatialTapGesture()
-                  .onEnded { value in
-                    let element = findElement(location: value.location, proxy: proxy, geometry: geo)
-                    Haptics.shared.play(.medium)
-                    if selectedElement?.date == element?.date {
-                      // If tapping the same element, clear the selection.
-                      selectedElement = nil
-                    } else {
-                        selectedElement = element
-                    }
-                  }
-                  .exclusively(before: DragGesture()
-                    .onChanged { value in
-                        let newElement = findElement(location: value.location, proxy: proxy, geometry: geo)
-                        if selectedElement == newElement {
-                            return
-                        }
-                        selectedElement = newElement
-                        Haptics.shared.play(.medium)
-                    }
-                    .onEnded { _ in
-                        selectedElement = nil
-                    })
-              )
-          }
+    }
+    
+    @ViewBuilder
+    var correctBarChartHeader: some View {
+        if let selectedElement {
+            barChartHeader(timeframe: selectedElement.date.formatted(.dateTime.year().month()), value: selectedElement.value)
+        } else {
+            barChartHeader(timeframe: "Total", value: totalText)
         }
-        .frame(minHeight: 250)
     }
     
     var body: some View {
         List {
             VStack(alignment: .leading) {
                 Text("Over the last year").groupBoxLabelTextStyle(.secondary)
+                Picker("", selection: $showExpenseChart) {
+                    Text("Expenses").tag(true)
+                    Text("Income").tag(false)
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: showExpenseChart) { _ in
+                    selectedElement = nil
+                }
                 ZStack(alignment: .topLeading) {
-                    if let selectedElement {
-                        VStack(alignment: .leading) {
-                            Text(selectedElement.date, format: .dateTime.year().month())
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            Text(selectedElement.value, format: .currency(code: "EUR"))
-                                .font(.headline.bold())
-                                .foregroundColor(.primary)
-                        }
+                    correctBarChartHeader
+                    if showExpenseChart {
+                        expenseBarChart
                     } else {
-                        Text("Total: \(content.totalExpensesThisYear.formatted(.currency(code: "EUR")))")
-                            .font(.headline.bold())
+                        incomeBarChart
                     }
-                    barChart
-                        .padding(.vertical)
                 }
             }
             .listRowBackground(Color.clear)
             Section {
-                if selectedElement != nil {
-                    HStack {
-                        Button("View month summary") {
-                            showMonthSummarySheet.toggle()
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(Color.secondary)
+                if let selectedElement {
+                    NavigationLink("View month summary") {
+                        MonthSummaryView(monthDate: selectedElement.date)
                     }
                 }
                 Toggle("Show average mark", isOn: $showAverageBar)
             }
             Text("Categories").groupBoxLabelTextStyle(.secondary)
                 .padding(.top)
-            ForEach(content.expenseCategoryRetroDataPoints) { dataPoint in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(dataPoint.category.wrappedName)
-                            .fontWeight(.bold)
-                        Text("\(dataPoint.numTransactions) transactions")
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(dataPoint.total, format: .currency(code: "EUR"))
-                            .fontWeight(.semibold)
-                        Text("Ø\(dataPoint.average.formatted(.currency(code: "EUR"))) p.m.")
-                            .font(.caption2)
-                    }
-                    .foregroundColor(Color.secondary)
-                }
-                .padding(.vertical, 2)
+            ForEach(retroDataPoints) { dataPoint in
+                CategorySummaryTile(dataPoint: dataPoint)
             }
         }
         .listStyle(.plain)
-        .sheet(isPresented: $showMonthSummarySheet) {
-            if let selectedElement {
-                NavigationView {
-                    MonthSummaryView(monthDate: selectedElement.date)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Close") {
-                                    showMonthSummarySheet.toggle()
-                                }
-                            }
-                        }
-                }
-            }
-        }
-        .navigationTitle("Expenses")
-    }
-    
-    func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
-      // Figure out the X position by offseting gesture location with chart frame
-      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
-      // Use value(atX:) to find plotted value for the given X axis position.
-      // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
-        if let date: Date = proxy.value(atX: relativeXPosition) {
-          // Find the month for tapped date
-          for dataPoint in content.monthlyExpenseDataPoints {
-              if dataPoint.date.isSameMonthAs(date) {
-                  return dataPoint
-              }
-          }
-      }
-      return nil
+        .navigationTitle("Transaction Overview")
     }
 }
 

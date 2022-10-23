@@ -15,6 +15,16 @@ struct PieChartDataPoint: Identifiable {
     var color: Color
 }
 
+struct TransactionsByDate: Identifiable {
+    var id = UUID()
+    var date: Date
+    var transactions: [Transaction]
+    
+    mutating func setTransactions(_ newTransactions: [Transaction]) {
+        transactions = newTransactions
+    }
+}
+
 struct CategoryRetroDataPoint: Identifiable, Equatable {
     var id: UUID = UUID()
     var category: TransactionCategory

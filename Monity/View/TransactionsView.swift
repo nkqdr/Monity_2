@@ -10,23 +10,15 @@ import SwiftUI
 struct TransactionsView: View {
     @State var showAddTransactionView = false
     @State private var showFilterSettings = false
-    @StateObject var content = TransactionsViewModel()
+    @StateObject var content = TransactionsViewModel.shared
     @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
-    
-    func showEditSheetForTransaction(_ transaction: Transaction) {
-        content.currentTransaction = transaction
-        showAddTransactionView.toggle()
-    }
     
     var body: some View {
         NavigationView {
-            List(content.currentTransactionsByDate) { date in
-                Section(header: Text(date.date, format: .dateTime.year().month().day())) {
-                    ForEach(date.transactions) { transaction in
-                        TransactionListTile(transaction: transaction, onDelete: content.deleteTransaction, onEdit: showEditSheetForTransaction)
-                    }
-                }
-            }
+            TransactionsList(
+                showAddTransactionView: $showAddTransactionView,
+                transactionsByDate: content.currentTransactionsByDate
+            )
             .navigationTitle("Transactions")
             .listStyle(.insetGrouped)
             .toolbar {
@@ -68,14 +60,6 @@ struct TransactionsView: View {
                     .buttonStyle(.borderedProminent)
                 }
                 .presentationDetents([.medium])
-            }
-            .sheet(isPresented: $showAddTransactionView) {
-                AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: content.currentTransaction))
-            }
-            .onChange(of: showAddTransactionView) { newValue in
-                if !newValue {
-                    content.currentTransaction = nil
-                }
             }
         }
     }
