@@ -19,9 +19,11 @@ class TransactionsCategorySummaryViewModel: ObservableObject {
     
     private var transactionCancellable: AnyCancellable?
     private var selectedCategory: TransactionCategory
+    private var showExpenses: Bool
     
-    init(category: TransactionCategory) {
+    init(category: TransactionCategory, showExpenses: Bool) {
         self.selectedCategory = category
+        self.showExpenses = showExpenses
         let transactionPublisher = TransactionStorage.shared.transactions.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
@@ -32,7 +34,7 @@ class TransactionsCategorySummaryViewModel: ObservableObject {
         var byDate: [TransactionsByDate] = []
         let uniqueDates = Set(transactions.map { $0.date?.removeTimeStampAndDay ?? Date() })
         for uniqueDate in uniqueDates {
-            let newTransactions = transactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false }
+            let newTransactions = transactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false && $0.isExpense == showExpenses }
             let existing = transactionsByDate.first(where: { $0.date.isSameMonthAs(uniqueDate)})
             if let existing {
                 var newExisting = existing

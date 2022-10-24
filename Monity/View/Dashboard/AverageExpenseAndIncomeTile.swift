@@ -22,7 +22,7 @@ struct AverageExpenseAndIncomeTile: View {
     
     @ViewBuilder
     private var actualTile: some View {
-        let percentOfIncomeSpent: Int = Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100)
+        let percentOfIncomeSpent: Int? = content.totalIncomeThisYear > 0 ? Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100) : nil
         VStack(alignment: .leading) {
             HStack {
                 Text("Transaction Overview").groupBoxLabelTextStyle(.secondary)
@@ -30,8 +30,13 @@ struct AverageExpenseAndIncomeTile: View {
                 Text("Last Year").groupBoxLabelTextStyle(.secondary)
             }
             Spacer()
-            Text("You spent \(percentOfIncomeSpent)% of your income.")
-                .groupBoxLabelTextStyle()
+            if let percentOfIncomeSpent {
+                Text("You spent \(percentOfIncomeSpent)% of your income.")
+                    .groupBoxLabelTextStyle()
+            } else {
+                Text("Register your transactions to build the statistics!")
+                    .groupBoxLabelTextStyle()
+            }
             expenseChart
             incomeChart
         }

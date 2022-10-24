@@ -11,10 +11,12 @@ struct TransactionCategorySummaryView: View {
     @State var showEditTransactionView: Bool = false
     @ObservedObject var content: TransactionsCategorySummaryViewModel
     var category: TransactionCategory
+    var showExpenses: Bool
     
-    init(category: TransactionCategory) {
-        self.content = TransactionsCategorySummaryViewModel(category: category)
+    init(category: TransactionCategory, showExpenses: Bool) {
+        self.content = TransactionsCategorySummaryViewModel(category: category, showExpenses: showExpenses)
         self.category = category
+        self.showExpenses = showExpenses
     }
     
     var body: some View {
@@ -39,6 +41,6 @@ struct TransactionSummaryView_Previews: PreviewProvider {
     
     static var previews: some View {
         let c = generateData()
-        TransactionCategorySummaryView(category: c)
+        TransactionCategorySummaryView(category: c, showExpenses: true)
     }
 }

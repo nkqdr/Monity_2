@@ -93,7 +93,9 @@ struct AverageExpenseDetailView: View {
             Text("Categories").groupBoxLabelTextStyle(.secondary)
                 .padding(.top)
             ForEach(retroDataPoints) { dataPoint in
-                CategorySummaryTile(dataPoint: dataPoint)
+                NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenseChart)) {
+                    CategorySummaryTile(dataPoint: dataPoint)
+                }
             }
         }
         .listStyle(.plain)

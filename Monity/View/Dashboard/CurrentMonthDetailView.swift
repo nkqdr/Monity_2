@@ -179,7 +179,17 @@ struct CurrentMonthDetailView: View {
                 VStack(alignment: .leading) {
                     Text("Current cashflow").groupBoxLabelTextStyle()
                         .padding(.top, 8)
-                    cashFlowChart
+                    if content.cashFlowData.count > 1 {
+                        cashFlowChart
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("No registered transactions for this month.")
+                                .groupBoxLabelTextStyle(.secondary)
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
                 }
             }
         }

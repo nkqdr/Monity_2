@@ -32,7 +32,12 @@ class AverageMonthlyChartViewModel: ObservableObject {
         }
     }
     
-    private var transactionCategories: [TransactionCategory] = []
+    private var transactionCategories: [TransactionCategory] = [] {
+        didSet {
+            expenseCategoryRetroDataPoints = getExpenseRetroDataPoints()
+            incomeCategoryRetroDataPoints = getIncomeRetroDataPoints()
+        }
+    }
     
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?

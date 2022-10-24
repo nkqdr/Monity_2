@@ -11,26 +11,24 @@ struct CategorySummaryTile: View {
     var dataPoint: CategoryRetroDataPoint
     
     var body: some View {
-        NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category)) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(dataPoint.category.wrappedName)
-                        .fontWeight(.bold)
-                    Text("\(dataPoint.numTransactions) transactions")
-                        .foregroundColor(.secondary)
-                        .font(.footnote)
-                }
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(dataPoint.total, format: .currency(code: "EUR"))
-                        .fontWeight(.semibold)
-                    Text("Ø\(dataPoint.average.formatted(.currency(code: "EUR"))) p.m.")
-                        .font(.caption2)
-                }
-                .foregroundColor(Color.secondary)
+        HStack {
+            VStack(alignment: .leading) {
+                Text(dataPoint.category.wrappedName)
+                    .fontWeight(.bold)
+                Text("\(dataPoint.numTransactions) transactions")
+                    .foregroundColor(.secondary)
+                    .font(.footnote)
             }
-            .padding(.vertical, 2)
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(dataPoint.total, format: .currency(code: "EUR"))
+                    .fontWeight(.semibold)
+                Text("Ø\(dataPoint.average.formatted(.currency(code: "EUR"))) p.m.")
+                    .font(.caption2)
+            }
+            .foregroundColor(Color.secondary)
         }
+        .padding(.vertical, 2)
     }
 }
 
