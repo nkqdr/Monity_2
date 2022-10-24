@@ -8,6 +8,31 @@
 import Foundation
 import SwiftUI
 
+enum SavingsCategoryLabel: String, CaseIterable {
+    case none = ""
+    case saved = "Saved"
+    case invested = "Invested"
+    case liquid = "Liquid"
+    
+    var color: Color {
+        switch self {
+        case .none: return Color.clear
+        case .saved: return Color.yellow
+        case .invested: return Color.green
+        case .liquid: return Color.blue
+        }
+    }
+    
+    static func by(_ repr: String?) -> SavingsCategoryLabel {
+        for label in SavingsCategoryLabel.allCases {
+            if label.rawValue == repr {
+                return label
+            }
+        }
+        return SavingsCategoryLabel.none
+    }
+}
+
 struct PieChartDataPoint: Identifiable {
     var id: UUID = UUID()
     var title: String
