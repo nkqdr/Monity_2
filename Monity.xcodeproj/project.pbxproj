@@ -40,6 +40,7 @@
 		60A4CFB928F9A685007F392D /* SettingsSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFB828F9A685007F392D /* SettingsSystemViewModel.swift */; };
 		60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */; };
 		60A4CFC028F9C175007F392D /* SettingsSavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFBF28F9C175007F392D /* SettingsSavingsView.swift */; };
+		60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E0D2906F19C00396308 /* SavingStorage.swift */; };
 		60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1128F35B6F001FF5FF /* MonityApp.swift */; };
 		60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1528F35B70001FF5FF /* Assets.xcassets */; };
 		60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */; };
@@ -118,6 +119,7 @@
 		60A4CFB828F9A685007F392D /* SettingsSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSystemViewModel.swift; sourceTree = "<group>"; };
 		60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		60A4CFBF28F9C175007F392D /* SettingsSavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSavingsView.swift; sourceTree = "<group>"; };
+		60B50E0D2906F19C00396308 /* SavingStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingStorage.swift; sourceTree = "<group>"; };
 		60BD9F0E28F35B6F001FF5FF /* Monity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BD9F1128F35B6F001FF5FF /* MonityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityApp.swift; sourceTree = "<group>"; };
 		60BD9F1528F35B70001FF5FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				60BD9F1A28F35B70001FF5FF /* Persistence.swift */,
 				60BD9F4228F35C27001FF5FF /* TransactionCategoryStorage.swift */,
 				60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */,
+				60B50E0D2906F19C00396308 /* SavingStorage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				603ADF9C290579E90075CB90 /* TransactionsCategorySummaryViewModel.swift in Sources */,
 				6000FF7728F5FBF00083595D /* CurrentMonthOverviewTile.swift in Sources */,
 				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
+				60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */,
 				603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
