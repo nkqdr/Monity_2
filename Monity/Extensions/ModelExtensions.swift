@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension TransactionCategory {
     var wrappedName: String {
@@ -20,5 +21,24 @@ extension TransactionCategory {
 extension Transaction {
     var wrappedText: String {
         self.text ?? ""
+    }
+}
+
+extension SavingsCategory {
+    var wrappedName: String {
+        self.name ?? ""
+    }
+    
+    var color: Color {
+        for category in SavingsCategoryLabel.allCases {
+            if category.rawValue == self.label {
+                return category.color
+            }
+        }
+        return Color.clear
+    }
+    
+    var wrappedEntryCount: Int {
+        self.entries?.count ?? 0
     }
 }

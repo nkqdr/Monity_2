@@ -9,6 +9,12 @@ import SwiftUI
 
 struct Settings_SavingsView: View {
     @State private var showAddCategorySheet: Bool = false
+    @StateObject private var content = SettingsSavingsViewModel()
+    
+    func showEditSheetForCategory(_ category: SavingsCategory) {
+        content.currentCategory = category
+        showAddCategorySheet.toggle()
+    }
     
     var savingsCategories: some View {
         Section(header: HStack {
@@ -20,7 +26,9 @@ struct Settings_SavingsView: View {
                         Image(systemName: "plus")
                     }
         }, footer: Text("Here you can add all of your savings categories, so that you can later add entries to these categories.")) {
-            
+            ForEach(content.categories) { category in
+                SavingsCategoryTile(category: category, onEdit: showEditSheetForCategory, onDelete: content.deleteCategory)
+            }
         }
     }
     
@@ -29,8 +37,14 @@ struct Settings_SavingsView: View {
             savingsCategories
         }
         .sheet(isPresented: $showAddCategorySheet) {
-            Text("Yeet")
+            SavingsCategoryFormView(isPresented: $showAddCategorySheet, editor: SavingsCategoryEditor(category: content.currentCategory))
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
+        }
+        .onChange(of: showAddCategorySheet) { newValue in
+            if !newValue {
+                content.currentCategory = nil
+            }
         }
         .navigationTitle("Savings")
         .navigationBarTitleDisplayMode(.inline)
