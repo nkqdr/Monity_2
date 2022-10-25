@@ -9,9 +9,13 @@ import Foundation
 import Combine
 
 class TransactionsCategorySummaryViewModel: ObservableObject {
-    @Published var transactions: [Transaction] = [] {
+    private var transactions: [Transaction] = [] {
         didSet {
-            let relevantTransactions = transactions.filter { $0.category == selectedCategory }
+            relevantTransactions = transactions.filter { $0.category == selectedCategory }
+        }
+    }
+    @Published var relevantTransactions: [Transaction] = [] {
+        didSet {
             updateTransactionsByDate(relevantTransactions)
         }
     }
@@ -32,9 +36,9 @@ class TransactionsCategorySummaryViewModel: ObservableObject {
     
     private func updateTransactionsByDate(_ transactions: [Transaction]) {
         var byDate: [TransactionsByDate] = []
-        let uniqueDates = Set(transactions.map { $0.date?.removeTimeStampAndDay ?? Date() })
+        let uniqueDates = Set(relevantTransactions.map { $0.date?.removeTimeStampAndDay ?? Date() })
         for uniqueDate in uniqueDates {
-            let newTransactions = transactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false && $0.isExpense == showExpenses }
+            let newTransactions = relevantTransactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false && $0.isExpense == showExpenses }
             let existing = transactionsByDate.first(where: { $0.date.isSameMonthAs(uniqueDate)})
             if let existing {
                 var newExisting = existing

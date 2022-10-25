@@ -56,6 +56,18 @@ struct CategoryRetroDataPoint: Identifiable, Equatable {
     var total: Double
     var average: Double
     var numTransactions: Int
+    
+    mutating func setTotal(_ newTotal: Double) {
+        total = newTotal
+    }
+    
+    mutating func setAverage(_ avg: Double) {
+        average = avg
+    }
+    
+    mutating func setNumTransactinos(_ num: Int) {
+        numTransactions = num
+    }
 }
 
 struct ValueTimeDataPoint: Identifiable, Equatable {

@@ -26,6 +26,7 @@ struct DashboardView: View {
             }
             .navigationTitle("Dashboard")
         }
+        .navigationViewStyle(.stack) 
     }
 }
 
