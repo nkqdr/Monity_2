@@ -26,6 +26,8 @@
 		6045379628FAD065002EFC7F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379528FAD065002EFC7F /* Utils.swift */; };
 		604F8E7229012BC500DD3781 /* MonthSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F8E7129012BC500DD3781 /* MonthSummaryView.swift */; };
 		604F8E7429012BFA00DD3781 /* MonthSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F8E7329012BFA00DD3781 /* MonthSummaryViewModel.swift */; };
+		60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60552B0329081CB0001F2B39 /* ItemListViewModel.swift */; };
+		60552B0629081E19001F2B39 /* EditableDeletableItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60552B0529081E19001F2B39 /* EditableDeletableItemList.swift */; };
 		60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */; };
 		60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */; };
 		60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */; };
@@ -111,6 +113,8 @@
 		6045379528FAD065002EFC7F /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		604F8E7129012BC500DD3781 /* MonthSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthSummaryView.swift; sourceTree = "<group>"; };
 		604F8E7329012BFA00DD3781 /* MonthSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthSummaryViewModel.swift; sourceTree = "<group>"; };
+		60552B0329081CB0001F2B39 /* ItemListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListViewModel.swift; sourceTree = "<group>"; };
+		60552B0529081E19001F2B39 /* EditableDeletableItemList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDeletableItemList.swift; sourceTree = "<group>"; };
 		60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryListTile.swift; sourceTree = "<group>"; };
 		60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStorage.swift; sourceTree = "<group>"; };
 		60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -204,6 +208,14 @@
 				603FDE7A29013767000398C7 /* CashflowViewModel.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		60552B0229081C9C001F2B39 /* Generics */ = {
+			isa = PBXGroup;
+			children = (
+				60552B0329081CB0001F2B39 /* ItemListViewModel.swift */,
+			);
+			path = Generics;
 			sourceTree = "<group>";
 		};
 		60587B8928F3F1490097D4F4 /* Shared */ = {
@@ -317,6 +329,7 @@
 		60BD9F4428F35C66001FF5FF /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				60552B0229081C9C001F2B39 /* Generics */,
 				604F8E7529012EC500DD3781 /* Protocols */,
 				6000FF7828F5FECF0083595D /* DashboardTiles */,
 				60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */,
@@ -367,6 +380,7 @@
 				603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */,
 				603ADF99290564F20075CB90 /* TransactionsList.swift */,
 				60B50E172906F93100396308 /* SavingsCategoryTile.swift */,
+				60552B0529081E19001F2B39 /* EditableDeletableItemList.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -557,6 +571,8 @@
 				6000FF7728F5FBF00083595D /* CurrentMonthOverviewTile.swift in Sources */,
 				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
 				60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */,
+				60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */,
+				60552B0629081E19001F2B39 /* EditableDeletableItemList.swift in Sources */,
 				603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
 				60B50E142906F5F400396308 /* SavingsCategoryFormView.swift in Sources */,

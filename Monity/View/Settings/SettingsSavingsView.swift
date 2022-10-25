@@ -8,43 +8,38 @@
 import SwiftUI
 
 struct Settings_SavingsView: View {
-    @State private var showAddCategorySheet: Bool = false
-    @StateObject private var content = SettingsSavingsViewModel()
     
-    func showEditSheetForCategory(_ category: SavingsCategory) {
-        content.currentCategory = category
-        showAddCategorySheet.toggle()
-    }
-    
-    var savingsCategories: some View {
-        Section(header: HStack {
+    @ViewBuilder
+    func savingsCategoriesHeader(_ createFunc: @escaping () -> Void) -> some View {
+        HStack {
             Text("Categories")
-                    Spacer()
-                    Button {
-                        showAddCategorySheet.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-        }, footer: Text("Here you can add all of your savings categories, so that you can later add entries to these categories.")) {
-            ForEach(content.categories) { category in
-                SavingsCategoryTile(category: category, onEdit: showEditSheetForCategory, onDelete: content.deleteCategory)
+            Spacer()
+            Button(action: createFunc) {
+                Image(systemName: "plus")
             }
         }
+    }
+    
+    var savingsCategoriesFooter: some View {
+        Text("Here you can add all of your savings categories, so that you can later add entries to these categories.")
     }
     
     var body: some View {
-        List {
-            savingsCategories
-        }
-        .sheet(isPresented: $showAddCategorySheet) {
-            SavingsCategoryFormView(isPresented: $showAddCategorySheet, editor: SavingsCategoryEditor(category: content.currentCategory))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.hidden)
-        }
-        .onChange(of: showAddCategorySheet) { newValue in
-            if !newValue {
-                content.currentCategory = nil
+        EditableDeletableItemList(viewModel: SettingsSavingsViewModel()) { items, createFunc, editFunc, deleteFunc in
+            Section(header: savingsCategoriesHeader(createFunc), footer: savingsCategoriesFooter) {
+                ForEach(items) { category in
+                    SavingsCategoryTile(
+                        category: category,
+                        onEdit: editFunc,
+                        onDelete: deleteFunc
+                    )
+                }
             }
+        } sheetContent: { showAddSheet, currentItem in
+            SavingsCategoryFormView(
+                isPresented: showAddSheet,
+                editor: SavingsCategoryEditor(category: currentItem)
+            )
         }
         .navigationTitle("Savings")
         .navigationBarTitleDisplayMode(.inline)
