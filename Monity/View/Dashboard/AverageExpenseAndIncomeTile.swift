@@ -25,9 +25,8 @@ struct AverageExpenseAndIncomeTile: View {
         let percentOfIncomeSpent: Int? = content.totalIncomeThisYear > 0 ? Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100) : nil
         VStack(alignment: .leading) {
             HStack {
-                Text("Transaction Overview").groupBoxLabelTextStyle(.secondary)
-                Spacer()
                 Text("Last Year").groupBoxLabelTextStyle(.secondary)
+                Spacer()
             }
             Spacer()
             if let percentOfIncomeSpent {

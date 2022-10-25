@@ -12,7 +12,7 @@ struct SavingsView: View {
     
     @ViewBuilder
     var scrollViewContent: some View {
-        if content.categories.isEmpty {
+        if content.items.isEmpty {
             VStack {
                 Text("No Savings categories defined.")
                 Text("Go to Settings > Savings to define your categories.")
@@ -23,7 +23,7 @@ struct SavingsView: View {
         } else {
             ScrollView {
                 LazyVGrid(columns: [GridItem(), GridItem()]) {
-                    ForEach(content.categories) { category in
+                    ForEach(content.items) { category in
                         GroupBox(label: Text(category.wrappedName).groupBoxLabelTextStyle()) {
                             Circle()
                                 .frame(width: 20)

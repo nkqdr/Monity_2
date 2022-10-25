@@ -8,15 +8,9 @@
 import Foundation
 import Combine
 
-class SavingsViewModel: ObservableObject {
-    @Published var categories: [SavingsCategory] = []
-    
-    private var categoryCancellable: AnyCancellable?
-    
+class SavingsViewModel: ItemListViewModel<SavingsCategory> {
     init() {
         let categoryPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
-        categoryCancellable = categoryPublisher.sink { categories in
-            self.categories = categories
-        }
+        super.init(itemPublisher: categoryPublisher)
     }
 }

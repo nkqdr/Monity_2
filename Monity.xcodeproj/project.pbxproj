@@ -62,7 +62,6 @@
 		60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */; };
 		60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */; };
 		60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4A28F35D02001FF5FF /* DashboardView.swift */; };
-		60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */; };
 		60BD9F5028F35D41001FF5FF /* SettingsTransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4F28F35D41001FF5FF /* SettingsTransactionsView.swift */; };
 		60BD9F5228F35D52001FF5FF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5128F35D52001FF5FF /* SettingsView.swift */; };
 		60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5328F35D66001FF5FF /* TransactionsView.swift */; };
@@ -154,7 +153,6 @@
 		60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditor.swift; sourceTree = "<group>"; };
 		60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		60BD9F4A28F35D02001FF5FF /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBox.swift; sourceTree = "<group>"; };
 		60BD9F4F28F35D41001FF5FF /* SettingsTransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsView.swift; sourceTree = "<group>"; };
 		60BD9F5128F35D52001FF5FF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		60BD9F5328F35D66001FF5FF /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
@@ -234,7 +232,6 @@
 		6097917828F9399E00FA5621 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				60BD9F4D28F35D1E001FF5FF /* DashboardBox.swift */,
 				6000FF7628F5FBF00083595D /* CurrentMonthOverviewTile.swift */,
 				602E45C128F95D46003FD564 /* CurrentMonthDetailView.swift */,
 				60E7605B28FD454D00FAB25A /* AverageExpenseAndIncomeTile.swift */,
@@ -573,7 +570,6 @@
 				60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */,
 				603ADF9C290579E90075CB90 /* TransactionsCategorySummaryViewModel.swift in Sources */,
 				6000FF7728F5FBF00083595D /* CurrentMonthOverviewTile.swift in Sources */,
-				60BD9F4E28F35D1E001FF5FF /* DashboardBox.swift in Sources */,
 				60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */,
 				60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */,
 				60552B0629081E19001F2B39 /* EditableDeletableItemList.swift in Sources */,

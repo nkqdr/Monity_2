@@ -8,12 +8,7 @@
 import Foundation
 import Combine
 
-class SettingsSystemViewModel: ObservableObject {
-    @Published var transactions: [Transaction] = [] {
-        didSet {
-            registeredTransactions = transactions.count
-        }
-    }
+class SettingsSystemViewModel: ItemListViewModel<Transaction> {
     @Published var transactionCategories: [TransactionCategory] = []
     @Published var isWorking: Bool = false
     @Published var registeredTransactions: Int = 0
@@ -37,18 +32,19 @@ class SettingsSystemViewModel: ObservableObject {
         }
     }
     
-    private let transactionCategoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
-    
-    private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
-        transactionCancellable = transactionPublisher.sink { transactions in
-            self.transactions = transactions
-        }
+    init() {
+        let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        let transactionCategoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
+        super.init(itemPublisher: transactionPublisher)
         transactionCategoryCancellable = transactionCategoryPublisher.sink { categories in
             self.transactionCategories = categories
         }
+    }
+    
+    override func onItemsSet() {
+        registeredTransactions = items.count
     }
     
     // MARK: - Helper functions
