@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Settings_SavingsView: View {
+    @ObservedObject var content = SettingsSavingsViewModel()
     
     @ViewBuilder
     func savingsCategoriesHeader(_ createFunc: @escaping () -> Void) -> some View {
@@ -25,13 +26,13 @@ struct Settings_SavingsView: View {
     }
     
     var body: some View {
-        EditableDeletableItemList(viewModel: SettingsSavingsViewModel()) { items, createFunc, editFunc, deleteFunc in
-            Section(header: savingsCategoriesHeader(createFunc), footer: savingsCategoriesFooter) {
-                ForEach(items) { category in
+        EditableDeletableItemList(viewModel: content) { create, edit, delete in
+            Section(header: savingsCategoriesHeader(create), footer: savingsCategoriesFooter) {
+                ForEach(content.items) { category in
                     SavingsCategoryTile(
                         category: category,
-                        onEdit: editFunc,
-                        onDelete: deleteFunc
+                        onEdit: edit,
+                        onDelete: delete
                     )
                 }
             }

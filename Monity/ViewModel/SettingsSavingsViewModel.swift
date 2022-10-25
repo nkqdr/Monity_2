@@ -15,6 +15,8 @@ class SettingsSavingsViewModel: ItemListViewModel<SavingsCategory> {
         super.init(itemPublisher: itemPublisher)
     }
     
+    // MARK: - Intents
+    
     override func deleteItem(_ item: SavingsCategory) {
         SavingsCategoryStorage.shared.delete(item)
     }

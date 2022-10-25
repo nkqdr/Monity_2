@@ -9,7 +9,11 @@ import Foundation
 import Combine
 
 class ItemListViewModel<ListItem>: ObservableObject {
-    @Published var items: [ListItem] = []
+    @Published var items: [ListItem] = [] {
+        didSet {
+            onItemsSet()
+        }
+    }
     @Published var currentItem: ListItem? = nil
     
     private var itemCancellable: AnyCancellable?
@@ -19,6 +23,8 @@ class ItemListViewModel<ListItem>: ObservableObject {
             self.items = items
         }
     }
+    
+    func onItemsSet() { }
     
     // MARK: - Intents
     func deleteItem(_ item: ListItem) {

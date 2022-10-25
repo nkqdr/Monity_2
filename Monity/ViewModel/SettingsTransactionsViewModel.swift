@@ -8,22 +8,17 @@
 import Foundation
 import Combine
 
-class SettingsTransactionsViewModel: ObservableObject {
+class SettingsTransactionsViewModel: ItemListViewModel<TransactionCategory> {
     @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: "monthly_limit")
-    @Published var categories: [TransactionCategory] = []
-    @Published var currentCategory: TransactionCategory? = nil
     
-    private var categoryCancellable: AnyCancellable?
-    
-    init(categoryPublisher: AnyPublisher<[TransactionCategory], Never> = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()) {
-        categoryCancellable = categoryPublisher.sink { categories in
-            self.categories = categories
-        }
+    init() {
+        let publisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+        super.init(itemPublisher: publisher)
     }
     
     // MARK: - Intents
     
-    func deleteCategory(_ category: TransactionCategory) {
-        TransactionCategoryStorage.shared.delete(category)
+    override func deleteItem(_ item: TransactionCategory) {
+        TransactionCategoryStorage.shared.delete(item)
     }
 }

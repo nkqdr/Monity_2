@@ -11,7 +11,7 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
     typealias CreateFunc = () -> Void
     typealias EditFunc = (ListItem) -> Void
     typealias DeleteFunc = (ListItem) -> Void
-    typealias ListViewContent = ([ListItem], @escaping CreateFunc, @escaping EditFunc, @escaping DeleteFunc) -> ListContent
+    typealias ListViewContent = (@escaping CreateFunc, @escaping EditFunc, @escaping DeleteFunc) -> ListContent
     typealias SheetViewContent = (Binding<Bool>, ListItem?) -> SheetContent
     
     @State private var showAddItemSheet: Bool = false
@@ -42,7 +42,7 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
     
     var body: some View {
         List {
-            content(viewModel.items, handleCreateAttempt, showEditSheetForListItem, viewModel.deleteItem)
+            content(handleCreateAttempt, showEditSheetForListItem, viewModel.deleteItem)
         }
         .sheet(isPresented: $showAddItemSheet) {
             sheetContent($showAddItemSheet, viewModel.currentItem)
