@@ -29,7 +29,7 @@ class TransactionsViewModel: ItemListViewModel<Transaction> {
     private let currentDateComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     
     init() {
-        let publisher = TransactionStorage.shared.transactions.eraseToAnyPublisher()
+        let publisher = TransactionStorage.shared.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     

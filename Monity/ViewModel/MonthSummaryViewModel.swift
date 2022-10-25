@@ -47,7 +47,7 @@ class MonthSummaryViewModel: ObservableObject, PieChartViewModel {
     @Published var spentThisMonth: Double = 0
     
     private var transactionCancellable: AnyCancellable?
-    private let transactionPublisher = TransactionStorage.shared.transactions.eraseToAnyPublisher()
+    private let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
     
     public init(monthDate: Date) {
         transactionCancellable = transactionPublisher.sink { transactions in

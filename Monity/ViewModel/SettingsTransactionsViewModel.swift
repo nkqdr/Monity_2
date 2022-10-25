@@ -12,7 +12,7 @@ class SettingsTransactionsViewModel: ItemListViewModel<TransactionCategory> {
     @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: "monthly_limit")
     
     init() {
-        let publisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+        let publisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     

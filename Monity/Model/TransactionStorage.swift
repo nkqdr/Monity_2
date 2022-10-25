@@ -6,35 +6,14 @@
 //
 
 import Foundation
-import Combine
-import CoreData
 
-class TransactionStorage: NSObject, ObservableObject {
-    var transactions = CurrentValueSubject<[Transaction], Never>([])
-    private let transactionsFetchController: RichFetchedResultsController<Transaction>
-    
+class TransactionStorage: CoreDataModelStorage<Transaction> {
     static let shared: TransactionStorage = TransactionStorage()
     
-    private override init() {
-        let request = RichFetchRequest<Transaction>(entityName: "Transaction")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
-        request.relationshipKeyPathsForRefreshing = [
-            #keyPath(Transaction.category.name)
-        ]
-        transactionsFetchController = RichFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        super.init()
-        transactionsFetchController.delegate = self
-        do {
-            try transactionsFetchController.performFetch()
-            transactions.value = transactionsFetchController.fetchedObjects! as? [Transaction] ?? []
-        } catch {
-            NSLog("Error: could not fetch objects")
-        }
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ])
     }
     
     func add(set rows: [String]) -> Bool {
@@ -102,13 +81,5 @@ class TransactionStorage: NSObject, ObservableObject {
             PersistenceController.shared.container.viewContext.rollback()
             print("Failed to save context \(error.localizedDescription)")
         }
-    }
-}
-
-extension TransactionStorage: NSFetchedResultsControllerDelegate {
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let transactions = controller.fetchedObjects as? [Transaction] else { return }
-        print("Context has changed, reloading transactions")
-        self.transactions.value = transactions
     }
 }

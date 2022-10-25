@@ -6,35 +6,14 @@
 //
 
 import Foundation
-import Combine
-import CoreData
 
-class SavingStorage: NSObject, ObservableObject {
-    var savingsEntries = CurrentValueSubject<[SavingsEntry], Never>([])
-    private let savingsFetchController: RichFetchedResultsController<SavingsEntry>
-    
+class SavingStorage: CoreDataModelStorage<SavingsEntry> {
     static let shared: SavingStorage = SavingStorage()
     
-    private override init() {
-        let request = RichFetchRequest<SavingsEntry>(entityName: "SavingsEntry")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)]
-        request.relationshipKeyPathsForRefreshing = [
-            #keyPath(SavingsEntry.category.name)
-        ]
-        savingsFetchController = RichFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        super.init()
-        savingsFetchController.delegate = self
-        do {
-            try savingsFetchController.performFetch()
-            savingsEntries.value = savingsFetchController.fetchedObjects! as? [SavingsEntry] ?? []
-        } catch {
-            NSLog("Error: could not fetch objects")
-        }
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
+        ])
     }
     
 //    func add(set rows: [String]) -> Bool {
@@ -98,13 +77,5 @@ class SavingStorage: NSObject, ObservableObject {
             PersistenceController.shared.container.viewContext.rollback()
             print("Failed to save context \(error.localizedDescription)")
         }
-    }
-}
-
-extension SavingStorage: NSFetchedResultsControllerDelegate {
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let savingsEntries = controller.fetchedObjects as? [SavingsEntry] else { return }
-        print("Context has changed, reloading savings")
-        self.savingsEntries.value = savingsEntries
     }
 }

@@ -42,8 +42,8 @@ class AverageMonthlyChartViewModel: ObservableObject {
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
-        let categoryPublisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
+        let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
         transactionCategoryCancellable = categoryPublisher.sink { categories in
             self.transactionCategories = categories
         }

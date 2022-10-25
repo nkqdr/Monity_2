@@ -28,6 +28,7 @@
 		604F8E7429012BFA00DD3781 /* MonthSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F8E7329012BFA00DD3781 /* MonthSummaryViewModel.swift */; };
 		60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60552B0329081CB0001F2B39 /* ItemListViewModel.swift */; };
 		60552B0629081E19001F2B39 /* EditableDeletableItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60552B0529081E19001F2B39 /* EditableDeletableItemList.swift */; };
+		60552B0A29082FEF001F2B39 /* CoreDataModelStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60552B0929082FEF001F2B39 /* CoreDataModelStorage.swift */; };
 		60587B8228F3D5500097D4F4 /* TransactionCategoryListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */; };
 		60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */; };
 		60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */; };
@@ -115,6 +116,7 @@
 		604F8E7329012BFA00DD3781 /* MonthSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthSummaryViewModel.swift; sourceTree = "<group>"; };
 		60552B0329081CB0001F2B39 /* ItemListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListViewModel.swift; sourceTree = "<group>"; };
 		60552B0529081E19001F2B39 /* EditableDeletableItemList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDeletableItemList.swift; sourceTree = "<group>"; };
+		60552B0929082FEF001F2B39 /* CoreDataModelStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataModelStorage.swift; sourceTree = "<group>"; };
 		60587B8128F3D5500097D4F4 /* TransactionCategoryListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryListTile.swift; sourceTree = "<group>"; };
 		60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStorage.swift; sourceTree = "<group>"; };
 		60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */,
 				60B50E0D2906F19C00396308 /* SavingStorage.swift */,
 				60B50E0F2906F38100396308 /* SavingsCategoryStorage.swift */,
+				60552B0929082FEF001F2B39 /* CoreDataModelStorage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				600C39B928F54E9800688149 /* MonthYearPicker.swift in Sources */,
 				60A4CFB628F9A446007F392D /* SettingsSystemView.swift in Sources */,
 				60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */,
+				60552B0A29082FEF001F2B39 /* CoreDataModelStorage.swift in Sources */,
 				6097917728F935B400FA5621 /* PieChart.swift in Sources */,
 				60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */,
 				60BD9F5628F35D7A001FF5FF /* SavingsView.swift in Sources */,

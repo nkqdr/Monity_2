@@ -11,7 +11,7 @@ import Combine
 class SettingsSavingsViewModel: ItemListViewModel<SavingsCategory> {
     
     init() {
-        let itemPublisher = SavingsCategoryStorage.shared.categories.eraseToAnyPublisher()
+        let itemPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
         super.init(itemPublisher: itemPublisher)
     }
     

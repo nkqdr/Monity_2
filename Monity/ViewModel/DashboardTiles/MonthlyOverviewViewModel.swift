@@ -63,7 +63,7 @@ class MonthlyOverviewViewModel: ObservableObject, PieChartViewModel, CashflowVie
     
     // MARK: - Constructor(s)
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
+    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
         }

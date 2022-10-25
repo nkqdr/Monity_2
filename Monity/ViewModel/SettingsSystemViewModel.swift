@@ -37,12 +37,12 @@ class SettingsSystemViewModel: ObservableObject {
         }
     }
     
-    private let transactionCategoryPublisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+    private let transactionCategoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
     
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
+    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
         }

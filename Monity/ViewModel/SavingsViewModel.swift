@@ -14,7 +14,7 @@ class SavingsViewModel: ObservableObject {
     private var categoryCancellable: AnyCancellable?
     
     init() {
-        let categoryPublisher = SavingsCategoryStorage.shared.categories.eraseToAnyPublisher()
+        let categoryPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
         categoryCancellable = categoryPublisher.sink { categories in
             self.categories = categories
         }

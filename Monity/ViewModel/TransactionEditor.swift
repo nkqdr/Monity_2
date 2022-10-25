@@ -20,7 +20,7 @@ class TransactionEditor: ObservableObject {
     
     private var categoryCancellable: AnyCancellable?
     
-    init(transaction: Transaction? = nil, categoryPublisher: AnyPublisher<[TransactionCategory], Never> = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()) {
+    init(transaction: Transaction? = nil, categoryPublisher: AnyPublisher<[TransactionCategory], Never> = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()) {
         self.isExpense = transaction?.isExpense ?? true
         self.selectedCategory = transaction?.category ?? nil
         self.givenAmount = transaction?.amount ?? 0

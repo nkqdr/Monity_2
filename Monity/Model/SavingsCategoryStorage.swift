@@ -6,32 +6,14 @@
 //
 
 import Foundation
-import Combine
-import CoreData
 
-class SavingsCategoryStorage: NSObject, ObservableObject {
-    var categories = CurrentValueSubject<[SavingsCategory], Never>([])
-    private let categoryFetchController: NSFetchedResultsController<SavingsCategory>
-    
+class SavingsCategoryStorage: CoreDataModelStorage<SavingsCategory> {
     static let shared: SavingsCategoryStorage = SavingsCategoryStorage()
     
-    private override init() {
-        let request = SavingsCategory.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)]
-        categoryFetchController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        super.init()
-        categoryFetchController.delegate = self
-        do {
-            try categoryFetchController.performFetch()
-            categories.value = categoryFetchController.fetchedObjects ?? []
-        } catch {
-            NSLog("Error: could not fetch objects")
-        }
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)
+        ])
     }
     
     func add(name: String, label: SavingsCategoryLabel) -> SavingsCategory {
@@ -77,12 +59,4 @@ class SavingsCategoryStorage: NSObject, ObservableObject {
 //            print("Failed to save context \(error.localizedDescription)")
 //        }
 //    }
-}
-
-extension SavingsCategoryStorage: NSFetchedResultsControllerDelegate {
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let categories = controller.fetchedObjects as? [SavingsCategory] else { return }
-        print("Context has changed, reloading categories")
-        self.categories.value = categories
-    }
 }
