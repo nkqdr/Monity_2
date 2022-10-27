@@ -18,11 +18,19 @@ struct Settings_TransactionsView: View {
             monthlyLimitSection
             Section(header: categorySectionHeader(create), footer: categorySectionFooter) {
                 ForEach(content.items) { category in
-                    TransactionCategoryListTile(
-                        category: category,
+                    EditableDeletableItem(
+                        item: category,
+                        confirmationTitle: "Are you sure you want to delete \(category.wrappedName)?",
+                        confirmationMessage: "\(category.wrappedTransactionsCount) related transactions will be deleted.",
                         onEdit: edit,
-                        onDelete: delete
-                    )
+                        onDelete: delete) { item in
+                            VStack(alignment: .leading) {
+                                Text(item.wrappedName)
+                                Text("Associated transactions: \(item.wrappedTransactionsCount)")
+                                    .font(.callout)
+                                    .foregroundColor(.secondary)
+                            }
+                    }
                 }
             }
         } sheetContent: { showAddItemSheet, currentItem in

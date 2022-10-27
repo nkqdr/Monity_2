@@ -29,11 +29,27 @@ struct Settings_SavingsView: View {
         EditableDeletableItemList(viewModel: content) { create, edit, delete in
             Section(header: savingsCategoriesHeader(create), footer: savingsCategoriesFooter) {
                 ForEach(content.items) { category in
-                    SavingsCategoryTile(
-                        category: category,
+                    EditableDeletableItem(
+                        item: category,
+                        confirmationTitle: "Are you sure you want to delete \(category.wrappedName)?",
+                        confirmationMessage: "\(category.wrappedEntryCount) related entries will be deleted.",
                         onEdit: edit,
-                        onDelete: delete
-                    )
+                        onDelete: delete) { item in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(item.wrappedName)
+                                    Text("Associated entries: \(item.entries?.count ?? 0)")
+                                        .font(.callout)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Text(item.label?.description ?? "")
+                                    .foregroundColor(.secondary)
+                                Circle()
+                                    .foregroundColor(item.color)
+                                    .frame(width: 14)
+                            }
+                        }
                 }
             }
         } sheetContent: { showAddSheet, currentItem in
