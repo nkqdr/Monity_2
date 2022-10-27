@@ -8,11 +8,8 @@
 import Foundation
 import Combine
 
-class SettingsSystemViewModel: ItemListViewModel<Transaction> {
-    @Published var transactionCategories: [TransactionCategory] = []
+class SettingsSystemViewModel: ObservableObject {
     @Published var isWorking: Bool = false
-    @Published var registeredTransactions: Int = 0
-    @Published var registeredSavingsEntries: Int = 0
     @Published var storageUsedString: String = PersistenceController.shared.getSqliteStoreSize()
     @Published var showFilePicker: Bool = false
     @Published var showInvalidFileAlert: Bool = false
@@ -32,21 +29,6 @@ class SettingsSystemViewModel: ItemListViewModel<Transaction> {
         }
     }
     
-    private var transactionCategoryCancellable: AnyCancellable?
-    
-    init() {
-        let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
-        let transactionCategoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
-        super.init(itemPublisher: transactionPublisher)
-        transactionCategoryCancellable = transactionCategoryPublisher.sink { categories in
-            self.transactionCategories = categories
-        }
-    }
-    
-    override func onItemsSet() {
-        registeredTransactions = items.count
-    }
-    
     // MARK: - Helper functions
     func importTransactionsCSV(_ rows: [String]) {
         let result = TransactionStorage.shared.add(set: rows)
@@ -56,7 +38,10 @@ class SettingsSystemViewModel: ItemListViewModel<Transaction> {
     }
     
     func importSavingsCSV(_ rows: [String]) {
-        // TODO: Implement this after defining savings model
+        let result = SavingStorage.shared.add(set: rows)
+        if !result {
+            showInvalidFileAlert.toggle()
+        }
     }
     
     // MARK: - Intents
@@ -77,8 +62,11 @@ class SettingsSystemViewModel: ItemListViewModel<Transaction> {
     }
     
     func deleteAllData() {
-        // Delete transaction categories, so that all transactions will be deleted by cascade.
-        TransactionCategoryStorage.shared.delete(allIn: transactionCategories)
+        // Delete categories, so that all items will be deleted by cascade.
+        TransactionCategoryStorage.shared.deleteAll()
+        SavingsCategoryStorage.shared.deleteAll()
+        TransactionStorage.shared.deleteAll()
+        SavingStorage.shared.deleteAll()
     }
     
     func exportTransactionsCSV() {

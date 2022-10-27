@@ -33,6 +33,17 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
         }
     }
     
+    func deleteAll() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ModelClass.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try PersistenceController.shared.container.viewContext.executeAndMergeChanges(using: deleteRequest)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let items = controller.fetchedObjects as? [ModelClass] else { return }
         self.items.value = items

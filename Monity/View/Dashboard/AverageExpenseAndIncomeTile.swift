@@ -37,6 +37,7 @@ struct AverageExpenseAndIncomeTile: View {
                     .groupBoxLabelTextStyle()
             }
             expenseChart
+                .padding(.top, percentOfIncomeSpent != nil ? 0 : 10)
             incomeChart
         }
     }

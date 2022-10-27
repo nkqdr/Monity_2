@@ -21,6 +21,7 @@
 		60387382290ADA3F00AB7D0E /* SavingsEntryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */; };
 		60387384290AE54400AB7D0E /* SavingsCategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387383290AE54400AB7D0E /* SavingsCategoryListView.swift */; };
 		60387386290AEAF300AB7D0E /* EditableDeletableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387385290AEAF300AB7D0E /* EditableDeletableItem.swift */; };
+		60387388290AFB0D00AB7D0E /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */; };
 		603ADF90290554140075CB90 /* LargeValuePerMonthChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF8F290554140075CB90 /* LargeValuePerMonthChart.swift */; };
 		603ADF9229055D8D0075CB90 /* CategorySummaryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */; };
 		603ADF98290563AB0075CB90 /* TransactionCategorySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF97290563AB0075CB90 /* TransactionCategorySummaryView.swift */; };
@@ -112,6 +113,7 @@
 		60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEntryFormView.swift; sourceTree = "<group>"; };
 		60387383290AE54400AB7D0E /* SavingsCategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryListView.swift; sourceTree = "<group>"; };
 		60387385290AEAF300AB7D0E /* EditableDeletableItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDeletableItem.swift; sourceTree = "<group>"; };
+		60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
 		603ADF8F290554140075CB90 /* LargeValuePerMonthChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeValuePerMonthChart.swift; sourceTree = "<group>"; };
 		603ADF9129055D8D0075CB90 /* CategorySummaryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySummaryTile.swift; sourceTree = "<group>"; };
 		603ADF97290563AB0075CB90 /* TransactionCategorySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategorySummaryView.swift; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 				602E45C328F9608D003FD564 /* ShapeExtensions.swift */,
 				60A4CFB328F9A15D007F392D /* BundleExtensions.swift */,
 				60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */,
+				60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 				6000FF7728F5FBF00083595D /* CurrentMonthOverviewTile.swift in Sources */,
 				60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */,
 				60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */,
+				60387388290AFB0D00AB7D0E /* CoreDataExtensions.swift in Sources */,
 				60387386290AEAF300AB7D0E /* EditableDeletableItem.swift in Sources */,
 				60552B0629081E19001F2B39 /* EditableDeletableItemList.swift in Sources */,
 				603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */,

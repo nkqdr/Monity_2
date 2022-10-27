@@ -9,6 +9,8 @@ import SwiftUI
 
 struct Settings_SystemView: View {
     @StateObject private var content = SettingsSystemViewModel()
+    @ObservedObject private var savingsContent = SavingsViewModel.shared
+    @ObservedObject private var transactionsContent = TransactionsViewModel.shared
     @State private var importSummary: ImportCSVSummary? // This is needed because an error occurs when directly using the value in the ViewModel
     @State private var showDeleteAllConfirmation: Bool = false
     
@@ -91,13 +93,13 @@ struct Settings_SystemView: View {
             HStack {
                 Text("Registered transactions")
                 Spacer()
-                Text(content.registeredTransactions, format: .number)
+                Text(transactionsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
             }
             HStack {
                 Text("Registered savings entries")
                 Spacer()
-                Text(content.registeredSavingsEntries, format: .number)
+                Text(savingsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
             }
             HStack {
