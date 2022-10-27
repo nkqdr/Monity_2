@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 
 enum SavingsCategoryLabel: String, CaseIterable {
-    case none = ""
+    case liquid = "Liquid"
     case saved = "Saved"
     case invested = "Invested"
-    case liquid = "Liquid"
+    case none = ""
     
     var color: Color {
         switch self {

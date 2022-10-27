@@ -14,12 +14,7 @@ struct DashboardView: View {
                 Group {
                     CurrentMonthOverviewTile()
                     AverageExpenseAndIncomeTile()
-//                    Section {
-//                        VStack(alignment: .leading) {
-//                            Text("Savings").groupBoxLabelTextStyle(.secondary)
-//                            Text("To-Do")
-//                        }
-//                    }
+                    SavingsTile()
                 }
                 .listRowInsets(EdgeInsets())
                 .padding()

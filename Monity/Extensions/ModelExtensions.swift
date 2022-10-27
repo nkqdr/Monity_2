@@ -41,4 +41,22 @@ extension SavingsCategory {
     var wrappedEntryCount: Int {
         self.entries?.count ?? 0
     }
+    
+    public var entryArray: [SavingsEntry] {
+        let set = entries as? Set<SavingsEntry> ?? []
+        
+        return set.sorted {
+            return $0.wrappedDate < $1.wrappedDate
+        }
+    }
+    
+    var lastEntry: SavingsEntry? {
+        self.entryArray.last
+    }
+}
+
+extension SavingsEntry {
+    var wrappedDate: Date {
+        self.date ?? Date()
+    }
 }

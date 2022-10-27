@@ -2,73 +2,72 @@
 //  SavingsView.swift
 //  Monity
 //
-//  Created by Niklas Kuder on 09.10.22.
+//  Created by Niklas Kuder on 27.10.22.
 //
 
 import SwiftUI
 
 struct SavingsView: View {
-    @ObservedObject private var content = SavingsViewModel()
+    @State var showAddEntryView = false
+    @ObservedObject private var content = SavingsViewModel.shared
     
     @ViewBuilder
-    var scrollViewContent: some View {
-        if content.items.isEmpty {
-            VStack {
-                Text("No Savings categories defined.")
-                Text("Go to Settings > Savings to define your categories.")
+    func categoryTile(_ category: SavingsCategory) -> some View {
+        let currentAmount: Double? = category.lastEntry?.amount
+        HStack {
+            VStack(alignment: .leading) {
+                Text(category.wrappedName)
+                Text("Associated entries: \(category.entries?.count ?? 0)")
+                    .font(.callout)
+                    .foregroundColor(.secondary)
             }
-            .foregroundColor(.secondary)
-            .padding()
-            .multilineTextAlignment(.center)
-        } else {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(), GridItem()]) {
-                    ForEach(content.items) { category in
-                        GroupBox(label: Text(category.wrappedName).groupBoxLabelTextStyle()) {
-                            Circle()
-                                .frame(width: 20)
-                                .foregroundColor(.red)
-                        }
-                        .groupBoxStyle(CustomGroupBox())
-                        .frame(minHeight: 200)
-                    }
+            Spacer()
+            if let currentAmount {
+                Text(currentAmount.formatted(.currency(code: "EUR")))
+                    .foregroundColor(.green)
+            } else {
+                Text("-")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func savingsLabelSection(_ label: SavingsCategoryLabel) -> some View {
+        Section(label.rawValue != "" ? label.rawValue : "Unlabeled") {
+            ForEach(content.items.filter { $0.label == label.rawValue }) { category in
+                NavigationLink(destination: EmptyView()) {
+                    categoryTile(category)
                 }
-                .padding()
             }
         }
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(UIColor.systemGroupedBackground)
-                    .edgesIgnoringSafeArea(.all)
-                scrollViewContent
+        NavigationStack {
+            List {
+                ForEach(SavingsCategoryLabel.allCases, id: \.self) { label in
+                    let relevantCategories = content.items.filter { $0.label == label.rawValue }
+                    if relevantCategories.count > 0 {
+                        savingsLabelSection(label)
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showAddEntryView.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
             }
             .navigationTitle("Savings")
         }
     }
 }
 
-struct CustomGroupBox: GroupBoxStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        VStack(alignment: .leading) {
-            configuration.label
-            Spacer()
-            HStack {
-                Spacer()
-                configuration.content
-                Spacer()
-            }
-            Spacer()
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 200)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color(UIColor.secondarySystemGroupedBackground)))
-    }
-}
-
-struct WealthView_Previews: PreviewProvider {
+struct SavingsView_Previews: PreviewProvider {
     static var previews: some View {
         SavingsView()
     }
