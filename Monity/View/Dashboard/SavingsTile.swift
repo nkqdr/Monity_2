@@ -13,7 +13,7 @@ struct SavingsTile: View {
     
     @ViewBuilder
     var savingsChart: some View {
-        Chart(content.lineChartData) {
+        Chart(content.allLineChartData) {
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.catmullRom)

@@ -15,24 +15,30 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             currentNetWorth = items.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
             uniqueDates = Set(savingEntries.map { $0.wrappedDate.removeTimeStamp ?? Date() })
             generateLineChartDataPoints()
+            generateFilteredLineChartDataPoints()
         }
     }
-    @Published var timeFrameToDisplay: Int = 1
-    @Published var percentChangeInLastYear: Double = 0.35
-    @Published var lineChartData: [ValueTimeDataPoint] = [] {
+    @Published var timeFrameToDisplay: Int = 31536000 {
         didSet {
-            print(lineChartData.map { $0.date })
+            generateFilteredLineChartDataPoints()
         }
     }
+    @Published var percentChangeInLastYear: Double = 0
+    @Published var allLineChartData: [ValueTimeDataPoint] = [] {
+        didSet {
+            setPercentageChangeLastYear()
+        }
+    }
+    @Published var filteredLineChartData: [ValueTimeDataPoint] = []
     @Published var currentNetWorth: Double = 0
     @Published var uniqueDates: Set<Date> = []
     
     var minLineChartValue: Double {
-        lineChartData.map { $0.value }.min() ?? 0
+        filteredLineChartData.map { $0.value }.min() ?? 0
     }
     
     var maxLineChartValue: Double {
-        lineChartData.map { $0.value }.max() ?? 0
+        filteredLineChartData.map { $0.value }.max() ?? 0
     }
     
     private var entryCancellable: AnyCancellable?
@@ -40,13 +46,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     private init() {
         let categoryPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
         let entryPublisher = SavingStorage.shared.items.eraseToAnyPublisher()
-        lineChartData = [
-            ValueTimeDataPoint(date: Date(timeIntervalSinceNow: 0), value: 1562.02),
-            ValueTimeDataPoint(date: Date(timeIntervalSinceNow: 86000), value: 2062.02),
-            ValueTimeDataPoint(date: Date(timeIntervalSinceNow: 170000), value: 1962.02),
-            ValueTimeDataPoint(date: Date(timeIntervalSinceNow: 250000), value: 2510.02),
-            ValueTimeDataPoint(date: Date(timeIntervalSinceNow: 320000), value: 2862.02),
-        ]
         super.init(itemPublisher: categoryPublisher)
         entryCancellable = entryPublisher.sink { entries in
             self.savingEntries = entries
@@ -59,9 +58,23 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             let netWorthAtUniqueDate: Double = items.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 }.reduce(0, +)
             dataPoints.append(ValueTimeDataPoint(date: uniqueDate, value: netWorthAtUniqueDate))
         }
-        lineChartData = dataPoints.sorted {
+        allLineChartData = dataPoints.sorted {
             $0.date < $1.date
         }
+    }
+    
+    func generateFilteredLineChartDataPoints() {
+        let lowerBoundDate: Date = timeFrameToDisplay > 0 ? Date(timeIntervalSinceNow: -Double(timeFrameToDisplay)).removeTimeStamp ?? Date() : Date.distantPast
+        filteredLineChartData = allLineChartData.filter { $0.date.removeTimeStamp ?? Date() >= lowerBoundDate }
+    }
+    
+    func setPercentageChangeLastYear() {
+        let latest: Double = allLineChartData.last?.value ?? 0
+        let oneYearAgo: Date = Date(timeIntervalSinceNow: -31536000) // One Year has 31536000 seconds
+        let entriesBeforeOneYearAgo = allLineChartData.filter { $0.date.removeTimeStamp ?? Date() <= oneYearAgo.removeTimeStamp ?? Date() }
+        let valueOneYearAgo: Double = entriesBeforeOneYearAgo.count > 0 ? entriesBeforeOneYearAgo.last?.value ?? 0 : allLineChartData.first?.value ?? 0
+        let increase = latest - valueOneYearAgo
+        percentChangeInLastYear = increase / valueOneYearAgo
     }
     
     func getTotalSumFor(_ label: SavingsCategoryLabel) -> Double {
