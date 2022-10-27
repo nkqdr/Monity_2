@@ -16,7 +16,7 @@ class ItemListViewModel<ListItem>: ObservableObject {
     }
     @Published var currentItem: ListItem? = nil
     
-    private var itemCancellable: AnyCancellable?
+    var itemCancellable: AnyCancellable?
     
     init(itemPublisher: AnyPublisher<[ListItem], Never>) {
         itemCancellable = itemPublisher.sink { items in

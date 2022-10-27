@@ -17,6 +17,7 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             print(lineChartData)
         }
     }
+    @Published var currentNetWorth: Double = 0
     
     var minLineChartValue: Double {
         lineChartData.map { $0.value }.min() ?? 0
@@ -39,6 +40,18 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     }
     
     override func onItemsSet() {
+        currentNetWorth = items.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
         // TODO: Set the percentage changed.
+    }
+    
+    func getTotalSumFor(_ label: SavingsCategoryLabel) -> Double {
+        return items.filter { $0.label == label.rawValue }.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
+    }
+    
+    func getFractionPercentageFor(_ label: SavingsCategoryLabel) -> Double {
+        if currentNetWorth != 0 {
+            return getTotalSumFor(label) / currentNetWorth
+        }
+        return 0
     }
 }

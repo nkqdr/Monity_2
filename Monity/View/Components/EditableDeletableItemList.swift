@@ -19,15 +19,18 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
     
     let content: ListViewContent
     let sheetContent: SheetViewContent
+    let includeAddInNavigationBar: Bool
     
     init(
         viewModel: ItemListViewModel<ListItem>,
+        includeAddInNavigationBar: Bool = false,
         @ViewBuilder content: @escaping ListViewContent,
         @ViewBuilder sheetContent: @escaping SheetViewContent
     ) {
         self.viewModel = viewModel
         self.content = content
         self.sheetContent = sheetContent
+        self.includeAddInNavigationBar = includeAddInNavigationBar
     }
     
     func showEditSheetForListItem(_ category: ListItem) {
@@ -52,6 +55,15 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
         .onChange(of: showAddItemSheet) { newValue in
             if !newValue {
                 viewModel.currentItem = nil
+            }
+        }
+        .toolbar {
+            if includeAddInNavigationBar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: handleCreateAttempt) {
+                        Image(systemName: "plus")
+                    }
+                }
             }
         }
     }

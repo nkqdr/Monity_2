@@ -54,20 +54,18 @@ class SavingStorage: CoreDataModelStorage<SavingsEntry> {
         return entry
     }
     
-//    func update(_ transaction: Transaction, editor: TransactionEditor) -> Bool {
-//        PersistenceController.shared.container.viewContext.performAndWait {
-//            transaction.text = editor.description
-//            transaction.category = editor.selectedCategory
-//            transaction.isExpense = editor.isExpense
-//            transaction.amount = editor.givenAmount
-//            transaction.date = editor.selectedDate
-//            if let _ = try? PersistenceController.shared.container.viewContext.save() {
-//                return true
-//            } else {
-//                return false
-//            }
-//        }
-//    }
+    func update(_ entry: SavingsEntry, editor: SavingsEditor) -> Bool {
+        PersistenceController.shared.container.viewContext.performAndWait {
+            guard let category = editor.category else { return false }
+            entry.amount = editor.amount
+            entry.category = category
+            if let _ = try? PersistenceController.shared.container.viewContext.save() {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
 
     func delete(_ entry: SavingsEntry) {
         PersistenceController.shared.container.viewContext.delete(entry)

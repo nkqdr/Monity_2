@@ -10,6 +10,7 @@ import SwiftUI
 struct SavingsView: View {
     @State var showAddEntryView = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @ObservedObject private var entryContent = SavingsViewModel.shared
     
     @ViewBuilder
     func categoryTile(_ category: SavingsCategory) -> some View {
@@ -24,7 +25,7 @@ struct SavingsView: View {
             Spacer()
             if let currentAmount {
                 Text(currentAmount.formatted(.currency(code: "EUR")))
-                    .foregroundColor(.green)
+                    .foregroundColor(currentAmount >= 0 ? .green : .red)
             } else {
                 Text("-")
                     .foregroundColor(.secondary)
@@ -33,10 +34,25 @@ struct SavingsView: View {
     }
     
     @ViewBuilder
+    func sectionHeader(_ label: SavingsCategoryLabel) -> some View {
+        let totalSum: Double = content.getTotalSumFor(label)
+        let fractionOfAll: Double = content.getFractionPercentageFor(label)
+        HStack(spacing: 0) {
+            Text(label.rawValue != "" ? label.rawValue : "Unlabeled")
+            Spacer()
+            Group {
+                Text(totalSum, format: .currency(code: "EUR"))
+                Text(" (" + String(format: "%.1f", 100 * fractionOfAll) + "%)")
+            }
+            .foregroundColor(totalSum >= 0 ? .green: .red)
+        }
+    }
+    
+    @ViewBuilder
     func savingsLabelSection(_ label: SavingsCategoryLabel) -> some View {
-        Section(label.rawValue != "" ? label.rawValue : "Unlabeled") {
+        Section(header: sectionHeader(label)) {
             ForEach(content.items.filter { $0.label == label.rawValue }) { category in
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: SavingsCategoryListView(category: category)) {
                     categoryTile(category)
                 }
             }
@@ -56,11 +72,17 @@ struct SavingsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
+                        entryContent.currentItem = nil
                         showAddEntryView.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
                 }
+            }
+            .sheet(isPresented: $showAddEntryView) {
+                SavingsEntryFormView(isPresented: $showAddEntryView, editor: SavingsEditor(entry: entryContent.currentItem))
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.hidden)
             }
             .navigationTitle("Savings")
         }
