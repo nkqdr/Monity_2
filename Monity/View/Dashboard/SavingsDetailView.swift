@@ -37,10 +37,10 @@ struct SavingsDetailView: View {
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.catmullRom)
-                .symbol {
-                    Circle()
-                        .frame(width: 8)
-                }
+//                .symbol {
+//                    Circle()
+//                        .frame(width: 8)
+//                }
         }
         .chartYAxis {
             AxisMarks { value in

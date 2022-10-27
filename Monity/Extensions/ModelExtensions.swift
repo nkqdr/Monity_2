@@ -50,6 +50,11 @@ extension SavingsCategory {
         }
     }
     
+    func lastEntryBefore(_ date: Date) -> SavingsEntry? {
+        let entriesBefore = self.entryArray.filter { $0.wrappedDate.removeTimeStamp ?? Date() <= date }
+        return entriesBefore.last
+    }
+    
     var lastEntry: SavingsEntry? {
         self.entryArray.last
     }
