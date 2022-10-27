@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct SavingsTile: View {
-    @ObservedObject private var content = SavingsViewModel.shared
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
     
     @ViewBuilder
     var savingsChart: some View {

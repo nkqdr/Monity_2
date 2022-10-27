@@ -11,13 +11,14 @@ import CoreData
 
 class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedResultsControllerDelegate where ModelClass: NSManagedObject {
     var items = CurrentValueSubject<[ModelClass], Never>([])
-    private let itemFetchController: NSFetchedResultsController<ModelClass>
+    private let itemFetchController: RichFetchedResultsController<ModelClass>
     
-    init(sortDescriptors: [NSSortDescriptor]) {
-        let request = ModelClass.fetchRequest()
+    init(sortDescriptors: [NSSortDescriptor], keyPathsForRefreshing: Set<String> = []) {
+        let request = RichFetchRequest<ModelClass>(entityName: ModelClass.entity().name ?? "")
         request.sortDescriptors = sortDescriptors
-        itemFetchController = NSFetchedResultsController<ModelClass>(
-            fetchRequest: request as! NSFetchRequest<ModelClass>,
+        request.relationshipKeyPathsForRefreshing = keyPathsForRefreshing
+        itemFetchController = RichFetchedResultsController<ModelClass>(
+            fetchRequest: request,
             managedObjectContext: PersistenceController.shared.container.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
@@ -26,7 +27,7 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
         itemFetchController.delegate = self
         do {
             try itemFetchController.performFetch()
-            items.value = itemFetchController.fetchedObjects ?? []
+            items.value = itemFetchController.fetchedObjects! as? [ModelClass] ?? []
         } catch {
             NSLog("Error: could not fetch objects")
         }

@@ -8,8 +8,8 @@
 import Foundation
 import Combine
 
-class SavingsViewModel: ItemListViewModel<SavingsCategory> {
-    static let shared = SavingsViewModel()
+class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
+    static let shared = SavingsCategoryViewModel()
     @Published var timeFrameToDisplay: Int = 0
     @Published var percentChangeInLastYear: Double = 0.35
     @Published var lineChartData: [ValueTimeDataPoint] = [] {

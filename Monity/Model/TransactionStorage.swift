@@ -13,6 +13,8 @@ class TransactionStorage: CoreDataModelStorage<Transaction> {
     private init() {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
         ])
     }
     

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SavingsView: View {
     @State var showAddEntryView = false
-    @ObservedObject private var content = SavingsViewModel.shared
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
     
     @ViewBuilder
     func categoryTile(_ category: SavingsCategory) -> some View {

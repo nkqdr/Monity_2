@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct SavingsDetailView: View {
-    @ObservedObject private var content = SavingsViewModel.shared
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
     
     var noCategories: some View {
         VStack {
