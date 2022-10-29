@@ -10,6 +10,7 @@ import Charts
 
 struct SavingsDetailView: View {
     @State private var selectedElement: ValueTimeDataPoint?
+    @State private var showHiddenCategories: Bool = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
     
     var noCategories: some View {
@@ -136,18 +137,35 @@ struct SavingsDetailView: View {
         .frame(minHeight: 200)
     }
     
+    func categoryGridFor(_ categories: [SavingsCategory]) -> some View {
+        LazyVGrid(columns: [GridItem(), GridItem()]) {
+            ForEach(categories) { category in
+                savingsCategorySummaryTile(category)
+                    .contextMenu {
+                        Button {
+                            withAnimation(.spring()) {
+                                content.toggleHiddenFor(category)
+                            }
+                        } label: {
+                            if category.isHidden {
+                                Label("Show", systemImage: "eye.fill")
+                            } else {
+                                Label("Hide", systemImage: "eye.slash.fill")
+                            }
+                        }
+                    }
+            }
+        }
+        .padding()
+    }
+    
     var scrollViewContent: some View {
         ScrollView {
             chartHeader
             savingsChart
             timeframePicker
             Divider()
-            LazyVGrid(columns: [GridItem(), GridItem()]) {
-                ForEach(content.items) { category in
-                    savingsCategorySummaryTile(category)
-                }
-            }
-            .padding()
+            categoryGridFor(content.shownCategories)
         }
     }
     
@@ -157,6 +175,23 @@ struct SavingsDetailView: View {
                 noCategories
             } else {
                 scrollViewContent
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showHiddenCategories.toggle()
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showHiddenCategories) {
+            NavigationView {
+                ScrollView {
+                    categoryGridFor(content.hiddenCategories)
+                }
+                .navigationTitle("Hidden categories")
             }
         }
         .navigationTitle("Savings Overview")

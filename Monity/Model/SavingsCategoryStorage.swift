@@ -21,15 +21,17 @@ class SavingsCategoryStorage: CoreDataModelStorage<SavingsCategory> {
         category.id = UUID()
         category.name = name
         category.label = label.rawValue
+        category.isHidden = false
         category.entries = []
         try? PersistenceController.shared.container.viewContext.save()
         return category
     }
     
-    func update(_ category: SavingsCategory, name: String?, label: SavingsCategoryLabel) -> Bool {
+    func update(_ category: SavingsCategory, name: String? = nil, label: SavingsCategoryLabel? = nil, isHidden: Bool? = nil) -> Bool {
         PersistenceController.shared.container.viewContext.performAndWait {
             category.name = name ?? category.name
-            category.label = label.rawValue
+            category.label = label?.rawValue ?? category.label
+            category.isHidden = isHidden ?? category.isHidden
             if let _ = try? PersistenceController.shared.container.viewContext.save() {
                 return true
             } else {

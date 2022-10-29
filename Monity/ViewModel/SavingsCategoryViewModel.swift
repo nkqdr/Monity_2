@@ -10,6 +10,8 @@ import Combine
 
 class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     static let shared = SavingsCategoryViewModel()
+    @Published var shownCategories: [SavingsCategory] = []
+    @Published var hiddenCategories: [SavingsCategory] = []
     @Published var savingEntries: [SavingsEntry] = [] {
         didSet {
             currentNetWorth = items.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
@@ -63,6 +65,11 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         }
     }
     
+    override func onItemsSet() {
+        shownCategories = items.filter { !$0.isHidden }
+        hiddenCategories = items.filter { $0.isHidden }
+    }
+    
     var lowerBoundDate: Date {
         timeFrameToDisplay > 0 ? Date(timeIntervalSinceNow: -Double(timeFrameToDisplay)).removeTimeStamp ?? Date() : Date.distantPast
     }
@@ -77,7 +84,11 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         let entriesBeforeOneYearAgo = allLineChartData.filter { $0.date.removeTimeStamp ?? Date() <= oneYearAgo.removeTimeStamp ?? Date() }
         let valueOneYearAgo: Double = entriesBeforeOneYearAgo.count > 0 ? entriesBeforeOneYearAgo.last?.value ?? 0 : allLineChartData.first?.value ?? 0
         let increase = latest - valueOneYearAgo
-        percentChangeInLastYear = increase / valueOneYearAgo
+        if valueOneYearAgo != 0 {
+            percentChangeInLastYear = increase / valueOneYearAgo
+        } else {
+            percentChangeInLastYear = 0
+        }
     }
     
     func getTotalSumFor(_ label: SavingsCategoryLabel) -> Double {
@@ -89,5 +100,11 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             return getTotalSumFor(label) / currentNetWorth
         }
         return 0
+    }
+    
+    // MARK: - Intents
+    
+    func toggleHiddenFor(_ category: SavingsCategory) {
+        let _ = SavingsCategoryStorage.shared.update(category, isHidden: !category.isHidden)
     }
 }
