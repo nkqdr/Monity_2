@@ -120,9 +120,7 @@ struct SavingsDetailView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color(UIColor.systemGroupedBackground)
-                .edgesIgnoringSafeArea(.all)
+        ListBase {
             mainContent
         }
         .navigationTitle("Savings Overview")
@@ -149,24 +147,6 @@ struct SavingsDetailView: View {
             }
       }
       return nil
-    }
-}
-
-struct CustomGroupBox: GroupBoxStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        VStack(alignment: .leading) {
-            configuration.label
-            Spacer()
-            HStack {
-                Spacer()
-                configuration.content
-                Spacer()
-            }
-            Spacer()
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 200)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color(UIColor.secondarySystemGroupedBackground)))
     }
 }
 

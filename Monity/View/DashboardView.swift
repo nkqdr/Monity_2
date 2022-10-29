@@ -10,14 +10,15 @@ import SwiftUI
 struct DashboardView: View {
     var body: some View {
         NavigationView {
-            List {
-                Group {
-                    CurrentMonthOverviewTile()
-                    AverageExpenseAndIncomeTile()
-                    SavingsTile()
+            ListBase {
+                ScrollView {
+                    Group {
+                        CurrentMonthOverviewTile()
+                        AverageExpenseAndIncomeTile()
+                        SavingsTile()
+                    }
+                    .padding()
                 }
-                .listRowInsets(EdgeInsets())
-                .padding()
             }
             .navigationTitle("Dashboard")
         }
