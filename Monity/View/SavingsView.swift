@@ -38,7 +38,11 @@ struct SavingsView: View {
         let totalSum: Double = content.getTotalSumFor(label)
         let fractionOfAll: Double = content.getFractionPercentageFor(label)
         HStack(spacing: 0) {
-            Text(label.rawValue != "" ? label.rawValue : "Unlabeled")
+            if label.rawValue != "" {
+                Text(LocalizedStringKey(label.rawValue))
+            } else {
+                Text("Unlabeled")
+            }
             Spacer()
             Group {
                 Text(totalSum, format: .currency(code: "EUR"))

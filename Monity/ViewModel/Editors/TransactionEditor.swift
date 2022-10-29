@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class TransactionEditor: ObservableObject {
     @Published var isExpense: Bool = true
@@ -15,7 +16,7 @@ class TransactionEditor: ObservableObject {
     @Published var description: String = ""
     @Published var selectedDate: Date = Date.now
     @Published var categories: [TransactionCategory] = []
-    @Published var navigationFormTitle: String
+    @Published var navigationFormTitle: LocalizedStringKey
     var transaction: Transaction?
     
     private var categoryCancellable: AnyCancellable?

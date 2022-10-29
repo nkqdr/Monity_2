@@ -24,7 +24,7 @@ struct SavingsCategoryListView: View {
                 EditableDeletableItem(
                     item: entry,
                     confirmationTitle: "Are you sure you want to delete this entry?",
-                    confirmationMessage: "This cannot be undone.",
+                    confirmationMessage: "This cannot be undone!",
                     onEdit: edit,
                     onDelete: delete) { item in
                     HStack {

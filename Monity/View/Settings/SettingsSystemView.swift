@@ -91,19 +91,19 @@ struct Settings_SystemView: View {
     var dataSection: some View {
         Section(header: Text("Saved Data"), footer: Text("Manage all data you have ever saved in this app.")) {
             HStack {
-                Text("Registered transactions")
+                Text("Registered transactions:")
                 Spacer()
                 Text(transactionsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
             }
             HStack {
-                Text("Registered savings entries")
+                Text("Registered savings entries:")
                 Spacer()
                 Text(savingsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
             }
             HStack {
-                Text("Used storage")
+                Text("Used storage:")
                 Spacer()
                 Text(content.storageUsedString)
                     .foregroundColor(.secondary)

@@ -43,7 +43,7 @@ struct Settings_SavingsView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text(item.label?.description ?? "")
+                                Text(LocalizedStringKey(item.wrappedLabel))
                                     .foregroundColor(.secondary)
                                 Circle()
                                     .foregroundColor(item.color)

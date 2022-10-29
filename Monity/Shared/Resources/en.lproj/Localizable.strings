@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Monity
+
+  Created by Niklas Kuder on 29.10.22.
+  
+*/
+
+/* No comment provided by engineer. */
+"income.plural" = "Income";
+
+/* No comment provided by engineer. */
+"picker.lastmonth" = "Last Month";
+
+/* No comment provided by engineer. */
+"picker.lastyear" = "Last Year";
+
+/* No comment provided by engineer. */
+"picker.fiveyears" = "5 Years";
+
+/* No comment provided by engineer. */
+"picker.max" = "Max";

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+
 class SavingsEditor: ObservableObject {
     @Published var category: SavingsCategory? {
         didSet {
@@ -14,7 +16,7 @@ class SavingsEditor: ObservableObject {
     }
     @Published var amount: Double
     @Published var disableSave: Bool = true
-    @Published var navigationFormTitle: String
+    @Published var navigationFormTitle: LocalizedStringKey
     var entry: SavingsEntry?
     
     init(entry: SavingsEntry? = nil) {

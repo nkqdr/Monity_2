@@ -66,9 +66,15 @@ struct CurrencyPieChart: View {
                             Circle()
                                 .foregroundStyle(.thinMaterial)
                             VStack(spacing: 1) {
-                                Text(activeIndex == -1 ? "Total" : adjustedValues[activeIndex].title)
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
+                                Group {
+                                    if activeIndex == -1 {
+                                        Text("Total")
+                                    } else {
+                                        Text(adjustedValues[activeIndex].title)
+                                    }
+                                }
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
                                 Text(activeIndex == -1 ? centerLabel : adjustedValues[activeIndex].value, format: .currency(code: "EUR"))
                                     .font(.subheadline)
                                     .padding(5)

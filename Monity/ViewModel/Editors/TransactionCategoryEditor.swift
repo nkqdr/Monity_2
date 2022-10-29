@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class TransactionCategoryEditor: ObservableObject {
     @Published var name: String {
@@ -13,7 +14,7 @@ class TransactionCategoryEditor: ObservableObject {
             disableSave = allCategories.map { $0.wrappedName }.contains(name) || name == ""
         }
     }
-    @Published var navigationFormTitle: String
+    @Published var navigationFormTitle: LocalizedStringKey
     @Published var disableSave: Bool = true
     private var allCategories: [TransactionCategory]
     var category: TransactionCategory?

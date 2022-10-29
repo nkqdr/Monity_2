@@ -40,23 +40,26 @@ struct AverageExpenseDetailView: View {
         }
     }
     
-    func barChartHeader(timeframe: String, value: Double) -> some View {
-        VStack(alignment: .leading) {
-            Text(timeframe)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Text(value, format: .currency(code: "EUR"))
-                .font(.headline.bold())
-                .foregroundColor(.primary)
-        }
-    }
-    
     @ViewBuilder
     var correctBarChartHeader: some View {
         if let selectedElement {
-            barChartHeader(timeframe: selectedElement.date.formatted(.dateTime.year().month()), value: selectedElement.value)
+            VStack(alignment: .leading) {
+                Text(selectedElement.date.formatted(.dateTime.year().month()))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Text(selectedElement.value, format: .currency(code: "EUR"))
+                    .font(.headline.bold())
+                    .foregroundColor(.primary)
+            }
         } else {
-            barChartHeader(timeframe: "Total", value: totalText)
+            VStack(alignment: .leading) {
+                Text("Total")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Text(totalText, format: .currency(code: "EUR"))
+                    .font(.headline.bold())
+                    .foregroundColor(.primary)
+            }
         }
     }
     
@@ -66,7 +69,7 @@ struct AverageExpenseDetailView: View {
                 Text("Over the last year").groupBoxLabelTextStyle(.secondary)
                 Picker("", selection: $showExpenseChart) {
                     Text("Expenses").tag(true)
-                    Text("Income").tag(false)
+                    Text("income.plural").tag(false)
                 }
                 .pickerStyle(.segmented)
                 .onChange(of: showExpenseChart) { _ in

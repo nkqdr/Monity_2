@@ -29,6 +29,10 @@ extension SavingsCategory {
         self.name ?? ""
     }
     
+    var wrappedLabel: String {
+        self.label ?? ""
+    }
+    
     var color: Color {
         for category in SavingsCategoryLabel.allCases {
             if category.rawValue == self.label {

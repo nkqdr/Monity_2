@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class SavingsCategoryEditor: ObservableObject {
     @Published var name: String {
@@ -18,7 +19,7 @@ class SavingsCategoryEditor: ObservableObject {
             disableSave = shouldDisableSave()
         }
     }
-    @Published var navigationFormTitle: String
+    @Published var navigationFormTitle: LocalizedStringKey
     @Published var disableSave: Bool = true
     private var allCategories: [SavingsCategory]
     var category: SavingsCategory?

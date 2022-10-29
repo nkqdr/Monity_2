@@ -26,10 +26,10 @@ struct SavingsDetailView: View {
     var timeframePicker: some View {
         // The picker holds the number of seconds for the selected timeframe.
         Picker("Timeframe", selection: $content.timeFrameToDisplay) {
-            Text("Last Month").tag(2592000)
-            Text("Last Year").tag(31536000)
-            Text("5 Years").tag(157680000)
-            Text("Max").tag(-1)
+            Text("picker.lastmonth").tag(2592000)
+            Text("picker.lastyear").tag(31536000)
+            Text("picker.fiveyears").tag(157680000)
+            Text("picker.max").tag(-1)
         }
         .pickerStyle(.segmented)
         .padding()

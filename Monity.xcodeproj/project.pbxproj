@@ -43,6 +43,7 @@
 		608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D2C290D2AFC00FFB45A /* ListBase.swift */; };
 		608C4D30290D2C8F00FFB45A /* GroupBoxStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D2F290D2C8F00FFB45A /* GroupBoxStyles.swift */; };
 		608C4D32290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D31290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift */; };
+		608C4D36290D640100FFB45A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 608C4D38290D640100FFB45A /* Localizable.strings */; };
 		6097917728F935B400FA5621 /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6097917628F935B400FA5621 /* PieChart.swift */; };
 		6097917C28F944E600FA5621 /* CurrencyPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6097917B28F944E600FA5621 /* CurrencyPieChart.swift */; };
 		60A1DDD028FDA32800635F39 /* AverageExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */; };
@@ -138,6 +139,8 @@
 		608C4D2C290D2AFC00FFB45A /* ListBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBase.swift; sourceTree = "<group>"; };
 		608C4D2F290D2C8F00FFB45A /* GroupBoxStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxStyles.swift; sourceTree = "<group>"; };
 		608C4D31290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationGroupBoxLabel.swift; sourceTree = "<group>"; };
+		608C4D37290D640100FFB45A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		608C4D39290D640500FFB45A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6097917628F935B400FA5621 /* PieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChart.swift; sourceTree = "<group>"; };
 		6097917B28F944E600FA5621 /* CurrencyPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPieChart.swift; sourceTree = "<group>"; };
 		60A1DDCF28FDA32800635F39 /* AverageExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageExpenseDetailView.swift; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 		60587B8928F3F1490097D4F4 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				608C4D33290D63C900FFB45A /* Resources */,
 				60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */,
 				6014FF4428F96E7F00413CE2 /* Structures.swift */,
 				60A4CFB128F99ED8007F392D /* Haptics.swift */,
@@ -262,6 +266,14 @@
 				608C4D2F290D2C8F00FFB45A /* GroupBoxStyles.swift */,
 			);
 			path = Styles;
+			sourceTree = "<group>";
+		};
+		608C4D33290D63C900FFB45A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				608C4D38290D640100FFB45A /* Localizable.strings */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		6097917828F9399E00FA5621 /* Dashboard */ = {
@@ -523,6 +535,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 60BD9F0528F35B6F001FF5FF;
 			productRefGroup = 60BD9F0F28F35B6F001FF5FF /* Products */;
@@ -542,6 +555,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */,
+				608C4D36290D640100FFB45A /* Localizable.strings in Resources */,
 				60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,6 +685,18 @@
 			targetProxy = 60BD9F2F28F35B70001FF5FF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		608C4D38290D640100FFB45A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				608C4D37290D640100FFB45A /* en */,
+				608C4D39290D640500FFB45A /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		60BD9F3628F35B70001FF5FF /* Debug */ = {

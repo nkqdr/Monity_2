@@ -20,7 +20,7 @@ struct MonthSummaryView: View {
     @ViewBuilder
     private var incomePieChart: some View {
         VStack(alignment: .leading) {
-            Text("Income").groupBoxLabelTextStyle()
+            Text("income.plural").groupBoxLabelTextStyle()
             if let content {
                 CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
             }

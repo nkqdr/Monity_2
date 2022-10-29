@@ -162,7 +162,7 @@ struct CurrentMonthDetailView: View {
             ScrollView {
                 overviewHeader
                 Group {
-                    GroupBox(label: Text("Income").groupBoxLabelTextStyle()) {
+                    GroupBox(label: Text("income.plural").groupBoxLabelTextStyle()) {
                         CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
                     }
                     GroupBox(label: Text("Expenses").groupBoxLabelTextStyle()) {

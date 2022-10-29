@@ -1,0 +1,360 @@
+/* No comment provided by engineer. */
+"%lld related entries will be deleted." = "%lld verknüpfte Einträge werden gelöscht.";
+
+/* No comment provided by engineer. */
+"%lld related transactions will be deleted." = "%lld verknüpfte Transaktionen werden gelöscht.";
+
+/* No comment provided by engineer. */
+"%lld transactions" = "%lld Transaktionen";
+
+/* No comment provided by engineer. */
+"5 Years" = "5 Jahre";
+
+/* No comment provided by engineer. */
+"About" = "Über";
+
+/* No comment provided by engineer. */
+"Amount" = "Betrag";
+
+/* No comment provided by engineer. */
+"Apply" = "Anwenden";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete %@?" = "Sind Sie sicher, dass Sie %@ löschen wollen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete all App-Data?" = "Sind Sie sicher, dass Sie alle App-Daten löschen wollen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete this entry?" = "Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete this transaction?" = "Sind Sie sicher, dass Sie diese Transaktion löschen möchten?";
+
+/* No comment provided by engineer. */
+"Associated entries: %lld" = "Verknüpfte Einträge: %lld";
+
+/* No comment provided by engineer. */
+"Associated transactions: %lld" = "Verknüpfte Transaktionen: %lld";
+
+/* No comment provided by engineer. */
+"Average" = "Durchschnitt";
+
+/* No comment provided by engineer. */
+"Budget:" = "Budget:";
+
+/* No comment provided by engineer. */
+"Cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"Categories" = "Kategorien";
+
+/* No comment provided by engineer. */
+"Category" = "Kategorie";
+
+/* No comment provided by engineer. */
+"Category name" = "Kategoriename";
+
+/* No comment provided by engineer. */
+"Change limit" = "Limit ändern";
+
+/* No comment provided by engineer. */
+"Choose a category" = "Kategorie auswählen";
+
+/* No comment provided by engineer. */
+"Configuration" = "Konfiguration";
+
+/* No comment provided by engineer. */
+"Could not read this file" = "Datei konnte nicht gelesen werden";
+
+/* No comment provided by engineer. */
+"Current cashflow" = "Cashflow";
+
+/* No comment provided by engineer. */
+"Current Month" = "Dieser Monat";
+
+/* No comment provided by engineer. */
+"Dashboard" = "Dashboard";
+
+/* No comment provided by engineer. */
+"Date" = "Datum";
+
+/* No comment provided by engineer. */
+"Days left:" = "Verbleibende Tage:";
+
+/* No comment provided by engineer. */
+"Delete" = "Löschen";
+
+/* No comment provided by engineer. */
+"Delete all data" = "Alle Daten löschen";
+
+/* No comment provided by engineer. */
+"Delete limit" = "Limit löschen";
+
+/* No comment provided by engineer. */
+"Delete monthly limit" = "Monatliches Limit löschen";
+
+/* No comment provided by engineer. */
+"Delete transaction" = "Transaktion löschen";
+
+/* No comment provided by engineer. */
+"Description" = "Beschreibung";
+
+/* No comment provided by engineer. */
+"Details" = "Details";
+
+/* No comment provided by engineer. */
+"Edit" = "Bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit category" = "Kategorie bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit entry" = "Eintrag bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit transaction" = "Transaktion bearbeiten";
+
+/* No comment provided by engineer. */
+"Expense" = "Ausgabe";
+
+/* No comment provided by engineer. */
+"Expenses" = "Ausgaben";
+
+/* No comment provided by engineer. */
+"Export Data" = "Daten exportieren";
+
+/* No comment provided by engineer. */
+"Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
+
+/* No comment provided by engineer. */
+"General" = "Allgemein";
+
+/* No comment provided by engineer. */
+"Go to Settings > Savings to define your categories." = "Gehen Sie zu Einstellungen > Vermögen, um Ihre Kategorien zu definieren.";
+
+/* No comment provided by engineer. */
+"Here you can add all of your savings categories, so that you can later add entries to these categories." = "Hier können Sie alle Ihre Vermögenskategorien hinzufügen, so dass Sie später Einträge zu diesen Kategorien hinzufügen können.";
+
+/* No comment provided by engineer. */
+"Hidden categories" = "Versteckte Kategorien";
+
+/* No comment provided by engineer. */
+"Hide" = "Verstecken";
+
+/* No comment provided by engineer. */
+"Import" = "Importieren";
+
+/* No comment provided by engineer. */
+"Import Data" = "Daten importieren";
+
+/* No comment provided by engineer. */
+"Import Summary" = "Import Zusammenfassung";
+
+/* No comment provided by engineer. */
+"Income" = "Einnahme";
+
+/* No comment provided by engineer. */
+"income.plural" = "Einnahmen";
+
+/* No comment provided by engineer. */
+"Invested" = "Investiert";
+
+/* No comment provided by engineer. */
+"Label" = "Kennzeichnung";
+
+/* No comment provided by engineer. */
+"Last Month" = "Letzter Monat";
+
+/* No comment provided by engineer. */
+"Last Year" = "Letztes Jahr";
+
+/* No comment provided by engineer. */
+"picker.lastmonth" = "1 Monat";
+
+/* No comment provided by engineer. */
+"picker.lastyear" = "1 Jahr";
+
+/* No comment provided by engineer. */
+"picker.fiveyears" = "5 Jahre";
+
+/* No comment provided by engineer. */
+"picker.max" = "Max";
+
+/* No comment provided by engineer. */
+"Limit" = "Limit";
+
+/* No comment provided by engineer. */
+"Liquid" = "Liquide";
+
+/* No comment provided by engineer. */
+"Manage all data you have ever saved in this app." = "Verwalten Sie alle Daten, die Sie jemals in dieser App gespeichert haben.";
+
+/* No comment provided by engineer. */
+"Month" = "Monat";
+
+/* No comment provided by engineer. */
+"Monthly limit" = "Monatliches Limit";
+
+/* No comment provided by engineer. */
+"Net-Worth" = "Vermögen";
+
+/* No comment provided by engineer. */
+"New category" = "Neue Kategorie";
+
+/* No comment provided by engineer. */
+"New entry" = "Neuer Eintrag";
+
+/* No comment provided by engineer. */
+"New transaction" = "Neue Transaktion";
+
+/* No comment provided by engineer. */
+"No registered expenses for this month." = "Keine gespeicherten Ausgaben in diesem Monat.";
+
+/* No comment provided by engineer. */
+"No registered income for this month." = "Keine gespeicherten Einnahmen in diesem Monat.";
+
+/* No comment provided by engineer. */
+"No registered transactions for this month." = "Keine gespeicherten Transaktionen in diesem Monat.";
+
+/* No comment provided by engineer. */
+"No Savings categories defined." = "Keine Vermögenskategorien definiert.";
+
+/* No comment provided by engineer. */
+"None" = "Keine";
+
+/* No comment provided by engineer. */
+"Optional" = "Optional";
+
+/* No comment provided by engineer. */
+"Over the last year" = "Im letzten Jahr";
+
+/* No comment provided by engineer. */
+"Pick a transaction type" = "Transaktionstyp auswählen";
+
+/* No comment provided by engineer. */
+"Please enter your desired limit." = "Bitte geben Sie das gewünschte Limit ein.";
+
+/* No comment provided by engineer. */
+"Please make sure to use a csv file with the correct format." = "Bitte stellen Sie sicher, dass Sie eine csv-Datei mit dem richtigen Format verwenden.";
+
+/* No comment provided by engineer. */
+"Please set a monthly limit in the settings in order to use this." = "Bitte legen Sie in den Einstellungen ein monatliches Limit fest, um diese Ansicht zu nutzen.";
+
+/* No comment provided by engineer. */
+"Predicted total expenses:" = "Geschätzte Gesamtausgaben:";
+
+/* No comment provided by engineer. */
+"Ratio" = "Verhältnis";
+
+/* No comment provided by engineer. */
+"Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
+
+/* No comment provided by engineer. */
+"Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
+
+/* No comment provided by engineer. */
+"Registered savings entries:" = "Registrierte Vermögenseinträge:";
+
+/* No comment provided by engineer. */
+"Registered transactions:" = "Registrierte Transaktionen:";
+
+/* No comment provided by engineer. */
+"Rows:" = "Reihen";
+
+/* No comment provided by engineer. */
+"Save" = "Speichern";
+
+/* No comment provided by engineer. */
+"Saved" = "Gespart";
+
+/* No comment provided by engineer. */
+"Saved Data" = "Gespeicherte Daten";
+
+/* No comment provided by engineer. */
+"Savings" = "Vermögen";
+
+/* No comment provided by engineer. */
+"Savings Overview" = "Vermögensübersicht";
+
+/* No comment provided by engineer. */
+"Select CSV" = "CSV auswählen";
+
+/* No comment provided by engineer. */
+"Selected month" = "Ausgewählter Monat";
+
+/* No comment provided by engineer. */
+"Set monthly limit" = "Monatliches Limit setzen";
+
+/* No comment provided by engineer. */
+"Set yourself a monthly limit and try to stay in your own budget" = "Setzen Sie sich ein monatliches Limit und versuchen Sie, Ihr eigenes Budget einzuhalten";
+
+/* No comment provided by engineer. */
+"Settings" = "Einstellungen";
+
+/* No comment provided by engineer. */
+"Show" = "Anzeigen";
+
+/* No comment provided by engineer. */
+"Show average mark" = "Durchschnitt anzeigen";
+
+/* No comment provided by engineer. */
+"System" = "System";
+
+/* No comment provided by engineer. */
+"These will help you categorize all of your expenses and income" = "Diese helfen Ihnen, alle Ihre Ausgaben und Einnahmen zu kategorisieren";
+
+/* No comment provided by engineer. */
+"This cannot be undone!" = "Das kann nicht rückgängig gemacht werden!";
+
+/* No comment provided by engineer. */
+"Timeframe" = "Zeitfenster";
+
+/* No comment provided by engineer. */
+"Today" = "Heute";
+
+/* No comment provided by engineer. */
+"Total" = "Gesamt";
+
+/* No comment provided by engineer. */
+"Transaction date" = "Transaktionsdatum";
+
+/* No comment provided by engineer. */
+"Transaction Overview" = "Transaktionsübersicht";
+
+/* No comment provided by engineer. */
+"Transactions" = "Transaktionen";
+
+/* No comment provided by engineer. */
+"Try again" = "Erneut versuchen";
+
+/* No comment provided by engineer. */
+"Type" = "Typ";
+
+/* No comment provided by engineer. */
+"Unlabeled" = "Unbekannt";
+
+/* No comment provided by engineer. */
+"Used storage:" = "Benutzter Speicher:";
+
+/* No comment provided by engineer. */
+"Value" = "Wert";
+
+/* No comment provided by engineer. */
+"Version %@" = "Version %@";
+
+/* No comment provided by engineer. */
+"View month summary" = "Monatsübersicht anzeigen";
+
+/* No comment provided by engineer. */
+"You spent %lld%% of your income." = "Sie haben %lld%% Ihrer Einnahmen ausgegeben.";
+
+/* No comment provided by engineer. */
+"Your monthly limit:" = "Ihr monatliches Limit:";
+
+/* No comment provided by engineer. */
+"Your wealth decreased by %lld%%" = "Ihr Vermögen ist um %lld%% gesunken";
+
+/* No comment provided by engineer. */
+"Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
+

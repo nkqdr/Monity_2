@@ -49,33 +49,6 @@ struct CurrentMonthOverviewTile: View {
             .groupBoxStyle(CustomGroupBox())
         }
         .buttonStyle(.plain)
-        .onlyHideContextMenu {
-            if monthlyLimit > 0 {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Predicted total expenses:")
-                            .font(.system(size: 18, weight: .semibold))
-                            .frame(maxWidth: .infinity)
-                        Text(content.predictedTotalSpendings, format: .currency(code: "EUR"))
-                            .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
-                    }
-                    .frame(maxWidth: .infinity)
-                    Spacer(minLength: 60)
-                    BudgetBattery(monthlyLimit: monthlyLimit, alreadySpent: content.spentThisMonth)
-                }
-                .frame(maxWidth: .infinity, maxHeight: 350)
-                .padding()
-            } else {
-                VStack {
-                    Text("Please set a monthly limit in the settings in order to use this.")
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.secondary)
-                }
-                .frame(height: 350)
-                .frame(maxWidth: .infinity)
-                .padding()
-            }
-        }
     }
 }
 
