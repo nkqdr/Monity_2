@@ -23,6 +23,7 @@ struct SavingsDetailView: View {
     }
     
     var timeframePicker: some View {
+        // The picker holds the number of seconds for the selected timeframe.
         Picker("Timeframe", selection: $content.timeFrameToDisplay) {
             Text("Last Month").tag(2592000)
             Text("Last Year").tag(31536000)
@@ -85,43 +86,78 @@ struct SavingsDetailView: View {
           }
         }
         .frame(height: 200)
-        .foregroundColor(content.percentChangeInLastYear >= 0 ? .green : .red)
-        .padding()
+        .foregroundColor(content.currentNetWorth >= 0 ? .green : .red)
+        .padding(.horizontal)
 //        .animation(.easeInOut, value: content.filteredLineChartData)
+    }
+    
+    @ViewBuilder
+    var chartHeader: some View {
+        let netWorthToDisplay: Double = selectedElement != nil ? selectedElement!.value : content.currentNetWorth
+        let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : Date()
+        HStack {
+            VStack(alignment: .leading) {
+                Text(netWorthToDisplay, format: .currency(code: "EUR"))
+                    .font(.title2.bold())
+                Text(timeToDisplay, format: .dateTime.year().month().day())
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding()
+    }
+    
+    @ViewBuilder
+    func savingsCategorySummaryTile(_ category: SavingsCategory) -> some View {
+        let label = VStack(alignment: .leading) {
+            Text(category.wrappedName).groupBoxLabelTextStyle()
+            Text(category.lastEntry?.amount.formatted(.currency(code: "EUR")) ?? "-")
+                .font(.callout)
+                .foregroundColor(.secondary)
+        }
+        let dataPoints: [ValueTimeDataPoint] = category.lineChartDataPoints(after: content.lowerBoundDate)
+        let maxValue: Double = dataPoints.map { $0.value }.max() ?? 0
+        GroupBox(label: label) {
+            Chart(dataPoints) {
+                AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
+                    .opacity(0.5)
+                    .interpolationMethod(.catmullRom)
+                LineMark(x: .value("Date", $0.date), y: .value("Value", $0.value))
+                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
+                    .interpolationMethod(.catmullRom)
+            }
+            .chartYAxis(.hidden)
+            .chartXAxis(.hidden)
+            .chartYScale(domain: 0 ... maxValue)
+            .foregroundColor(category.lastEntry?.amount ?? 0 >= 0 ? .green : .red)
+        }
+        .groupBoxStyle(CustomGroupBox())
+        .frame(minHeight: 200)
     }
     
     var scrollViewContent: some View {
         ScrollView {
+            chartHeader
             savingsChart
             timeframePicker
             Divider()
             LazyVGrid(columns: [GridItem(), GridItem()]) {
                 ForEach(content.items) { category in
-                    GroupBox(label: Text(category.wrappedName).groupBoxLabelTextStyle()) {
-                        Circle()
-                            .frame(width: 20)
-                            .foregroundColor(.red)
-                    }
-                    .groupBoxStyle(CustomGroupBox())
-                    .frame(minHeight: 200)
+                    savingsCategorySummaryTile(category)
                 }
             }
             .padding()
         }
     }
     
-    @ViewBuilder
-    var mainContent: some View {
-        if content.items.isEmpty {
-            noCategories
-        } else {
-            scrollViewContent
-        }
-    }
-    
     var body: some View {
         ListBase {
-            mainContent
+            if content.items.isEmpty {
+                noCategories
+            } else {
+                scrollViewContent
+            }
         }
         .navigationTitle("Savings Overview")
     }

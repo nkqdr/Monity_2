@@ -63,8 +63,11 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         }
     }
     
+    var lowerBoundDate: Date {
+        timeFrameToDisplay > 0 ? Date(timeIntervalSinceNow: -Double(timeFrameToDisplay)).removeTimeStamp ?? Date() : Date.distantPast
+    }
+    
     func generateFilteredLineChartDataPoints() {
-        let lowerBoundDate: Date = timeFrameToDisplay > 0 ? Date(timeIntervalSinceNow: -Double(timeFrameToDisplay)).removeTimeStamp ?? Date() : Date.distantPast
         filteredLineChartData = allLineChartData.filter { $0.date.removeTimeStamp ?? Date() >= lowerBoundDate }
     }
     

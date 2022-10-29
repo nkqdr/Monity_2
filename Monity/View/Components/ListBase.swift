@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListBase<Content>: View where Content: View {
-    var content: () -> Content
+    @ViewBuilder var content: () -> Content
     
     var body: some View {
         ZStack {

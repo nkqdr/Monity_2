@@ -58,6 +58,13 @@ extension SavingsCategory {
     var lastEntry: SavingsEntry? {
         self.entryArray.last
     }
+    
+    func lineChartDataPoints(after: Date) -> [ValueTimeDataPoint] {
+        let data =  self.entryArray.filter { $0.wrappedDate >= after }.map { ValueTimeDataPoint(date: $0.wrappedDate, value: $0.amount) }.sorted {
+            $0.date < $1.date
+        }
+        return data
+    }
 }
 
 extension SavingsEntry {
