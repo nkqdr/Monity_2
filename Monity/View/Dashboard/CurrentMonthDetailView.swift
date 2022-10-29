@@ -47,8 +47,6 @@ struct CurrentMonthDetailView: View {
         }
         .padding(.bottom, 5)
         .padding(.horizontal)
-        .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets())
     }
     
     @ViewBuilder
@@ -196,7 +194,6 @@ struct CurrentMonthDetailView: View {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
         .navigationTitle("Current Month")
-//        .navigationBarTitleDisplayMode(.inline)
     }
     
     func setSelectedElement(_ value: ValueTimeDataPoint?) {
