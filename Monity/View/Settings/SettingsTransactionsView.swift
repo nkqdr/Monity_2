@@ -10,22 +10,37 @@ import SwiftUI
 struct Settings_TransactionsView: View {
     @AppStorage("monthly_limit") private var monthlyLimit: Double?
     @StateObject private var content = SettingsTransactionsViewModel()
-    @State private var showAddCategorySheet: Bool = false
     @State private var showingEditAlert: Bool = false
     @State private var showingDeleteConfirmation: Bool = false
     
     var body: some View {
-        List {
+        EditableDeletableItemList(viewModel: content) { create, edit, delete in
             monthlyLimitSection
-            transactionCategorySection
+            Section(header: categorySectionHeader(create), footer: categorySectionFooter) {
+                ForEach(content.items) { category in
+                    EditableDeletableItem(
+                        item: category,
+                        confirmationTitle: "Are you sure you want to delete \(category.wrappedName)?",
+                        confirmationMessage: "\(category.wrappedTransactionsCount) related transactions will be deleted.",
+                        onEdit: edit,
+                        onDelete: delete) { item in
+                            VStack(alignment: .leading) {
+                                Text(item.wrappedName)
+                                Text("Associated transactions: \(item.wrappedTransactionsCount)")
+                                    .font(.callout)
+                                    .foregroundColor(.secondary)
+                            }
+                    }
+                }
+            }
+        } sheetContent: { showAddItemSheet, currentItem in
+            TransactionCategoryFormView(
+                isPresented: showAddItemSheet,
+                editor: TransactionCategoryEditor(category: currentItem)
+            )
         }
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showAddCategorySheet) {
-            TransactionCategoryFormView(isPresented: $showAddCategorySheet, editor: TransactionCategoryEditor(category: content.currentCategory))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.hidden)
-        }
         .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
             TextField("Limit", value: $content.monthlyLimit, format: .currency(code: "EUR"))
             Button("Save") {
@@ -35,15 +50,18 @@ struct Settings_TransactionsView: View {
         }, message: {
             Text("Please enter your desired limit.")
         })
-        .onChange(of: showAddCategorySheet) { newValue in
-            if !newValue {
-                content.currentCategory = nil
-            }
-        }
+    }
+    
+    private var monthlyLimitHeader: some View {
+        Text("Monthly limit")
+    }
+    
+    private var monthlyLimitFooter: some View {
+        Text("Set yourself a monthly limit and try to stay in your own budget")
     }
     
     private var monthlyLimitSection: some View {
-        Section(header: Text("Monthly limit"), footer: Text("Set yourself a monthly limit and try to stay in your own budget")) {
+        Section(header: monthlyLimitHeader, footer: monthlyLimitFooter) {
             HStack {
                 Text("Your monthly limit:")
                 Spacer()
@@ -77,25 +95,18 @@ struct Settings_TransactionsView: View {
         }
     }
     
-    func showEditSheetForCategory(_ category: TransactionCategory) {
-        content.currentCategory = category
-        showAddCategorySheet.toggle()
-    }
-    
-    private var transactionCategorySection: some View {
-        Section(header: HStack {
+    func categorySectionHeader(_ createFunc: @escaping () -> Void) -> some View {
+        HStack {
             Text("Categories")
             Spacer()
-            Button {
-                showAddCategorySheet.toggle()
-            } label: {
+            Button(action: createFunc) {
                 Image(systemName: "plus")
             }
-        }, footer: Text("These will help you categorize all of your expenses and income")) {
-            ForEach(content.categories) { category in
-                TransactionCategoryListTile(category: category, onEdit: showEditSheetForCategory, onDelete: content.deleteCategory)
-            }
         }
+    }
+    
+    private var categorySectionFooter: some View {
+        Text("These will help you categorize all of your expenses and income")
     }
 }
 

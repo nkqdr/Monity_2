@@ -6,32 +6,14 @@
 //
 
 import Foundation
-import Combine
-import CoreData
 
-class TransactionCategoryStorage: NSObject, ObservableObject {
-    var categories = CurrentValueSubject<[TransactionCategory], Never>([])
-    private let categoryFetchController: NSFetchedResultsController<TransactionCategory>
-    
+class TransactionCategoryStorage: CoreDataModelStorage<TransactionCategory> {
     static let shared: TransactionCategoryStorage = TransactionCategoryStorage()
     
-    private override init() {
-        let request = TransactionCategory.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
-        categoryFetchController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        super.init()
-        categoryFetchController.delegate = self
-        do {
-            try categoryFetchController.performFetch()
-            categories.value = categoryFetchController.fetchedObjects ?? []
-        } catch {
-            NSLog("Error: could not fetch objects")
-        }
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)
+        ])
     }
     
     func add(name: String) -> TransactionCategory {
@@ -75,12 +57,3 @@ class TransactionCategoryStorage: NSObject, ObservableObject {
         }
     }
 }
-
-extension TransactionCategoryStorage: NSFetchedResultsControllerDelegate {
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let categories = controller.fetchedObjects as? [TransactionCategory] else { return }
-        print("Context has changed, reloading categories")
-        self.categories.value = categories
-    }
-}
-

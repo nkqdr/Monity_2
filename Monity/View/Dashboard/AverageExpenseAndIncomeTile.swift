@@ -24,12 +24,6 @@ struct AverageExpenseAndIncomeTile: View {
     private var actualTile: some View {
         let percentOfIncomeSpent: Int? = content.totalIncomeThisYear > 0 ? Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100) : nil
         VStack(alignment: .leading) {
-            HStack {
-                Text("Transaction Overview").groupBoxLabelTextStyle(.secondary)
-                Spacer()
-                Text("Last Year").groupBoxLabelTextStyle(.secondary)
-            }
-            Spacer()
             if let percentOfIncomeSpent {
                 Text("You spent \(percentOfIncomeSpent)% of your income.")
                     .groupBoxLabelTextStyle()
@@ -38,15 +32,19 @@ struct AverageExpenseAndIncomeTile: View {
                     .groupBoxLabelTextStyle()
             }
             expenseChart
+                .padding(.top, percentOfIncomeSpent != nil ? 0 : 10)
             incomeChart
         }
     }
+    
     var body: some View {
-        Section {
-            NavigationLink(destination: AverageExpenseDetailView()) {
+        NavigationLink(destination: AverageExpenseDetailView()) {
+            GroupBox(label: NavigationGroupBoxLabel(title: "Last Year")) {
                 actualTile
             }
+            .groupBoxStyle(CustomGroupBox())
         }
+        .buttonStyle(.plain)
     }
 }
 

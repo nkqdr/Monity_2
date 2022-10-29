@@ -10,22 +10,19 @@ import SwiftUI
 struct DashboardView: View {
     var body: some View {
         NavigationView {
-            List {
-                Group {
-                    CurrentMonthOverviewTile()
-                    AverageExpenseAndIncomeTile()
-//                    Section {
-//                        VStack(alignment: .leading) {
-//                            Text("Savings").groupBoxLabelTextStyle(.secondary)
-//                            Text("To-Do")
-//                        }
-//                    }
+            ListBase {
+                ScrollView {
+                    Group {
+                        CurrentMonthOverviewTile()
+                        AverageExpenseAndIncomeTile()
+                        SavingsTile()
+                    }
+                    .padding()
                 }
-                .listRowInsets(EdgeInsets())
-                .padding()
             }
             .navigationTitle("Dashboard")
         }
+        .navigationViewStyle(.stack) 
     }
 }
 

@@ -6,23 +6,17 @@
 //
 
 import Foundation
-import Combine
 
-class SettingsSavingsViewModel: ObservableObject {
-    @Published var categories: [SavingsCategory] = []
-    @Published var currentCategory: SavingsCategory? = nil
-    
-    private var categoryCancellable: AnyCancellable?
+class SettingsSavingsViewModel: ItemListViewModel<SavingsCategory> {
     
     init() {
-        let categoryPublisher = SavingsCategoryStorage.shared.categories.eraseToAnyPublisher()
-        categoryCancellable = categoryPublisher.sink { categories in
-            self.categories = categories
-        }
+        let itemPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
+        super.init(itemPublisher: itemPublisher)
     }
     
     // MARK: - Intents
-    func deleteCategory(_ category: SavingsCategory) {
-        SavingsCategoryStorage.shared.delete(category)
+    
+    override func deleteItem(_ item: SavingsCategory) {
+        SavingsCategoryStorage.shared.delete(item)
     }
 }

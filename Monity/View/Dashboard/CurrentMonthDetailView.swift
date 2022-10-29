@@ -45,7 +45,8 @@ struct CurrentMonthDetailView: View {
                     .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
             }
         }
-        .padding(.vertical, 5)
+        .padding(.bottom, 5)
+        .padding(.horizontal)
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
     }
@@ -159,38 +160,33 @@ struct CurrentMonthDetailView: View {
     }
     
     var body: some View {
-        List {
-            Section {
+        ListBase {
+            ScrollView {
                 overviewHeader
-            }
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Income").groupBoxLabelTextStyle()
-                    CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
-                }
-            }
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Expenses").groupBoxLabelTextStyle()
-                    CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
-                }
-            }
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Current cashflow").groupBoxLabelTextStyle()
-                        .padding(.top, 8)
-                    if content.cashFlowData.count > 1 {
-                        cashFlowChart
-                    } else {
-                        HStack {
-                            Spacer()
-                            Text("No registered transactions for this month.")
-                                .groupBoxLabelTextStyle(.secondary)
-                            Spacer()
+                Group {
+                    GroupBox(label: Text("Income").groupBoxLabelTextStyle()) {
+                        CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
+                    }
+                    GroupBox(label: Text("Expenses").groupBoxLabelTextStyle()) {
+                        CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
+                    }
+                    GroupBox(label: Text("Current cashflow").groupBoxLabelTextStyle()) {
+                        if content.cashFlowData.count > 1 {
+                            cashFlowChart
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("No registered transactions for this month.")
+                                    .groupBoxLabelTextStyle(.secondary)
+                                Spacer()
+                            }
+                            .padding(.vertical)
                         }
-                        .padding(.vertical)
                     }
                 }
+                .groupBoxStyle(CustomGroupBox())
+                .padding(.horizontal)
+                .padding(.vertical, 5)
             }
         }
         .onChange(of: monthlyLimit) { newValue in
@@ -200,6 +196,7 @@ struct CurrentMonthDetailView: View {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
         .navigationTitle("Current Month")
+//        .navigationBarTitleDisplayMode(.inline)
     }
     
     func setSelectedElement(_ value: ValueTimeDataPoint?) {

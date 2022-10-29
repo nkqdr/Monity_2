@@ -41,4 +41,34 @@ extension SavingsCategory {
     var wrappedEntryCount: Int {
         self.entries?.count ?? 0
     }
+    
+    public var entryArray: [SavingsEntry] {
+        let set = entries as? Set<SavingsEntry> ?? []
+        
+        return set.sorted {
+            return $0.wrappedDate < $1.wrappedDate
+        }
+    }
+    
+    func lastEntryBefore(_ date: Date) -> SavingsEntry? {
+        let entriesBefore = self.entryArray.filter { $0.wrappedDate.removeTimeStamp ?? Date() <= date }
+        return entriesBefore.last
+    }
+    
+    var lastEntry: SavingsEntry? {
+        self.entryArray.last
+    }
+    
+    func lineChartDataPoints(after: Date) -> [ValueTimeDataPoint] {
+        let data =  self.entryArray.filter { $0.wrappedDate >= after }.map { ValueTimeDataPoint(date: $0.wrappedDate, value: $0.amount) }.sorted {
+            $0.date < $1.date
+        }
+        return data
+    }
+}
+
+extension SavingsEntry {
+    var wrappedDate: Date {
+        self.date ?? Date()
+    }
 }

@@ -42,8 +42,8 @@ class AverageMonthlyChartViewModel: ObservableObject {
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
-        let categoryPublisher = TransactionCategoryStorage.shared.categories.eraseToAnyPublisher()
+    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
+        let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
         transactionCategoryCancellable = categoryPublisher.sink { categories in
             self.transactionCategories = categories
         }
@@ -75,13 +75,25 @@ class AverageMonthlyChartViewModel: ObservableObject {
         return filterPastYearDataPointsBy(isExpense: false)
     }
     
-    private func generateFilteredRetroDataPoints(isExpense: Bool) -> [CategoryRetroDataPoint] {
+    private func updateFilteredRetroDataPoints(isExpense: Bool) -> [CategoryRetroDataPoint] {
         var dataPoints: [CategoryRetroDataPoint] = []
         for category in transactionCategories {
             let usedTransactions: [Transaction] = transactions.filter { $0.category == category && $0.isExpense == isExpense }
             let totalSum: Double = usedTransactions.map { $0.amount}.reduce(0, +)
             let average: Double = totalSum / Double(monthlyExpenseDataPoints.count)
-            if totalSum > 0 {
+            var existing: CategoryRetroDataPoint?
+            if isExpense {
+                existing = expenseCategoryRetroDataPoints.first(where: { $0.category == category })
+            } else {
+                existing = incomeCategoryRetroDataPoints.first(where: { $0.category == category })
+            }
+            if let existing, totalSum > 0 {
+                var newExisting = existing
+                newExisting.setTotal(totalSum)
+                newExisting.setAverage(average)
+                newExisting.setNumTransactinos(usedTransactions.count)
+                dataPoints.append(newExisting)
+            } else if totalSum > 0 {
                 dataPoints.append(CategoryRetroDataPoint(category: category, total: totalSum, average: average, numTransactions: usedTransactions.count))
             }
         }
@@ -91,10 +103,10 @@ class AverageMonthlyChartViewModel: ObservableObject {
     }
     
     private func getIncomeRetroDataPoints() -> [CategoryRetroDataPoint] {
-        return generateFilteredRetroDataPoints(isExpense: false)
+        return updateFilteredRetroDataPoints(isExpense: false)
     }
     
     private func getExpenseRetroDataPoints() -> [CategoryRetroDataPoint] {
-        return generateFilteredRetroDataPoints(isExpense: true)
+        return updateFilteredRetroDataPoints(isExpense: true)
     }
 }

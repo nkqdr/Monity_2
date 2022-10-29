@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class MonthlyOverviewViewModel: ObservableObject, PieChartViewModel, CashflowViewModel {
+class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewModel, CashflowViewModel {
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
     @Published var cashFlowData: [ValueTimeDataPoint] = []
@@ -33,14 +33,6 @@ class MonthlyOverviewViewModel: ObservableObject, PieChartViewModel, CashflowVie
             cashFlowData = getCashFlowDataPoints(for: thisMonthTransactions)
         }
     }
-    @Published var transactions: [Transaction] = [] {
-        didSet {
-            thisMonthTransactions = transactions.filter { t in
-                let comps = Calendar.current.dateComponents([.month, .year], from: t.date ?? Date())
-                return comps.year == currentComps.year && comps.month == currentComps.month
-            }
-        }
-    }
     @Published var predictedTotalSpendings: Double = 0
     @Published var thisMonthExpenses: [Transaction] = [] {
         didSet {
@@ -59,14 +51,19 @@ class MonthlyOverviewViewModel: ObservableObject, PieChartViewModel, CashflowVie
         let correctMonth: Int = currentComps.month == 12 ? 1 : (currentComps.month ?? 0) + 1
         return Calendar.current.date(from: DateComponents(year: correctYear, month: correctMonth, day: 1)) ?? Date()
     }
-    private var transactionCancellable: AnyCancellable?
     
     // MARK: - Constructor(s)
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.transactions.eraseToAnyPublisher()) {
-        transactionCancellable = transactionPublisher.sink { transactions in
-            self.transactions = transactions
-        }
+    init() {
+        let publisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        super.init(itemPublisher: publisher)
         remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
+    }
+    
+    override func onItemsSet() {
+        thisMonthTransactions = items.filter { t in
+            let comps = Calendar.current.dateComponents([.month, .year], from: t.date ?? Date())
+            return comps.year == currentComps.year && comps.month == currentComps.month
+        }
     }
 }

@@ -14,10 +14,7 @@ struct CurrentMonthOverviewTile: View {
     
     @ViewBuilder
     var actualTile: some View {
-        let label = Text("Current Month").groupBoxLabelTextStyle(.secondary)
         VStack(alignment: .leading) {
-            label
-            Spacer()
             HStack {
                 VStack(alignment: .leading) {
                     Text("Days left:")
@@ -27,7 +24,7 @@ struct CurrentMonthOverviewTile: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                VStack {
+                VStack(alignment: .leading) {
                     Text("Budget:")
                         .font(.system(size: 18, weight: .semibold))
                     Text(remainingAmount, format: .currency(code: "EUR"))
@@ -36,6 +33,22 @@ struct CurrentMonthOverviewTile: View {
                 }
             }
         }
+        .onChange(of: monthlyLimit) { newValue in
+            remainingAmount = newValue - content.spentThisMonth
+        }
+        .onAppear {
+            remainingAmount = monthlyLimit - content.spentThisMonth
+        }
+    }
+    
+    var body: some View {
+        NavigationLink(destination: CurrentMonthDetailView()) {
+            GroupBox(label: NavigationGroupBoxLabel(title: "Current Month")) {
+                actualTile
+            }
+            .groupBoxStyle(CustomGroupBox())
+        }
+        .buttonStyle(.plain)
         .onlyHideContextMenu {
             if monthlyLimit > 0 {
                 HStack {
@@ -61,20 +74,6 @@ struct CurrentMonthOverviewTile: View {
                 .frame(height: 350)
                 .frame(maxWidth: .infinity)
                 .padding()
-            }
-        }
-        .onChange(of: monthlyLimit) { newValue in
-            remainingAmount = newValue - content.spentThisMonth
-        }
-        .onAppear {
-            remainingAmount = monthlyLimit - content.spentThisMonth
-        }
-    }
-    
-    var body: some View {
-        Section {
-            NavigationLink(destination: CurrentMonthDetailView()) {
-                actualTile
             }
         }
     }

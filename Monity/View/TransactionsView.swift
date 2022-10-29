@@ -10,7 +10,7 @@ import SwiftUI
 struct TransactionsView: View {
     @State var showAddTransactionView = false
     @State private var showFilterSettings = false
-    @StateObject var content = TransactionsViewModel.shared
+    @ObservedObject var content = TransactionsViewModel.shared
     @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
     
     var body: some View {
@@ -54,7 +54,6 @@ struct TransactionsView: View {
                     Spacer()
                     Button("Apply") {
                         content.filteredSelectedDate = temporaryDateSelection
-                        print(content.filteredSelectedDate)
                         showFilterSettings = false
                     }
                     .buttonStyle(.borderedProminent)

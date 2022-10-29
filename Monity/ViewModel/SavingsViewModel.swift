@@ -2,21 +2,34 @@
 //  SavingsViewModel.swift
 //  Monity
 //
-//  Created by Niklas Kuder on 24.10.22.
+//  Created by Niklas Kuder on 27.10.22.
 //
 
 import Foundation
 import Combine
 
-class SavingsViewModel: ObservableObject {
-    @Published var categories: [SavingsCategory] = []
+class SavingsViewModel: ItemListViewModel<SavingsEntry> {
+    static let shared = SavingsViewModel()
+    static func forCategory(_ category: SavingsCategory) -> SavingsViewModel {
+        return SavingsViewModel(category: category)
+    }
     
-    private var categoryCancellable: AnyCancellable?
+    private init() {
+        let publisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        super.init(itemPublisher: publisher)
+    }
     
-    init() {
-        let categoryPublisher = SavingsCategoryStorage.shared.categories.eraseToAnyPublisher()
-        categoryCancellable = categoryPublisher.sink { categories in
-            self.categories = categories
+    private init(category: SavingsCategory) {
+        let publisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        super.init(itemPublisher: publisher)
+        itemCancellable = publisher.sink { entries in
+            self.items = entries.filter { $0.category == category}
         }
+    }
+    
+    // MARK: - Intent
+    
+    override func deleteItem(_ item: SavingsEntry) {
+        SavingStorage.shared.delete(item)
     }
 }

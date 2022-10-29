@@ -26,11 +26,25 @@ struct TransactionsList: View {
         List(transactionsByDate) { date in
             Section(header: Text(date.date, format: dateFormat)) {
                 ForEach(date.transactions) { transaction in
-                    TransactionListTile(
-                        transaction: transaction,
-                        onDelete: deleteTransaction,
-                        onEdit: showEditSheetForTransaction
-                    )
+                    EditableDeletableItem(
+                        item: transaction,
+                        confirmationTitle: "Delete transaction",
+                        confirmationMessage: "Are you sure you want to delete this transaction?",
+                        onEdit: showEditSheetForTransaction,
+                        onDelete: deleteTransaction) { item in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(item.category?.wrappedName ?? "No category")
+                                        .font(.headline)
+                                    Text(item.wrappedText)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Text(item.amount, format: .currency(code: "EUR"))
+                                    .foregroundColor(item.isExpense ? .red : .green)
+                            }
+                    }
                 }
             }
         }

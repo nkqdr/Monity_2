@@ -6,32 +6,14 @@
 //
 
 import Foundation
-import Combine
-import CoreData
 
-class SavingsCategoryStorage: NSObject, ObservableObject {
-    var categories = CurrentValueSubject<[SavingsCategory], Never>([])
-    private let categoryFetchController: NSFetchedResultsController<SavingsCategory>
-    
+class SavingsCategoryStorage: CoreDataModelStorage<SavingsCategory> {
     static let shared: SavingsCategoryStorage = SavingsCategoryStorage()
     
-    private override init() {
-        let request = SavingsCategory.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)]
-        categoryFetchController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        super.init()
-        categoryFetchController.delegate = self
-        do {
-            try categoryFetchController.performFetch()
-            categories.value = categoryFetchController.fetchedObjects ?? []
-        } catch {
-            NSLog("Error: could not fetch objects")
-        }
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)
+        ])
     }
     
     func add(name: String, label: SavingsCategoryLabel) -> SavingsCategory {
@@ -39,15 +21,17 @@ class SavingsCategoryStorage: NSObject, ObservableObject {
         category.id = UUID()
         category.name = name
         category.label = label.rawValue
+        category.isHidden = false
         category.entries = []
         try? PersistenceController.shared.container.viewContext.save()
         return category
     }
     
-    func update(_ category: SavingsCategory, name: String?, label: SavingsCategoryLabel) -> Bool {
+    func update(_ category: SavingsCategory, name: String? = nil, label: SavingsCategoryLabel? = nil, isHidden: Bool? = nil) -> Bool {
         PersistenceController.shared.container.viewContext.performAndWait {
             category.name = name ?? category.name
-            category.label = label.rawValue
+            category.label = label?.rawValue ?? category.label
+            category.isHidden = isHidden ?? category.isHidden
             if let _ = try? PersistenceController.shared.container.viewContext.save() {
                 return true
             } else {
@@ -66,23 +50,15 @@ class SavingsCategoryStorage: NSObject, ObservableObject {
         }
     }
     
-//    func delete(allIn categories: [TransactionCategory]) {
-//        for category in categories {
-//            PersistenceController.shared.container.viewContext.delete(category)
-//        }
-//        do {
-//            try PersistenceController.shared.container.viewContext.save()
-//        } catch {
-//            PersistenceController.shared.container.viewContext.rollback()
-//            print("Failed to save context \(error.localizedDescription)")
-//        }
-//    }
-}
-
-extension SavingsCategoryStorage: NSFetchedResultsControllerDelegate {
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let categories = controller.fetchedObjects as? [SavingsCategory] else { return }
-        print("Context has changed, reloading categories")
-        self.categories.value = categories
+    func delete(allIn categories: [SavingsCategory]) {
+        for category in categories {
+            PersistenceController.shared.container.viewContext.delete(category)
+        }
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            PersistenceController.shared.container.viewContext.rollback()
+            print("Failed to save context \(error.localizedDescription)")
+        }
     }
 }
