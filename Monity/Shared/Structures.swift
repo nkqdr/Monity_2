@@ -82,3 +82,8 @@ struct ImportCSVSummary: Identifiable, Equatable {
     var rowsAmount: Int
     var rows: [String]
 }
+
+struct CSVValidHeaders {
+    static let transactionCSV: String = "description,amount,date,type,category"
+    static let savingsCSV: String = "amount,date,category_name,category_label"
+}

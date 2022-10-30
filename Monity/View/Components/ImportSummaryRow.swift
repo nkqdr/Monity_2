@@ -29,22 +29,23 @@ struct ImportSummaryRow: View {
         let amount: Double = Double(rowContents[0]) ?? 0
         let date: Date = Utils.formatFlutterDateStringToDate(rowContents[1])
         let categoryName: String = rowContents[2]
-        let categoryLabel: String = rowContents[3]
+        let categoryLabel: SavingsCategoryLabel = SavingsCategoryLabel.by(rowContents[3])
         
         return HStack {
             VStack(alignment: .leading) {
                 Text(categoryName)
                     .fontWeight(.bold)
+                Spacer()
                 HStack {
                     Circle()
-                        .foregroundColor(Utils.getColorForSavingsLabel(categoryLabel))
+                        .foregroundColor(categoryLabel.color)
                         .frame(width: 15)
-                    Text(categoryLabel)
+                    Text(LocalizedStringKey(categoryLabel.rawValue))
                 }
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(Utils.dateRepresentationFor(date))
+                Text(date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
                 Text(amount, format: .currency(code: "EUR"))
@@ -66,11 +67,12 @@ struct ImportSummaryRow: View {
             VStack(alignment: .leading) {
                 Text(categoryName)
                     .fontWeight(.bold)
+                Spacer()
                 Text(description)
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(Utils.dateRepresentationFor(date))
+                Text(date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
                 Text(amount, format: .currency(code: "EUR"))

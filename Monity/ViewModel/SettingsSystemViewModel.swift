@@ -68,17 +68,4 @@ class SettingsSystemViewModel: ObservableObject {
         TransactionStorage.shared.deleteAll()
         SavingStorage.shared.deleteAll()
     }
-    
-    func exportTransactionsCSV() {
-        
-    }
-
-    func exportSavingsCSV() {
-        
-    }
-    
-    private struct CSVValidHeaders {
-        static let transactionCSV: String = "description,amount,date,type,category"
-        static let savingsCSV: String = "amount,date,category_name,category_label"
-    }
 }

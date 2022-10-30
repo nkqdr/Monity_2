@@ -22,6 +22,35 @@ extension Transaction {
     var wrappedText: String {
         self.text ?? ""
     }
+    
+    var wrappedDate: Date {
+        self.date ?? Date()
+    }
+}
+
+extension Transaction: CSVRepresentable {
+    private var wrappedCSVText: String {
+        if self.wrappedText.contains(",") {
+            return "\"\(self.wrappedText)\""
+        }
+        return self.wrappedText
+    }
+    
+    private var wrappedCategoryCSVName: String {
+        let name = self.category?.wrappedName ?? ""
+        if name.contains(",") {
+            return "\"\(name)\""
+        }
+        return name
+    }
+    
+    private var expenseTypeString: String {
+        self.isExpense ? "expense" : "income"
+    }
+    
+    var commaSeparatedString: String {
+        "\(self.wrappedCSVText),\(self.amount),\(Utils.formatDateToISOString(self.wrappedDate)),\(self.expenseTypeString),\(self.wrappedCategoryCSVName)"
+    }
 }
 
 extension SavingsCategory {
@@ -74,5 +103,19 @@ extension SavingsCategory {
 extension SavingsEntry {
     var wrappedDate: Date {
         self.date ?? Date()
+    }
+}
+
+extension SavingsEntry: CSVRepresentable {
+    private var wrappedCSVcategoryName: String {
+        let name = self.category?.wrappedName ?? ""
+        if name.contains(",") {
+            return "\"\(name)\""
+        }
+        return name
+    }
+    
+    var commaSeparatedString: String {
+        "\(self.amount),\(Utils.formatDateToISOString(self.wrappedDate)),\(self.wrappedCSVcategoryName),\(self.category?.wrappedLabel ?? "")"
     }
 }

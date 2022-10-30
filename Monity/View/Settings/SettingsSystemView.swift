@@ -11,64 +11,110 @@ struct Settings_SystemView: View {
     @StateObject private var content = SettingsSystemViewModel()
     @ObservedObject private var savingsContent = SavingsViewModel.shared
     @ObservedObject private var transactionsContent = TransactionsViewModel.shared
-    @State private var importSummary: ImportCSVSummary? // This is needed because an error occurs when directly using the value in the ViewModel
+    @ObservedObject private var dataExporter: DataExporter = DataExporter()
     @State private var showDeleteAllConfirmation: Bool = false
+    @State private var showSelectorSheet: Bool = false
+    // These are needed because an error occurs when directly using the value in the ViewModel
+    @State private var importSummary: ImportCSVSummary?
+    @State private var exportHasErrors: Bool = false
+    @State private var exportWasSuccessful: Bool = false
+    
+    func buildImportSummaryView(_ summary: ImportCSVSummary) -> some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Import Summary")
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                        .fontWeight(.semibold)
+                    Text(summary.resourceName)
+                        .font(.title)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text("Rows:")
+                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    Text(summary.rowsAmount, format: .number)
+                        .fontWeight(.bold)
+                        .font(.headline)
+                }
+            }
+            .padding()
+            ScrollView {
+                ForEach(summary.rows, id: \.self) { row in
+                    ImportSummaryRow(summary: summary, row: row)
+                }
+                .padding()
+            }
+            HStack {
+                Button("Cancel", role: .destructive) {
+                    content.importSummary = nil
+                }
+                .buttonStyle(.borderless)
+                Spacer()
+                Button("Import") {
+                    content.importCSV()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding()
+        }
+    }
     
     var body: some View {
         List {
             dataSection
             importSection
-//            exportSection
+            exportSection
         }
         .sync($content.importSummary, with: $importSummary)
+        .sync($dataExporter.exportHasErrors, with: $exportHasErrors, delay: 0.5)
+        .sync($dataExporter.exportWasSuccessful, with: $exportWasSuccessful, delay: 0.5)
         .sheet(isPresented: $content.showFilePicker) {
             DocumentPicker(fileContent: $content.csvFileContent)
                 .ignoresSafeArea()
         }
-        .sheet(item: $importSummary) { summary in
+        .sheet(isPresented: $showSelectorSheet) {
             VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Import Summary")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                            .fontWeight(.semibold)
-                        Text(summary.resourceName)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text("Rows:")
-                            .foregroundColor(.secondary)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                        Text(summary.rowsAmount, format: .number)
-                            .fontWeight(.bold)
-                            .font(.headline)
-                    }
+                Toggle(isOn: $dataExporter.exportTransactions) {
+                    Text("Export Transactions")
                 }
-                .padding()
-                ScrollView {
-                    ForEach(summary.rows, id: \.self) { row in
-                        ImportSummaryRow(summary: summary, row: row)
-                    }
-                    .padding()
+                Toggle(isOn: $dataExporter.exportSavings) {
+                    Text("Export Savings")
                 }
+                Spacer()
                 HStack {
                     Button("Cancel", role: .destructive) {
-                        content.importSummary = nil
+                        showSelectorSheet = false
                     }
                     .buttonStyle(.borderless)
                     Spacer()
-                    Button("Import") {
-                        content.importCSV()
+                    Button("Export to CSV") {
+                        showSelectorSheet = false
+                        dataExporter.triggerExport()
                     }
+                    .disabled(dataExporter.disableExportButton)
                     .buttonStyle(.borderedProminent)
                 }
-                .padding()
             }
-//            .presentationDetents([.medium])
+            .padding()
+            .presentationDetents([.height(180)])
+        }
+        .sheet(item: $importSummary) { summary in
+            buildImportSummaryView(summary)
+        }
+        .alert("Exporting error", isPresented: $exportHasErrors) {
+            Button("Try again", role: .cancel) { }
+        } message: {
+            Text("Something didn't work.")
+        }
+        .alert("Export successful!", isPresented: $exportWasSuccessful) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("You can find the .csv files in your Documents directory.")
         }
         .alert("Could not read this file", isPresented: $content.showInvalidFileAlert) {
             Button("Try again") {
@@ -135,11 +181,12 @@ struct Settings_SystemView: View {
     var exportSection: some View {
         Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
             HStack {
-                Button("Transactions", action: content.exportTransactionsCSV)
-                    .buttonStyle(.borderless)
                 Spacer()
-                Button("Savings", action: content.exportSavingsCSV)
-                    .buttonStyle(.borderless)
+                Button("Select Data") {
+                    showSelectorSheet.toggle()
+                }
+                .buttonStyle(.borderless)
+                Spacer()
             }
         }
     }

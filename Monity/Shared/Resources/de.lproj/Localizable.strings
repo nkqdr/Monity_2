@@ -8,9 +8,6 @@
 "%lld transactions" = "%lld Transaktionen";
 
 /* No comment provided by engineer. */
-"5 Years" = "5 Jahre";
-
-/* No comment provided by engineer. */
 "About" = "Über";
 
 /* No comment provided by engineer. */
@@ -125,7 +122,19 @@
 "Export Data" = "Daten exportieren";
 
 /* No comment provided by engineer. */
+"Export Savings" = "Vermögen exportieren";
+
+/* No comment provided by engineer. */
+"Export to CSV" = "Als CSV exportieren";
+
+/* No comment provided by engineer. */
+"Export Transactions" = "Transaktionen exportieren";
+
+/* No comment provided by engineer. */
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
+
+/* No comment provided by engineer. */
+"Exporting error" = "Export-Error";
 
 /* No comment provided by engineer. */
 "General" = "Allgemein";
@@ -164,22 +173,7 @@
 "Label" = "Kennzeichnung";
 
 /* No comment provided by engineer. */
-"Last Month" = "Letzter Monat";
-
-/* No comment provided by engineer. */
 "Last Year" = "Letztes Jahr";
-
-/* No comment provided by engineer. */
-"picker.lastmonth" = "1 Monat";
-
-/* No comment provided by engineer. */
-"picker.lastyear" = "1 Jahr";
-
-/* No comment provided by engineer. */
-"picker.fiveyears" = "5 Jahre";
-
-/* No comment provided by engineer. */
-"picker.max" = "Max";
 
 /* No comment provided by engineer. */
 "Limit" = "Limit";
@@ -233,13 +227,22 @@
 "Pick a transaction type" = "Transaktionstyp auswählen";
 
 /* No comment provided by engineer. */
+"picker.fiveyears" = "5 Jahre";
+
+/* No comment provided by engineer. */
+"picker.lastmonth" = "1 Monat";
+
+/* No comment provided by engineer. */
+"picker.lastyear" = "1 Jahr";
+
+/* No comment provided by engineer. */
+"picker.max" = "Max";
+
+/* No comment provided by engineer. */
 "Please enter your desired limit." = "Bitte geben Sie das gewünschte Limit ein.";
 
 /* No comment provided by engineer. */
 "Please make sure to use a csv file with the correct format." = "Bitte stellen Sie sicher, dass Sie eine csv-Datei mit dem richtigen Format verwenden.";
-
-/* No comment provided by engineer. */
-"Please set a monthly limit in the settings in order to use this." = "Bitte legen Sie in den Einstellungen ein monatliches Limit fest, um diese Ansicht zu nutzen.";
 
 /* No comment provided by engineer. */
 "Predicted total expenses:" = "Geschätzte Gesamtausgaben:";
@@ -281,6 +284,9 @@
 "Select CSV" = "CSV auswählen";
 
 /* No comment provided by engineer. */
+"Select Data" = "Daten auswählen";
+
+/* No comment provided by engineer. */
 "Selected month" = "Ausgewählter Monat";
 
 /* No comment provided by engineer. */
@@ -297,6 +303,9 @@
 
 /* No comment provided by engineer. */
 "Show average mark" = "Durchschnitt anzeigen";
+
+/* No comment provided by engineer. */
+"Something didn't work." = "Etwas hat nicht funktioniert.";
 
 /* No comment provided by engineer. */
 "System" = "System";

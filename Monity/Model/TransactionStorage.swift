@@ -30,7 +30,7 @@ class TransactionStorage: CoreDataModelStorage<Transaction> {
             let description: String = rowContents[0]
             let amount: Double = Double(rowContents[1]) ?? 0
             let date: Date = Utils.formatFlutterDateStringToDate(rowContents[2])
-            let isExpense: Bool = rowContents[3] == "0"
+            let isExpense: Bool = rowContents[3] == "0" || rowContents[3] == "expense"
             let categoryName: String = rowContents[4]
             var category = categories.first(where: { $0.wrappedName == categoryName })
             if category == nil {

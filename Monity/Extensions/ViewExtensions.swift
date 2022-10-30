@@ -31,13 +31,17 @@ extension View {
         }
     }
     
-    func sync<T:Equatable>(_ published:Binding<T>, with binding:Binding<T>) -> some View{
+    func sync<T:Equatable>(_ published:Binding<T>, with binding:Binding<T>, delay: Double = 0) -> some View {
         self
             .onChange(of: published.wrappedValue) { published in
-                binding.wrappedValue = published
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    binding.wrappedValue = published
+                }
             }
             .onChange(of: binding.wrappedValue) { binding in
-                published.wrappedValue = binding
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    published.wrappedValue = binding
+                }
             }
     }
     

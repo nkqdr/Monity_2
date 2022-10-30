@@ -9,28 +9,17 @@ import Foundation
 import SwiftUI
 
 class Utils {
-    static func getColorForSavingsLabel(_ label: String) -> Color {
-        switch label {
-        case "Invested":
-            return Color.blue
-        case "Saved":
-            return Color.yellow
-        case "Liquid":
-            return Color.purple
-        default:
-            return Color.red
-        }
-    }
+    static let dateStringRepr: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
     
-    static func dateRepresentationFor(_ date: Date) -> String {
+    static func formatDateToISOString(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
+        formatter.dateFormat = dateStringRepr
         return formatter.string(from: date)
     }
     
     static func formatFlutterDateStringToDate(_ str: String) -> Date {
         let newFormatter = DateFormatter()
-        newFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+        newFormatter.dateFormat = dateStringRepr
         let date = newFormatter.date(from: str)
         return date ?? Date()
     }
