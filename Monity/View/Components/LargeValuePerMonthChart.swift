@@ -23,7 +23,7 @@ struct LargeValuePerMonthChart: View {
                     .foregroundStyle(color)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .annotation(position: .top, alignment: .leading) {
-                        Text("Ø \(average.formatted(.currency(code: "EUR")))")
+                        Text("Ø \(average.formatted(.customCurrency()))")
                             .font(.footnote)
                             .foregroundColor(color)
                     }
@@ -40,8 +40,9 @@ struct LargeValuePerMonthChart: View {
         .padding(.top, 25)
         .chartYAxis {
             AxisMarks { value in
+                let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
                 AxisGridLine()
-                AxisValueLabel(format: .currency(code: "EUR"))
+                AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
             }
         }
         .chartXAxis {

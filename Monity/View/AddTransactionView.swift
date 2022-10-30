@@ -26,7 +26,7 @@ struct AddTransactionView: View {
                         Text("Expense").tag(true)
                     }
                     .pickerStyle(.segmented)
-                    TextField("Amount", value: $editor.givenAmount, format: .currency(code: "EUR"))
+                    TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
                         .keyboardType(.decimalPad)
                     if let _ = editor.transaction {
                         DatePicker("Transaction date", selection: $editor.selectedDate, displayedComponents: .date)

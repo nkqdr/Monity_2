@@ -35,7 +35,7 @@ struct SavingsCategoryListView: View {
                                 .font(.footnote)
                         }
                         Spacer()
-                        Text(item.amount, format: .currency(code: "EUR"))
+                        Text(item.amount, format: .customCurrency())
                             .foregroundColor(item.amount >= 0 ? .green : .red)
                     }
                     .padding(.vertical, 2)

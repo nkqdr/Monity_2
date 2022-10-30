@@ -48,7 +48,7 @@ struct ImportSummaryRow: View {
                 Text(date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(amount, format: .currency(code: "EUR"))
+                Text(amount, format: .customCurrency())
                     .foregroundColor(amount > 0 ? .green : .red)
                     .fontWeight(.semibold)
             }
@@ -75,7 +75,7 @@ struct ImportSummaryRow: View {
                 Text(date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(amount, format: .currency(code: "EUR"))
+                Text(amount, format: .customCurrency())
                     .foregroundColor(isExpense ? .red : .green)
                     .fontWeight(.semibold)
             }

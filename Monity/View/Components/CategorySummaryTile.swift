@@ -21,9 +21,9 @@ struct CategorySummaryTile: View {
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(dataPoint.total, format: .currency(code: "EUR"))
+                Text(dataPoint.total, format: .customCurrency())
                     .fontWeight(.semibold)
-                Text("Ø\(dataPoint.average.formatted(.currency(code: "EUR"))) p.m.")
+                Text("Ø\(dataPoint.average.formatted(.customCurrency())) p.m.")
                     .font(.caption2)
             }
             .foregroundColor(Color.secondary)

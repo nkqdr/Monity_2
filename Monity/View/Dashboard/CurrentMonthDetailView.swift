@@ -28,7 +28,7 @@ struct CurrentMonthDetailView: View {
                     VStack(alignment: .leading) {
                         Text("Budget:")
                             .font(.system(size: 18, weight: .semibold))
-                        Text(remainingAmount, format: .currency(code: "EUR"))
+                        Text(remainingAmount, format: .customCurrency())
                             .font(.system(size: 22, weight: .bold))
                             .foregroundColor(remainingAmount >= 0 ? .green : .red)
                     }
@@ -41,7 +41,7 @@ struct CurrentMonthDetailView: View {
                 Text("Predicted total expenses:")
                     .font(.system(size: 18, weight: .semibold))
                 Spacer()
-                Text(content.predictedTotalSpendings, format: .currency(code: "EUR"))
+                Text(content.predictedTotalSpendings, format: .customCurrency())
                     .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
             }
         }
@@ -111,7 +111,7 @@ struct CurrentMonthDetailView: View {
           ZStack(alignment: .topLeading) {
               if selectedElement == nil {
                   let lastValue: Double = content.cashFlowData.last?.value ?? 0
-                  Text(lastValue, format: .currency(code: "EUR"))
+                  Text(lastValue, format: .customCurrency())
                       .foregroundColor(lastValue >= 0 ? .green : .red)
                       .font(.title3.bold())
               }
@@ -136,7 +136,7 @@ struct CurrentMonthDetailView: View {
                   Text("\(selectedElement.date, format: .dateTime.month().day())")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                  Text(selectedElement.value, format: .currency(code: "EUR"))
+                  Text(selectedElement.value, format: .customCurrency())
                     .font(.headline.bold())
                     .foregroundColor(.primary)
                 }

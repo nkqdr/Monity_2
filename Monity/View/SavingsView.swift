@@ -24,7 +24,7 @@ struct SavingsView: View {
             }
             Spacer()
             if let currentAmount {
-                Text(currentAmount.formatted(.currency(code: "EUR")))
+                Text(currentAmount.formatted(.customCurrency()))
                     .foregroundColor(currentAmount >= 0 ? .green : .red)
             } else {
                 Text("-")
@@ -45,7 +45,7 @@ struct SavingsView: View {
             }
             Spacer()
             Group {
-                Text(totalSum, format: .currency(code: "EUR"))
+                Text(totalSum, format: .customCurrency())
                 Text(" (" + String(format: "%.1f", 100 * fractionOfAll) + "%)")
             }
             .foregroundColor(totalSum >= 0 ? .green: .red)

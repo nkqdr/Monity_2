@@ -41,7 +41,7 @@ struct TransactionsList: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text(item.amount, format: .currency(code: "EUR"))
+                                Text(item.amount, format: .customCurrency())
                                     .foregroundColor(item.isExpense ? .red : .green)
                             }
                     }

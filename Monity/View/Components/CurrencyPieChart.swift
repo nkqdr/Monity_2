@@ -38,7 +38,7 @@ struct CurrencyPieChart: View {
                             .font(.subheadline)
                         HStack(spacing: 5) {
                             Group {
-                                Text(dataPoint.value, format: .currency(code: "EUR"))
+                                Text(dataPoint.value, format: .customCurrency())
                                     .font(.caption)
                                 Text("(" + String(format: "%.2f", dataPoint.value / centerLabel * 100) + "%)")
                                     .font(.caption2)
@@ -75,7 +75,7 @@ struct CurrencyPieChart: View {
                                 }
                                 .font(.footnote)
                                 .foregroundColor(.secondary)
-                                Text(activeIndex == -1 ? centerLabel : adjustedValues[activeIndex].value, format: .currency(code: "EUR"))
+                                Text(activeIndex == -1 ? centerLabel : adjustedValues[activeIndex].value, format: .customCurrency())
                                     .font(.subheadline)
                                     .padding(5)
                             }

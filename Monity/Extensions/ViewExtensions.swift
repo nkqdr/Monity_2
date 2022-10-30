@@ -12,6 +12,13 @@ enum GroupBoxLabelStyle {
     case secondary
 }
 
+extension FormatStyle where Self == FloatingPointFormatStyle<Double> {
+    static func customCurrency<Value>() -> FloatingPointFormatStyle<Value>.Currency where Value : BinaryFloatingPoint {
+        let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
+        return .currency(code: currencyCode ?? "EUR")
+    }
+}
+
 extension View {
     func deleteSwipeAction(callback: @escaping () -> Void) -> some View {
         self.swipeActions(edge: .trailing) {

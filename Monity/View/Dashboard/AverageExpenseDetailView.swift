@@ -47,7 +47,7 @@ struct AverageExpenseDetailView: View {
                 Text(selectedElement.date.formatted(.dateTime.year().month()))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text(selectedElement.value, format: .currency(code: "EUR"))
+                Text(selectedElement.value, format: .customCurrency())
                     .font(.headline.bold())
                     .foregroundColor(.primary)
             }
@@ -56,7 +56,7 @@ struct AverageExpenseDetailView: View {
                 Text("Total")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text(totalText, format: .currency(code: "EUR"))
+                Text(totalText, format: .customCurrency())
                     .font(.headline.bold())
                     .foregroundColor(.primary)
             }

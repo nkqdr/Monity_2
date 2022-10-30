@@ -24,9 +24,9 @@ struct SettingsView: View {
             NavigationLink("System") {
                 Settings_SystemView()
             }
-//            NavigationLink("Options") {
-//
-//            }
+            NavigationLink("Options") {
+                Settings_OptionsView()
+            }
         }
     }
     

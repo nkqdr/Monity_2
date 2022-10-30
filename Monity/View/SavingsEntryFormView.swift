@@ -21,7 +21,7 @@ struct SavingsEntryFormView: View {
                         Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
                     }
                 }
-                TextField("Amount", value: $editor.amount, format: .currency(code: "EUR"))
+                TextField("Amount", value: $editor.amount, format: .customCurrency())
                     .keyboardType(.decimalPad)
             }
             .navigationTitle(editor.navigationFormTitle)

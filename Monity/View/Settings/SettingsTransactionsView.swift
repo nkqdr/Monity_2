@@ -42,7 +42,7 @@ struct Settings_TransactionsView: View {
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
-            TextField("Limit", value: $content.monthlyLimit, format: .currency(code: "EUR"))
+            TextField("Limit", value: $content.monthlyLimit, format: .customCurrency())
             Button("Save") {
                 UserDefaults.standard.set(content.monthlyLimit, forKey: "monthly_limit")
             }
@@ -66,11 +66,11 @@ struct Settings_TransactionsView: View {
                 Text("Your monthly limit:")
                 Spacer()
                 if let limit = monthlyLimit {
-                    Text(limit, format: .currency(code: "EUR"))
+                    Text(limit, format: .customCurrency())
                         .foregroundColor(.green)
                         .fontWeight(.bold)
                 } else {
-                    Text("None")
+                    Text("-")
                         .foregroundColor(.gray)
                 }
             }

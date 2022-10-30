@@ -19,7 +19,7 @@ struct AverageOneYearBarChart: View {
                 .foregroundStyle(tint)
                 .lineStyle(StrokeStyle(lineWidth: 2))
                 .annotation(position: .top, alignment: .leading) {
-                    Text("Ø \(average.formatted(.currency(code: "EUR")))")
+                    Text("Ø \(average.formatted(.customCurrency()))")
                         .font(.footnote)
                         .foregroundColor(tint)
                 }

@@ -27,7 +27,7 @@ struct CurrentMonthOverviewTile: View {
                 VStack(alignment: .leading) {
                     Text("Budget:")
                         .font(.system(size: 18, weight: .semibold))
-                    Text(remainingAmount, format: .currency(code: "EUR"))
+                    Text(remainingAmount, format: .customCurrency())
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(remainingAmount >= 0 ? .green : .red)
                 }

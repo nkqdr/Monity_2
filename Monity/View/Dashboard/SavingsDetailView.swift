@@ -47,12 +47,6 @@ struct SavingsDetailView: View {
             }
         }
         .chartYAxis(.hidden)
-//        .chartYAxis {
-//            AxisMarks { value in
-//                AxisGridLine()
-//                AxisValueLabel(format: .currency(code: "EUR"))
-//            }
-//        }
         .chartYScale(domain: content.minLineChartValue ... content.maxLineChartValue)
         .chartOverlay { proxy in
          GeometryReader { geo in
@@ -98,7 +92,7 @@ struct SavingsDetailView: View {
         let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : Date()
         HStack {
             VStack(alignment: .leading) {
-                Text(netWorthToDisplay, format: .currency(code: "EUR"))
+                Text(netWorthToDisplay, format: .customCurrency())
                     .font(.title2.bold())
                 Text(timeToDisplay, format: .dateTime.year().month().day())
                     .font(.footnote)
@@ -113,7 +107,7 @@ struct SavingsDetailView: View {
     func savingsCategorySummaryTile(_ category: SavingsCategory) -> some View {
         let label = VStack(alignment: .leading) {
             Text(category.wrappedName).groupBoxLabelTextStyle()
-            Text(category.lastEntry?.amount.formatted(.currency(code: "EUR")) ?? "-")
+            Text(category.lastEntry?.amount.formatted(.customCurrency()) ?? "-")
                 .font(.callout)
                 .foregroundColor(.secondary)
         }
