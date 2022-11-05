@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct PieChart: View {
+struct PieChart<S>: View where S: ViewModifier {
     public let values: [Double]
     public var colors: [Color]
     public var backgroundColor: Color = .clear
     public var showSliceLabels: Bool = false
+    public var labelStyle: S
     public var widthFraction: CGFloat = 1
 //    public var innerRadiusFraction: CGFloat
     
@@ -35,7 +36,7 @@ struct PieChart: View {
             let minSize = min(geometry.size.width, geometry.size.height)
             ZStack{
                 ForEach(0..<values.count, id: \.self){ i in
-                    PieSliceView(pieSliceData: slices[i], showLabels: showSliceLabels)
+                    PieSliceView(pieSliceData: slices[i], showLabels: showSliceLabels, labelModifier: labelStyle)
                         .scaleEffect(activeIndex == i ? 1.08 : 1)
                         .animation(.spring(), value: activeIndex)
                 }
@@ -67,9 +68,21 @@ struct PieChart: View {
     }
 }
 
-struct PieSliceView: View {
+extension PieChart where S == EmptyModifier {
+    init(values: [Double], colors: [Color], backgroundColor: Color = .clear, showSliceLabels: Bool = false, activeIndex: Binding<Int>) {
+        self.values = values
+        self.colors = colors
+        self._activeIndex = activeIndex
+        self.backgroundColor = backgroundColor
+        self.showSliceLabels = showSliceLabels
+        self.labelStyle = EmptyModifier()
+    }
+}
+
+struct PieSliceView<LabelStyle>: View where LabelStyle: ViewModifier {
     var pieSliceData: PieSliceData
     var showLabels: Bool
+    var labelModifier: LabelStyle
     
     var midRadians: Double {
         return Double.pi / 2.0 - (pieSliceData.startAngle + pieSliceData.endAngle).radians / 2.0
@@ -102,6 +115,7 @@ struct PieSliceView: View {
                             y: geometry.size.height * 0.5 * CGFloat(1.0 - 0.78 * sin(midRadians))
                         )
                         .foregroundColor(Color.white)
+                        .modifier(labelModifier)
                 }
             }
         }

@@ -11,6 +11,7 @@ import Charts
 struct SavingsDetailView: View {
     @State private var selectedElement: ValueTimeDataPoint?
     @State private var showHiddenCategories: Bool = false
+    @State private var showAssetAllocation: Bool = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
     
     var noCategories: some View {
@@ -163,6 +164,26 @@ struct SavingsDetailView: View {
         }
     }
     
+    @ViewBuilder
+    var hiddenCategoriesSheet: some View {
+        NavigationView {
+            ScrollView {
+                categoryGridFor(content.hiddenCategories)
+            }
+            .navigationTitle("Hidden categories")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    @ViewBuilder
+    var assetAllocationSheet: some View {
+        NavigationView {
+            AssetAllocationPieChart(relevantLabels: SavingsCategoryLabel.allCasesWithoutNone)
+                .navigationTitle("Asset Allocation")
+                .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
     var body: some View {
         ListBase {
             if content.items.isEmpty {
@@ -173,20 +194,23 @@ struct SavingsDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showHiddenCategories.toggle()
+                Menu {
+                    Button { showHiddenCategories.toggle() } label: {
+                        Label("Hidden Categories", systemImage: "eye.slash.fill")
+                    }
+                    Button { showAssetAllocation.toggle() } label: {
+                        Label("Asset Allocation", systemImage: "chart.pie.fill")
+                    }
                 } label: {
-                    Image(systemName: "ellipsis.circle")
+                    Label("More", systemImage: "ellipsis.circle")
                 }
             }
         }
         .sheet(isPresented: $showHiddenCategories) {
-            NavigationView {
-                ScrollView {
-                    categoryGridFor(content.hiddenCategories)
-                }
-                .navigationTitle("Hidden categories")
-            }
+            hiddenCategoriesSheet
+        }
+        .sheet(isPresented: $showAssetAllocation) {
+            assetAllocationSheet
         }
         .navigationTitle("Savings Overview")
     }

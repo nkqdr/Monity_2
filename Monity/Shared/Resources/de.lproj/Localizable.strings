@@ -379,3 +379,5 @@
 /* No comment provided by engineer. */
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
 
+/* No comment provided by engineer. */
+"asset.allocation.help.message" = "Indem Sie jeder Geldanlage einen Bezeichner aus 'Investiert', 'Gespart', oder 'Liquide' zuweisen, bekommen Sie eine noch genauere Übersicht über Ihre Geldanlagen. Diese Anpassung können Sie in den Einstellungen treffen.";

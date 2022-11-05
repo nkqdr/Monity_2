@@ -20,3 +20,6 @@
 
 /* No comment provided by engineer. */
 "picker.max" = "Max";
+
+/* Alert message in the asset allocation section. */
+"asset.allocation.help.message" = "By assigning each investment a state from 'Invested', 'Saved', or 'Liquid', you get an even more detailed overview of your savings. You can make this adjustment in the settings.";

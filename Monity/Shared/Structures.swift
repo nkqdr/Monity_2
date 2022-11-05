@@ -23,6 +23,15 @@ enum SavingsCategoryLabel: String, CaseIterable {
         }
     }
     
+    static var allCasesWithoutNone: [SavingsCategoryLabel] {
+        var cases = self.allCases
+        let removed = cases.removeLast()
+        if removed != .none {
+            fatalError("The wrong label got removed.")
+        }
+        return cases
+    }
+    
     static func by(_ repr: String?) -> SavingsCategoryLabel {
         for label in SavingsCategoryLabel.allCases {
             if label.rawValue == repr {
@@ -74,6 +83,13 @@ struct ValueTimeDataPoint: Identifiable, Equatable {
     var id: UUID = UUID()
     var date: Date
     var value: Double
+}
+
+struct AssetAllocationDataPoint: Identifiable {
+    var id = UUID()
+    var category: SavingsCategory
+    var totalAmount: Double
+    var relativeAmount: Double
 }
 
 struct ImportCSVSummary: Identifiable, Equatable {

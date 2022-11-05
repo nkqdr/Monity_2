@@ -102,6 +102,19 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         return 0
     }
     
+    func getAssetAllocationDatapointsFor(_ label: SavingsCategoryLabel) -> [AssetAllocationDataPoint] {
+        var dataPoints: [AssetAllocationDataPoint] = []
+        let categories = items.filter { $0.label == label.rawValue && $0.lastEntry?.amount != 0 }
+        let totalSum: Double = categories.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
+        for category in categories {
+            let lastValue: Double = category.lastEntry?.amount ?? 0
+            dataPoints.append(
+                AssetAllocationDataPoint(category: category, totalAmount: lastValue, relativeAmount: lastValue / totalSum)
+            )
+        }
+        return dataPoints
+    }
+    
     // MARK: - Intents
     
     func toggleHiddenFor(_ category: SavingsCategory) {
