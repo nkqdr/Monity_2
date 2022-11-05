@@ -28,7 +28,7 @@ struct Settings_OptionsView: View {
             appearanceSection
             
 //            Section("Security") {
-//                
+//
 //            }
         }
         .navigationTitle("Options")

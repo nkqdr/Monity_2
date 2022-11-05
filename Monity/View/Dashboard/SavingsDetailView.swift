@@ -170,7 +170,7 @@ struct SavingsDetailView: View {
             ScrollView {
                 categoryGridFor(content.hiddenCategories)
             }
-            .navigationTitle("Hidden categories")
+            .navigationTitle("Hidden Categories")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
