@@ -9,8 +9,26 @@ import SwiftUI
 
 struct Settings_OptionsView: View {
     @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
+    @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
+    @State private var activeAppIcon: String? = nil {
+        didSet {
+            activeAppIconStored = activeAppIcon ?? "None"
+            UIApplication.shared.setAlternateIconName(activeAppIcon)
+        }
+    }
+    
+    init() {
+        if activeAppIconStored != "None" {
+            self._activeAppIcon = State(initialValue: activeAppIconStored)
+        }
+    }
+    
     let currencyOptions: [String] = [
         "AED", "AUD", "BRL", "CAD", "CHF", "EUR", "GBP", "HKD", "INR", "JPY", "USD",
+    ]
+    private let iconOptions: [IconSetup] = [
+        IconSetup(iconName: "IconImageLight", tag: nil),
+        IconSetup(iconName: "IconImageDark", tag: "AppIcon 1")
     ]
     
     private var appearanceSection: some View {
@@ -20,18 +38,54 @@ struct Settings_OptionsView: View {
                     Text($0).tag($0)
                 }
             }
+            VStack(alignment: .leading) {
+                Text("App Icon")
+                HStack {
+                    Spacer()
+                    ForEach(iconOptions) { icon in
+                        Image(icon.iconName)
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .background {
+                                if activeAppIcon == icon.tag {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 5)
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                            .onTapGesture {
+                                activeAppIcon = icon.tag
+                            }
+                        Spacer()
+                    }
+                }
+            }
+//            Picker("App Icon", selection: $activeAppIcon) {
+//                Text("Light").tag(Optional<String>.none)
+//                Text("Dark").tag("AppIcon 1" as String?)
+//            }
         }
+//        .onChange(of: activeAppIcon) { newValue in
+//            activeAppIconStored = newValue ?? "None"
+//            UIApplication.shared.setAlternateIconName(newValue)
+//        }
     }
     
     var body: some View {
         List {
             appearanceSection
-            
 //            Section("Security") {
 //
 //            }
         }
         .navigationTitle("Options")
+    }
+    
+    private struct IconSetup: Identifiable {
+        var id = UUID()
+        var iconName: String
+        var tag: String?
     }
 }
 

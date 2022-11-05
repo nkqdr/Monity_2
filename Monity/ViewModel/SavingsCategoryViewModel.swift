@@ -112,7 +112,9 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
                 AssetAllocationDataPoint(category: category, totalAmount: lastValue, relativeAmount: lastValue / totalSum)
             )
         }
-        return dataPoints
+        return dataPoints.sorted {
+            $0.totalAmount > $1.totalAmount
+        }
     }
     
     // MARK: - Intents
