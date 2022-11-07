@@ -91,6 +91,7 @@ struct CurrencyPieChart: View {
                 Spacer()
                 Text(emptyString)
                     .font(.subheadline)
+                    .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                 Spacer()
             }

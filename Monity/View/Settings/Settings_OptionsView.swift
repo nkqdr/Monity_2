@@ -16,6 +16,12 @@ struct Settings_OptionsView: View {
             UIApplication.shared.setAlternateIconName(activeAppIcon)
         }
     }
+    private var gridItems: [GridItem] {
+        if iconOptions.count > 2 {
+            return [GridItem(), GridItem(), GridItem()]
+        }
+        return [GridItem(), GridItem()]
+    }
     
     init() {
         if activeAppIconStored != "None" {
@@ -26,6 +32,7 @@ struct Settings_OptionsView: View {
     let currencyOptions: [String] = [
         "AED", "AUD", "BRL", "CAD", "CHF", "EUR", "GBP", "HKD", "INR", "JPY", "USD",
     ]
+    
     private let iconOptions: [IconSetup] = [
         IconSetup(iconName: "IconImageLight", tag: nil),
         IconSetup(iconName: "IconImageDark", tag: "AppIcon 1")
@@ -40,8 +47,7 @@ struct Settings_OptionsView: View {
             }
             VStack(alignment: .leading) {
                 Text("App Icon")
-                HStack {
-                    Spacer()
+                LazyVGrid(columns: gridItems, spacing: 20) {
                     ForEach(iconOptions) { icon in
                         Image(icon.iconName)
                             .resizable()
@@ -57,19 +63,10 @@ struct Settings_OptionsView: View {
                             .onTapGesture {
                                 activeAppIcon = icon.tag
                             }
-                        Spacer()
                     }
                 }
             }
-//            Picker("App Icon", selection: $activeAppIcon) {
-//                Text("Light").tag(Optional<String>.none)
-//                Text("Dark").tag("AppIcon 1" as String?)
-//            }
         }
-//        .onChange(of: activeAppIcon) { newValue in
-//            activeAppIconStored = newValue ?? "None"
-//            UIApplication.shared.setAlternateIconName(newValue)
-//        }
     }
     
     var body: some View {

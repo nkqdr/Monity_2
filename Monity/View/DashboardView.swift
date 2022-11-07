@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ListBase {
                 ScrollView {
                     Group {
@@ -22,7 +22,6 @@ struct DashboardView: View {
             }
             .navigationTitle("Dashboard")
         }
-        .navigationViewStyle(.stack) 
     }
 }
 

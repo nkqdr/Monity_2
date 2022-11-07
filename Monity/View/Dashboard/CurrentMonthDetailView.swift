@@ -175,6 +175,7 @@ struct CurrentMonthDetailView: View {
                             HStack {
                                 Spacer()
                                 Text("No registered transactions for this month.")
+                                    .multilineTextAlignment(.center)
                                     .groupBoxLabelTextStyle(.secondary)
                                 Spacer()
                             }
