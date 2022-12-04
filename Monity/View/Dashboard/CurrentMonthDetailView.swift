@@ -51,7 +51,7 @@ struct CurrentMonthDetailView: View {
     
     @ViewBuilder
     var cashFlowChart: some View {
-        let minValue: Double = (content.cashFlowData.map { $0.value }.min() ?? 10) * 1.2
+        let minValue: Double = min(0, (content.cashFlowData.map { $0.value }.min() ?? 10))
         let absMaxValue: Double = (content.cashFlowData.map { abs($0.value) }.max() ?? 10)
         Chart(content.cashFlowData) {
             AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))

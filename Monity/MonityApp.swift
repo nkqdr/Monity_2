@@ -54,7 +54,7 @@ struct MainTabView: View {
         .overlay {
             if showOverlay {
                 ZStack {
-                    Rectangle().foregroundStyle(.ultraThinMaterial).ignoresSafeArea()
+                    Rectangle().foregroundStyle(.regularMaterial).ignoresSafeArea()
                     VStack {
                         Group {
                             if colorScheme == .dark {
@@ -64,7 +64,7 @@ struct MainTabView: View {
                             }
                         }
                         .frame(width: 100, height: 100)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
                 }
             }
