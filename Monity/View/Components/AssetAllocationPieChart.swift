@@ -108,11 +108,19 @@ struct AssetAllocationPieChart: View {
     
     private var emptyBox: some View {
         GroupBox {
-            Text("Tap the chart for more details.")
-                .font(.footnote)
-                .padding(.vertical)
-                .foregroundColor(.secondary)
-                .frame(maxWidth: .infinity)
+            if content.savingEntries.count > 0 {
+                Text("Tap the chart for more details.")
+                    .font(.footnote)
+                    .padding(.vertical)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity)
+            } else {
+                Text("Nothing to display here.")
+                    .foregroundColor(.secondary)
+                    .font(.footnote)
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+            }
         }
         .padding(.vertical)
     }
@@ -121,7 +129,9 @@ struct AssetAllocationPieChart: View {
         ScrollView {
             Group {
                 labelHeader
-                pieChart
+                if content.savingEntries.count > 0 {
+                    pieChart
+                }
                 if activeIndex >= 0 {
                     categoryBox
                 } else {
