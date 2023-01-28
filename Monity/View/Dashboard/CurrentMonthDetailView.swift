@@ -39,10 +39,18 @@ struct CurrentMonthDetailView: View {
             Divider()
             HStack {
                 Text("Predicted total expenses:")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                 Spacer()
                 Text(content.predictedTotalSpendings, format: .customCurrency())
                     .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
+            }
+            Divider()
+            HStack {
+                Text("Average daily expenses:")
+                    .font(.system(size: 16, weight: .semibold))
+                Spacer()
+                Text(content.spendingsPerDay, format: .customCurrency())
+                    .foregroundColor(.secondary)
             }
         }
         .padding(.bottom, 5)

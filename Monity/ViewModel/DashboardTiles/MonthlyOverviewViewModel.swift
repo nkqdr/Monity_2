@@ -13,13 +13,16 @@ class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewMode
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
     @Published var cashFlowData: [ValueTimeDataPoint] = []
-    
+    @Published var spendingsPerDay: Double = 0 {
+        didSet {
+            let daysInMonth: Int = Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 0
+            predictedTotalSpendings = spendingsPerDay * Double(daysInMonth)
+        }
+    }
     @Published var spentThisMonth: Double = 0 {
         didSet {
             let currentDay: Int = Calendar.current.dateComponents([.day], from: Date()).day ?? 1
-            let spendingsPerDay: Double = spentThisMonth / Double(currentDay)
-            let daysInMonth: Int = Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 0
-            predictedTotalSpendings = spendingsPerDay * Double(daysInMonth)
+            spendingsPerDay = spentThisMonth / Double(currentDay)
         }
     }
     @Published var earnedThisMonth: Double = 0
