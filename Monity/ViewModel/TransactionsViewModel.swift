@@ -84,6 +84,17 @@ class TransactionsViewModel: ItemListViewModel<Transaction> {
     
     // MARK: - Intents
     
+    public func resetTransactionsSearch() {
+        filterTransactionList()
+    }
+    
+    public func filterTransactionsByValue(_ value: String) {
+        filteredTransactions = filteredTransactions?.filter {
+            $0.category?.wrappedName.contains(value) ?? false
+            || $0.wrappedText.contains(value)
+        }
+    }
+    
     override func deleteItem(_ item: Transaction) {
         TransactionStorage.shared.delete(item)
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TransactionsView: View {
     @State var showAddTransactionView = false
+    @State private var searchValue: String = ""
     @State private var showFilterSettings = false
     @ObservedObject var content = TransactionsViewModel.shared
     @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
@@ -19,6 +20,14 @@ struct TransactionsView: View {
                 showAddTransactionView: $showAddTransactionView,
                 transactionsByDate: content.currentTransactionsByDate
             )
+            .searchable(text: $searchValue)
+            .onChange(of: searchValue) { newValue in
+                if newValue.isEmpty {
+                    content.resetTransactionsSearch()
+                } else {
+                    content.filterTransactionsByValue(newValue)
+                }
+            }
             .navigationTitle("Transactions")
             .listStyle(.insetGrouped)
             .toolbar {
