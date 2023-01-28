@@ -50,6 +50,9 @@
 "Average daily expenses:" = "Durchschnittliche Tagesausgaben:";
 
 /* No comment provided by engineer. */
+"Average change per year:" = "Durchschnittliche Änderung pro Jahr:";
+
+/* No comment provided by engineer. */
 "Budget:" = "Budget:";
 
 /* No comment provided by engineer. */
@@ -155,6 +158,9 @@
 "Exporting error" = "Export-Error";
 
 /* No comment provided by engineer. */
+"Future Projections" = "Projektionen";
+
+/* No comment provided by engineer. */
 "General" = "Allgemein";
 
 /* No comment provided by engineer. */
@@ -243,6 +249,9 @@
 
 /* No comment provided by engineer. */
 "None" = "Keine";
+
+/* No comment provided by engineer. */
+"Nothing to display here." = "Hier gibt es nichts zu sehen.";
 
 /* No comment provided by engineer. */
 "OK" = "OK";
@@ -342,6 +351,9 @@
 
 /* No comment provided by engineer. */
 "System" = "System";
+
+/* No comment provided by engineer. */
+"Tap the chart for more details." = "Tippe auf den Graphen um Details anzuzeigen.";
 
 /* No comment provided by engineer. */
 "These will help you categorize all of your expenses and income" = "Diese helfen Ihnen, alle Ihre Ausgaben und Einnahmen zu kategorisieren";

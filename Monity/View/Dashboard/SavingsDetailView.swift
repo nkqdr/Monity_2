@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 
 struct SavingsDetailView: View {
+    private let savingsProjectionYears: [Int] = [1, 5, 10, 25]
     @State private var selectedElement: ValueTimeDataPoint?
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
@@ -154,11 +155,42 @@ struct SavingsDetailView: View {
         .padding()
     }
     
+    func getFutureDate(addedYears: Int) -> Date {
+        let comps = DateComponents(year: addedYears)
+        return Calendar.current.date(byAdding: comps, to: Date()) ?? Date()
+    }
+    
+    var savingsProjections: some View {
+        VStack(alignment: .leading) {
+            Text("Future Projections").font(.footnote).foregroundColor(.secondary).padding(.bottom, 5)
+            ForEach(savingsProjectionYears, id: \.self) { yearAmount in
+                let projection = content.getXYearProjection(yearAmount)
+                HStack {
+                    Text(getFutureDate(addedYears: yearAmount), format: .dateTime.day().month().year())
+                    Spacer()
+                    Text(projection, format: .customCurrency())
+                        .foregroundColor(projection > 0 ? .green : .red)
+                }
+                .padding(.vertical, 1)
+            }
+            HStack {
+                Text("Average change per year:")
+                    .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
+                Spacer()
+                Text(content.yearlySavingsRate, format: .customCurrency())
+                    .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
+            }
+        }
+        .padding()
+    }
+    
     var scrollViewContent: some View {
         ScrollView {
             chartHeader
             savingsChart
             timeframePicker
+            Divider()
+            savingsProjections
             Divider()
             categoryGridFor(content.shownCategories)
         }
