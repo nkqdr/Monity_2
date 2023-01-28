@@ -22,9 +22,28 @@ struct TransactionsList: View {
         showAddTransactionView.toggle()
     }
     
+    func getTransactionSumFor(_ list: [Transaction], isExpense: Bool) -> Double {
+        return list.filter({ $0.isExpense == isExpense }).map({ $0.amount }).reduce(0, +)
+    }
+    
+    @ViewBuilder
+    func sectionHeaderFor(_ transactionByDate: TransactionsByDate) -> some View {
+        HStack {
+            Text(transactionByDate.date, format: dateFormat)
+            Spacer()
+            HStack(spacing: 1) {
+                Text(getTransactionSumFor(transactionByDate.transactions, isExpense: true), format: .customCurrency())
+                    .foregroundColor(.red)
+                Text(" | ")
+                Text(getTransactionSumFor(transactionByDate.transactions, isExpense: false), format: .customCurrency())
+                    .foregroundColor(.green)
+            }
+        }
+    }
+    
     var body: some View {
         List(transactionsByDate) { date in
-            Section(header: Text(date.date, format: dateFormat)) {
+            Section(header: sectionHeaderFor(date)) {
                 ForEach(date.transactions) { transaction in
                     EditableDeletableItem(
                         item: transaction,
