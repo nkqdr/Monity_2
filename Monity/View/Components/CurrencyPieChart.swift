@@ -71,6 +71,8 @@ struct CurrencyPieChart: View {
                                         Text("Total")
                                     } else {
                                         Text(adjustedValues[activeIndex].title)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
                                     }
                                 }
                                 .font(.footnote)
