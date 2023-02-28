@@ -26,6 +26,12 @@
 "Are you sure you want to delete all App-Data?" = "Sind Sie sicher, dass Sie alle App-Daten löschen wollen?";
 
 /* No comment provided by engineer. */
+"Are you sure you want to delete all savings data?" = "Sind Sie sicher, dass Sie alle Vermögensdaten löschen wollen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete all transaction data?" = "Sind Sie sicher, dass Sie alle Transaktionsdaten löschen wollen?";
+
+/* No comment provided by engineer. */
 "Are you sure you want to delete this entry?" = "Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?";
 
 /* No comment provided by engineer. */
@@ -47,10 +53,10 @@
 "Average" = "Durchschnitt";
 
 /* No comment provided by engineer. */
-"Average daily expenses:" = "Durchschnittliche Tagesausgaben:";
+"Average change per year:" = "Durchschnittliche Änderung pro Jahr:";
 
 /* No comment provided by engineer. */
-"Average change per year:" = "Durchschnittliche Änderung pro Jahr:";
+"Average daily expenses:" = "Durchschnittliche Tagesausgaben:";
 
 /* No comment provided by engineer. */
 "Budget:" = "Budget:";
@@ -110,7 +116,13 @@
 "Delete monthly limit" = "Monatliches Limit löschen";
 
 /* No comment provided by engineer. */
+"Delete Savings data" = "Vermögensdaten löschen";
+
+/* No comment provided by engineer. */
 "Delete transaction" = "Transaktion löschen";
+
+/* No comment provided by engineer. */
+"Delete Transaction data" = "Transaktionsdaten löschen";
 
 /* No comment provided by engineer. */
 "Description" = "Beschreibung";
@@ -275,13 +287,13 @@
 "picker.lastmonth" = "1 Monat";
 
 /* No comment provided by engineer. */
-"picker.sixmonths" = "6 Monate";
-
-/* No comment provided by engineer. */
 "picker.lastyear" = "1 Jahr";
 
 /* No comment provided by engineer. */
 "picker.max" = "Max";
+
+/* No comment provided by engineer. */
+"picker.sixmonths" = "6 Monate";
 
 /* No comment provided by engineer. */
 "Please enter your desired limit." = "Bitte geben Sie das gewünschte Limit ein.";

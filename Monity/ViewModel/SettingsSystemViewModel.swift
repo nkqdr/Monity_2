@@ -61,11 +61,19 @@ class SettingsSystemViewModel: ObservableObject {
         importSummary = nil
     }
     
+    func deleteTransactionData() {
+        TransactionCategoryStorage.shared.deleteAll()
+        TransactionStorage.shared.deleteAll()
+    }
+    
+    func deleteSavingsData() {
+        SavingsCategoryStorage.shared.deleteAll()
+        SavingStorage.shared.deleteAll()
+    }
+    
     func deleteAllData() {
         // Delete categories, so that all items will be deleted by cascade.
-        TransactionCategoryStorage.shared.deleteAll()
-        SavingsCategoryStorage.shared.deleteAll()
-        TransactionStorage.shared.deleteAll()
-        SavingStorage.shared.deleteAll()
+        deleteTransactionData()
+        deleteSavingsData()
     }
 }

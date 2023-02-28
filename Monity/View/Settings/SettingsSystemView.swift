@@ -13,6 +13,8 @@ struct Settings_SystemView: View {
     @ObservedObject private var transactionsContent = TransactionsViewModel.shared
     @ObservedObject private var dataExporter: DataExporter = DataExporter()
     @State private var showDeleteAllConfirmation: Bool = false
+    @State private var showDeleteSavingsConfirmation: Bool = false
+    @State private var showDeleteTransactionsConfirmation: Bool = false
     @State private var showSelectorSheet: Bool = false
     // These are needed because an error occurs when directly using the value in the ViewModel
     @State private var importSummary: ImportCSVSummary?
@@ -130,6 +132,20 @@ struct Settings_SystemView: View {
         } message: {
             Text("This cannot be undone!")
         }
+        .confirmationDialog("Are you sure you want to delete all savings data?", isPresented: $showDeleteSavingsConfirmation, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                content.deleteSavingsData()
+            }
+        } message: {
+            Text("This cannot be undone!")
+        }
+        .confirmationDialog("Are you sure you want to delete all transaction data?", isPresented: $showDeleteTransactionsConfirmation, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                content.deleteTransactionData()
+            }
+        } message: {
+            Text("This cannot be undone!")
+        }
         .navigationTitle("System")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -142,11 +158,25 @@ struct Settings_SystemView: View {
                 Text(transactionsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
             }
+            .contextMenu {
+                Button(role: .destructive) {
+                    showDeleteTransactionsConfirmation.toggle()
+                } label: {
+                    Label("Delete Transaction data", systemImage: "trash")
+                }
+            }
             HStack {
                 Text("Registered savings entries:")
                 Spacer()
                 Text(savingsContent.items.count, format: .number)
                     .foregroundColor(.secondary)
+            }
+            .contextMenu {
+                Button(role: .destructive) {
+                    showDeleteSavingsConfirmation.toggle()
+                } label: {
+                    Label("Delete Savings data", systemImage: "trash")
+                }
             }
             HStack {
                 Text("Used storage:")

@@ -34,6 +34,7 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             setPercentageChangeLastYear()
         }
     }
+    @Published var lastYearLineChartData: [ValueTimeDataPoint] = []
     @Published var filteredLineChartData: [ValueTimeDataPoint] = []
     @Published var currentNetWorth: Double = 0
     @Published var uniqueDates: Set<Date> = []
@@ -48,7 +49,7 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     
     private var entryCancellable: AnyCancellable?
     
-    private init() {
+    public init() {
         let categoryPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
         let entryPublisher = SavingStorage.shared.items.eraseToAnyPublisher()
         super.init(itemPublisher: categoryPublisher)
