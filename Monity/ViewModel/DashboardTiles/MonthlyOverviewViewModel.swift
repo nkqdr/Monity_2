@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewModel, CashflowViewModel {
+    public static var shared = MonthlyOverviewViewModel()
     @Published var incomeDataPoints: [PieChartDataPoint] = []
     @Published var expenseDataPoints: [PieChartDataPoint] = []
     @Published var cashFlowData: [ValueTimeDataPoint] = []
@@ -57,7 +58,7 @@ class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewMode
     
     // MARK: - Constructor(s)
     
-    init() {
+    private init() {
         let publisher = TransactionStorage.shared.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
         remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1

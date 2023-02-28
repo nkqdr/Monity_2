@@ -10,7 +10,7 @@ import SwiftUI
 struct CurrentMonthOverviewTile: View {
     @AppStorage("monthly_limit") private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
-    @StateObject private var content = MonthlyOverviewViewModel()
+    @ObservedObject private var content = MonthlyOverviewViewModel.shared
     
     @ViewBuilder
     var actualTile: some View {

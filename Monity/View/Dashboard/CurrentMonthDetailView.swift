@@ -12,7 +12,7 @@ struct CurrentMonthDetailView: View {
     @AppStorage("monthly_limit") private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
     @State var selectedElement: ValueTimeDataPoint?
-    @StateObject private var content = MonthlyOverviewViewModel()
+    @ObservedObject private var content = MonthlyOverviewViewModel.shared
     
     var overviewHeader: some View {
         VStack(alignment: .leading) {
