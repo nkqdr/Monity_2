@@ -119,3 +119,9 @@ extension SavingsEntry: CSVRepresentable {
         "\(self.amount),\(Utils.formatDateToISOString(self.wrappedDate)),\(self.wrappedCSVcategoryName),\(self.category?.wrappedLabel ?? "")"
     }
 }
+
+extension RecurringTransaction {
+    var wrappedName: String {
+        self.name ?? ""
+    }
+}

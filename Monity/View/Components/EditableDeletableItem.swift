@@ -11,7 +11,7 @@ struct EditableDeletableItem<ItemType, Content>: View where Content: View {
     @State private var showConfirmationDialog: Bool = false
     var item: ItemType
     var confirmationTitle: LocalizedStringKey
-    var confirmationMessage: LocalizedStringKey
+    var confirmationMessage: LocalizedStringKey?
     var onEdit: ((ItemType) -> Void)?
     var onDelete: ((ItemType) -> Void)?
     var content: (ItemType) -> Content
@@ -35,7 +35,9 @@ struct EditableDeletableItem<ItemType, Content>: View where Content: View {
                     }
                 }
             } message: {
-                Text(confirmationMessage)
+                if let msg = confirmationMessage {
+                    Text(msg)
+                }
             }
     }
 }

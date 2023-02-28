@@ -1,5 +1,5 @@
 //
-//  SettingsSystemView.swift
+//  MoreSystemView.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 14.10.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Settings_SystemView: View {
+struct More_SystemView: View {
     @StateObject private var content = SettingsSystemViewModel()
     @ObservedObject private var savingsContent = SavingsViewModel.shared
     @ObservedObject private var transactionsContent = TransactionsViewModel.shared
@@ -224,6 +224,6 @@ struct Settings_SystemView: View {
 
 struct Settings_SystemView_Previews: PreviewProvider {
     static var previews: some View {
-        Settings_SystemView()
+        More_SystemView()
     }
 }

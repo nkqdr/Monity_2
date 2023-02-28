@@ -40,9 +40,9 @@ struct MainTabView: View {
                     Label("Savings", systemImage: "dollarsign")
                 }
                 .tag(2)
-            SettingsView()
+            MoreView()
                 .tabItem {
-                    Label("Settings", systemImage: "gear")
+                    Label("More", systemImage: "ellipsis")
                 }
                 .tag(3)
         }

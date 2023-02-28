@@ -1,5 +1,5 @@
 //
-//  Settings_OptionsView.swift
+//  More_OptionsView.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 30.10.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Settings_OptionsView: View {
+struct More_OptionsView: View {
     @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
     @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
     @State private var activeAppIcon: String? = nil {
@@ -76,7 +76,7 @@ struct Settings_OptionsView: View {
 //
 //            }
         }
-        .navigationTitle("Options")
+        .navigationTitle("Settings")
     }
     
     private struct IconSetup: Identifiable {
@@ -88,6 +88,6 @@ struct Settings_OptionsView: View {
 
 struct Settings_OptionsView_Previews: PreviewProvider {
     static var previews: some View {
-        Settings_OptionsView()
+        More_OptionsView()
     }
 }
