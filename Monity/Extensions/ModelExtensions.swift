@@ -124,4 +124,21 @@ extension RecurringTransaction {
     var wrappedName: String {
         self.name ?? ""
     }
+    
+    var normalizedMonthlyAmount: Double {
+        guard let monthDivider = TransactionCycle.fromValue(self.cycle)?.dividerForMonthlyValue else {
+            return 0
+        }
+        return (self.amount / monthDivider)
+    }
+    
+    func isActiveAfter(date: Date) -> Bool {
+        guard let startDate = self.startDate?.removeTimeStamp else {
+            return false
+        }
+        guard let endDate = self.endDate?.removeTimeStamp else {
+            return startDate <= date
+        }
+        return startDate <= date && endDate > date.removeTimeStamp!
+    }
 }

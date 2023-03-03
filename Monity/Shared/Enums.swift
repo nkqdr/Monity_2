@@ -27,4 +27,29 @@ enum TransactionCycle: Int16, CaseIterable {
             return "Bi-Weekly"
         }
     }
+    
+    var dividerForMonthlyValue: Double {
+        switch self {
+        case .monthly:
+            return 1
+        case .yearly:
+            return 12
+        case .weekly:
+            return 0.25
+        case .biWeekly:
+            return 0.5
+        }
+    }
+    
+    static func fromValue(_ value: Int16?) -> TransactionCycle? {
+        guard let givenValue = value else {
+            return nil
+        }
+        for val in TransactionCycle.allCases {
+            if val.rawValue == givenValue {
+                return val
+            }
+        }
+        return nil
+    }
 }

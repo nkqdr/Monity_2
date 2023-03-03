@@ -83,6 +83,10 @@ struct ValueTimeDataPoint: Identifiable, Equatable {
     var id: UUID = UUID()
     var date: Date
     var value: Double
+    
+    var description: String {
+        return "\(date) -> \(value)"
+    }
 }
 
 struct AssetAllocationDataPoint: Identifiable {

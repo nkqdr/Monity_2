@@ -20,8 +20,8 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
         let transaction = RecurringTransaction(context: PersistenceController.shared.container.viewContext)
         transaction.name = name
         transaction.amount = amount
-        transaction.startDate = startDate
-        transaction.endDate = endDate
+        transaction.startDate = startDate.removeTimeStamp
+        transaction.endDate = endDate?.removeTimeStamp
         transaction.cycle = cycle.rawValue
         transaction.isDeducted = isDeducted
         transaction.id = UUID()
@@ -33,8 +33,8 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
         PersistenceController.shared.container.viewContext.performAndWait {
             transaction.name = editor.name
             transaction.amount = editor.amount
-            transaction.startDate = editor.startDate
-            transaction.endDate = editor.isStillActive ? nil : editor.endDate
+            transaction.startDate = editor.startDate.removeTimeStamp
+            transaction.endDate = editor.isStillActive ? nil : editor.endDate.removeTimeStamp
             transaction.cycle = editor.cycle.rawValue
             transaction.isDeducted = editor.isDeducted
             if let _ = try? PersistenceController.shared.container.viewContext.save() {

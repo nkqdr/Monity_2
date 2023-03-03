@@ -15,6 +15,7 @@ struct DashboardView: View {
                     Group {
                         CurrentMonthOverviewTile()
                         AverageExpenseAndIncomeTile()
+                        RecurringTransactionsTile()
                         SavingsTile()
                     }
                     .padding()

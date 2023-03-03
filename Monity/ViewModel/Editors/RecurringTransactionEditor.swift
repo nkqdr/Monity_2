@@ -13,11 +13,11 @@ class RecurringTransactionEditor: ObservableObject {
     @Published var isDeducted: Bool = true
     @Published var amount: Double = 0
     @Published var name: String = ""
-    @Published var startDate: Date = Date.now
-    @Published var endDate: Date = Date.now
+    @Published var startDate: Date
+    @Published var endDate: Date
     @Published var cycle: TransactionCycle = .monthly
     @Published var navigationFormTitle: LocalizedStringKey
-    @Published var isStillActive: Bool = true
+    @Published var isStillActive: Bool
     var transaction: RecurringTransaction?
     
     init(transaction: RecurringTransaction? = nil) {
@@ -26,8 +26,10 @@ class RecurringTransactionEditor: ObservableObject {
         self.name = transaction?.name ?? ""
         self.transaction = transaction
         self.startDate = transaction?.startDate ?? Date.now
-        self.cycle = .monthly
+        self.cycle = TransactionCycle.fromValue(transaction?.cycle) ?? .monthly
         self.navigationFormTitle = (transaction != nil) ? "Edit transaction" : "New transaction"
+        self.isStillActive = transaction?.endDate == nil
+        self.endDate = transaction?.endDate ?? Date.now
     }
     
     // MARK: - Intents

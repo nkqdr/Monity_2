@@ -38,9 +38,6 @@ struct MoreView: View {
             NavigationLink("Savings") {
                 More_SavingsView()
             }
-            NavigationLink("Recurring Transactions") {
-                More_RecurringTransactionsView()
-            }
         }
     }
     
