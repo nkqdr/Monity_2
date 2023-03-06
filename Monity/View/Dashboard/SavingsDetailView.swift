@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct SavingsDetailView: View {
-    private let savingsProjectionYears: [Int] = [1, 5, 10, 25]
+    private let savingsProjectionYears: [Int] = [1, 5, 10, 25, 50]
     @State private var selectedElement: ValueTimeDataPoint?
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false

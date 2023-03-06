@@ -461,7 +461,7 @@
 "You can find the .csv files in your Documents directory." = "Sie finden die .csv-Dateien in Ihrem Dokumentenverzeichnis.";
 
 /* No comment provided by engineer. */
-"You may need to restart the app for the change to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderung wirksam wird.";
+"You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
 
 /* No comment provided by engineer. */
 "You spent %lld%% of your income." = "Sie haben %lld%% Ihrer Einnahmen ausgegeben.";
@@ -477,4 +477,7 @@
 
 /* No comment provided by engineer. */
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
+
+/* No comment provided by engineer. */
+"Show in month overview" = "In Monatsübersicht anzeigen";
 

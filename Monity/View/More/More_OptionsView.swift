@@ -10,12 +10,14 @@ import SwiftUI
 struct More_OptionsView: View {
     @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
     @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
+    @AppStorage("integrate_recurring_expenses_in_month_overview") private var integrateRecurringExpensesInOverview: Bool = true
     @State private var activeAppIcon: String? = nil {
         didSet {
             activeAppIconStored = activeAppIcon ?? "None"
             UIApplication.shared.setAlternateIconName(activeAppIcon)
         }
     }
+    
     private var gridItems: [GridItem] {
         if iconOptions.count > 2 {
             return [GridItem(), GridItem(), GridItem()]
@@ -39,7 +41,7 @@ struct More_OptionsView: View {
     ]
     
     private var appearanceSection: some View {
-        Section(header: Text("Appearance"), footer: Text("You may need to restart the app for the change to take effect.")) {
+        Section(header: Text("Appearance"), footer: Text("You may need to restart the app for the changes to take effect.")) {
             Picker("Currency", selection: $selectedCurrency) {
                 ForEach(currencyOptions, id: \.self) {
                     Text($0).tag($0)
@@ -69,12 +71,16 @@ struct More_OptionsView: View {
         }
     }
     
+    private var recurringExpensesSection: some View {
+        Section(header: Text("Recurring expenses")) {
+            Toggle("Show in month overview", isOn: $integrateRecurringExpensesInOverview)
+        }
+    }
+    
     var body: some View {
         List {
             appearanceSection
-//            Section("Security") {
-//
-//            }
+            recurringExpensesSection
         }
         .navigationTitle("Settings")
     }
