@@ -53,13 +53,7 @@ struct SavingsPredictionBox: View {
                 Spacer()
                 Text(projection, format: .customCurrency())
                     .fontWeight(.bold)
-                    .foregroundColor(accentColor)
-                    .padding(5)
-                    .background {
-                        RoundedRectangle(cornerRadius: 5)
-                            .foregroundColor(accentColor)
-                            .opacity(0.1)
-                    }
+                    .tintedBackground(accentColor)
             }
         }
         .groupBoxStyle(CustomGroupBox())
