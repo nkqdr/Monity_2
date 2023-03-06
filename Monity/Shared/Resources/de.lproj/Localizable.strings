@@ -338,7 +338,7 @@
 "Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
 
 /* No comment provided by engineer. */
-"Recurring transactions" = "Regelmäßige Transaktionen";
+"Recurring expenses" = "Regelmäßige Ausgaben";
 
 /* No comment provided by engineer. */
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
@@ -470,7 +470,7 @@
 "Your monthly limit:" = "Ihr monatliches Limit:";
 
 /* No comment provided by engineer. */
-"Active transactions" = "Aktive Transaktionen";
+"Active expenses" = "Aktive Ausgaben";
 
 /* No comment provided by engineer. */
 "Your wealth decreased by %lld%%" = "Ihr Vermögen ist um %lld%% gesunken";

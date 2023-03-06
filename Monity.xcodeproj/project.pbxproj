@@ -53,6 +53,9 @@
 		60804B9229AE642700F45E5F /* RecurringTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */; };
 		60804B9429AE66EB00F45E5F /* RecurringTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */; };
 		60804B9629AE673F00F45E5F /* RecurringTransactionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9529AE673F00F45E5F /* RecurringTransactionEditor.swift */; };
+		608B80BB29B6469700047F3D /* SavingsPredictionBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */; };
+		608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B80BC29B6544500047F3D /* TypeExtensions.swift */; };
+		608B80C029B656CC00047F3D /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 608B80C229B656CC00047F3D /* Localizable.stringsdict */; };
 		608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D2C290D2AFC00FFB45A /* ListBase.swift */; };
 		608C4D30290D2C8F00FFB45A /* GroupBoxStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D2F290D2C8F00FFB45A /* GroupBoxStyles.swift */; };
 		608C4D32290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D31290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift */; };
@@ -163,6 +166,10 @@
 		60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionFormView.swift; sourceTree = "<group>"; };
 		60804B9529AE673F00F45E5F /* RecurringTransactionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionEditor.swift; sourceTree = "<group>"; };
+		608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsPredictionBox.swift; sourceTree = "<group>"; };
+		608B80BC29B6544500047F3D /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
+		608B80C129B656CC00047F3D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		608B80C329B656D000047F3D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		608C4D2C290D2AFC00FFB45A /* ListBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBase.swift; sourceTree = "<group>"; };
 		608C4D2F290D2C8F00FFB45A /* GroupBoxStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxStyles.swift; sourceTree = "<group>"; };
 		608C4D31290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationGroupBoxLabel.swift; sourceTree = "<group>"; };
@@ -303,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				608C4D38290D640100FFB45A /* Localizable.strings */,
+				608B80C229B656CC00047F3D /* Localizable.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -473,6 +481,7 @@
 				600D884F291698B0002BE3F5 /* AssetAllocationPieChart.swift */,
 				604DBDD629B1D909008C26ED /* RecurringTransactionListTile.swift */,
 				604DBDDC29B1DB95008C26ED /* RecurringTransactionsLineChart.swift */,
+				608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -486,6 +495,7 @@
 				60A4CFB328F9A15D007F392D /* BundleExtensions.swift */,
 				60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */,
 				60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */,
+				608B80BC29B6544500047F3D /* TypeExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -506,6 +516,8 @@
 			dependencies = (
 			);
 			name = Monity;
+			packageProductDependencies = (
+			);
 			productName = Monity;
 			productReference = 60BD9F0E28F35B6F001FF5FF /* Monity.app */;
 			productType = "com.apple.product-type.application";
@@ -579,6 +591,8 @@
 				de,
 			);
 			mainGroup = 60BD9F0528F35B6F001FF5FF;
+			packageReferences = (
+			);
 			productRefGroup = 60BD9F0F28F35B6F001FF5FF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -596,6 +610,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */,
+				608B80C029B656CC00047F3D /* Localizable.stringsdict in Resources */,
 				608C4D36290D640100FFB45A /* Localizable.strings in Resources */,
 				60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */,
 			);
@@ -652,6 +667,7 @@
 				604DBDDD29B1DB95008C26ED /* RecurringTransactionsLineChart.swift in Sources */,
 				60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */,
 				60B50E122906F43100396308 /* SavingsCategoryEditor.swift in Sources */,
+				608B80BB29B6469700047F3D /* SavingsPredictionBox.swift in Sources */,
 				602E45C228F95D46003FD564 /* CurrentMonthDetailView.swift in Sources */,
 				60B50E162906F73A00396308 /* SettingsSavingsViewModel.swift in Sources */,
 				60804B9229AE642700F45E5F /* RecurringTransactionsViewModel.swift in Sources */,
@@ -705,6 +721,7 @@
 				60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */,
 				604F8E7229012BC500DD3781 /* MonthSummaryView.swift in Sources */,
 				60BD9F5228F35D52001FF5FF /* MoreView.swift in Sources */,
+				608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,6 +758,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		608B80C229B656CC00047F3D /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				608B80C129B656CC00047F3D /* en */,
+				608B80C329B656D000047F3D /* de */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 		608C4D38290D640100FFB45A /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

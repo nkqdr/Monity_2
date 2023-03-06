@@ -15,7 +15,7 @@ struct RecurringTransactionsDetailView: View {
     @ViewBuilder
     func savingsCategoriesHeader(_ createFunc: @escaping () -> Void) -> some View {
         HStack {
-            Text("Active transactions")
+            Text("Active expenses")
             Spacer()
             Button(action: createFunc) {
                 Image(systemName: "plus")
@@ -81,7 +81,7 @@ struct RecurringTransactionsDetailView: View {
                     }
             }
         }
-        .navigationTitle("Recurring transactions")
+        .navigationTitle("Recurring expenses")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

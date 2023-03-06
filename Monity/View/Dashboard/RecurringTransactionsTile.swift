@@ -12,7 +12,7 @@ struct RecurringTransactionsTile: View {
     
     var body: some View {
         NavigationLink(destination: RecurringTransactionsDetailView()) {
-            GroupBox(label: NavigationGroupBoxLabel(title: "Recurring transactions")) {
+            GroupBox(label: NavigationGroupBoxLabel(title: "Recurring expenses")) {
                 VStack(alignment: .leading) {
                     Text("You are currently paying \(content.currentMonthlyPayment.formatted(.customCurrency())) per month.")
                         .groupBoxLabelTextStyle()
