@@ -16,6 +16,7 @@ struct RecurringTransactionFormView: View {
         NavigationView {
             Form {
                 TextField("Name", text: $editor.name)
+                TransactionCategoryPicker(selection: $editor.category)
                 Section("Payment details") {
                     TextField("Amount", value: $editor.amount, format: .customCurrency())
                         .keyboardType(.decimalPad)

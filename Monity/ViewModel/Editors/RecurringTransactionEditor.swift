@@ -18,6 +18,7 @@ class RecurringTransactionEditor: ObservableObject {
     @Published var cycle: TransactionCycle = .monthly
     @Published var navigationFormTitle: LocalizedStringKey
     @Published var isStillActive: Bool
+    @Published var category: TransactionCategory?
     var transaction: RecurringTransaction?
     
     init(transaction: RecurringTransaction? = nil) {
@@ -30,6 +31,7 @@ class RecurringTransactionEditor: ObservableObject {
         self.navigationFormTitle = (transaction != nil) ? "Edit transaction" : "New transaction"
         self.isStillActive = transaction?.endDate == nil
         self.endDate = transaction?.endDate ?? Date.now
+        self.category = transaction?.category ?? nil
     }
     
     // MARK: - Intents

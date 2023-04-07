@@ -15,12 +15,7 @@ struct AddTransactionView: View {
         NavigationView {
             Form {
                 Section("Details") {
-                    Picker("Choose a category", selection: $editor.selectedCategory) {
-                        Text("None").tag(Optional<TransactionCategory>.none)
-                        ForEach(editor.categories) { category in
-                            Text(category.wrappedName).tag(category as TransactionCategory?)
-                        }
-                    }
+                    TransactionCategoryPicker(selection: $editor.selectedCategory)
                     Picker("Pick a transaction type", selection: $editor.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
