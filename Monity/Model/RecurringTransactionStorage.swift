@@ -16,7 +16,7 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
         ])
     }
     
-    func add(name: String, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool) -> RecurringTransaction {
+    func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool) -> RecurringTransaction {
         let transaction = RecurringTransaction(context: PersistenceController.shared.container.viewContext)
         transaction.name = name
         transaction.amount = amount
@@ -25,6 +25,7 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
         transaction.cycle = cycle.rawValue
         transaction.isDeducted = isDeducted
         transaction.id = UUID()
+        transaction.category = category
         try? PersistenceController.shared.container.viewContext.save()
         return transaction
     }
@@ -37,6 +38,7 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
             transaction.endDate = editor.isStillActive ? nil : editor.endDate.removeTimeStamp
             transaction.cycle = editor.cycle.rawValue
             transaction.isDeducted = editor.isDeducted
+            transaction.category = editor.category
             if let _ = try? PersistenceController.shared.container.viewContext.save() {
                 return true
             } else {
