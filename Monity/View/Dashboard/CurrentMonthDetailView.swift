@@ -34,22 +34,21 @@ struct CurrentMonthDetailView: View {
                 Spacer()
                 BudgetBattery()
             }
-            Divider()
-            HStack {
-                Text("Predicted total expenses:")
-                    .font(.system(size: 16, weight: .semibold))
+            HStack(alignment: .top) {
+                Text("Predicted total expenses:").groupBoxLabelTextStyle()
                 Spacer()
-                Text(content.predictedTotalSpendings, format: .customCurrency())
-                    .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
-            }
-            Divider()
-            HStack {
-                Text("Average daily expenses:")
-                    .font(.system(size: 16, weight: .semibold))
-                Spacer()
-                Text(content.spendingsPerDay, format: .customCurrency())
+                VStack(alignment: .trailing) {
+                    Text(content.predictedTotalSpendings, format: .customCurrency())
+                        .fontWeight(.bold)
+                        .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
+                    Group {
+                        Text("∅ ") + Text(content.spendingsPerDay, format: .customCurrency()) + Text(" / Day")
+                    }
                     .foregroundColor(.secondary)
+                    .font(.caption)
+                }
             }
+            .padding(.vertical, 5)
         }
         .padding(.bottom, 5)
         .padding(.horizontal)
