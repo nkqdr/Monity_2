@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 protocol PieChartViewModel {
-    func getPieChartDataPoints(for transactions: [Transaction], with color: Color) -> [PieChartDataPoint]
+    func getPieChartDataPoints(for transactions: [AbstractTransaction], with color: Color) -> [PieChartDataPoint]
 }
 
 extension PieChartViewModel {
-    func getPieChartDataPoints(for transactions: [Transaction], with color: Color) -> [PieChartDataPoint] {
+    func getPieChartDataPoints(for transactions: [AbstractTransaction], with color: Color) -> [PieChartDataPoint] {
         var byCategory: [String?:Double] = [:]
         let usedCategoryNames: Set<String?> = Set(transactions.map { $0.category?.name })
         for usedCategoryName in usedCategoryNames {
@@ -26,7 +26,8 @@ extension PieChartViewModel {
         let totalDataPoints: Double = Double(sorted.count)
         for (index, categoryName) in sorted.enumerated() {
             let opacity: Double = 1.0 - (Double(index) / totalDataPoints)
-            dps.append(PieChartDataPoint(title: categoryName ?? "No category", value: byCategory[categoryName] ?? 0, color: color.opacity(opacity)))
+            let stringKey = LocalizedStringKey(categoryName ?? "No category")
+            dps.append(PieChartDataPoint(title: stringKey, value: byCategory[categoryName] ?? 0, color: color.opacity(opacity)))
         }
         return dps
     }

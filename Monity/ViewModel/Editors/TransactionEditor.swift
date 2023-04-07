@@ -15,14 +15,10 @@ class TransactionEditor: ObservableObject {
     @Published var givenAmount: Double = 0
     @Published var description: String = ""
     @Published var selectedDate: Date = Date.now
-    @Published var categories: [TransactionCategory] = []
     @Published var navigationFormTitle: LocalizedStringKey
     var transaction: Transaction?
     
-    private var categoryCancellable: AnyCancellable?
-    
     init(transaction: Transaction? = nil) {
-        let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
         self.isExpense = transaction?.isExpense ?? true
         self.selectedCategory = transaction?.category ?? nil
         self.givenAmount = transaction?.amount ?? 0
@@ -30,10 +26,6 @@ class TransactionEditor: ObservableObject {
         self.transaction = transaction
         self.selectedDate = transaction?.date ?? Date.now
         self.navigationFormTitle = (transaction != nil) ? "Edit transaction" : "New transaction"
-        
-        categoryCancellable = categoryPublisher.sink { categories in
-            self.categories = categories
-        }
     }
     
     // MARK: - Intents

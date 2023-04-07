@@ -1,5 +1,5 @@
 //
-//  Settings_OptionsView.swift
+//  More_OptionsView.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 30.10.22.
@@ -7,15 +7,18 @@
 
 import SwiftUI
 
-struct Settings_OptionsView: View {
+struct More_OptionsView: View {
     @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
     @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
+    @AppStorage("integrate_recurring_expenses_in_month_overview") private var integrateRecurringExpensesInOverview: Bool = true
+    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
     @State private var activeAppIcon: String? = nil {
         didSet {
             activeAppIconStored = activeAppIcon ?? "None"
             UIApplication.shared.setAlternateIconName(activeAppIcon)
         }
     }
+    
     private var gridItems: [GridItem] {
         if iconOptions.count > 2 {
             return [GridItem(), GridItem(), GridItem()]
@@ -39,7 +42,7 @@ struct Settings_OptionsView: View {
     ]
     
     private var appearanceSection: some View {
-        Section(header: Text("Appearance"), footer: Text("You may need to restart the app for the change to take effect.")) {
+        Section(header: Text("Appearance"), footer: Text("You may need to restart the app for the changes to take effect.")) {
             Picker("Currency", selection: $selectedCurrency) {
                 ForEach(currencyOptions, id: \.self) {
                     Text($0).tag($0)
@@ -69,14 +72,25 @@ struct Settings_OptionsView: View {
         }
     }
     
+    private var recurringExpensesSection: some View {
+        Section(header: Text("Recurring expenses"), footer: Text("recurring_expenses.settings_description")) {
+            Toggle("Show in month overview", isOn: $integrateRecurringExpensesInOverview)
+        }
+    }
+    
+    private var wealthSection: some View {
+        Section(header: Text("Savings")) {
+            Toggle("Show projections", isOn: $showProjections)
+        }
+    }
+    
     var body: some View {
         List {
             appearanceSection
-//            Section("Security") {
-//
-//            }
+            recurringExpensesSection
+            wealthSection
         }
-        .navigationTitle("Options")
+        .navigationTitle("Settings")
     }
     
     private struct IconSetup: Identifiable {
@@ -88,6 +102,6 @@ struct Settings_OptionsView: View {
 
 struct Settings_OptionsView_Previews: PreviewProvider {
     static var previews: some View {
-        Settings_OptionsView()
+        More_OptionsView()
     }
 }

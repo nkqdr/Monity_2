@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  MoreView.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 09.10.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct MoreView: View {
     var body: some View {
         NavigationView {
             List {
@@ -15,17 +15,17 @@ struct SettingsView: View {
                 configurationSection
                 helpSection
             }
-            .navigationTitle("Settings")
+            .navigationTitle("More")
         }
     }
     
     private var generalSection: some View {
         Section("General") {
             NavigationLink("System") {
-                Settings_SystemView()
+                More_SystemView()
             }
-            NavigationLink("Options") {
-                Settings_OptionsView()
+            NavigationLink("Settings") {
+                More_OptionsView()
             }
         }
     }
@@ -33,10 +33,10 @@ struct SettingsView: View {
     private var configurationSection: some View {
         Section("Configuration") {
             NavigationLink("Transactions") {
-                Settings_TransactionsView()
+                More_TransactionsView()
             }
             NavigationLink("Savings") {
-                Settings_SavingsView()
+                More_SavingsView()
             }
         }
     }
@@ -60,6 +60,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        MoreView()
     }
 }

@@ -53,7 +53,7 @@ struct TransactionsList: View {
                         onDelete: deleteTransaction) { item in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text(item.category?.wrappedName ?? "No category")
+                                    Text(LocalizedStringKey(item.category?.wrappedName ?? "No category"))
                                         .font(.headline)
                                     Text(item.wrappedText)
                                         .font(.subheadline)

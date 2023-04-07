@@ -11,6 +11,9 @@
 "About" = "Über";
 
 /* No comment provided by engineer. */
+"Active" = "Aktiv";
+
+/* No comment provided by engineer. */
 "Amount" = "Betrag";
 
 /* No comment provided by engineer. */
@@ -18,6 +21,9 @@
 
 /* No comment provided by engineer. */
 "Apply" = "Anwenden";
+
+/* No comment provided by engineer. */
+"Archive" = "Archiv";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete %@?" = "Sind Sie sicher, dass Sie %@ löschen wollen?";
@@ -59,6 +65,9 @@
 "Average daily expenses:" = "Durchschnittliche Tagesausgaben:";
 
 /* No comment provided by engineer. */
+"Bi-Weekly" = "Zweiwöchentlich";
+
+/* No comment provided by engineer. */
 "Budget:" = "Budget:";
 
 /* No comment provided by engineer. */
@@ -80,6 +89,9 @@
 "Choose a category" = "Kategorie auswählen";
 
 /* No comment provided by engineer. */
+"Close" = "Schließen";
+
+/* No comment provided by engineer. */
 "Configuration" = "Konfiguration";
 
 /* No comment provided by engineer. */
@@ -93,6 +105,9 @@
 
 /* No comment provided by engineer. */
 "Current Month" = "Dieser Monat";
+
+/* No comment provided by engineer. */
+"Cycle" = "Turnus";
 
 /* No comment provided by engineer. */
 "Dashboard" = "Dashboard";
@@ -141,6 +156,9 @@
 
 /* No comment provided by engineer. */
 "Edit transaction" = "Transaktion bearbeiten";
+
+/* No comment provided by engineer. */
+"End date" = "Enddatum";
 
 /* No comment provided by engineer. */
 "Expense" = "Ausgabe";
@@ -209,6 +227,9 @@
 "Invested" = "Investiert";
 
 /* No comment provided by engineer. */
+"Is deducted" = "Wird abgebucht";
+
+/* No comment provided by engineer. */
 "Label" = "Kennzeichnung";
 
 /* No comment provided by engineer. */
@@ -230,10 +251,16 @@
 "Month" = "Monat";
 
 /* No comment provided by engineer. */
+"Monthly" = "Monatlich";
+
+/* No comment provided by engineer. */
 "Monthly limit" = "Monatliches Limit";
 
 /* No comment provided by engineer. */
 "More" = "Mehr";
+
+/* No comment provided by engineer. */
+"Name" = "Name";
 
 /* No comment provided by engineer. */
 "Net-Worth" = "Vermögen";
@@ -272,10 +299,10 @@
 "Optional" = "Optional";
 
 /* No comment provided by engineer. */
-"Options" = "Optionen";
+"Over the last year" = "Im letzten Jahr";
 
 /* No comment provided by engineer. */
-"Over the last year" = "Im letzten Jahr";
+"Payment details" = "Zahlungsdetails";
 
 /* No comment provided by engineer. */
 "Pick a transaction type" = "Transaktionstyp auswählen";
@@ -309,6 +336,9 @@
 
 /* No comment provided by engineer. */
 "Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
+
+/* No comment provided by engineer. */
+"Recurring expenses" = "Regelmäßige Ausgaben";
 
 /* No comment provided by engineer. */
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
@@ -365,6 +395,9 @@
 "Something didn't work." = "Etwas hat nicht funktioniert.";
 
 /* No comment provided by engineer. */
+"Start date" = "Startdatum";
+
+/* No comment provided by engineer. */
 "System" = "System";
 
 /* No comment provided by engineer. */
@@ -416,10 +449,19 @@
 "View month summary" = "Monatsübersicht anzeigen";
 
 /* No comment provided by engineer. */
+"Weekly" = "Wöchentlich";
+
+/* No comment provided by engineer. */
+"Yearly" = "Jährlich";
+
+/* No comment provided by engineer. */
+"You are currently paying %@ per month." = "Sie zahlen derzeit %@ pro Monat.";
+
+/* No comment provided by engineer. */
 "You can find the .csv files in your Documents directory." = "Sie finden die .csv-Dateien in Ihrem Dokumentenverzeichnis.";
 
 /* No comment provided by engineer. */
-"You may need to restart the app for the change to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderung wirksam wird.";
+"You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
 
 /* No comment provided by engineer. */
 "You spent %lld%% of your income." = "Sie haben %lld%% Ihrer Einnahmen ausgegeben.";
@@ -428,8 +470,26 @@
 "Your monthly limit:" = "Ihr monatliches Limit:";
 
 /* No comment provided by engineer. */
+"Active expenses" = "Aktive Ausgaben";
+
+/* No comment provided by engineer. */
 "Your wealth decreased by %lld%%" = "Ihr Vermögen ist um %lld%% gesunken";
 
 /* No comment provided by engineer. */
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
+
+/* No comment provided by engineer. */
+"Show in month overview" = "In Monatsübersicht anzeigen";
+
+/* No comment provided by engineer. */
+"Show projections" = "Projektionen anzeigen";
+
+/* Alert message in the asset allocation section. */
+"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
+
+/* No comment provided by engineer. */
+"No category" = "Ohne Kategorie";
+
+/* No comment provided by engineer. */
+" / Day" = " / Tag";
 

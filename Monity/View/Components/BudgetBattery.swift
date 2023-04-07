@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct BudgetBattery: View {
-    var monthlyLimit: Double
-    var alreadySpent: Double
+    @AppStorage("monthly_limit") private var monthlyLimit: Double = 0
+    @ObservedObject private var expenseCalculator = MonthExpenseCalculator.current
+    private var alreadySpent: Double {
+        expenseCalculator.totalExpenses
+    }
     
     var body: some View {
         let remainingPercentage: Double = monthlyLimit > 0 ? (1 - alreadySpent / monthlyLimit) : 0
@@ -34,6 +37,6 @@ struct BudgetBattery: View {
 
 struct BudgetBattery_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetBattery(monthlyLimit: 1000, alreadySpent: 342.1)
+        BudgetBattery()
     }
 }

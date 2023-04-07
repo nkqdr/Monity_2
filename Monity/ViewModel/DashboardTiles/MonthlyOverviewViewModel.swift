@@ -7,13 +7,11 @@
 
 import Foundation
 import Combine
-import SwiftUI
 
-class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewModel, CashflowViewModel {
+class MonthlyOverviewViewModel: ObservableObject {
     public static var shared = MonthlyOverviewViewModel()
-    @Published var incomeDataPoints: [PieChartDataPoint] = []
-    @Published var expenseDataPoints: [PieChartDataPoint] = []
-    @Published var cashFlowData: [ValueTimeDataPoint] = []
+    @Published var remainingDays: Int = 0
+    @Published var predictedTotalSpendings: Double = 0
     @Published var spendingsPerDay: Double = 0 {
         didSet {
             let daysInMonth: Int = Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 0
@@ -26,48 +24,25 @@ class MonthlyOverviewViewModel: ItemListViewModel<Transaction>, PieChartViewMode
             spendingsPerDay = spentThisMonth / Double(currentDay)
         }
     }
-    @Published var earnedThisMonth: Double = 0
-    @Published var remainingDays: Int = 0
-    @Published var thisMonthTransactions: [Transaction] = [] {
-        didSet {
-            thisMonthExpenses = thisMonthTransactions.filter { $0.isExpense }
-            thisMonthIncome = thisMonthTransactions.filter { !$0.isExpense }
-            expenseDataPoints = getPieChartDataPoints(for: thisMonthExpenses, with: .red)
-            incomeDataPoints = getPieChartDataPoints(for: thisMonthIncome, with: .green)
-            cashFlowData = getCashFlowDataPoints(for: thisMonthTransactions)
-        }
-    }
-    @Published var predictedTotalSpendings: Double = 0
-    @Published var thisMonthExpenses: [Transaction] = [] {
-        didSet {
-            spentThisMonth = thisMonthExpenses.map { $0.amount }.reduce(0, +)
-        }
-    }
-    @Published var thisMonthIncome: [Transaction] = [] {
-        didSet {
-            earnedThisMonth = thisMonthIncome.map { $0.amount }.reduce(0, +)
-        }
-    }
     
     private let currentComps: DateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date())
+    private var transactions: [AbstractTransaction] = [] {
+        didSet {
+            spentThisMonth = transactions.filter { $0.isExpense }.map { $0.amount }.reduce(0, +)
+        }
+    }
+    private var transactionCancellable: AnyCancellable?
     private var startOfNextMonth: Date {
         let correctYear: Int = currentComps.month == 12 ? (currentComps.year ?? 0) + 1 : currentComps.year ?? 1
         let correctMonth: Int = currentComps.month == 12 ? 1 : (currentComps.month ?? 0) + 1
         return Calendar.current.date(from: DateComponents(year: correctYear, month: correctMonth, day: 1)) ?? Date()
     }
     
-    // MARK: - Constructor(s)
-    
     private init() {
-        let publisher = TransactionStorage.shared.items.eraseToAnyPublisher()
-        super.init(itemPublisher: publisher)
-        remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
-    }
-    
-    override func onItemsSet() {
-        thisMonthTransactions = items.filter { t in
-            let comps = Calendar.current.dateComponents([.month, .year], from: t.date ?? Date())
-            return comps.year == currentComps.year && comps.month == currentComps.month
+        let publisher = AbstractTransactionWrapper(date: Date()).$wrappedTransactions.eraseToAnyPublisher()
+        transactionCancellable = publisher.sink { items in
+            self.transactions = items
         }
+        remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
     }
 }

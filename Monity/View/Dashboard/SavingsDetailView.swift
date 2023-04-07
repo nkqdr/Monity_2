@@ -9,11 +9,12 @@ import SwiftUI
 import Charts
 
 struct SavingsDetailView: View {
-    private let savingsProjectionYears: [Int] = [1, 5, 10, 25]
+    private let savingsProjectionYears: [Int] = [1, 5, 10, 25, 50]
     @State private var selectedElement: ValueTimeDataPoint?
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
     
     var noCategories: some View {
         VStack {
@@ -164,25 +165,25 @@ struct SavingsDetailView: View {
     var savingsProjections: some View {
         VStack(alignment: .leading) {
             Text("Future Projections").font(.footnote).foregroundColor(.secondary).padding(.bottom, 5)
-            ForEach(savingsProjectionYears, id: \.self) { yearAmount in
-                let projection = content.getXYearProjection(yearAmount)
+                .padding(.horizontal)
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    Text(getFutureDate(addedYears: yearAmount), format: .dateTime.day().month().year())
-                    Spacer()
-                    Text(projection, format: .customCurrency())
-                        .foregroundColor(projection > 0 ? .green : .red)
+                    ForEach(savingsProjectionYears, id: \.self) { yearAmount in
+                        SavingsPredictionBox(yearAmount: yearAmount)
+                            .frame(minWidth: 300, minHeight: 50)
+                    }
                 }
-                .padding(.vertical, 1)
+                .padding(.horizontal)
             }
             HStack {
                 Text("Average change per year:")
                     .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
                 Spacer()
                 Text(content.yearlySavingsRate, format: .customCurrency())
-                    .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
+                    .font(.footnote).foregroundColor(content.yearlySavingsRate >= 0 ? .green : .red).padding(.top, 5)
             }
+            .padding(.horizontal)
         }
-        .padding()
     }
     
     var scrollViewContent: some View {
@@ -190,8 +191,10 @@ struct SavingsDetailView: View {
             chartHeader
             savingsChart
             timeframePicker
-            Divider()
-            savingsProjections
+            if (showProjections) {
+                Divider()
+                savingsProjections
+            }
             Divider()
             categoryGridFor(content.shownCategories)
         }

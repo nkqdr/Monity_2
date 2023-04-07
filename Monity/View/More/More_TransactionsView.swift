@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Settings_TransactionsView: View {
+struct More_TransactionsView: View {
     @AppStorage("monthly_limit") private var monthlyLimit: Double?
     @StateObject private var content = SettingsTransactionsViewModel()
     @State private var showingEditAlert: Bool = false
@@ -112,7 +112,7 @@ struct Settings_TransactionsView: View {
 
 struct Settings_TransactionsView_Previews: PreviewProvider {
     static var previews: some View {
-        Settings_TransactionsView()
+        More_TransactionsView()
     }
 }
 

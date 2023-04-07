@@ -19,7 +19,7 @@ class AverageMonthlyChartViewModel: ObservableObject {
     @Published var totalExpensesThisYear: Double = 0
     @Published var totalIncomeThisYear: Double = 0
     
-    private var transactions: [Transaction] = [] {
+    private var transactions: [AbstractTransaction] = [] {
         didSet {
             monthlyExpenseDataPoints = getPastYearExpenseDataPoints()
             monthlyIncomeDataPoints = getPastYearIncomeDataPoints()
@@ -42,7 +42,8 @@ class AverageMonthlyChartViewModel: ObservableObject {
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
     
-    init(transactionPublisher: AnyPublisher<[Transaction], Never> = TransactionStorage.shared.items.eraseToAnyPublisher()) {
+    init() {
+        let transactionPublisher = AbstractTransactionWrapper().$wrappedTransactions.eraseToAnyPublisher()
         let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
         transactionCategoryCancellable = categoryPublisher.sink { categories in
             self.transactionCategories = categories
@@ -78,7 +79,7 @@ class AverageMonthlyChartViewModel: ObservableObject {
     private func updateFilteredRetroDataPoints(isExpense: Bool) -> [CategoryRetroDataPoint] {
         var dataPoints: [CategoryRetroDataPoint] = []
         for category in transactionCategories {
-            let usedTransactions: [Transaction] = transactions.filter { $0.category == category && $0.isExpense == isExpense && $0.date?.isInLastYear ?? false }
+            let usedTransactions: [AbstractTransaction] = transactions.filter { $0.category == category && $0.isExpense == isExpense && $0.date?.isInLastYear ?? false }
             let totalSum: Double = usedTransactions.map { $0.amount}.reduce(0, +)
             let average: Double = totalSum / Double(isExpense ? monthlyExpenseDataPoints.count : monthlyIncomeDataPoints.count)
             var existing: CategoryRetroDataPoint?

@@ -18,11 +18,13 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
     @ObservedObject private var viewModel: ItemListViewModel<ListItem>
     
     let content: ListViewContent
+    let presentationDetents: Set<PresentationDetent>
     let sheetContent: SheetViewContent
     let includeAddInNavigationBar: Bool
     
     init(
         viewModel: ItemListViewModel<ListItem>,
+        presentationDetents: Set<PresentationDetent> = [.medium, .large],
         includeAddInNavigationBar: Bool = false,
         @ViewBuilder content: @escaping ListViewContent,
         @ViewBuilder sheetContent: @escaping SheetViewContent
@@ -31,6 +33,7 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
         self.content = content
         self.sheetContent = sheetContent
         self.includeAddInNavigationBar = includeAddInNavigationBar
+        self.presentationDetents = presentationDetents
     }
     
     func showEditSheetForListItem(_ category: ListItem) {
@@ -49,7 +52,7 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
         }
         .sheet(isPresented: $showAddItemSheet) {
             sheetContent($showAddItemSheet, viewModel.currentItem)
-                .presentationDetents([.medium, .large])
+                .presentationDetents(presentationDetents)
                 .presentationDragIndicator(.hidden)
         }
         .onChange(of: showAddItemSheet) { newValue in

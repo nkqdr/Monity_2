@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Settings_SavingsView: View {
+struct More_SavingsView: View {
     @ObservedObject var content = SettingsSavingsViewModel()
     
     @ViewBuilder
@@ -65,6 +65,6 @@ struct Settings_SavingsView: View {
 
 struct Settings_SavingsView_Previews: PreviewProvider {
     static var previews: some View {
-        Settings_SavingsView()
+        More_SavingsView()
     }
 }
