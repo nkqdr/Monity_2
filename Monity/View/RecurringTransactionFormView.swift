@@ -25,7 +25,7 @@ struct RecurringTransactionFormView: View {
                             Text(cycle.name).tag(cycle)
                         }
                     }
-                    Toggle("Is deducted", isOn: $editor.isDeducted)
+//                    Toggle("Is deducted", isOn: $editor.isDeducted)
                 }
                 Section("Timeframe") {
                     DatePicker("Start date", selection: $editor.startDate, displayedComponents: .date)

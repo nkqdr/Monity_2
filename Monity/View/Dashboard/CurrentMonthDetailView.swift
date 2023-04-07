@@ -42,7 +42,7 @@ struct CurrentMonthDetailView: View {
                         .fontWeight(.bold)
                         .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
                     Group {
-                        Text("∅ ") + Text(content.spendingsPerDay, format: .customCurrency()) + Text(" / Day")
+                        Text("Ø ") + Text(content.spendingsPerDay, format: .customCurrency()) + Text(" / Day")
                     }
                     .foregroundColor(.secondary)
                     .font(.caption)

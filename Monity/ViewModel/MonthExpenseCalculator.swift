@@ -29,5 +29,4 @@ class MonthExpenseCalculator: ObservableObject, PieChartViewModel {
             self.expenses = items.filter({ $0.isExpense })
         }
     }
-    
 }
