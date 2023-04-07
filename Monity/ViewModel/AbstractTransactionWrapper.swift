@@ -85,7 +85,7 @@ class AbstractTransactionWrapper: ObservableObject {
             var recurringAbExpenses: [AbstractTransaction]
             if let selectedMonthDate {
                 recurringAbExpenses = recurringExpenses.map {
-                    AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.amount, isExpense: true)
+                    AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
                 }
             } else {
                 var allRec: [AbstractTransaction] = []

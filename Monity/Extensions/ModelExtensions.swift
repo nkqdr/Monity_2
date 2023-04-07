@@ -140,7 +140,7 @@ extension RecurringTransaction {
         guard let start = self.startDate else {
             return []
         }
-        return Date.getMonthAndYearBetween(from: start, to: self.endDate ?? Date()).map { AbstractTransaction(date: $0, category: self.category, amount: self.amount, isExpense: true) }
+        return Date.getMonthAndYearBetween(from: start, to: self.endDate ?? Date()).map { AbstractTransaction(date: $0, category: self.category, amount: self.normalizedMonthlyAmount, isExpense: true) }
     }
     
     func isActiveAt(date: Date) -> Bool {
