@@ -11,6 +11,7 @@ struct More_OptionsView: View {
     @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
     @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
     @AppStorage("integrate_recurring_expenses_in_month_overview") private var integrateRecurringExpensesInOverview: Bool = true
+    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
     @State private var activeAppIcon: String? = nil {
         didSet {
             activeAppIconStored = activeAppIcon ?? "None"
@@ -77,10 +78,17 @@ struct More_OptionsView: View {
         }
     }
     
+    private var wealthSection: some View {
+        Section(header: Text("Savings")) {
+            Toggle("Show projections", isOn: $showProjections)
+        }
+    }
+    
     var body: some View {
         List {
             appearanceSection
             recurringExpensesSection
+            wealthSection
         }
         .navigationTitle("Settings")
     }

@@ -14,6 +14,7 @@ struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
     
     var noCategories: some View {
         VStack {
@@ -190,8 +191,10 @@ struct SavingsDetailView: View {
             chartHeader
             savingsChart
             timeframePicker
-            Divider()
-            savingsProjections
+            if (showProjections) {
+                Divider()
+                savingsProjections
+            }
             Divider()
             categoryGridFor(content.shownCategories)
         }
