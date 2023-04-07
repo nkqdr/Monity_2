@@ -73,7 +73,7 @@ struct More_OptionsView: View {
     }
     
     private var recurringExpensesSection: some View {
-        Section(header: Text("Recurring expenses")) {
+        Section(header: Text("Recurring expenses"), footer: Text("recurring_expenses.settings_description")) {
             Toggle("Show in month overview", isOn: $integrateRecurringExpensesInOverview)
         }
     }

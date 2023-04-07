@@ -44,7 +44,7 @@ enum SavingsCategoryLabel: String, CaseIterable {
 
 struct PieChartDataPoint: Identifiable {
     var id: UUID = UUID()
-    var title: String
+    var title: LocalizedStringKey
     var value: Double
     var color: Color
 }
@@ -106,4 +106,11 @@ struct ImportCSVSummary: Identifiable, Equatable {
 struct CSVValidHeaders {
     static let transactionCSV: String = "description,amount,date,type,category"
     static let savingsCSV: String = "amount,date,category_name,category_label"
+}
+
+struct AbstractTransaction {
+    var date: Date?
+    var category: TransactionCategory?
+    var amount: Double
+    var isExpense: Bool
 }

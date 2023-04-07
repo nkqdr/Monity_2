@@ -44,7 +44,7 @@ class RecurringTransactionsViewModel: ItemListViewModel<RecurringTransaction> {
             let dp = ValueTimeDataPoint(
                 date: date,
                 value: items.filter({
-                    $0.isActiveAfter(date: date)
+                    $0.isActiveAt(date: date)
                 }).map({ $0.normalizedMonthlyAmount }).reduce(0, +)
             )
             dataPoints.append(dp)

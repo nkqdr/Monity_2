@@ -76,6 +76,13 @@
 		60B50E162906F73A00396308 /* SettingsSavingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E152906F73A00396308 /* SettingsSavingsViewModel.swift */; };
 		60B50E1A2907020E00396308 /* SavingsCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E192907020E00396308 /* SavingsCategoryViewModel.swift */; };
 		60BA8EE529E06A5A00DA4A9C /* TransactionCategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE429E06A5A00DA4A9C /* TransactionCategoryPicker.swift */; };
+		60BA8EE729E06E3700DA4A9C /* MonthExpenseCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE629E06E3700DA4A9C /* MonthExpenseCalculator.swift */; };
+		60BA8EE929E0770600DA4A9C /* ExpensesGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE829E0770600DA4A9C /* ExpensesGroupBox.swift */; };
+		60BA8EEB29E07B7900DA4A9C /* CashflowChartGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EEA29E07B7900DA4A9C /* CashflowChartGroupBox.swift */; };
+		60BA8EED29E07BAC00DA4A9C /* MonthCashflowCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EEC29E07BAC00DA4A9C /* MonthCashflowCalculator.swift */; };
+		60BA8EF129E07DA000DA4A9C /* AbstractTransactionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EF029E07DA000DA4A9C /* AbstractTransactionWrapper.swift */; };
+		60BA8EF329E0893300DA4A9C /* IncomeGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EF229E0893300DA4A9C /* IncomeGroupBox.swift */; };
+		60BA8EF529E0897A00DA4A9C /* MonthIncomeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EF429E0897A00DA4A9C /* MonthIncomeCalculator.swift */; };
 		60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1128F35B6F001FF5FF /* MonityApp.swift */; };
 		60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1528F35B70001FF5FF /* Assets.xcassets */; };
 		60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BD9F1828F35B70001FF5FF /* Preview Assets.xcassets */; };
@@ -192,6 +199,13 @@
 		60B50E152906F73A00396308 /* SettingsSavingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSavingsViewModel.swift; sourceTree = "<group>"; };
 		60B50E192907020E00396308 /* SavingsCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryViewModel.swift; sourceTree = "<group>"; };
 		60BA8EE429E06A5A00DA4A9C /* TransactionCategoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryPicker.swift; sourceTree = "<group>"; };
+		60BA8EE629E06E3700DA4A9C /* MonthExpenseCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthExpenseCalculator.swift; sourceTree = "<group>"; };
+		60BA8EE829E0770600DA4A9C /* ExpensesGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesGroupBox.swift; sourceTree = "<group>"; };
+		60BA8EEA29E07B7900DA4A9C /* CashflowChartGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashflowChartGroupBox.swift; sourceTree = "<group>"; };
+		60BA8EEC29E07BAC00DA4A9C /* MonthCashflowCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCashflowCalculator.swift; sourceTree = "<group>"; };
+		60BA8EF029E07DA000DA4A9C /* AbstractTransactionWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractTransactionWrapper.swift; sourceTree = "<group>"; };
+		60BA8EF229E0893300DA4A9C /* IncomeGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeGroupBox.swift; sourceTree = "<group>"; };
+		60BA8EF429E0897A00DA4A9C /* MonthIncomeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthIncomeCalculator.swift; sourceTree = "<group>"; };
 		60BD9F0E28F35B6F001FF5FF /* Monity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BD9F1128F35B6F001FF5FF /* MonityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityApp.swift; sourceTree = "<group>"; };
 		60BD9F1528F35B70001FF5FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -438,6 +452,10 @@
 				60B50E192907020E00396308 /* SavingsCategoryViewModel.swift */,
 				6038737C290AD67000AB7D0E /* SavingsViewModel.swift */,
 				60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */,
+				60BA8EE629E06E3700DA4A9C /* MonthExpenseCalculator.swift */,
+				60BA8EEC29E07BAC00DA4A9C /* MonthCashflowCalculator.swift */,
+				60BA8EF029E07DA000DA4A9C /* AbstractTransactionWrapper.swift */,
+				60BA8EF429E0897A00DA4A9C /* MonthIncomeCalculator.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -485,6 +503,9 @@
 				604DBDDC29B1DB95008C26ED /* RecurringTransactionsLineChart.swift */,
 				608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */,
 				60BA8EE429E06A5A00DA4A9C /* TransactionCategoryPicker.swift */,
+				60BA8EE829E0770600DA4A9C /* ExpensesGroupBox.swift */,
+				60BA8EEA29E07B7900DA4A9C /* CashflowChartGroupBox.swift */,
+				60BA8EF229E0893300DA4A9C /* IncomeGroupBox.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -648,6 +669,7 @@
 				60BD9F5028F35D41001FF5FF /* More_TransactionsView.swift in Sources */,
 				60A4CFB228F99ED8007F392D /* Haptics.swift in Sources */,
 				60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */,
+				60BA8EF329E0893300DA4A9C /* IncomeGroupBox.swift in Sources */,
 				608C4D30290D2C8F00FFB45A /* GroupBoxStyles.swift in Sources */,
 				6045379628FAD065002EFC7F /* Utils.swift in Sources */,
 				60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */,
@@ -662,6 +684,7 @@
 				60804B8E29AE608B00F45E5F /* Enums.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */,
+				60BA8EF129E07DA000DA4A9C /* AbstractTransactionWrapper.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
 				60E7606028FD5AB400FAB25A /* AverageOneYearBarChart.swift in Sources */,
 				60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */,
@@ -669,6 +692,7 @@
 				604DBDD729B1D909008C26ED /* RecurringTransactionListTile.swift in Sources */,
 				604DBDDD29B1DB95008C26ED /* RecurringTransactionsLineChart.swift in Sources */,
 				60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */,
+				60BA8EF529E0897A00DA4A9C /* MonthIncomeCalculator.swift in Sources */,
 				60B50E122906F43100396308 /* SavingsCategoryEditor.swift in Sources */,
 				608B80BB29B6469700047F3D /* SavingsPredictionBox.swift in Sources */,
 				602E45C228F95D46003FD564 /* CurrentMonthDetailView.swift in Sources */,
@@ -690,6 +714,7 @@
 				60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */,
 				60552B0A29082FEF001F2B39 /* CoreDataModelStorage.swift in Sources */,
 				604DBDDB29B1DAE4008C26ED /* RecurringTransactionsDetailView.swift in Sources */,
+				60BA8EE929E0770600DA4A9C /* ExpensesGroupBox.swift in Sources */,
 				600921EF290EB3E4004897F7 /* CSVRepresentable.swift in Sources */,
 				6097917728F935B400FA5621 /* PieChart.swift in Sources */,
 				60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */,
@@ -708,6 +733,7 @@
 				60B50E142906F5F400396308 /* SavingsCategoryFormView.swift in Sources */,
 				608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */,
 				60387380290AD86400AB7D0E /* SavingsEditor.swift in Sources */,
+				60BA8EED29E07BAC00DA4A9C /* MonthCashflowCalculator.swift in Sources */,
 				60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				60B50E1A2907020E00396308 /* SavingsCategoryViewModel.swift in Sources */,
@@ -715,6 +741,7 @@
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
 				603ADF9229055D8D0075CB90 /* CategorySummaryTile.swift in Sources */,
 				6045379428FAC9A4002EFC7F /* ImportSummaryRow.swift in Sources */,
+				60BA8EEB29E07B7900DA4A9C /* CashflowChartGroupBox.swift in Sources */,
 				603FDE7B29013767000398C7 /* CashflowViewModel.swift in Sources */,
 				602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */,
 				60804B9429AE66EB00F45E5F /* RecurringTransactionFormView.swift in Sources */,
@@ -723,6 +750,7 @@
 				60387384290AE54400AB7D0E /* SavingsCategoryListView.swift in Sources */,
 				60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */,
 				604F8E7229012BC500DD3781 /* MonthSummaryView.swift in Sources */,
+				60BA8EE729E06E3700DA4A9C /* MonthExpenseCalculator.swift in Sources */,
 				60BD9F5228F35D52001FF5FF /* MoreView.swift in Sources */,
 				60BA8EE529E06A5A00DA4A9C /* TransactionCategoryPicker.swift in Sources */,
 				608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */,

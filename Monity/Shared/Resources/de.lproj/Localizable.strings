@@ -484,3 +484,9 @@
 /* No comment provided by engineer. */
 "Show projections" = "Projektionen anzeigen";
 
+/* Alert message in the asset allocation section. */
+"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
+
+/* No comment provided by engineer. */
+"No category" = "Ohne Kategorie";
+

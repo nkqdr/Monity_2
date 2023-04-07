@@ -18,26 +18,6 @@ struct MonthSummaryView: View {
     }
     
     @ViewBuilder
-    private var incomePieChart: some View {
-        VStack(alignment: .leading) {
-            Text("income.plural").groupBoxLabelTextStyle()
-            if let content {
-                CurrencyPieChart(values: content.incomeDataPoints, backgroundColor: .clear, centerLabel: content.earnedThisMonth, emptyString: "No registered income for this month.")
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var expensePieChart: some View {
-        VStack(alignment: .leading) {
-            Text("Expenses").groupBoxLabelTextStyle()
-            if let content {
-                CurrencyPieChart(values: content.expenseDataPoints, backgroundColor: .clear, centerLabel: content.spentThisMonth, emptyString: "No registered expenses for this month.")
-            }
-        }
-    }
-    
-    @ViewBuilder
     private var incomeExpenseRelationChart: some View {
         if let content {
             Chart(content.incomeExpenseRelationData) {
@@ -47,7 +27,6 @@ struct MonthSummaryView: View {
                     .foregroundStyle(Color.secondary)
             }
             .chartForegroundStyleScale(["Expenses": Color.red.gradient, "Income": Color.green.gradient])
-//            .chartLegend(.hidden)
             .chartXScale(domain: 0 ... 1)
             .chartXAxis(.hidden)
             .frame(height: 50)
@@ -55,20 +34,17 @@ struct MonthSummaryView: View {
     }
     
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading) {
-                    Text("Ratio").groupBoxLabelTextStyle()
-                    incomeExpenseRelationChart
+        ListBase {
+            ScrollView {
+                Group {
+                    GroupBox(label: Text("Ratio").groupBoxLabelTextStyle()) {
+                        incomeExpenseRelationChart
+                    }
+                    IncomeGroupBox(date: monthDate)
+                    ExpensesGroupBox(date: monthDate)
                 }
-            }
-//            .listRowBackground(Color.clear)
-//            .listRowInsets(EdgeInsets())
-            Section {
-                incomePieChart
-            }
-            Section {
-                expensePieChart
+                .padding(.horizontal)
+                .padding(.vertical, 5)
             }
         }
         .navigationTitle(Text(monthDate, format: .dateTime.year().month()))
