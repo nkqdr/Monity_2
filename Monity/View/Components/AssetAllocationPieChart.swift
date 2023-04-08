@@ -96,7 +96,7 @@ struct AssetAllocationPieChart: View {
             }
             .chartXAxis {
                 AxisMarks { value in
-                    let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
+                    let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
                     AxisGridLine()
                     AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
                 }

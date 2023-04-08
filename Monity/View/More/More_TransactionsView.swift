@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct More_TransactionsView: View {
-    @AppStorage("monthly_limit") private var monthlyLimit: Double?
+    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
     @StateObject private var content = SettingsTransactionsViewModel()
     @State private var showingEditAlert: Bool = false
     @State private var showingDeleteConfirmation: Bool = false
@@ -44,7 +44,7 @@ struct More_TransactionsView: View {
         .alert("Set monthly limit", isPresented: $showingEditAlert, actions: {
             TextField("Limit", value: $content.monthlyLimit, format: .customCurrency())
             Button("Save") {
-                UserDefaults.standard.set(content.monthlyLimit, forKey: "monthly_limit")
+                UserDefaults.standard.set(content.monthlyLimit, forKey: AppStorageKeys.monthlyLimit)
             }
             Button("Cancel", role: .cancel, action: {})
         }, message: {
@@ -89,7 +89,7 @@ struct More_TransactionsView: View {
         .confirmationDialog("Delete monthly limit", isPresented: $showingDeleteConfirmation) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {
-                    UserDefaults.standard.removeObject(forKey: "monthly_limit")
+                    UserDefaults.standard.removeObject(forKey: AppStorageKeys.monthlyLimit)
                 }
             }
         }

@@ -10,7 +10,7 @@ import Combine
 
 extension UserDefaults {
     @objc dynamic var integrate_recurring_expenses_in_month_overview: Bool {
-        return bool(forKey: "integrate_recurring_expenses_in_month_overview")
+        return bool(forKey: AppStorageKeys.integrateRecurringExpensesInCalculations)
     }
 }
 
@@ -30,7 +30,7 @@ class AbstractTransactionWrapper: ObservableObject {
         }
     }
     /// Setting that enables/disables the inclusion of recurring transactions in the monthly overview
-    private var includeRecurringExpenses: Bool = UserDefaults.standard.bool(forKey: "integrate_recurring_expenses_in_month_overview") {
+    private var includeRecurringExpenses: Bool = UserDefaults.standard.bool(forKey: AppStorageKeys.integrateRecurringExpensesInCalculations) {
         didSet {
             update()
         }

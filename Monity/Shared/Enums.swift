@@ -53,3 +53,12 @@ enum TransactionCycle: Int16, CaseIterable {
         return nil
     }
 }
+
+struct AppStorageKeys {
+    static let monthlyLimit = "monthly_limit"
+    static let selectedCurrency = "user_selected_currency"
+    static let appIcon = "active_app_icon"
+    static let showSavingsOnDashboard = "show_savings_on_dashboard"
+    static let integrateRecurringExpensesInCalculations = "integrate_recurring_expenses_in_month_overview"
+    static let showSavingsProjections = "show_projections_in_savings_overview"
+}

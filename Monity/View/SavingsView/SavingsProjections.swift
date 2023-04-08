@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SavingsProjections: View {
     @ObservedObject private var content = SavingsCategoryViewModel.shared
-    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
+    @AppStorage(AppStorageKeys.showSavingsProjections) private var showProjections: Bool = true
     private let savingsProjectionYears: [Int] = [1, 5, 10, 25, 50]
     
     var horizontalScrollView: some View {
