@@ -14,7 +14,7 @@ struct SavingsCategoryPicker: View {
     var body: some View {
         Picker("Category", selection: $selection) {
             Text("None").tag(Optional<SavingsCategory>.none)
-            ForEach(categoryContent.shownCategories) { category in
+            ForEach(categoryContent.items) { category in
                 Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
             }
         }
