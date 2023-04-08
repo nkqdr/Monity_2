@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SavingsCategoryTile: View {
     @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @EnvironmentObject private var entryManager: SavingsEntryManager
     var category: SavingsCategory
     
     private var currentAmount: Double? {
@@ -42,7 +43,9 @@ struct SavingsCategoryTile: View {
                 if !category.isHidden {
                     Button {
                         withAnimation(.spring()) {
-                            content.toggleHiddenFor(category)
+                            entryManager.editor = SavingsEditor(entry: nil)
+                            entryManager.editor.category = category
+                            entryManager.showSheet.toggle()
                         }
                     } label: {
                         Label("New entry", systemImage: "plus")

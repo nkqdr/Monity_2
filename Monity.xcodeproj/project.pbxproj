@@ -21,6 +21,7 @@
 		602E998C29E15C700063BBC7 /* SavingsLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998B29E15C700063BBC7 /* SavingsLineChart.swift */; };
 		602E998E29E15EF80063BBC7 /* SavingsCategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */; };
 		602E999029E1690A0063BBC7 /* SavingsCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */; };
+		602E999429E18B2F0063BBC7 /* SavingsEntryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E999329E18B2F0063BBC7 /* SavingsEntryManager.swift */; };
 		60387379290AC19B00AB7D0E /* SavingsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387378290AC19B00AB7D0E /* SavingsTile.swift */; };
 		6038737D290AD67000AB7D0E /* SavingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737C290AD67000AB7D0E /* SavingsViewModel.swift */; };
 		60387380290AD86400AB7D0E /* SavingsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737F290AD86400AB7D0E /* SavingsEditor.swift */; };
@@ -144,6 +145,7 @@
 		602E998B29E15C700063BBC7 /* SavingsLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsLineChart.swift; sourceTree = "<group>"; };
 		602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryTile.swift; sourceTree = "<group>"; };
 		602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryList.swift; sourceTree = "<group>"; };
+		602E999329E18B2F0063BBC7 /* SavingsEntryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEntryManager.swift; sourceTree = "<group>"; };
 		60387378290AC19B00AB7D0E /* SavingsTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsTile.swift; sourceTree = "<group>"; };
 		6038737C290AD67000AB7D0E /* SavingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsViewModel.swift; sourceTree = "<group>"; };
 		6038737F290AD86400AB7D0E /* SavingsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEditor.swift; sourceTree = "<group>"; };
@@ -471,6 +473,7 @@
 				60BA8EEC29E07BAC00DA4A9C /* MonthCashflowCalculator.swift */,
 				60BA8EF029E07DA000DA4A9C /* AbstractTransactionWrapper.swift */,
 				60BA8EF429E0897A00DA4A9C /* MonthIncomeCalculator.swift */,
+				602E999329E18B2F0063BBC7 /* SavingsEntryManager.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -767,6 +770,7 @@
 				60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */,
 				604F8E7229012BC500DD3781 /* MonthSummaryView.swift in Sources */,
 				60BA8EE729E06E3700DA4A9C /* MonthExpenseCalculator.swift in Sources */,
+				602E999429E18B2F0063BBC7 /* SavingsEntryManager.swift in Sources */,
 				60BD9F5228F35D52001FF5FF /* MoreView.swift in Sources */,
 				60BA8EE529E06A5A00DA4A9C /* TransactionCategoryPicker.swift in Sources */,
 				608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */,

@@ -11,8 +11,8 @@ import Charts
 struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
-    @State private var showAddEntrySheet: Bool = false
     @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @ObservedObject private var entryManager = SavingsEntryManager()
     
     var noCategories: some View {
         VStack {
@@ -32,7 +32,8 @@ struct SavingsDetailView: View {
                 .foregroundColor(.secondary)
             Spacer()
             Button {
-                showAddEntrySheet.toggle()
+                entryManager.editor = SavingsEditor(entry: nil)
+                entryManager.showSheet.toggle()
             } label: {
                 Image(systemName: "plus")
             }
@@ -80,6 +81,7 @@ struct SavingsDetailView: View {
                 noCategories
             } else {
                 scrollViewContent
+                    .environmentObject(entryManager)
             }
         }
         .toolbar {
@@ -102,8 +104,8 @@ struct SavingsDetailView: View {
         .sheet(isPresented: $showAssetAllocation) {
             assetAllocationSheet
         }
-        .sheet(isPresented: $showAddEntrySheet) {
-            SavingsEntryFormView(isPresented: $showAddEntrySheet, editor: SavingsEditor(entry: nil))
+        .sheet(isPresented: $entryManager.showSheet) {
+            SavingsEntryFormView(isPresented: $entryManager.showSheet, editor: entryManager.editor)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
         }
