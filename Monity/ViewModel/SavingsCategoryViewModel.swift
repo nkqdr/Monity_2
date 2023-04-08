@@ -39,14 +39,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     @Published var currentNetWorth: Double = 0
     @Published var uniqueDates: Set<Date> = []
     
-    var minLineChartValue: Double {
-        filteredLineChartData.map { $0.value }.min() ?? 0
-    }
-    
-    var maxLineChartValue: Double {
-        filteredLineChartData.map { $0.value }.max() ?? 0
-    }
-    
     private var entryCancellable: AnyCancellable?
     
     public init() {

@@ -145,6 +145,36 @@ struct SavingsLineChart: View {
     }
 }
 
+struct StaticSavingsLineChart: View {
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    
+    private var dataPoints: [ValueTimeDataPoint] {
+        content.filteredLineChartData
+    }
+    
+    private var minYValue: Double {
+        dataPoints.map { $0.value }.min() ?? 0
+    }
+    
+    private var maxYValue: Double {
+        dataPoints.map { $0.value }.max() ?? 0
+    }
+    
+    var body: some View {
+        Chart(dataPoints) {
+            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
+                .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
+                .interpolationMethod(.catmullRom)
+        }
+        .chartYAxis(.hidden)
+        .chartXAxis(.hidden)
+        .chartYScale(domain: minYValue ... maxYValue)
+        .frame(height: 120)
+        .foregroundColor(content.percentChangeInLastYear >= 0 ? .green : .red)
+        .padding(.vertical, 10)
+    }
+}
+
 struct SavingsLineChart_Previews: PreviewProvider {
     static var previews: some View {
         SavingsLineChart()
