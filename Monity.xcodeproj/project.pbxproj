@@ -22,7 +22,6 @@
 		602E998E29E15EF80063BBC7 /* SavingsCategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */; };
 		602E999029E1690A0063BBC7 /* SavingsCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */; };
 		60387379290AC19B00AB7D0E /* SavingsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387378290AC19B00AB7D0E /* SavingsTile.swift */; };
-		6038737B290AC79A00AB7D0E /* SavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737A290AC79A00AB7D0E /* SavingsView.swift */; };
 		6038737D290AD67000AB7D0E /* SavingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737C290AD67000AB7D0E /* SavingsViewModel.swift */; };
 		60387380290AD86400AB7D0E /* SavingsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737F290AD86400AB7D0E /* SavingsEditor.swift */; };
 		60387382290ADA3F00AB7D0E /* SavingsEntryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */; };
@@ -146,7 +145,6 @@
 		602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryTile.swift; sourceTree = "<group>"; };
 		602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryList.swift; sourceTree = "<group>"; };
 		60387378290AC19B00AB7D0E /* SavingsTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsTile.swift; sourceTree = "<group>"; };
-		6038737A290AC79A00AB7D0E /* SavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsView.swift; sourceTree = "<group>"; };
 		6038737C290AD67000AB7D0E /* SavingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsViewModel.swift; sourceTree = "<group>"; };
 		6038737F290AD86400AB7D0E /* SavingsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEditor.swift; sourceTree = "<group>"; };
 		60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEntryFormView.swift; sourceTree = "<group>"; };
@@ -492,7 +490,6 @@
 				60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */,
 				604F8E7129012BC500DD3781 /* MonthSummaryView.swift */,
 				60B50E132906F5F400396308 /* SavingsCategoryFormView.swift */,
-				6038737A290AC79A00AB7D0E /* SavingsView.swift */,
 				60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */,
 				60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */,
 			);
@@ -727,7 +724,6 @@
 				603ADF90290554140075CB90 /* LargeValuePerMonthChart.swift in Sources */,
 				608C4D32290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift in Sources */,
 				600C39B928F54E9800688149 /* MonthYearPicker.swift in Sources */,
-				6038737B290AC79A00AB7D0E /* SavingsView.swift in Sources */,
 				604CF434290EDF13009B6D08 /* More_OptionsView.swift in Sources */,
 				60A4CFB628F9A446007F392D /* More_SystemView.swift in Sources */,
 				60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */,

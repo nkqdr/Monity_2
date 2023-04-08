@@ -24,34 +24,6 @@ struct SavingsDetailView: View {
         .multilineTextAlignment(.center)
     }
     
-    @ViewBuilder
-    func savingsCategorySummaryTile(_ category: SavingsCategory) -> some View {
-        let label = VStack(alignment: .leading) {
-            Text(category.wrappedName).groupBoxLabelTextStyle()
-            Text(category.lastEntry?.amount.formatted(.customCurrency()) ?? "-")
-                .font(.callout)
-                .foregroundColor(.secondary)
-        }
-        let dataPoints: [ValueTimeDataPoint] = category.lineChartDataPoints(after: content.lowerBoundDate)
-        let maxValue: Double = dataPoints.map { $0.value }.max() ?? 0
-        GroupBox(label: label) {
-            Chart(dataPoints) {
-                AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
-                    .opacity(0.5)
-                    .interpolationMethod(.catmullRom)
-                LineMark(x: .value("Date", $0.date), y: .value("Value", $0.value))
-                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                    .interpolationMethod(.catmullRom)
-            }
-            .chartYAxis(.hidden)
-            .chartXAxis(.hidden)
-            .chartYScale(domain: 0 ... maxValue)
-            .foregroundColor(category.lastEntry?.amount ?? 0 >= 0 ? .green : .red)
-        }
-        .groupBoxStyle(CustomGroupBox())
-        .frame(minHeight: 200)
-    }
-    
     var categorySectionHeader: some View {
         HStack {
             Text("Categories")

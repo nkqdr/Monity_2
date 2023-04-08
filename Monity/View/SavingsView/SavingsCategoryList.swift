@@ -17,8 +17,10 @@ struct SavingsCategoryList: View {
     }
     
     var body: some View {
-        ForEach(sortedCategories, id: \.self) { category in
-            SavingsCategoryTile(category: category)
+        LazyVGrid(columns: [GridItem(), GridItem()]) {
+            ForEach(sortedCategories, id: \.self) { category in
+                SavingsCategoryTile(category: category)
+            }
         }
         .padding(.horizontal)
     }

@@ -23,7 +23,7 @@ struct SavingsEntryFormView: View {
                 }
                 TextField("Amount", value: $editor.amount, format: .customCurrency())
                     .keyboardType(.decimalPad)
-                if let entry = editor.entry {
+                if let _ = editor.entry {
                     Section {
                         DatePicker("Timestamp", selection: $editor.timestamp)
                     }

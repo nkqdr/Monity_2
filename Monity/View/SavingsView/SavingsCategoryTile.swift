@@ -16,7 +16,11 @@ struct SavingsCategoryTile: View {
     }
     
     private var groupBoxLabel: some View {
-        NavigationGroupBoxLabel(title: LocalizedStringKey(category.wrappedName), subtitle: LocalizedStringKey("Associated entries: \(category.entries?.count ?? 0)"), labelStyle: .primary)
+        NavigationGroupBoxLabel(
+            title: LocalizedStringKey(category.wrappedName),
+            subtitle: LocalizedStringKey(category.lastEntry!.wrappedDate.formatted(.dateTime.year().month().day())),
+            labelStyle: .primary
+        )
     }
     
     var body: some View {
@@ -35,7 +39,17 @@ struct SavingsCategoryTile: View {
             }
             .groupBoxStyle(CustomGroupBox())
             .contextMenu {
-                Button {
+                if !category.isHidden {
+                    Button {
+                        withAnimation(.spring()) {
+                            content.toggleHiddenFor(category)
+                        }
+                    } label: {
+                        Label("New entry", systemImage: "plus")
+                    }
+                }
+                Divider()
+                Button(role: category.isHidden ? .cancel : .destructive) {
                     withAnimation(.spring()) {
                         content.toggleHiddenFor(category)
                     }
