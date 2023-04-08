@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @AppStorage(AppStorageKeys.showSavingsOnDashboard) private var showSavingsOnDashboard: Bool = true
-    
     var body: some View {
         NavigationStack {
             ListBase {
@@ -18,14 +16,9 @@ struct DashboardView: View {
                         CurrentMonthOverviewTile()
                         AverageExpenseAndIncomeTile()
                         RecurringTransactionsTile()
-                        if showSavingsOnDashboard {
-                            SavingsTile()
-                        }
+                        SavingsTile()
                     }
                     .padding()
-                }
-                .onChange(of: showSavingsOnDashboard) { val in
-                    print(val)
                 }
             }
             .navigationTitle("Dashboard")

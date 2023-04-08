@@ -499,3 +499,8 @@
 /* No comment provided by engineer. */
 "Timestamp" = "Zeitpunkt";
 
+/* No comment provided by engineer. */
+"Show Savings" = "Vermögen anzeigen";
+
+/* No comment provided by engineer. */
+"This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Optik. Ihre Daten werden nicht gelöscht.";

@@ -19,7 +19,7 @@ struct SavingsCategoryTile: View {
     private var groupBoxLabel: some View {
         NavigationGroupBoxLabel(
             title: LocalizedStringKey(category.wrappedName),
-            subtitle: LocalizedStringKey(category.lastEntry!.wrappedDate.formatted(.dateTime.year().month().day())),
+            subtitle: LocalizedStringKey(category.lastEntry?.wrappedDate.formatted(.dateTime.year().month().day()) ?? ""),
             labelStyle: .primary
         )
     }

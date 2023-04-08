@@ -10,6 +10,7 @@ import Charts
 
 struct SavingsTile: View {
     @ObservedObject private var content = SavingsCategoryViewModel()
+    @AppStorage(AppStorageKeys.showSavingsOnDashboard) private var showSavingsOnDashboard: Bool = true
     
     @ViewBuilder
     var actualTile: some View {
@@ -29,13 +30,15 @@ struct SavingsTile: View {
     }
     
     var body: some View {
-        NavigationLink(destination: SavingsDetailView()) {
-            GroupBox(label: NavigationGroupBoxLabel(title: "Last Year")) {
-                actualTile
+        if showSavingsOnDashboard {
+            NavigationLink(destination: SavingsDetailView()) {
+                GroupBox(label: NavigationGroupBoxLabel(title: "Last Year")) {
+                    actualTile
+                }
+                .groupBoxStyle(CustomGroupBox())
             }
-            .groupBoxStyle(CustomGroupBox())
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
     }
 }
 

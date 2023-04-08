@@ -23,5 +23,6 @@ struct SavingsCategoryList: View {
             }
         }
         .padding(.horizontal)
+        .padding(.bottom)
     }
 }
