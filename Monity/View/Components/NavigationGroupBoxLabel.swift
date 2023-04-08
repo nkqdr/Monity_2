@@ -9,10 +9,19 @@ import SwiftUI
 
 struct NavigationGroupBoxLabel: View {
     var title: LocalizedStringKey
+    var subtitle: LocalizedStringKey?
+    var labelStyle: GroupBoxLabelStyle = .secondary
     
     var body: some View {
         HStack {
-            Text(title).groupBoxLabelTextStyle(.secondary)
+            VStack(alignment: .leading) {
+                Text(title).groupBoxLabelTextStyle(labelStyle)
+                if let subtitle {
+                    Text(subtitle)
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
             Spacer()
             Image(systemName: "chevron.right")
                 .foregroundColor(.secondary)

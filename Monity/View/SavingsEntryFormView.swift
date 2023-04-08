@@ -17,12 +17,17 @@ struct SavingsEntryFormView: View {
             Form {
                 Picker("Category", selection: $editor.category) {
                     Text("None").tag(Optional<SavingsCategory>.none)
-                    ForEach(categoryContent.items) { category in
+                    ForEach(categoryContent.shownCategories) { category in
                         Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
                     }
                 }
                 TextField("Amount", value: $editor.amount, format: .customCurrency())
                     .keyboardType(.decimalPad)
+                if let entry = editor.entry {
+                    Section {
+                        DatePicker("Timestamp", selection: $editor.timestamp)
+                    }
+                }
             }
             .navigationTitle(editor.navigationFormTitle)
             .toolbar {

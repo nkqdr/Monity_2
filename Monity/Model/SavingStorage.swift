@@ -60,6 +60,7 @@ class SavingStorage: CoreDataModelStorage<SavingsEntry> {
             guard let category = editor.category else { return false }
             entry.amount = editor.amount
             entry.category = category
+            entry.date = editor.timestamp
             if let _ = try? PersistenceController.shared.container.viewContext.save() {
                 return true
             } else {

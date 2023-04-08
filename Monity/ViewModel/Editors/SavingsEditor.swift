@@ -17,11 +17,13 @@ class SavingsEditor: ObservableObject {
     @Published var amount: Double
     @Published var disableSave: Bool = true
     @Published var navigationFormTitle: LocalizedStringKey
+    @Published var timestamp: Date
     var entry: SavingsEntry?
     
     init(entry: SavingsEntry? = nil) {
         self.category = entry?.category
         self.amount = entry?.amount ?? 0
+        self.timestamp = entry?.date ?? Date()
         self.navigationFormTitle = (entry != nil) ? "Edit entry" : "New entry"
         self.entry = entry
         if entry != nil {
