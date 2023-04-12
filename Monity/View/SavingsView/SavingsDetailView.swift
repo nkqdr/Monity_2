@@ -53,28 +53,6 @@ struct SavingsDetailView: View {
         }
     }
     
-    @ViewBuilder
-    var hiddenCategoriesSheet: some View {
-        NavigationView {
-            ListBase {
-                ScrollView {
-                    SavingsCategoryList(categories: content.hiddenCategories)
-                }
-            }
-            .navigationTitle("Hidden Categories")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
-    @ViewBuilder
-    var assetAllocationSheet: some View {
-        NavigationView {
-            AssetAllocationPieChart(relevantLabels: SavingsCategoryLabel.allCasesWithoutNone)
-                .navigationTitle("Asset Allocation")
-                .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
     var body: some View {
         ListBase {
             if content.items.isEmpty {
@@ -99,10 +77,22 @@ struct SavingsDetailView: View {
             }
         }
         .sheet(isPresented: $showHiddenCategories) {
-            hiddenCategoriesSheet
+            NavigationView {
+                ListBase {
+                    ScrollView {
+                        SavingsCategoryList(categories: content.hiddenCategories)
+                    }
+                }
+                .navigationTitle("Hidden Categories")
+                .navigationBarTitleDisplayMode(.inline)
+            }
         }
         .sheet(isPresented: $showAssetAllocation) {
-            assetAllocationSheet
+            NavigationView {
+                AssetAllocationPieChart()
+                    .navigationTitle("Asset Allocation")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
         .sheet(isPresented: $entryManager.showSheet) {
             SavingsEntryFormView(isPresented: $entryManager.showSheet, editor: entryManager.editor)
