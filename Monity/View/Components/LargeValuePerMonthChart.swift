@@ -9,8 +9,10 @@ import SwiftUI
 import Charts
 
 struct LargeValuePerMonthChart: View {
+    @StateObject private var content = AverageMonthlyChartViewModel.shared
     @Binding var selectedElement: ValueTimeDataPoint?
     @State private var ruleMarkOffset: Double = 0
+    @State private var dragGestureTick: Double = 0
     var valuePerMonthDataPoints: [ValueTimeDataPoint]
     var showAverageBar: Bool
     var average: Double
@@ -69,18 +71,20 @@ struct LargeValuePerMonthChart: View {
                         selectedElement = element
                     }
                   }
-                  .exclusively(before: DragGesture()
-                    .onChanged { value in
-                        ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(valuePerMonthDataPoints.count) / 2
-                        let newElement = findElement(location: value.location, proxy: proxy, geometry: geo)
-                        if selectedElement == newElement {
-                            return
+                    .exclusively(before: DragGesture().onChanged { value in
+                        let barWidth = Double(proxy.plotAreaSize.width) / Double(valuePerMonthDataPoints.count) + 4
+                        let dragDiff = value.location.x - value.startLocation.x
+                        let dragAmount = (dragDiff / barWidth).rounded()
+                        if (dragAmount != dragGestureTick) {
+                            let direction = dragAmount - dragGestureTick
+                            dragGestureTick = dragAmount
+                            
+                            if (content.drag(direction: direction)) {
+                                Haptics.shared.play(.medium)
+                            }
                         }
-                        selectedElement = newElement
-                        Haptics.shared.play(.medium)
-                    }
-                    .onEnded { _ in
-                        selectedElement = nil
+                    }.onEnded { value in
+                        content.handleDragEnd()
                     })
               )
           }

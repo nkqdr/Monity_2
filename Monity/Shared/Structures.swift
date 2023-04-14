@@ -113,4 +113,8 @@ struct AbstractTransaction {
     var category: TransactionCategory?
     var amount: Double
     var isExpense: Bool
+    
+    var wrappedDate: Date {
+        date ?? Date()
+    }
 }

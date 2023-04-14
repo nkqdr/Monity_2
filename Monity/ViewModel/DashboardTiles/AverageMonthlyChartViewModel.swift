@@ -18,17 +18,26 @@ class AverageMonthlyChartViewModel: ObservableObject {
     @Published var incomeCategoryRetroDataPoints: [CategoryRetroDataPoint] = []
     @Published var totalExpensesThisYear: Double = 0
     @Published var totalIncomeThisYear: Double = 0
+    @Published var selectedUpperBoundDate: Date = Date() {
+        didSet {
+            updateChartDataPoints()
+        }
+    }
+    private var allExpenseDataPoints: [ValueTimeDataPoint] = []
+    private var allIncomeDataPoints: [ValueTimeDataPoint] = []
+    private var allExpenseRetroDataPoints: [CategoryRetroDataPoint] = []
+    private var allIncomeRetroDataPoints: [CategoryRetroDataPoint] = []
+    
+    var selectedLowerBoundDate: Date {
+        Calendar.current.date(byAdding: DateComponents(year: -1), to: selectedUpperBoundDate) ?? Date()
+    }
     
     private var transactions: [AbstractTransaction] = [] {
         didSet {
-            monthlyExpenseDataPoints = getPastYearExpenseDataPoints()
-            monthlyIncomeDataPoints = getPastYearIncomeDataPoints()
-            expenseCategoryRetroDataPoints = getExpenseRetroDataPoints()
-            incomeCategoryRetroDataPoints = getIncomeRetroDataPoints()
-            totalExpensesThisYear = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +)
-            totalIncomeThisYear = monthlyIncomeDataPoints.map { $0.value }.reduce(0, +)
-            averageExpenses = totalExpensesThisYear / Double(monthlyExpenseDataPoints.count)
-            averageIncome = totalIncomeThisYear / Double(monthlyIncomeDataPoints.count)
+            allExpenseDataPoints = createValueTimeDataPoints(isExpense: true)
+            allIncomeDataPoints = createValueTimeDataPoints(isExpense: false)
+            updateChartDataPoints()
+            computeValues()
         }
     }
     
@@ -55,25 +64,20 @@ class AverageMonthlyChartViewModel: ObservableObject {
     
     // MARK: - Helper functions
     
-    private func filterPastYearDataPointsBy(isExpense: Bool) -> [ValueTimeDataPoint] {
+    private func createValueTimeDataPoints(isExpense: Bool) -> [ValueTimeDataPoint] {
         var dataPoints: [ValueTimeDataPoint] = []
-        let uniqueMonths: Set<Date> = Set(transactions.filter { $0.date?.isInLastYear ?? false }.map { $0.date?.removeTimeStampAndDay ?? Date() }.sorted())
+        let relevantTransactions = transactions.filter { $0.isExpense == isExpense }
+        let uniqueMonths: Set<Date> = Set(relevantTransactions.map { $0.date?.removeTimeStampAndDay ?? Date() }.sorted())
         for date in uniqueMonths {
             dataPoints.append(
-                ValueTimeDataPoint(date: date, value: transactions.filter {
-                    (isExpense == $0.isExpense) && $0.date?.isSameMonthAs(date) ?? false
+                ValueTimeDataPoint(date: date, value: relevantTransactions.filter {
+                    $0.date?.isSameMonthAs(date) ?? false
                 }.map { $0.amount }.reduce(0, +))
             )
         }
-        return dataPoints
-    }
-    
-    private func getPastYearExpenseDataPoints() -> [ValueTimeDataPoint] {
-        return filterPastYearDataPointsBy(isExpense: true)
-    }
-    
-    private func getPastYearIncomeDataPoints() -> [ValueTimeDataPoint] {
-        return filterPastYearDataPointsBy(isExpense: false)
+        return dataPoints.sorted { v1, v2 in
+            return v1.date < v2.date
+        }
     }
     
     private func updateFilteredRetroDataPoints(isExpense: Bool) -> [CategoryRetroDataPoint] {
@@ -103,11 +107,65 @@ class AverageMonthlyChartViewModel: ObservableObject {
         }
     }
     
+    private func computeValues() {
+        expenseCategoryRetroDataPoints = getExpenseRetroDataPoints()
+        incomeCategoryRetroDataPoints = getIncomeRetroDataPoints()
+        totalExpensesThisYear = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +)
+        totalIncomeThisYear = monthlyIncomeDataPoints.map { $0.value }.reduce(0, +)
+        averageExpenses = totalExpensesThisYear / Double(monthlyExpenseDataPoints.count)
+        averageIncome = totalIncomeThisYear / Double(monthlyIncomeDataPoints.count)
+    }
+    
+    private func updateChartDataPoints() {
+        monthlyExpenseDataPoints = allExpenseDataPoints.filter {
+            selectedLowerBoundDate.removeTimeStampAndDay! < $0.date.removeTimeStampAndDay!
+            && $0.date.removeTimeStampAndDay! <= selectedUpperBoundDate.removeTimeStampAndDay!
+        }
+        monthlyIncomeDataPoints = allIncomeDataPoints.filter {
+            selectedLowerBoundDate.removeTimeStampAndDay! < $0.date.removeTimeStampAndDay!
+            && $0.date.removeTimeStampAndDay! <= selectedUpperBoundDate.removeTimeStampAndDay!
+        }
+    }
+
     private func getIncomeRetroDataPoints() -> [CategoryRetroDataPoint] {
         return updateFilteredRetroDataPoints(isExpense: false)
     }
-    
+
     private func getExpenseRetroDataPoints() -> [CategoryRetroDataPoint] {
         return updateFilteredRetroDataPoints(isExpense: true)
+    }
+    
+    // MARK: - Intents
+    
+    private func dragChartRight() -> Bool {
+        print("Right")
+        let newVal = Calendar.current.date(byAdding: DateComponents(month: -1), to: selectedUpperBoundDate) ?? Date()
+        if (allExpenseDataPoints.first?.date.isSameMonthAs(Calendar.current.date(byAdding: DateComponents(year: -1, month: 2), to: newVal) ?? Date()) ?? true ) {
+            return false;
+        }
+        selectedUpperBoundDate = newVal
+        return true;
+    }
+    
+    private func dragChartLeft() -> Bool {
+        print("Left")
+        if (selectedUpperBoundDate.isSameMonthAs(Date())) {
+            return false;
+        }
+        selectedUpperBoundDate = Calendar.current.date(byAdding: DateComponents(month: 1), to: selectedUpperBoundDate) ?? Date()
+        return true;
+    }
+    
+    public func drag(direction: Double) -> Bool {
+        if (direction > 0) {
+            return dragChartRight()
+        } else {
+            return dragChartLeft()
+        }
+    }
+    
+    public func handleDragEnd() {
+        print("Here")
+        computeValues()
     }
 }
