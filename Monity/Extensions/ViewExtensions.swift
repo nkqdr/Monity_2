@@ -83,4 +83,11 @@ extension View {
                     .opacity(0.1)
             }
     }
+    
+    func monthYearSelectorSheet(_ isPresented: Binding<Bool>, selection: Binding<DateComponents>, onApply: @escaping () -> Void = {}) -> some View {
+        self.sheet(isPresented: isPresented) {
+            MonthYearPickerForm(selection: selection, isPresented: isPresented, onApply: onApply)
+                .presentationDetents([.height(350)])
+        }
+    }
 }

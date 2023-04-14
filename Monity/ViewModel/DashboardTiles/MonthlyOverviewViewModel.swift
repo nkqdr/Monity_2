@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 class MonthlyOverviewViewModel: ObservableObject {
-    public static var shared = MonthlyOverviewViewModel()
     @Published var remainingDays: Int = 0
     @Published var predictedTotalSpendings: Double = 0
     @Published var spendingsPerDay: Double = 0 {
@@ -24,12 +23,17 @@ class MonthlyOverviewViewModel: ObservableObject {
             spendingsPerDay = spentThisMonth / Double(currentDay)
         }
     }
+    @Published var selectedDate: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
     
     private let currentComps: DateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date())
     private var transactions: [AbstractTransaction] = [] {
         didSet {
             spentThisMonth = transactions.filter { $0.isExpense }.map { $0.amount }.reduce(0, +)
         }
+    }
+    
+    var currentMonthSelected: Bool {
+        selectedDate.toDate.isSameMonthAs(Date())
     }
     private var transactionCancellable: AnyCancellable?
     private var startOfNextMonth: Date {
@@ -38,7 +42,7 @@ class MonthlyOverviewViewModel: ObservableObject {
         return Calendar.current.date(from: DateComponents(year: correctYear, month: correctMonth, day: 1)) ?? Date()
     }
     
-    private init() {
+    public init() {
         let publisher = AbstractTransactionWrapper(date: Date()).$wrappedTransactions.eraseToAnyPublisher()
         transactionCancellable = publisher.sink { items in
             self.transactions = items

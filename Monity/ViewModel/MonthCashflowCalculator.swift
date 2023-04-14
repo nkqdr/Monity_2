@@ -16,11 +16,12 @@ class MonthCashflowCalculator: ObservableObject {
             cashFlowData = getCashFlowDataPoints()
         }
     }
-    private var selectedDate: Date = Date()
+    private var selectedDate: Date
     private var transactionCancellable: AnyCancellable?
     
-    init() {
-        let transactionPublisher = AbstractTransactionWrapper(date: Date()).$wrappedTransactions.eraseToAnyPublisher()
+    init(date: Date = Date()) {
+        self.selectedDate = date
+        let transactionPublisher = AbstractTransactionWrapper(date: date).$wrappedTransactions.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { value in
             self.transactions = value
         }

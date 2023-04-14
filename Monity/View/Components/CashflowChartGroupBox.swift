@@ -9,8 +9,14 @@ import SwiftUI
 import Charts
 
 struct CashflowChartGroupBox: View {
-    @ObservedObject private var content = MonthCashflowCalculator()
+    @ObservedObject private var content: MonthCashflowCalculator
     @State private var selectedElement: ValueTimeDataPoint?
+    var date: Date
+    
+    init(date: Date = Date()) {
+        self.date = date
+        self.content = MonthCashflowCalculator(date: date)
+    }
     
     var body: some View {
         GroupBox(label: Text("Current cashflow").groupBoxLabelTextStyle()) {

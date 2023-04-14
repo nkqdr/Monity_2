@@ -504,3 +504,6 @@
 
 /* No comment provided by engineer. */
 "This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Optik. Ihre Daten werden nicht gelöscht.";
+
+/* No comment provided by engineer. */
+"Reset" = "Zurücksetzen";

@@ -10,7 +10,8 @@ import SwiftUI
 struct CurrentMonthDetailView: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
-    @ObservedObject private var content = MonthlyOverviewViewModel.shared
+    @State private var showDateSelectorSheet: Bool = false
+    @StateObject private var content = MonthlyOverviewViewModel()
     
     var overviewHeader: some View {
         VStack(alignment: .leading) {
@@ -57,24 +58,37 @@ struct CurrentMonthDetailView: View {
     var body: some View {
         ListBase {
             ScrollView {
-                overviewHeader
+                if content.selectedDate.toDate.isSameMonthAs(Date()) {
+                    overviewHeader
+                        .transition(.scale)
+                }
                 Group {
-                    IncomeGroupBox()
-                    ExpensesGroupBox()
-                    CashflowChartGroupBox()
+                    IncomeGroupBox(date: content.selectedDate.toDate)
+                    ExpensesGroupBox(date: content.selectedDate.toDate)
+                    CashflowChartGroupBox(date: content.selectedDate.toDate)
                 }
                 .groupBoxStyle(CustomGroupBox())
                 .padding(.horizontal)
                 .padding(.vertical, 5)
             }
         }
+        .monthYearSelectorSheet($showDateSelectorSheet, selection: $content.selectedDate)
         .onChange(of: monthlyLimit) { newValue in
             remainingAmount = newValue - content.spentThisMonth
         }
         .onAppear {
             remainingAmount = monthlyLimit - content.spentThisMonth
         }
-        .navigationTitle("Current Month")
+        .navigationTitle(LocalizedStringKey(content.currentMonthSelected ? "Current Month" : content.selectedDate.toDate.formatted(.dateTime.year().month())))
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showDateSelectorSheet.toggle()
+                } label: {
+                    Image(systemName: content.currentMonthSelected ? "tray.full" : "tray.full.fill")
+                }
+            }
+        }
     }
 }
 
