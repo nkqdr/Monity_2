@@ -81,20 +81,26 @@ class AbstractTransactionWrapper: ObservableObject {
     private func update() {
         self.wrappedTransactions = transactions.map { AbstractTransaction(date: $0.date, category: $0.category, amount: $0.amount, isExpense: $0.isExpense)}
         
-        if (includeRecurringExpenses) {
-            var recurringAbExpenses: [AbstractTransaction]
-            if let selectedMonthDate {
-                recurringAbExpenses = recurringExpenses.map {
-                    AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
+        DispatchQueue.global(qos: .userInteractive).async {
+            if (self.includeRecurringExpenses) {
+                var recurringAbExpenses: [AbstractTransaction]
+                if let selectedMonthDate = self.selectedMonthDate {
+                    recurringAbExpenses = self.recurringExpenses.map {
+                        AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
+                    }
+                } else {
+                    var allRec: [AbstractTransaction] = []
+                    for item in self.recurringExpenses {
+                        allRec.append(contentsOf: item.individualTransactions)
+                    }
+                    recurringAbExpenses = allRec
                 }
-            } else {
-                var allRec: [AbstractTransaction] = []
-                for item in self.recurringExpenses {
-                    allRec.append(contentsOf: item.individualTransactions)
+                DispatchQueue.main.async {
+                    self.wrappedTransactions.append(contentsOf: recurringAbExpenses)
                 }
-                recurringAbExpenses = allRec
             }
-            self.wrappedTransactions.append(contentsOf: recurringAbExpenses)
         }
+        
+        
     }
 }

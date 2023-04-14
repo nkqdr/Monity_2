@@ -13,19 +13,24 @@ struct LargeValuePerMonthChart: View {
     @Binding var selectedElement: ValueTimeDataPoint?
     @State private var ruleMarkOffset: Double = 0
     @State private var dragGestureTick: Double = 0
-    var valuePerMonthDataPoints: [ValueTimeDataPoint]
     var showAverageBar: Bool
-    var average: Double
-    var color: Color
+    
+    private var color: Color {
+        content.showingExpenses ? .red : .green
+    }
+    
+    private var valuePerMonthDataPoints: [ValueTimeDataPoint] {
+        content.barChartDataPoints
+    }
     
     var body: some View {
         Chart(valuePerMonthDataPoints) {
             if showAverageBar {
-                RuleMark(y: .value("Average", average))
+                RuleMark(y: .value("Average", content.averageValue))
                     .foregroundStyle(color)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .annotation(position: .top, alignment: .leading) {
-                        Text("Ø \(average.formatted(.customCurrency()))")
+                        Text("Ø \(content.averageValue.formatted(.customCurrency()))")
                             .font(.footnote)
                             .foregroundColor(color)
                     }
@@ -78,7 +83,9 @@ struct LargeValuePerMonthChart: View {
                         if (dragAmount != dragGestureTick) {
                             let direction = dragAmount - dragGestureTick
                             dragGestureTick = dragAmount
-                            
+                            if (direction != 1.0 && direction != -1.0) {
+                                return
+                            }
                             if (content.drag(direction: direction)) {
                                 Haptics.shared.play(.medium)
                             }
@@ -93,12 +100,8 @@ struct LargeValuePerMonthChart: View {
     }
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
-      // Figure out the X position by offseting gesture location with chart frame
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
-      // Use value(atX:) to find plotted value for the given X axis position.
-      // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
         if let date: Date = proxy.value(atX: relativeXPosition) {
-          // Find the month for tapped date
           for dataPoint in valuePerMonthDataPoints {
               if dataPoint.date.isSameMonthAs(date) {
                   return dataPoint

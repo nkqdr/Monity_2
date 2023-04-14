@@ -10,6 +10,7 @@ import Combine
 
 class AverageMonthlyChartViewModel: ObservableObject {
     static let shared: AverageMonthlyChartViewModel = .init()
+    @Published var showingExpenses: Bool = true
     @Published var averageExpenses: Double = 0
     @Published var averageIncome: Double = 0
     @Published var monthlyExpenseDataPoints: [ValueTimeDataPoint] = []
@@ -22,6 +23,18 @@ class AverageMonthlyChartViewModel: ObservableObject {
         didSet {
             updateChartDataPoints()
         }
+    }
+    var barChartDataPoints: [ValueTimeDataPoint] {
+        showingExpenses ? monthlyExpenseDataPoints : monthlyIncomeDataPoints
+    }
+    var averageValue: Double {
+        showingExpenses ? averageExpenses : averageIncome
+    }
+    var retroDataPoints: [CategoryRetroDataPoint] {
+        showingExpenses ? expenseCategoryRetroDataPoints : incomeCategoryRetroDataPoints
+    }
+    var totalValue: Double {
+        showingExpenses ? totalExpensesThisYear : totalIncomeThisYear
     }
     private var allExpenseDataPoints: [ValueTimeDataPoint] = []
     private var allIncomeDataPoints: [ValueTimeDataPoint] = []
@@ -110,10 +123,7 @@ class AverageMonthlyChartViewModel: ObservableObject {
     private func computeValues() {
         expenseCategoryRetroDataPoints = getExpenseRetroDataPoints()
         incomeCategoryRetroDataPoints = getIncomeRetroDataPoints()
-        totalExpensesThisYear = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +)
-        totalIncomeThisYear = monthlyIncomeDataPoints.map { $0.value }.reduce(0, +)
-        averageExpenses = totalExpensesThisYear / Double(monthlyExpenseDataPoints.count)
-        averageIncome = totalIncomeThisYear / Double(monthlyIncomeDataPoints.count)
+        
     }
     
     private func updateChartDataPoints() {
@@ -125,6 +135,10 @@ class AverageMonthlyChartViewModel: ObservableObject {
             selectedLowerBoundDate.removeTimeStampAndDay! < $0.date.removeTimeStampAndDay!
             && $0.date.removeTimeStampAndDay! <= selectedUpperBoundDate.removeTimeStampAndDay!
         }
+        totalExpensesThisYear = monthlyExpenseDataPoints.map { $0.value }.reduce(0, +)
+        totalIncomeThisYear = monthlyIncomeDataPoints.map { $0.value }.reduce(0, +)
+        averageExpenses = totalExpensesThisYear / Double(monthlyExpenseDataPoints.count)
+        averageIncome = totalIncomeThisYear / Double(monthlyIncomeDataPoints.count)
     }
 
     private func getIncomeRetroDataPoints() -> [CategoryRetroDataPoint] {
@@ -138,22 +152,23 @@ class AverageMonthlyChartViewModel: ObservableObject {
     // MARK: - Intents
     
     private func dragChartRight() -> Bool {
-        print("Right")
         let newVal = Calendar.current.date(byAdding: DateComponents(month: -1), to: selectedUpperBoundDate) ?? Date()
-        if (allExpenseDataPoints.first?.date.isSameMonthAs(Calendar.current.date(byAdding: DateComponents(year: -1, month: 2), to: newVal) ?? Date()) ?? true ) {
-            return false;
+        if (showingExpenses && allExpenseDataPoints.first?.date.isSameMonthAs(Calendar.current.date(byAdding: DateComponents(year: -1, month: 2), to: newVal) ?? Date()) ?? true ) {
+            return false
+        }
+        if (!showingExpenses && allIncomeDataPoints.first?.date.isSameMonthAs(Calendar.current.date(byAdding: DateComponents(year: -1, month: 2), to: newVal) ?? Date()) ?? true ) {
+            return false
         }
         selectedUpperBoundDate = newVal
-        return true;
+        return true
     }
     
     private func dragChartLeft() -> Bool {
-        print("Left")
         if (selectedUpperBoundDate.isSameMonthAs(Date())) {
-            return false;
+            return false
         }
         selectedUpperBoundDate = Calendar.current.date(byAdding: DateComponents(month: 1), to: selectedUpperBoundDate) ?? Date()
-        return true;
+        return true
     }
     
     public func drag(direction: Double) -> Bool {
@@ -165,7 +180,6 @@ class AverageMonthlyChartViewModel: ObservableObject {
     }
     
     public func handleDragEnd() {
-        print("Here")
         computeValues()
     }
 }

@@ -11,37 +11,10 @@ import Charts
 struct AverageExpenseDetailView: View {
     @State private var showAverageBar: Bool = false
     @State private var selectedElement: ValueTimeDataPoint?
-    @State private var showExpenseChart: Bool = true
     @StateObject private var content = AverageMonthlyChartViewModel.shared
     
-    var expenseBarChart: some View {
-        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyExpenseDataPoints, showAverageBar: showAverageBar, average: content.averageExpenses, color: .red)
-            .padding(.vertical)
-    }
-    
-    var incomeBarChart: some View {
-        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyIncomeDataPoints, showAverageBar: showAverageBar, average: content.averageIncome, color: .green)
-            .padding(.vertical)
-    }
-    
-    var totalText: Double {
-        if showExpenseChart {
-            return content.totalExpensesThisYear
-        } else {
-            return content.totalIncomeThisYear
-        }
-    }
-    
-    var retroDataPoints: [CategoryRetroDataPoint] {
-        if showExpenseChart {
-            return content.expenseCategoryRetroDataPoints
-        } else {
-            return content.incomeCategoryRetroDataPoints
-        }
-    }
-    
     var timeframeString: String {
-        if showExpenseChart {
+        if content.showingExpenses {
             return content.monthlyExpenseDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyExpenseDataPoints.last!.date.formatted(.dateTime.year().month())
         } else {
             return content.monthlyIncomeDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyIncomeDataPoints.last!.date.formatted(.dateTime.year().month())
@@ -66,7 +39,7 @@ struct AverageExpenseDetailView: View {
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                Text(totalText, format: .customCurrency())
+                Text(content.totalValue, format: .customCurrency())
                     .font(.headline.bold())
                     .foregroundColor(.primary)
                 
@@ -79,30 +52,26 @@ struct AverageExpenseDetailView: View {
             VStack(alignment: .leading) {
                 ZStack(alignment: .topLeading) {
                     correctBarChartHeader
-                    if showExpenseChart {
-                        expenseBarChart
-                    } else {
-                        incomeBarChart
-                    }
+                    LargeValuePerMonthChart(selectedElement: $selectedElement, showAverageBar: showAverageBar)
+                        .padding(.vertical)
                 }
-                Picker("", selection: $showExpenseChart) {
+                Picker("", selection: $content.showingExpenses) {
                     Text("Expenses").tag(true)
                     Text("income.plural").tag(false)
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: showExpenseChart) { _ in
+                .onChange(of: content.showingExpenses) { _ in
                     selectedElement = nil
                 }
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
             Section {
-                
                 Toggle("Show average mark", isOn: $showAverageBar)
             }
             Section("Categories") {
-                ForEach(retroDataPoints) { dataPoint in
-                    NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenseChart)) {
+                ForEach(content.retroDataPoints) { dataPoint in
+                    NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: content.showingExpenses)) {
                         CategorySummaryTile(dataPoint: dataPoint)
                     }
                 }

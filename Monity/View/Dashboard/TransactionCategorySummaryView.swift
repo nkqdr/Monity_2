@@ -9,12 +9,12 @@ import SwiftUI
 
 struct TransactionCategorySummaryView: View {
     @State var showEditTransactionView: Bool = false
-    @ObservedObject var content: TransactionsCategorySummaryViewModel
+    @StateObject private var content: TransactionsCategorySummaryViewModel
     var category: TransactionCategory
     var showExpenses: Bool
     
     init(category: TransactionCategory, showExpenses: Bool) {
-        self.content = TransactionsCategorySummaryViewModel(category: category, showExpenses: showExpenses)
+        self._content = StateObject(wrappedValue: TransactionsCategorySummaryViewModel(category: category, showExpenses: showExpenses))
         self.category = category
         self.showExpenses = showExpenses
     }
