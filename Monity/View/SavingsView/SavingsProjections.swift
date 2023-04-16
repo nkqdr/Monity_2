@@ -25,7 +25,7 @@ struct SavingsProjections: View {
                 }
                 .padding(.horizontal)
             }
-            HStack {
+            HStack(alignment: .bottom) {
                 Text("Average change per year:")
                     .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
                 Spacer()

@@ -507,3 +507,9 @@
 
 /* No comment provided by engineer. */
 "Reset" = "Zurücksetzen";
+
+/* No comment provided by engineer. */
+"Total spendings until now:" = "Bisherige Ausgaben:";
+
+/* No comment provided by engineer. */
+"Total spendings:" = "Gesamtausgaben:";

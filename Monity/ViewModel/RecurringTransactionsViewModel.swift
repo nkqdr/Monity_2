@@ -20,8 +20,12 @@ class RecurringTransactionsViewModel: ItemListViewModel<RecurringTransaction> {
     }
     
     override func onItemsSet() {
-        activeTransactions = items.filter({ $0.endDate == nil })
-        archivedTransactions = items.filter({ $0.endDate != nil })
+        activeTransactions = items.filter({ $0.endDate == nil }).sorted { v1, v2 in
+            v1.normalizedMonthlyAmount > v2.normalizedMonthlyAmount
+        }
+        archivedTransactions = items.filter({ $0.endDate != nil }).sorted { v1, v2 in
+            v1.normalizedMonthlyAmount > v2.normalizedMonthlyAmount
+        }
         chartDataPoints = buildChartDataPoints()
         currentMonthlyPayment = chartDataPoints.last?.value ?? 0
     }

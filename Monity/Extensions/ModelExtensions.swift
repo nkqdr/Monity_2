@@ -129,11 +129,40 @@ extension RecurringTransaction {
         self.endDate == nil
     }
     
+    var transactionCycle: TransactionCycle? {
+        TransactionCycle.fromValue(self.cycle)
+    }
+    
     var normalizedMonthlyAmount: Double {
         guard let monthDivider = TransactionCycle.fromValue(self.cycle)?.dividerForMonthlyValue else {
             return 0
         }
         return (self.amount / monthDivider)
+    }
+    
+    var totalAmountSpent: Double {
+        guard let startDate = self.startDate else {
+            return 0
+        }
+        let endDate = self.endDate ?? Date()
+        let calendar = Calendar.current
+        
+        switch self.transactionCycle {
+        case .monthly:
+            let diff = calendar.dateComponents([.month], from: startDate, to: endDate).month!
+            return self.amount * Double(diff + 1)
+        case .yearly:
+            let diff = calendar.dateComponents([.year], from: startDate, to: endDate).year!
+            return self.amount * Double(diff + 1)
+        case .weekly:
+            let diff = calendar.dateComponents([.day], from: startDate, to: endDate).day!
+            return self.amount * Double(diff + 1) / 7
+        case .biWeekly:
+            let diff = calendar.dateComponents([.day], from: startDate, to: endDate).day!
+            return self.amount * Double(diff + 1) / 14
+        case .none:
+            return 0
+        }
     }
     
     var individualTransactions: [AbstractTransaction] {
