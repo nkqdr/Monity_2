@@ -10,21 +10,7 @@ import Charts
 
 struct SavingsTile: View {
     @ObservedObject private var content = SavingsCategoryViewModel()
-    
-    @ViewBuilder
-    var savingsChart: some View {
-        Chart(content.filteredLineChartData) {
-            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
-                .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                .interpolationMethod(.catmullRom)
-        }
-        .chartYAxis(.hidden)
-        .chartXAxis(.hidden)
-        .chartYScale(domain: content.minLineChartValue ... content.maxLineChartValue)
-        .frame(height: 120)
-        .foregroundColor(content.percentChangeInLastYear >= 0 ? .green : .red)
-        .padding(.vertical, 10)
-    }
+    @AppStorage(AppStorageKeys.showSavingsOnDashboard) private var showSavingsOnDashboard: Bool = true
     
     @ViewBuilder
     var actualTile: some View {
@@ -39,18 +25,20 @@ struct SavingsTile: View {
                 }
             }
             .groupBoxLabelTextStyle()
-            savingsChart
+            StaticSavingsLineChart()
         }
     }
     
     var body: some View {
-        NavigationLink(destination: SavingsDetailView()) {
-            GroupBox(label: NavigationGroupBoxLabel(title: "Last Year")) {
-                actualTile
+        if showSavingsOnDashboard {
+            NavigationLink(destination: SavingsDetailView()) {
+                GroupBox(label: NavigationGroupBoxLabel(title: "Last Year")) {
+                    actualTile
+                }
+                .groupBoxStyle(CustomGroupBox())
             }
-            .groupBoxStyle(CustomGroupBox())
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
     }
 }
 

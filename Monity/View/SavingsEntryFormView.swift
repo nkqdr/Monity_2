@@ -7,22 +7,35 @@
 
 import SwiftUI
 
+struct SavingsCategoryPicker: View {
+    @Binding var selection: SavingsCategory?
+    @ObservedObject var categoryContent = SavingsCategoryViewModel.shared
+    
+    var body: some View {
+        Picker("Category", selection: $selection) {
+            Text("None").tag(Optional<SavingsCategory>.none)
+            ForEach(categoryContent.items) { category in
+                Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
+            }
+        }
+    }
+}
+
 struct SavingsEntryFormView: View {
     @Binding var isPresented: Bool
     @ObservedObject var editor: SavingsEditor
-    @ObservedObject var categoryContent = SavingsCategoryViewModel.shared
     
     var body: some View {
         NavigationView {
             Form {
-                Picker("Category", selection: $editor.category) {
-                    Text("None").tag(Optional<SavingsCategory>.none)
-                    ForEach(categoryContent.items) { category in
-                        Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
-                    }
-                }
+                SavingsCategoryPicker(selection: $editor.category)
                 TextField("Amount", value: $editor.amount, format: .customCurrency())
                     .keyboardType(.decimalPad)
+                if let _ = editor.entry {
+                    Section {
+                        DatePicker("Timestamp", selection: $editor.timestamp)
+                    }
+                }
             }
             .navigationTitle(editor.navigationFormTitle)
             .toolbar {

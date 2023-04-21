@@ -9,21 +9,28 @@ import SwiftUI
 import Charts
 
 struct LargeValuePerMonthChart: View {
+    @StateObject private var content = AverageMonthlyChartViewModel.shared
     @Binding var selectedElement: ValueTimeDataPoint?
     @State private var ruleMarkOffset: Double = 0
-    var valuePerMonthDataPoints: [ValueTimeDataPoint]
+    @State private var dragGestureTick: Double = 0
     var showAverageBar: Bool
-    var average: Double
-    var color: Color
+    
+    private var color: Color {
+        content.showingExpenses ? .red : .green
+    }
+    
+    private var valuePerMonthDataPoints: [ValueTimeDataPoint] {
+        content.barChartDataPoints
+    }
     
     var body: some View {
         Chart(valuePerMonthDataPoints) {
             if showAverageBar {
-                RuleMark(y: .value("Average", average))
+                RuleMark(y: .value("Average", content.averageValue))
                     .foregroundStyle(color)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .annotation(position: .top, alignment: .leading) {
-                        Text("Ø \(average.formatted(.customCurrency()))")
+                        Text("Ø \(content.averageValue.formatted(.customCurrency()))")
                             .font(.footnote)
                             .foregroundColor(color)
                     }
@@ -40,7 +47,7 @@ struct LargeValuePerMonthChart: View {
         .padding(.top, 25)
         .chartYAxis {
             AxisMarks { value in
-                let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
+                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
                 AxisGridLine()
                 AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
             }
@@ -69,18 +76,22 @@ struct LargeValuePerMonthChart: View {
                         selectedElement = element
                     }
                   }
-                  .exclusively(before: DragGesture()
-                    .onChanged { value in
-                        ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(valuePerMonthDataPoints.count) / 2
-                        let newElement = findElement(location: value.location, proxy: proxy, geometry: geo)
-                        if selectedElement == newElement {
-                            return
+                    .exclusively(before: DragGesture().onChanged { value in
+                        let barWidth = Double(proxy.plotAreaSize.width) / Double(valuePerMonthDataPoints.count) + 4
+                        let dragDiff = value.location.x - value.startLocation.x
+                        let dragAmount = (dragDiff / barWidth).rounded()
+                        if (dragAmount != dragGestureTick) {
+                            let direction = dragAmount - dragGestureTick
+                            dragGestureTick = dragAmount
+                            if (direction != 1.0 && direction != -1.0) {
+                                return
+                            }
+                            if (content.drag(direction: direction)) {
+                                Haptics.shared.play(.medium)
+                            }
                         }
-                        selectedElement = newElement
-                        Haptics.shared.play(.medium)
-                    }
-                    .onEnded { _ in
-                        selectedElement = nil
+                    }.onEnded { value in
+                        content.handleDragEnd()
                     })
               )
           }
@@ -89,12 +100,8 @@ struct LargeValuePerMonthChart: View {
     }
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
-      // Figure out the X position by offseting gesture location with chart frame
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
-      // Use value(atX:) to find plotted value for the given X axis position.
-      // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
         if let date: Date = proxy.value(atX: relativeXPosition) {
-          // Find the month for tapped date
           for dataPoint in valuePerMonthDataPoints {
               if dataPoint.date.isSameMonthAs(date) {
                   return dataPoint

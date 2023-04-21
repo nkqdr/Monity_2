@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct More_OptionsView: View {
-    @AppStorage("user_selected_currency") private var selectedCurrency: String = "EUR"
-    @AppStorage("active_app_icon") private var activeAppIconStored: String = "None"
-    @AppStorage("integrate_recurring_expenses_in_month_overview") private var integrateRecurringExpensesInOverview: Bool = true
-    @AppStorage("show_projections_in_savings_overview") private var showProjections: Bool = true
+    @AppStorage(AppStorageKeys.selectedCurrency) private var selectedCurrency: String = "EUR"
+    @AppStorage(AppStorageKeys.appIcon) private var activeAppIconStored: String = "None"
+    @AppStorage(AppStorageKeys.integrateRecurringExpensesInCalculations) private var integrateRecurringExpensesInOverview: Bool = true
+    @AppStorage(AppStorageKeys.showSavingsProjections) private var showProjections: Bool = true
+    
     @State private var activeAppIcon: String? = nil {
         didSet {
             activeAppIconStored = activeAppIcon ?? "None"
@@ -68,6 +69,9 @@ struct More_OptionsView: View {
                             }
                     }
                 }
+            }
+            NavigationLink("Dashboard") {
+                DashboardSettingsView()
             }
         }
     }

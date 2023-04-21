@@ -11,32 +11,13 @@ import Charts
 struct AverageExpenseDetailView: View {
     @State private var showAverageBar: Bool = false
     @State private var selectedElement: ValueTimeDataPoint?
-    @State private var showExpenseChart: Bool = true
     @StateObject private var content = AverageMonthlyChartViewModel.shared
     
-    var expenseBarChart: some View {
-        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyExpenseDataPoints, showAverageBar: showAverageBar, average: content.averageExpenses, color: .red)
-            .padding(.vertical)
-    }
-    
-    var incomeBarChart: some View {
-        LargeValuePerMonthChart(selectedElement: $selectedElement, valuePerMonthDataPoints: content.monthlyIncomeDataPoints, showAverageBar: showAverageBar, average: content.averageIncome, color: .green)
-            .padding(.vertical)
-    }
-    
-    var totalText: Double {
-        if showExpenseChart {
-            return content.totalExpensesThisYear
+    var timeframeString: String {
+        if content.showingExpenses {
+            return content.monthlyExpenseDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyExpenseDataPoints.last!.date.formatted(.dateTime.year().month())
         } else {
-            return content.totalIncomeThisYear
-        }
-    }
-    
-    var retroDataPoints: [CategoryRetroDataPoint] {
-        if showExpenseChart {
-            return content.expenseCategoryRetroDataPoints
-        } else {
-            return content.incomeCategoryRetroDataPoints
+            return content.monthlyIncomeDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyIncomeDataPoints.last!.date.formatted(.dateTime.year().month())
         }
     }
     
@@ -53,12 +34,15 @@ struct AverageExpenseDetailView: View {
             }
         } else {
             VStack(alignment: .leading) {
-                Text("Total")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text(totalText, format: .customCurrency())
+                Group {
+                    Text(timeframeString)
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                Text(content.totalValue, format: .customCurrency())
                     .font(.headline.bold())
                     .foregroundColor(.primary)
+                
             }
         }
     }
@@ -66,42 +50,33 @@ struct AverageExpenseDetailView: View {
     var body: some View {
         List {
             VStack(alignment: .leading) {
-                Text("Over the last year").groupBoxLabelTextStyle(.secondary)
-                Picker("", selection: $showExpenseChart) {
+                ZStack(alignment: .topLeading) {
+                    correctBarChartHeader
+                    LargeValuePerMonthChart(selectedElement: $selectedElement, showAverageBar: showAverageBar)
+                        .padding(.vertical)
+                }
+                Picker("", selection: $content.showingExpenses) {
                     Text("Expenses").tag(true)
                     Text("income.plural").tag(false)
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: showExpenseChart) { _ in
+                .onChange(of: content.showingExpenses) { _ in
                     selectedElement = nil
-                }
-                ZStack(alignment: .topLeading) {
-                    correctBarChartHeader
-                    if showExpenseChart {
-                        expenseBarChart
-                    } else {
-                        incomeBarChart
-                    }
                 }
             }
             .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
             Section {
-                if let selectedElement {
-                    NavigationLink("View month summary") {
-                        MonthSummaryView(monthDate: selectedElement.date)
-                    }
-                }
                 Toggle("Show average mark", isOn: $showAverageBar)
             }
-            Text("Categories").groupBoxLabelTextStyle(.secondary)
-                .padding(.top)
-            ForEach(retroDataPoints) { dataPoint in
-                NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenseChart)) {
-                    CategorySummaryTile(dataPoint: dataPoint)
+            Section("Categories") {
+                ForEach(content.retroDataPoints) { dataPoint in
+                    NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: content.showingExpenses)) {
+                        CategorySummaryTile(dataPoint: dataPoint)
+                    }
                 }
             }
         }
-        .listStyle(.plain)
         .navigationTitle("Transaction Overview")
     }
 }

@@ -36,7 +36,7 @@ struct TransactionsView: View {
                         temporaryDateSelection = content.filteredSelectedDate
                         showFilterSettings.toggle()
                     } label: {
-                        Image(systemName: content.isCurrentMonthSelected ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+                        Image(systemName: content.isCurrentMonthSelected ? "tray.full" : "tray.full.fill")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -47,28 +47,7 @@ struct TransactionsView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showFilterSettings) {
-                VStack {
-                    Text("Selected month")
-                        .padding()
-                    MonthYearPicker(dateSelection: $temporaryDateSelection)
-                        .frame(height: 150)
-                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
-                        .padding()
-                    Button("Today") {
-                        withAnimation(.spring()) {
-                            temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
-                        }
-                    }
-                    Spacer()
-                    Button("Apply") {
-                        content.filteredSelectedDate = temporaryDateSelection
-                        showFilterSettings = false
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .presentationDetents([.medium])
-            }
+            .monthYearSelectorSheet($showFilterSettings, selection: $content.filteredSelectedDate)
         }
     }
 }

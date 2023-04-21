@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 class RecurringTransactionEditor: ObservableObject {
     @Published var isDeducted: Bool = true
@@ -20,6 +19,15 @@ class RecurringTransactionEditor: ObservableObject {
     @Published var isStillActive: Bool
     @Published var category: TransactionCategory?
     var transaction: RecurringTransaction?
+    
+    var totalSpent: Double {
+        transaction?.totalAmountSpent ?? 0
+//        guard let t = transaction, let startDate = t.startDate else {
+//            return 0
+//        }
+//        let monthDiff = Calendar.current.dateComponents([.month], from: startDate, to: Date())
+//        return max(t.amount, t.normalizedMonthlyAmount * Double(monthDiff.month ?? 0))
+    }
     
     init(transaction: RecurringTransaction? = nil) {
         self.isDeducted = transaction?.isDeducted ?? true

@@ -34,6 +34,21 @@ struct RecurringTransactionFormView: View {
                         DatePicker("End date", selection: $editor.endDate, displayedComponents: .date)
                     }
                 }
+                if editor.totalSpent > 0 {
+                    HStack {
+                        if (editor.isStillActive) {
+                            Text("Total spendings until now:")
+                        } else {
+                            Text("Total spendings:")
+                        }
+                        Spacer()
+                        Text(editor.totalSpent, format: .customCurrency())
+                            .foregroundColor(.red)
+                    }
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .listRowBackground(Color.clear)
+                }
             }
             .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)

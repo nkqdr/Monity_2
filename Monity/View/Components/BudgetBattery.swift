@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetBattery: View {
-    @AppStorage("monthly_limit") private var monthlyLimit: Double = 0
+    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
     @ObservedObject private var expenseCalculator = MonthExpenseCalculator.current
     private var alreadySpent: Double {
         expenseCalculator.totalExpenses

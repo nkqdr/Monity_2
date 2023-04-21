@@ -14,7 +14,7 @@ enum GroupBoxLabelStyle {
 
 extension FormatStyle where Self == FloatingPointFormatStyle<Double> {
     static func customCurrency<Value>() -> FloatingPointFormatStyle<Value>.Currency where Value : BinaryFloatingPoint {
-        let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
+        let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
         return .currency(code: currencyCode ?? "EUR")
     }
 }
@@ -82,5 +82,12 @@ extension View {
                     .foregroundColor(tint)
                     .opacity(0.1)
             }
+    }
+    
+    func monthYearSelectorSheet(_ isPresented: Binding<Bool>, selection: Binding<DateComponents>, onApply: @escaping () -> Void = {}) -> some View {
+        self.sheet(isPresented: isPresented) {
+            MonthYearPickerForm(selection: selection, isPresented: isPresented, onApply: onApply)
+                .presentationDetents([.height(350)])
+        }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class SettingsTransactionsViewModel: ItemListViewModel<TransactionCategory> {
-    @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: "monthly_limit")
+    @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
     
     init() {
         let publisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()

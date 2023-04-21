@@ -10,7 +10,7 @@ import Combine
 
 extension UserDefaults {
     @objc dynamic var integrate_recurring_expenses_in_month_overview: Bool {
-        return bool(forKey: "integrate_recurring_expenses_in_month_overview")
+        return bool(forKey: AppStorageKeys.integrateRecurringExpensesInCalculations)
     }
 }
 
@@ -30,7 +30,7 @@ class AbstractTransactionWrapper: ObservableObject {
         }
     }
     /// Setting that enables/disables the inclusion of recurring transactions in the monthly overview
-    private var includeRecurringExpenses: Bool = UserDefaults.standard.bool(forKey: "integrate_recurring_expenses_in_month_overview") {
+    private var includeRecurringExpenses: Bool = UserDefaults.standard.bool(forKey: AppStorageKeys.integrateRecurringExpensesInCalculations) {
         didSet {
             update()
         }
@@ -81,20 +81,26 @@ class AbstractTransactionWrapper: ObservableObject {
     private func update() {
         self.wrappedTransactions = transactions.map { AbstractTransaction(date: $0.date, category: $0.category, amount: $0.amount, isExpense: $0.isExpense)}
         
-        if (includeRecurringExpenses) {
-            var recurringAbExpenses: [AbstractTransaction]
-            if let selectedMonthDate {
-                recurringAbExpenses = recurringExpenses.map {
-                    AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
+        DispatchQueue.global(qos: .userInteractive).async {
+            if (self.includeRecurringExpenses) {
+                var recurringAbExpenses: [AbstractTransaction]
+                if let selectedMonthDate = self.selectedMonthDate {
+                    recurringAbExpenses = self.recurringExpenses.map {
+                        AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
+                    }
+                } else {
+                    var allRec: [AbstractTransaction] = []
+                    for item in self.recurringExpenses {
+                        allRec.append(contentsOf: item.individualTransactions)
+                    }
+                    recurringAbExpenses = allRec
                 }
-            } else {
-                var allRec: [AbstractTransaction] = []
-                for item in self.recurringExpenses {
-                    allRec.append(contentsOf: item.individualTransactions)
+                DispatchQueue.main.async {
+                    self.wrappedTransactions.append(contentsOf: recurringAbExpenses)
                 }
-                recurringAbExpenses = allRec
             }
-            self.wrappedTransactions.append(contentsOf: recurringAbExpenses)
         }
+        
+        
     }
 }

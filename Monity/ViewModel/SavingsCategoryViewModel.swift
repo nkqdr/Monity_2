@@ -39,14 +39,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     @Published var currentNetWorth: Double = 0
     @Published var uniqueDates: Set<Date> = []
     
-    var minLineChartValue: Double {
-        filteredLineChartData.map { $0.value }.min() ?? 0
-    }
-    
-    var maxLineChartValue: Double {
-        filteredLineChartData.map { $0.value }.max() ?? 0
-    }
-    
     private var entryCancellable: AnyCancellable?
     
     public init() {
@@ -108,31 +100,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         }
     }
     
-    func getTotalSumFor(_ label: SavingsCategoryLabel) -> Double {
-        return items.filter { $0.label == label.rawValue }.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
-    }
-    
-    func getFractionPercentageFor(_ label: SavingsCategoryLabel) -> Double {
-        if currentNetWorth != 0 {
-            return getTotalSumFor(label) / currentNetWorth
-        }
-        return 0
-    }
-    
-    func getAssetAllocationDatapointsFor(_ label: SavingsCategoryLabel) -> [AssetAllocationDataPoint] {
-        var dataPoints: [AssetAllocationDataPoint] = []
-        let categories = items.filter { $0.label == label.rawValue && $0.lastEntry?.amount != 0 }
-        let totalSum: Double = categories.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
-        for category in categories {
-            let lastValue: Double = category.lastEntry?.amount ?? 0
-            dataPoints.append(
-                AssetAllocationDataPoint(category: category, totalAmount: lastValue, relativeAmount: lastValue / totalSum)
-            )
-        }
-        return dataPoints.sorted {
-            $0.totalAmount > $1.totalAmount
-        }
-    }
     
     // MARK: - Intents
     

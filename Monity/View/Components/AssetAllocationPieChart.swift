@@ -11,17 +11,12 @@ import Charts
 struct AssetAllocationPieChart: View {
     @State private var activeIndex: Int = -1
     @State private var showHelpAlert: Bool = false
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
-    var relevantLabels: [SavingsCategoryLabel]
-    
-    init(relevantLabels: [SavingsCategoryLabel]) {
-        self.relevantLabels = relevantLabels
-    }
+    @ObservedObject private var viewModel = AssetAllocationViewModel()
     
     private var labelHeader: some View {
         HStack {
-            ForEach(relevantLabels.indices, id: \.self) { index in
-                let label = relevantLabels[index]
+            ForEach(viewModel.allLabels.indices, id: \.self) { index in
+                let label = viewModel.allLabels[index]
                 HStack {
                     Circle()
                         .foregroundColor(label.color)
@@ -31,7 +26,7 @@ struct AssetAllocationPieChart: View {
                         .foregroundColor(activeIndex == index ? nil : .secondary)
                         .animation(.easeInOut, value: activeIndex)
                 }
-                if index < relevantLabels.count - 1 {
+                if index < viewModel.allLabels.count - 1 {
                     Spacer()
                 }
             }
@@ -43,8 +38,8 @@ struct AssetAllocationPieChart: View {
         GeometryReader { proxy in
             ZStack {
                 PieChart(
-                    values: relevantLabels.map { content.getTotalSumFor($0) },
-                    colors: relevantLabels.map { $0.color },
+                    values: viewModel.allLabels.map { viewModel.getTotalSumFor($0) },
+                    colors: viewModel.allLabels.map { $0.color },
                     showSliceLabels: true,
                     labelStyle: CustomLabelStyle(),
                     activeIndex: $activeIndex
@@ -62,10 +57,10 @@ struct AssetAllocationPieChart: View {
     
     private var categoryBoxLabel: some View {
         HStack {
-            Text(LocalizedStringKey(relevantLabels[activeIndex].rawValue))
+            Text(LocalizedStringKey(viewModel.allLabels[activeIndex].rawValue))
             Spacer()
-            Text(content.getTotalSumFor(relevantLabels[activeIndex]), format: .customCurrency())
-                .foregroundColor(.green)
+            Text(viewModel.getTotalSumFor(viewModel.allLabels[activeIndex]), format: .customCurrency())
+                .tintedBackground(.green)
                 .font(.headline.bold())
                 .padding(.leading)
         }
@@ -73,11 +68,11 @@ struct AssetAllocationPieChart: View {
     
     @ViewBuilder
     private var categoryBox: some View {
-        let dps = content.getAssetAllocationDatapointsFor(relevantLabels[activeIndex])
+        let dps = viewModel.getAssetAllocationDatapointsFor(viewModel.allLabels[activeIndex])
         GroupBox(label: categoryBoxLabel) {
             Chart(dps) { dp in
                 BarMark(x: .value("Amount", dp.totalAmount), y: .value("Category", dp.category.wrappedName))
-                    .foregroundStyle(relevantLabels[activeIndex].color.gradient)
+                    .foregroundStyle(viewModel.allLabels[activeIndex].color.gradient)
                     .annotation(position: .trailing) { _ in
                         HStack(spacing: 0) {
                             Group {
@@ -96,7 +91,7 @@ struct AssetAllocationPieChart: View {
             }
             .chartXAxis {
                 AxisMarks { value in
-                    let currencyCode = UserDefaults.standard.string(forKey: "user_selected_currency")
+                    let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
                     AxisGridLine()
                     AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
                 }
@@ -108,7 +103,7 @@ struct AssetAllocationPieChart: View {
     
     private var emptyBox: some View {
         GroupBox {
-            if content.savingEntries.count > 0 {
+            if viewModel.entriesExist {
                 Text("Tap the chart for more details.")
                     .font(.footnote)
                     .padding(.vertical)
@@ -129,7 +124,7 @@ struct AssetAllocationPieChart: View {
         ScrollView {
             Group {
                 labelHeader
-                if content.savingEntries.count > 0 {
+                if viewModel.entriesExist {
                     pieChart
                 }
                 if activeIndex >= 0 {
@@ -164,6 +159,6 @@ struct AssetAllocationPieChart: View {
 
 struct AssetAllocationPieChart_Previews: PreviewProvider {
     static var previews: some View {
-        AssetAllocationPieChart(relevantLabels: SavingsCategoryLabel.allCasesWithoutNone)
+        AssetAllocationPieChart()
     }
 }

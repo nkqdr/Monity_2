@@ -35,16 +35,11 @@ struct MainTabView: View {
                     Label("Dashboard", systemImage: "chart.bar.xaxis")
                 }
                 .tag(1)
-            SavingsView()
-                .tabItem {
-                    Label("Savings", systemImage: "dollarsign")
-                }
-                .tag(2)
             MoreView()
                 .tabItem {
                     Label("More", systemImage: "ellipsis")
                 }
-                .tag(3)
+                .tag(2)
         }
         .onChange(of: scenePhase) { newPhase in
             withAnimation(.easeInOut) {
