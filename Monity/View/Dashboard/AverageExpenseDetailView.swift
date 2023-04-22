@@ -15,9 +15,9 @@ struct AverageExpenseDetailView: View {
     
     var timeframeString: String {
         if content.showingExpenses {
-            return content.monthlyExpenseDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyExpenseDataPoints.last!.date.formatted(.dateTime.year().month())
+            return (content.monthlyExpenseDataPoints.first?.date.formatted(.dateTime.year().month()) ?? "") + " - " + (content.monthlyExpenseDataPoints.last?.date.formatted(.dateTime.year().month()) ?? "")
         } else {
-            return content.monthlyIncomeDataPoints.first!.date.formatted(.dateTime.year().month()) + " - " + content.monthlyIncomeDataPoints.last!.date.formatted(.dateTime.year().month())
+            return (content.monthlyIncomeDataPoints.first?.date.formatted(.dateTime.year().month()) ?? "") + " - " + (content.monthlyIncomeDataPoints.last?.date.formatted(.dateTime.year().month()) ?? "")
         }
     }
     
