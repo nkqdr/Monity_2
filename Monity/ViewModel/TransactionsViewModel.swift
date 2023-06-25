@@ -29,11 +29,12 @@ class TransactionsViewModel: ItemListViewModel<Transaction> {
     private let currentDateComps: DateComponents = Calendar.current.dateComponents([.month, .year], from: Date())
     
     init() {
-        let publisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        let publisher = TransactionFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
     override func onItemsSet() {
+        print("Updating items...")
         filterTransactionList()
     }
     
@@ -96,6 +97,6 @@ class TransactionsViewModel: ItemListViewModel<Transaction> {
     }
     
     override func deleteItem(_ item: Transaction) {
-        TransactionStorage.shared.delete(item)
+        TransactionStorage.delete(item)
     }
 }

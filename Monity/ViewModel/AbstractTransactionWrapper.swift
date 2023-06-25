@@ -50,7 +50,7 @@ class AbstractTransactionWrapper: ObservableObject {
             self.recurringExpenses = items
         }
         
-        let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        let transactionPublisher = TransactionFetchController.all.items.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { items in
             self.transactions = items
         }
@@ -69,7 +69,7 @@ class AbstractTransactionWrapper: ObservableObject {
             self.recurringExpenses = items.filter { $0.isActiveAt(date: date) }
         }
         
-        let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        let transactionPublisher = TransactionFetchController.all.items.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { items in
             self.transactions = items.filter({
                 let comps = Calendar.current.dateComponents([.month, .year], from: $0.date ?? date)

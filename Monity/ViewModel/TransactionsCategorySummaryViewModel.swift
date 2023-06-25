@@ -28,7 +28,7 @@ class TransactionsCategorySummaryViewModel: ObservableObject {
     init(category: TransactionCategory, showExpenses: Bool) {
         self.selectedCategory = category
         self.showExpenses = showExpenses
-        let transactionPublisher = TransactionStorage.shared.items.eraseToAnyPublisher()
+        let transactionPublisher = TransactionFetchController.all.items.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
         }

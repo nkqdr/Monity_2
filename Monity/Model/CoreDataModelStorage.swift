@@ -47,5 +47,6 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let items = controller.fetchedObjects as? [ModelClass] else { return }
         self.items.value = items
+        print("Refreshing \(String(describing: self))")
     }
 }
