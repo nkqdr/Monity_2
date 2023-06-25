@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct AverageExpenseAndIncomeTile: View {
-    @StateObject private var content = AverageMonthlyChartViewModel()
+    @StateObject private var content = AverageMonthlyChartViewModel.shared
     
+    @ViewBuilder
     private var expenseChart: some View {
         AverageOneYearBarChart(data: content.monthlyExpenseDataPoints, average: content.averageExpenses, tint: .red)
             .padding(.horizontal, 4)
     }
     
+    @ViewBuilder
     private var incomeChart: some View {
         AverageOneYearBarChart(data: content.monthlyIncomeDataPoints, average: content.averageIncome, tint: .green)
             .padding(.horizontal, 4)

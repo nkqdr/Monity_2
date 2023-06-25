@@ -10,8 +10,15 @@ import CoreData
 import Combine
 
 class TransactionFetchController: CoreDataModelStorage<Transaction> {
-    public static let all = TransactionFetchController()
+    static let all = TransactionFetchController()
+    static let currentMonth = TransactionFetchController.generateCurrentMonth()
     
+    private static func generateCurrentMonth() -> TransactionFetchController {
+        let comps = Calendar.current.dateComponents([.month, .year], from: Date())
+        return TransactionFetchController(month: comps.month, year: comps.year)
+    }
+    
+    /// This initializer will create a FetchedResultsController for all transactions.
     private init() {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
@@ -20,14 +27,29 @@ class TransactionFetchController: CoreDataModelStorage<Transaction> {
         ])
     }
     
-//    init(month: Int, year: Int) {
-//        super.init(sortDescriptors: [
-//            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
-//        ], keyPathsForRefreshing: [
-//            #keyPath(Transaction.category.name)
-//        ])
-//    }
+    /// This initializer will create a FetchedResultsController for all transactions in the given month.
+    init(month: Int?, year: Int?) {
+        let date: Date = Calendar.current.date(from: DateComponents(year: year, month: month)) ?? Date()
+        let startOfMonth: Date = date.startOfThisMonth.removeTimeStamp!
+        let endOfMonth: Date = Calendar.current.date(byAdding: DateComponents(month: 1), to: startOfMonth) ?? date
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
+        ], predicate: NSPredicate(format: "date >= %@ && date < %@", startOfMonth as NSDate, endOfMonth as NSDate))
+    }
     
+    /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
+    init(startComps: DateComponents, endComps: DateComponents) {
+        let startDate = Calendar.current.date(from: startComps) ?? Date()
+        let endDate = Calendar.current.date(from: endComps) ?? Date()
+        
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
+        ], predicate: NSPredicate(format: "date >= %@ && date <= %@", startDate as NSDate, endDate as NSDate))
+    }
 }
 
 class TransactionStorage {
@@ -102,13 +124,16 @@ class TransactionStorage {
     }
     
     static func deleteAll() {
+        let context = PersistenceController.shared.container.viewContext
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Transaction.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
-        do {
-            try PersistenceController.shared.container.viewContext.executeAndMergeChanges(using: deleteRequest)
-        } catch let error as NSError {
-            print(error)
+        context.performAndWait {
+            do {
+                try context.executeAndMergeChanges(using: deleteRequest)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
 }

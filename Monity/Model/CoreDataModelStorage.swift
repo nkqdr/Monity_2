@@ -13,9 +13,10 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
     var items = CurrentValueSubject<[ModelClass], Never>([])
     private let itemFetchController: RichFetchedResultsController<ModelClass>
     
-    init(sortDescriptors: [NSSortDescriptor], keyPathsForRefreshing: Set<String> = []) {
+    init(sortDescriptors: [NSSortDescriptor], keyPathsForRefreshing: Set<String> = [], predicate: NSPredicate? = nil) {
         let request = RichFetchRequest<ModelClass>(entityName: ModelClass.entity().name ?? "")
         request.sortDescriptors = sortDescriptors
+        request.predicate = predicate
         request.relationshipKeyPathsForRefreshing = keyPathsForRefreshing
         itemFetchController = RichFetchedResultsController<ModelClass>(
             fetchRequest: request,
@@ -37,16 +38,18 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ModelClass.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
-        do {
-            try PersistenceController.shared.container.viewContext.executeAndMergeChanges(using: deleteRequest)
-        } catch let error as NSError {
-            print(error)
+        PersistenceController.shared.container.viewContext.performAndWait {
+            do {
+                try PersistenceController.shared.container.viewContext.executeAndMergeChanges(using: deleteRequest)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
     
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let items = controller.fetchedObjects as? [ModelClass] else { return }
         self.items.value = items
-        print("Refreshing \(String(describing: self))")
+        print("Refreshing \(String(describing: self)) with \(items.count) items.")
     }
 }
