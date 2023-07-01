@@ -27,7 +27,7 @@ struct AverageExpenseAndIncomeTile: View {
         let percentOfIncomeSpent: Int? = content.totalIncomeThisYear > 0 ? Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100) : nil
         VStack(alignment: .leading) {
             if let percentOfIncomeSpent {
-                Text("You spent \(percentOfIncomeSpent)% of your income.")
+                Text("You saved \(100 - percentOfIncomeSpent)% of your income.")
                     .groupBoxLabelTextStyle()
             } else {
                 Text("Register your transactions to build the statistics!")
