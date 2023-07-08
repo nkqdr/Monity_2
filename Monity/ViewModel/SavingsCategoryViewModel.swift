@@ -54,7 +54,7 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         let sortedEntries = filteredLineChartData.sorted {
             $0.date < $1.date
         }
-        guard let firstEntry = sortedEntries.first, let lastEntry = sortedEntries.last else {
+        guard let firstEntry = sortedEntries.first, let lastEntry = sortedEntries.last, sortedEntries.count > 1 else {
             return 0
         }
         let amountDiff = abs(firstEntry.value - lastEntry.value)
