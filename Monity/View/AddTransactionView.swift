@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
-    @ObservedObject var editor: TransactionEditor
+    @StateObject var editor: TransactionEditor
     
     var body: some View {
         NavigationView {
