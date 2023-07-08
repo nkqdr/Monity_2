@@ -72,6 +72,10 @@ extension Date {
         return Calendar.current.date(from: DateComponents(year: myComps.wrappedYear, month: myComps.wrappedMonth, day: 1)) ?? Date()
     }
     
+    public var endOfThisMonth: Date {
+        return Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfThisMonth) ?? Date()
+    }
+    
     static func getMonthAndYearBetween(from start: Date, to end: Date) -> [Date] {
             var allDates: [Date] = []
             guard start < end else { return allDates }

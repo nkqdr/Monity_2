@@ -40,15 +40,12 @@ class TransactionFetchController: CoreDataModelStorage<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
-    init(startComps: DateComponents, endComps: DateComponents) {
-        let startDate = Calendar.current.date(from: startComps) ?? Date()
-        let endDate = Calendar.current.date(from: endComps) ?? Date()
-        
+    init(start: Date, end: Date) {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
         ], keyPathsForRefreshing: [
             #keyPath(Transaction.category.name)
-        ], predicate: NSPredicate(format: "date >= %@ && date <= %@", startDate as NSDate, endDate as NSDate))
+        ], predicate: NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate))
     }
 }
 

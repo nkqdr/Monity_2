@@ -74,7 +74,6 @@ class AverageMonthlyChartViewModel: ObservableObject {
         }
         transactionCancellable = transactionPublisher.sink { transactions in
             self.transactions = transactions
-            print("Updating transactions")
         }
     }
     

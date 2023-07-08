@@ -7,6 +7,35 @@
 
 import Foundation
 
+class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransaction> {
+    public static let all = RecurringTransactionFetchController()
+    
+    private init() {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)
+        ])
+    }
+    
+    /// FetchController for only those recurring transactions which are active at the given `date`.
+    public init(date: Date) {
+        super.init(
+            sortDescriptors: [NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)],
+            predicate: NSPredicate(format: "startDate <= %@  && (endDate == NIL || endDate < %@)", date as NSDate, date as NSDate))
+    }
+    
+    /// FetchController for only those recurring transactions which were active somewhere in the given date range.
+    public init(startDate: Date, endDate: Date) {
+        let hangingLeftPredicate = NSPredicate(format: "startDate <= %@ && endDate >= %@", startDate as NSDate, startDate as NSDate)
+        let inBetweenPredicate = NSPredicate(format: "startDate >= %@ && endDate <= %@", startDate as NSDate, endDate as NSDate)
+        let hangingRightPredicate = NSPredicate(format: "startDate <= %@ && endDate >= %@", endDate as NSDate, endDate as NSDate)
+        let stillGoingPredicate = NSPredicate(format: "endDate == NIL && startDate >= %@ && startDate <= %@", startDate as NSDate, endDate as NSDate)
+        super.init(
+            sortDescriptors: [NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)],
+            predicate: NSCompoundPredicate(orPredicateWithSubpredicates: [hangingLeftPredicate, inBetweenPredicate, hangingRightPredicate, stillGoingPredicate])
+        )
+    }
+}
+
 class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
     static let shared: RecurringTransactionStorage = RecurringTransactionStorage()
     

@@ -8,33 +8,36 @@
 import SwiftUI
 
 struct AverageExpenseAndIncomeTile: View {
-    @StateObject private var content = AverageMonthlyChartViewModel.shared
+    @StateObject private var content = TransactionSummaryViewModel()
     
     @ViewBuilder
     private var expenseChart: some View {
-        AverageOneYearBarChart(data: content.monthlyExpenseDataPoints, average: content.averageExpenses, tint: .red)
+        AverageOneYearBarChart(data: content.expenseBarChartData, average: content.averageExpenses, tint: .red)
             .padding(.horizontal, 4)
     }
     
     @ViewBuilder
     private var incomeChart: some View {
-        AverageOneYearBarChart(data: content.monthlyIncomeDataPoints, average: content.averageIncome, tint: .green)
+        AverageOneYearBarChart(data: content.incomeBarChartData, average: content.averageIncome, tint: .green)
             .padding(.horizontal, 4)
+    }
+    
+    private var percentage: Double? {
+        return content.percentageOfIncomeSpent
     }
     
     @ViewBuilder
     private var actualTile: some View {
-        let percentOfIncomeSpent: Int? = content.totalIncomeThisYear > 0 ? Int(content.totalExpensesThisYear / content.totalIncomeThisYear * 100) : nil
         VStack(alignment: .leading) {
-            if let percentOfIncomeSpent {
-                Text("You saved \(100 - percentOfIncomeSpent)% of your income.")
+            if let percentage {
+                Text("You saved \(Int((1 - percentage) * 100))% of your income.")
                     .groupBoxLabelTextStyle()
             } else {
                 Text("Register your transactions to build the statistics!")
                     .groupBoxLabelTextStyle()
             }
             expenseChart
-                .padding(.top, percentOfIncomeSpent != nil ? 0 : 10)
+                .padding(.top, percentage != nil ? 0 : 10)
             incomeChart
         }
     }

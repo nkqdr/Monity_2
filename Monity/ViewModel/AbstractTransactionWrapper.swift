@@ -16,99 +16,102 @@ extension UserDefaults {
 
 class AbstractTransactionWrapper: ObservableObject {
     @Published var wrappedTransactions: [AbstractTransaction] = []
-    private var selectedMonthDate: Date? = nil
     /// All recorded expenses in the selected month
     private var transactions: [Transaction] = [] {
         didSet {
-            update()
+            self.wrappedTransactions = calcWrappedTransactions()
         }
     }
     /// All recurring transactions that are active in the selected month
     private var recurringExpenses: [RecurringTransaction] = [] {
         didSet {
-            update()
+            self.wrappedTransactions = calcWrappedTransactions()
         }
     }
     /// Setting that enables/disables the inclusion of recurring transactions in the monthly overview
     private var includeRecurringExpenses: Bool = UserDefaults.standard.bool(forKey: AppStorageKeys.integrateRecurringExpensesInCalculations) {
         didSet {
-            update()
+            self.wrappedTransactions = calcWrappedTransactions()
         }
     }
+    
+    private var startOfTimeframe: Date
+    private var endOfTimeframe: Date
+    
+    
     var transactionCancellable: AnyCancellable?
     var recurringTransactionCancellable: AnyCancellable?
     var includeRecurringCancellable: AnyCancellable?
     private var fetchController: TransactionFetchController
+    private var recurringFetchController: RecurringTransactionFetchController
+    
+    // MARK: - Initializers
     
     /// If this initializer is used, {wrappedTransactions} will contain all Transactions that have ever been recorded
-    init() {
-        self.fetchController = TransactionFetchController.all
-        includeRecurringCancellable = UserDefaults.standard.publisher(for: \.integrate_recurring_expenses_in_month_overview).sink { value in
-            self.includeRecurringExpenses = value
-        }
-        
-        let recurringTransactionPublisher = RecurringTransactionStorage.shared.items.eraseToAnyPublisher()
-        recurringTransactionCancellable = recurringTransactionPublisher.sink { items in
-            self.recurringExpenses = items
-        }
-        
-        let transactionPublisher = fetchController.items.eraseToAnyPublisher()
-        transactionCancellable = transactionPublisher.sink { items in
-            self.transactions = items
-            print("Updating \(String(describing: self))")
-        }
+    convenience init() {
+        self.init(
+            transactionController: TransactionFetchController.all,
+            recurringTransactionController: RecurringTransactionFetchController.all
+        )
     }
     
     /// If this initializer is used, {wrappedTransactions} will contain only the transactions in the specified month
-    init(date: Date) {
-        self.selectedMonthDate = date
+    convenience init(date: Date) {
         let selectedMonthComps = Calendar.current.dateComponents([.month, .year], from: date)
-        self.fetchController = TransactionFetchController(month: selectedMonthComps.month, year: selectedMonthComps.year)
-        includeRecurringCancellable = UserDefaults.standard.publisher(for: \.integrate_recurring_expenses_in_month_overview).sink { value in
+        self.init(
+            transactionController: TransactionFetchController(month: selectedMonthComps.month, year: selectedMonthComps.year),
+            recurringTransactionController: RecurringTransactionFetchController(date: date),
+            startTimeframe: date.removeTimeStampAndDay ?? date,
+            endTimeframe: Calendar.current.date(byAdding: DateComponents(month: 1), to: date)?.removeTimeStampAndDay ?? date
+        )
+    }
+    
+    convenience init(startDate: Date, endDate: Date) {
+        self.init(
+            transactionController: TransactionFetchController(start: startDate, end: endDate),
+            recurringTransactionController: RecurringTransactionFetchController(startDate: startDate, endDate: endDate),
+            startTimeframe: startDate,
+            endTimeframe: endDate
+        )
+    }
+    
+    public init(transactionController: TransactionFetchController, recurringTransactionController: RecurringTransactionFetchController, startTimeframe: Date = Date.distantPast, endTimeframe: Date = Date.distantFuture) {
+        self.fetchController = transactionController
+        self.recurringFetchController = recurringTransactionController
+        self.startOfTimeframe = startTimeframe
+        self.endOfTimeframe = endTimeframe
+        
+        let includeRecurringPublisher = UserDefaults.standard.publisher(for: \.integrate_recurring_expenses_in_month_overview)
+        self.includeRecurringCancellable = includeRecurringPublisher.sink { value in
             self.includeRecurringExpenses = value
         }
-        
-        let recurringTransactionPublisher = RecurringTransactionStorage.shared.items.eraseToAnyPublisher()
-        recurringTransactionCancellable = recurringTransactionPublisher.sink { items in
-            self.recurringExpenses = items.filter { $0.isActiveAt(date: date) }
-        }
-       
         let transactionPublisher = self.fetchController.items.eraseToAnyPublisher()
-        transactionCancellable = transactionPublisher.sink { items in
-            self.transactions = items.filter({
-                let comps = Calendar.current.dateComponents([.month, .year], from: $0.date ?? date)
-                return comps.year == selectedMonthComps.year && comps.month == selectedMonthComps.month
-            })
+        self.transactionCancellable = transactionPublisher.sink { value in
+            self.transactions = value
+        }
+        let recurringTransactionPublisher = self.recurringFetchController.items.eraseToAnyPublisher()
+        self.recurringTransactionCancellable = recurringTransactionPublisher.sink { value in
+            self.recurringExpenses = value
         }
     }
     
-    private func update() {
-        if (self.wrappedTransactions.isEmpty) {
-            self.wrappedTransactions = transactions.map { AbstractTransaction(date: $0.date, category: $0.category, amount: $0.amount, isExpense: $0.isExpense)}
+    // MARK: - Helper functions
+    
+    private func calcWrappedTransactions() -> [AbstractTransaction] {
+        let abstractTransactions = self.transactions.map { AbstractTransaction(date: $0.date, category: $0.category, amount: $0.amount, isExpense: $0.isExpense) }
+        guard self.includeRecurringExpenses else {
+            // If recurring expenses should not be included, the wrapped transactions just equal the regular transactions
+            return abstractTransactions
         }
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            var abstractTransactions = self.transactions.map { AbstractTransaction(date: $0.date, category: $0.category, amount: $0.amount, isExpense: $0.isExpense)}
-            if (self.includeRecurringExpenses) {
-                var recurringAbExpenses: [AbstractTransaction]
-                if let selectedMonthDate = self.selectedMonthDate {
-                    recurringAbExpenses = self.recurringExpenses.map {
-                        AbstractTransaction(date: selectedMonthDate.startOfThisMonth, category: $0.category, amount: $0.normalizedMonthlyAmount, isExpense: true)
-                    }
-                } else {
-                    var allRec: [AbstractTransaction] = []
-                    for item in self.recurringExpenses {
-                        allRec.append(contentsOf: item.individualTransactions)
-                    }
-                    recurringAbExpenses = allRec
-                }
-                abstractTransactions.append(contentsOf: recurringAbExpenses)
+        // Otherwise, also include the recurring expenses as AbstractTransactions
+        let abstractRecurringTransactions: [AbstractTransaction] = self.recurringExpenses.map { recExpense in
+            return recExpense.individualTransactions.filter{
+                guard let date = $0.date else { return false }
+                return date >= self.startOfTimeframe && date <= self.endOfTimeframe
             }
-            DispatchQueue.main.async {
-                self.wrappedTransactions = abstractTransactions
-            }
-        }
+        }.reduce([], +)
         
-        
+        return abstractTransactions + abstractRecurringTransactions
     }
 }
