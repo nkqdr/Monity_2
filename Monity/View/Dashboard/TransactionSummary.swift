@@ -132,6 +132,8 @@ fileprivate struct TransactionCategorySummaryTile: View {
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
+                    Text("Last Year")
+                        .font(.caption)
                     Text(dataPoint.total, format: .customCurrency())
                         .fontWeight(.semibold)
                     Text("Ø\(dataPoint.average.formatted(.customCurrency())) p.m.")

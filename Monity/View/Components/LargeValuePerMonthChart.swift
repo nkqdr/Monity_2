@@ -54,7 +54,6 @@ struct LargeValuePerMonthChart: View {
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { value in
-                AxisGridLine()
                 AxisValueLabel(format: .dateTime.month(.narrow))
             }
         }

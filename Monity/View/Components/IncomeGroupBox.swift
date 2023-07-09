@@ -9,8 +9,10 @@ import SwiftUI
 
 struct IncomeGroupBox: View {
     @ObservedObject var incomeCalculator: MonthIncomeCalculator
+    private var date: Date
     
     init(date: Date = Date()) {
+        self.date = date
         if (date.isSameMonthAs(Date())) {
             self.incomeCalculator = MonthIncomeCalculator.current
         } else {
