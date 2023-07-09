@@ -31,7 +31,7 @@ class SettingsSystemViewModel: ObservableObject {
     
     // MARK: - Helper functions
     func importTransactionsCSV(_ rows: [String]) {
-        let result = TransactionStorage.shared.add(set: rows)
+        let result = TransactionStorage.main.add(set: rows)
         if !result {
             showInvalidFileAlert.toggle()
         }
@@ -62,8 +62,8 @@ class SettingsSystemViewModel: ObservableObject {
     }
     
     func deleteTransactionData() {
-        TransactionCategoryStorage.shared.deleteAll()
-        TransactionStorage.shared.deleteAll()
+        TransactionCategoryStorage.main.deleteAll()
+        TransactionStorage.main.deleteAll()
     }
     
     func deleteSavingsData() {

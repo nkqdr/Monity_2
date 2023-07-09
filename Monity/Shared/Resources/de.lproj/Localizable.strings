@@ -464,7 +464,7 @@
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
 
 /* No comment provided by engineer. */
-"You spent %lld%% of your income." = "Sie haben %lld%% Ihrer Einnahmen ausgegeben.";
+"You saved %lld%% of your income." = "Sie sparen %lld%% Ihres Einkommens.";
 
 /* No comment provided by engineer. */
 "Your monthly limit:" = "Ihr monatliches Limit:";

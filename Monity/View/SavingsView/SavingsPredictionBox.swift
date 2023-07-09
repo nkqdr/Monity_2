@@ -21,7 +21,8 @@ struct SavingsPredictionBox: View {
     }
     
     private var percentageChange: Double {
-        (projection / content.currentNetWorth - 1).round(to: 3)
+        guard content.currentNetWorth > 0 else { return 0 }
+        return (projection / content.currentNetWorth - 1).round(to: 3)
     }
     
     private var predictionDate: Date {

@@ -6,10 +6,18 @@
 //
 
 import Foundation
+import CoreData
 
-class TransactionStorage: CoreDataModelStorage<Transaction> {
-    static let shared: TransactionStorage = TransactionStorage()
+class TransactionFetchController: CoreDataModelStorage<Transaction> {
+    static let all = TransactionFetchController()
+    static let currentMonth = TransactionFetchController.generateCurrentMonth()
     
+    private static func generateCurrentMonth() -> TransactionFetchController {
+        let comps = Calendar.current.dateComponents([.month, .year], from: Date())
+        return TransactionFetchController(month: comps.month, year: comps.year)
+    }
+    
+    /// This initializer will create a FetchedResultsController for all transactions.
     private init() {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
@@ -18,9 +26,39 @@ class TransactionStorage: CoreDataModelStorage<Transaction> {
         ])
     }
     
+    /// This initializer will create a FetchedResultsController for all transactions in the given month.
+    init(month: Int?, year: Int?) {
+        let date: Date = Calendar.current.date(from: DateComponents(year: year, month: month)) ?? Date()
+        let startOfMonth: Date = date.startOfThisMonth.removeTimeStamp!
+        let endOfMonth: Date = Calendar.current.date(byAdding: DateComponents(month: 1), to: startOfMonth) ?? date
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
+        ], predicate: NSPredicate(format: "date >= %@ && date < %@", startOfMonth as NSDate, endOfMonth as NSDate))
+    }
+    
+    /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
+    init(start: Date, end: Date) {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
+        ], predicate: NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate))
+    }
+}
+
+class TransactionStorage {
+    public static let main = TransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
+    private let context: NSManagedObjectContext
+    
+    init(managedObjectContext: NSManagedObjectContext) {
+        self.context = managedObjectContext
+    }
+    
     func add(set rows: [String]) -> Bool {
         let categoriesFetchRequest = TransactionCategory.fetchRequest()
-        let currentCategories: [TransactionCategory]? = try? PersistenceController.shared.container.viewContext.fetch(categoriesFetchRequest)
+        let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
         guard let transactionCategories = currentCategories else {
             return false
         }
@@ -34,7 +72,7 @@ class TransactionStorage: CoreDataModelStorage<Transaction> {
             let categoryName: String = rowContents[4]
             var category = categories.first(where: { $0.wrappedName == categoryName })
             if category == nil {
-                let newCategory = TransactionCategory(context: PersistenceController.shared.container.viewContext)
+                let newCategory = TransactionCategory(context: self.context)
                 newCategory.name = categoryName
                 newCategory.id = UUID()
                 category = newCategory
@@ -42,46 +80,58 @@ class TransactionStorage: CoreDataModelStorage<Transaction> {
             }
             let _ = add(text: description, isExpense: isExpense, amount: amount, category: category, date: date, saveContext: false)
         }
-        try? PersistenceController.shared.container.viewContext.save()
+        try? self.context.save()
         return true
     }
     
-    func add(text: String, isExpense: Bool, amount: Double, category: TransactionCategory?, date: Date = Date(), saveContext: Bool = true) -> Transaction {
-        let transaction = Transaction(context: PersistenceController.shared.container.viewContext)
-        transaction.id = UUID()
-        transaction.date = date
-        transaction.isExpense = isExpense
-        transaction.amount = amount
-        transaction.category = category
-        transaction.text = text
-        if saveContext {
-            try? PersistenceController.shared.container.viewContext.save()
+    func add(text: String, isExpense: Bool, amount: Double, category: TransactionCategory?, date: Date = Date(), saveContext: Bool = true) {
+        self.context.performAndWait {
+            let transaction = Transaction(context: context)
+            transaction.id = UUID()
+            transaction.date = date
+            transaction.isExpense = isExpense
+            transaction.amount = amount
+            transaction.category = category
+            transaction.text = text
+            if saveContext {
+                try? self.context.save()
+            }
         }
-        return transaction
     }
     
-    func update(_ transaction: Transaction, editor: TransactionEditor) -> Bool {
-        PersistenceController.shared.container.viewContext.performAndWait {
+    func update(_ transaction: Transaction, editor: TransactionEditor) {
+        self.context.performAndWait {
             transaction.text = editor.description
             transaction.category = editor.selectedCategory
             transaction.isExpense = editor.isExpense
             transaction.amount = editor.givenAmount
             transaction.date = editor.selectedDate
-            if let _ = try? PersistenceController.shared.container.viewContext.save() {
-                return true
-            } else {
-                return false
-            }
+            try? self.context.save()
         }
     }
 
     func delete(_ transaction: Transaction) {
-        PersistenceController.shared.container.viewContext.delete(transaction)
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            PersistenceController.shared.container.viewContext.rollback()
-            print("Failed to save context \(error.localizedDescription)")
+        self.context.performAndWait {
+            context.delete(transaction)
+            do {
+                try self.context.save()
+            } catch {
+                self.context.rollback()
+                print("Failed to save context \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func deleteAll() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Transaction.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        self.context.performAndWait {
+            do {
+                try self.context.executeAndMergeChanges(using: deleteRequest)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
 }

@@ -54,7 +54,6 @@ struct LargeValuePerMonthChart: View {
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { value in
-                AxisGridLine()
                 AxisValueLabel(format: .dateTime.month(.narrow))
             }
         }
@@ -86,8 +85,10 @@ struct LargeValuePerMonthChart: View {
                             if (direction != 1.0 && direction != -1.0) {
                                 return
                             }
-                            if (content.drag(direction: direction)) {
-                                Haptics.shared.play(.medium)
+                            withAnimation {
+                                if (content.drag(direction: direction)) {
+                                    Haptics.shared.play(.medium)
+                                }
                             }
                         }
                     }.onEnded { value in

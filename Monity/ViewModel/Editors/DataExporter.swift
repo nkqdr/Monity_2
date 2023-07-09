@@ -47,7 +47,7 @@ class DataExporter: ObservableObject {
     }
     
     private func handleExportTransactions() {
-        let transactions = getCSVExportString(for: TransactionStorage.shared.items.value, headers: CSVValidHeaders.transactionCSV)
+        let transactions = getCSVExportString(for: TransactionFetchController.all.items.value, headers: CSVValidHeaders.transactionCSV)
         let transactionsFilename = getFilenameWithPrefix(filename: "transactions")
         writeStringToDisk(content: transactions, filename: transactionsFilename)
     }

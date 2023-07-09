@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class AverageMonthlyChartViewModel: ObservableObject {
-    static let shared: AverageMonthlyChartViewModel = .init()
+    static let shared: AverageMonthlyChartViewModel = AverageMonthlyChartViewModel()
     @Published var showingExpenses: Bool = true
     @Published var averageExpenses: Double = 0
     @Published var averageIncome: Double = 0
@@ -63,10 +63,12 @@ class AverageMonthlyChartViewModel: ObservableObject {
     
     private var transactionCancellable: AnyCancellable?
     private var transactionCategoryCancellable: AnyCancellable?
+    private let transactionWrapper: AbstractTransactionWrapper
     
     init() {
-        let transactionPublisher = AbstractTransactionWrapper().$wrappedTransactions.eraseToAnyPublisher()
-        let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
+        self.transactionWrapper = AbstractTransactionWrapper()
+        let transactionPublisher = self.transactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
+        let categoryPublisher = TransactionCategoryFetchController.all.items.eraseToAnyPublisher()
         transactionCategoryCancellable = categoryPublisher.sink { categories in
             self.transactionCategories = categories
         }

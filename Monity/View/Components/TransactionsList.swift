@@ -14,7 +14,7 @@ struct TransactionsList: View {
     var dateFormat: Date.FormatStyle = .dateTime.year().month().day()
     
     func deleteTransaction(_ transaction: Transaction) {
-        TransactionStorage.shared.delete(transaction)
+        TransactionStorage.main.delete(transaction)
     }
     
     func showEditSheetForTransaction(_ transaction: Transaction) {
