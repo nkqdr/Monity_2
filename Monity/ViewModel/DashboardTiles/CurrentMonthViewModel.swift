@@ -1,5 +1,5 @@
 //
-//  MonthlyOverviewViewModel.swift
+//  CurrentMonthViewModel.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 11.10.22.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class MonthlyOverviewViewModel: ObservableObject {
+class CurrentMonthViewModel: ObservableObject {
     @Published var remainingDays: Int = 0
     @Published var predictedTotalSpendings: Double = 0
     @Published var spendingsPerDay: Double = 0 {

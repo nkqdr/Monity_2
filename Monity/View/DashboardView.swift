@@ -14,7 +14,7 @@ struct DashboardView: View {
                 ScrollView {
                     Group {
                         CurrentMonthOverviewTile()
-                        AverageExpenseAndIncomeTile()
+                        TransactionSummaryTile()
                         RecurringTransactionsTile()
                         SavingsTile()
                     }

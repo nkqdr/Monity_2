@@ -86,8 +86,10 @@ struct LargeValuePerMonthChart: View {
                             if (direction != 1.0 && direction != -1.0) {
                                 return
                             }
-                            if (content.drag(direction: direction)) {
-                                Haptics.shared.play(.medium)
+                            withAnimation {
+                                if (content.drag(direction: direction)) {
+                                    Haptics.shared.play(.medium)
+                                }
                             }
                         }
                     }.onEnded { value in

@@ -50,8 +50,9 @@ class MonthlyTransactionsViewModel: ItemListViewModel<Transaction> {
     
     private func updateTransactionsByDate(_ transactionList: [Transaction]? = nil) {
         let transactions = transactionList ?? self.items
-        var byDate: [TransactionsByDate] = []
         let uniqueDates = Set(transactions.map { $0.date?.removeTimeStamp ?? Date() })
+        
+        var byDate: [TransactionsByDate] = []
         for uniqueDate in uniqueDates {
             let newTransactions = transactions.filter { $0.date?.isSameDayAs(uniqueDate) ?? false }
             let existing = currentTransactionsByDate.first(where: { $0.date.isSameDayAs(uniqueDate)})
