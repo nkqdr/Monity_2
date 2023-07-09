@@ -31,9 +31,9 @@ class TransactionEditor: ObservableObject {
     
     public func save() {
         if let t = transaction {
-            TransactionStorage.update(t, editor: self)
+            TransactionStorage.main.update(t, editor: self)
         } else {
-            TransactionStorage.add(text: description, isExpense: isExpense, amount: givenAmount, category: selectedCategory)
+            TransactionStorage.main.add(text: description, isExpense: isExpense, amount: givenAmount, category: selectedCategory)
         }
     }
 }

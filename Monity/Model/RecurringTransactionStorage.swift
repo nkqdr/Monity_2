@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransaction> {
     public static let all = RecurringTransactionFetchController()
@@ -36,31 +37,32 @@ class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransac
     }
 }
 
-class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
-    static let shared: RecurringTransactionStorage = RecurringTransactionStorage()
+class RecurringTransactionStorage {
+    static let main: RecurringTransactionStorage = RecurringTransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
+    private let context: NSManagedObjectContext
     
-    private init() {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)
-        ])
+    init(managedObjectContext: NSManagedObjectContext) {
+        self.context = managedObjectContext
     }
     
     func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool) -> RecurringTransaction {
-        let transaction = RecurringTransaction(context: PersistenceController.shared.container.viewContext)
-        transaction.name = name
-        transaction.amount = amount
-        transaction.startDate = startDate.removeTimeStamp
-        transaction.endDate = endDate?.removeTimeStamp
-        transaction.cycle = cycle.rawValue
-        transaction.isDeducted = isDeducted
-        transaction.id = UUID()
-        transaction.category = category
-        try? PersistenceController.shared.container.viewContext.save()
-        return transaction
+        self.context.performAndWait {
+            let transaction = RecurringTransaction(context: self.context)
+            transaction.name = name
+            transaction.amount = amount
+            transaction.startDate = startDate.removeTimeStamp
+            transaction.endDate = endDate?.removeTimeStamp
+            transaction.cycle = cycle.rawValue
+            transaction.isDeducted = isDeducted
+            transaction.id = UUID()
+            transaction.category = category
+            try? self.context.save()
+            return transaction
+        }
     }
     
     func update(_ transaction: RecurringTransaction, editor: RecurringTransactionEditor) -> Bool {
-        PersistenceController.shared.container.viewContext.performAndWait {
+        self.context.performAndWait {
             transaction.name = editor.name
             transaction.amount = editor.amount
             transaction.startDate = editor.startDate.removeTimeStamp
@@ -68,7 +70,7 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
             transaction.cycle = editor.cycle.rawValue
             transaction.isDeducted = editor.isDeducted
             transaction.category = editor.category
-            if let _ = try? PersistenceController.shared.container.viewContext.save() {
+            if let _ = try? self.context.save() {
                 return true
             } else {
                 return false
@@ -77,11 +79,11 @@ class RecurringTransactionStorage: CoreDataModelStorage<RecurringTransaction> {
     }
     
     func delete(_ transaction: RecurringTransaction) {
-        PersistenceController.shared.container.viewContext.delete(transaction)
+        self.context.delete(transaction)
         do {
-            try PersistenceController.shared.container.viewContext.save()
+            try self.context.save()
         } catch {
-            PersistenceController.shared.container.viewContext.rollback()
+            self.context.rollback()
             print("Failed to save context \(error.localizedDescription)")
         }
     }

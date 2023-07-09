@@ -82,7 +82,7 @@ class MonthlyTransactionsViewModel: ItemListViewModel<Transaction> {
     }
     
     override func deleteItem(_ item: Transaction) {
-        TransactionStorage.delete(item)
+        TransactionStorage.main.delete(item)
     }
     
 }

@@ -12,18 +12,25 @@ import CoreData
 class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedResultsControllerDelegate where ModelClass: NSManagedObject {
     var items = CurrentValueSubject<[ModelClass], Never>([])
     private let itemFetchController: RichFetchedResultsController<ModelClass>
+    private let managedObjectContext: NSManagedObjectContext
     
-    init(sortDescriptors: [NSSortDescriptor], keyPathsForRefreshing: Set<String> = [], predicate: NSPredicate? = nil) {
+    init(
+        sortDescriptors: [NSSortDescriptor],
+        keyPathsForRefreshing: Set<String> = [],
+        predicate: NSPredicate? = nil,
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
+    ) {
         let request = RichFetchRequest<ModelClass>(entityName: ModelClass.entity().name ?? "")
         request.sortDescriptors = sortDescriptors
         request.predicate = predicate
         request.relationshipKeyPathsForRefreshing = keyPathsForRefreshing
-        itemFetchController = RichFetchedResultsController<ModelClass>(
+        self.itemFetchController = RichFetchedResultsController<ModelClass>(
             fetchRequest: request,
-            managedObjectContext: PersistenceController.shared.container.viewContext,
+            managedObjectContext: managedObjectContext,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
+        self.managedObjectContext = managedObjectContext
         super.init()
         itemFetchController.delegate = self
         do {
@@ -38,9 +45,9 @@ class CoreDataModelStorage<ModelClass>: NSObject, ObservableObject, NSFetchedRes
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ModelClass.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
-        PersistenceController.shared.container.viewContext.performAndWait {
+        self.managedObjectContext.performAndWait {
             do {
-                try PersistenceController.shared.container.viewContext.executeAndMergeChanges(using: deleteRequest)
+                try self.managedObjectContext.executeAndMergeChanges(using: deleteRequest)
             } catch let error as NSError {
                 print(error)
             }

@@ -68,7 +68,7 @@ class AverageMonthlyChartViewModel: ObservableObject {
     init() {
         self.transactionWrapper = AbstractTransactionWrapper()
         let transactionPublisher = self.transactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
-        let categoryPublisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
+        let categoryPublisher = TransactionCategoryFetchController.all.items.eraseToAnyPublisher()
         transactionCategoryCancellable = categoryPublisher.sink { categories in
             self.transactionCategories = categories
         }

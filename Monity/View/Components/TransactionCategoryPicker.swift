@@ -17,7 +17,7 @@ struct TransactionCategoryPicker: View {
             ForEach(allCategories) { category in
                 Text(category.wrappedName).tag(category as TransactionCategory?)
             }
-        }.onReceive(TransactionCategoryStorage.shared.items.eraseToAnyPublisher()) { categories in
+        }.onReceive(TransactionCategoryFetchController.all.items.eraseToAnyPublisher()) { categories in
             allCategories = categories
         }
     }

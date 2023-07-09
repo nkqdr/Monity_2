@@ -12,13 +12,13 @@ class SettingsTransactionsViewModel: ItemListViewModel<TransactionCategory> {
     @Published var monthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
     
     init() {
-        let publisher = TransactionCategoryStorage.shared.items.eraseToAnyPublisher()
+        let publisher = TransactionCategoryFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
     // MARK: - Intents
     
     override func deleteItem(_ item: TransactionCategory) {
-        TransactionCategoryStorage.shared.delete(item)
+        TransactionCategoryStorage.main.delete(item)
     }
 }

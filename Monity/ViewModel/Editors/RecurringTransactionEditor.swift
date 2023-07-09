@@ -46,9 +46,9 @@ class RecurringTransactionEditor: ObservableObject {
     
     public func save() {
         if let t = transaction {
-            let _ = RecurringTransactionStorage.shared.update(t, editor: self)
+            let _ = RecurringTransactionStorage.main.update(t, editor: self)
         } else {
-            let _ = RecurringTransactionStorage.shared.add(name: name, category: category, amount: amount, startDate: startDate, endDate: isStillActive ? nil : endDate, cycle: cycle, isDeducted: isDeducted)
+            let _ = RecurringTransactionStorage.main.add(name: name, category: category, amount: amount, startDate: startDate, endDate: isStillActive ? nil : endDate, cycle: cycle, isDeducted: isDeducted)
         }
     }
 }

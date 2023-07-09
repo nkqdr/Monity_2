@@ -15,7 +15,7 @@ class RecurringTransactionsViewModel: ItemListViewModel<RecurringTransaction> {
     @Published var currentMonthlyPayment: Double = 0
     
     private init() {
-        let publisher = RecurringTransactionStorage.shared.items.eraseToAnyPublisher()
+        let publisher = RecurringTransactionFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
@@ -61,6 +61,6 @@ class RecurringTransactionsViewModel: ItemListViewModel<RecurringTransaction> {
     // MARK: - Intent
     
     override func deleteItem(_ item: RecurringTransaction) {
-        RecurringTransactionStorage.shared.delete(item)
+        RecurringTransactionStorage.main.delete(item)
     }
 }

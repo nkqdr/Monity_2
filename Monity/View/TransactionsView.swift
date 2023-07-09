@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TransactionsView: View {
-    @ObservedObject private var viewModel = MonthlyTransactionsViewModel()
+    @StateObject private var viewModel = MonthlyTransactionsViewModel()
     @State var showAddTransactionView = false
     @State private var searchValue: String = ""
     @State private var showFilterSettings = false
