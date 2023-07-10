@@ -10,6 +10,7 @@ import Foundation
 class DataExporter: ObservableObject {
     @Published var exportTransactions: Bool = false
     @Published var exportSavings: Bool = false
+    @Published var exportRecurringTransactions: Bool = false
     @Published var exportHasErrors: Bool = false
     @Published var exportWasSuccessful: Bool = false
     

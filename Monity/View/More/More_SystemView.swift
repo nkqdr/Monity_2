@@ -84,6 +84,9 @@ struct More_SystemView: View {
                 Toggle(isOn: $dataExporter.exportTransactions) {
                     Text("Export Transactions")
                 }
+                Toggle(isOn: $dataExporter.exportRecurringTransactions) {
+                    Text("Export Recurring Expenses")
+                }
                 Toggle(isOn: $dataExporter.exportSavings) {
                     Text("Export Savings")
                 }
@@ -103,7 +106,7 @@ struct More_SystemView: View {
                 }
             }
             .padding()
-            .presentationDetents([.height(180)])
+            .presentationDetents([.height(220)])
         }
         .sheet(item: $importSummary) { summary in
             buildImportSummaryView(summary)
