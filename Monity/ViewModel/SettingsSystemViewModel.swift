@@ -22,6 +22,8 @@ class SettingsSystemViewModel: ObservableObject {
                 importSummary = ImportCSVSummary(resourceName: "Transactions", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
             } else if header == CSVValidHeaders.savingsCSV {
                 importSummary = ImportCSVSummary(resourceName: "Savings", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
+            } else if header == CSVValidHeaders.recurringTransactionCSV {
+                importSummary = ImportCSVSummary(resourceName: "Recurring expenses", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
             } else {
                 importSummary = nil
                 showInvalidFileAlert.toggle()
@@ -44,6 +46,14 @@ class SettingsSystemViewModel: ObservableObject {
         }
     }
     
+    func importRecurringTransactionsCSV(_ rows: [String]) {
+        let result = RecurringTransactionStorage.main.add(set: rows)
+        print(result)
+        if !result {
+            showInvalidFileAlert.toggle()
+        }
+    }
+    
     // MARK: - Intents
     
     func importCSV() {
@@ -55,6 +65,8 @@ class SettingsSystemViewModel: ObservableObject {
                 self.importTransactionsCSV(summary.rows)
             } else if summary.resourceName == "Savings" {
                 self.importSavingsCSV(summary.rows)
+            } else if summary.resourceName == "Recurring expenses" {
+                self.importRecurringTransactionsCSV(summary.rows)
             }
         }
         // End with this to close the sheet

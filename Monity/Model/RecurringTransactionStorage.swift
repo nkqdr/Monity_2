@@ -45,7 +45,39 @@ class RecurringTransactionStorage {
         self.context = managedObjectContext
     }
     
-    func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool) -> RecurringTransaction {
+    func add(set rows: [String]) -> Bool {
+        let categoriesFetchRequest = TransactionCategory.fetchRequest()
+        let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
+        guard let transactionCategories = currentCategories else {
+            return false
+        }
+        var categories = transactionCategories
+        for row in rows {
+            let rowContents = Utils.separateCSVRow(row)
+            
+            let name: String = rowContents[0]
+            let amount: Double = Double(rowContents[1]) ?? 0
+            let categoryName: String = rowContents[2]
+            let cycleNum: Int16 = Int16(rowContents[3]) ?? 0
+            let startDate: Date = Utils.formatFlutterDateStringToDate(rowContents[4])
+            let endDateContent: String = rowContents[5]
+            let endDate: Date? = endDateContent.isEmpty ? nil : Utils.formatFlutterDateStringToDate(endDateContent)
+            let cycle = TransactionCycle.fromValue(cycleNum) ?? TransactionCycle.monthly
+            var category = categories.first(where: { $0.wrappedName == categoryName })
+            if category == nil, !categoryName.isEmpty {
+                let newCategory = TransactionCategory(context: self.context)
+                newCategory.name = categoryName
+                newCategory.id = UUID()
+                category = newCategory
+                categories.append(newCategory)
+            }
+            let _ = add(name: name, category: category, amount: amount, startDate: startDate, endDate: endDate, cycle: cycle, isDeducted: true, saveContext: false)
+        }
+        try? self.context.save()
+        return true
+    }
+    
+    func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool, saveContext: Bool = true) -> RecurringTransaction {
         self.context.performAndWait {
             let transaction = RecurringTransaction(context: self.context)
             transaction.name = name
@@ -56,7 +88,9 @@ class RecurringTransactionStorage {
             transaction.isDeducted = isDeducted
             transaction.id = UUID()
             transaction.category = category
-            try? self.context.save()
+            if saveContext {
+                try? self.context.save()
+            }
             return transaction
         }
     }

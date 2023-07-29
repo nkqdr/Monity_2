@@ -19,10 +19,56 @@ struct ImportSummaryRow: View {
                 transactionRow
             } else if summary.resourceName == "Savings" {
                 savingsRow
+            } else if summary.resourceName == "Recurring expenses" {
+                recurringExpenseRow
             }
         }
         .frame(maxHeight: 100)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+    }
+    
+    var recurringExpenseRow: some View {
+        let name: String = rowContents[0]
+        let amount: Double = Double(rowContents[1]) ?? 0
+        let categoryName: String = rowContents[2]
+        let cycle: Int16 = Int16(rowContents[3]) ?? 0
+        let startDate: Date = Utils.formatFlutterDateStringToDate(rowContents[4])
+        let endDateContent: String = rowContents[5]
+        let endDate: Date? = endDateContent.isEmpty ? nil : Utils.formatFlutterDateStringToDate(rowContents[5])
+        
+        return HStack {
+            VStack(alignment: .leading) {
+                if !categoryName.isEmpty {
+                    Text(categoryName)
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                }
+                Text(name)
+                    .fontWeight(.bold)
+                Spacer()
+                HStack {
+                    Text(startDate, format: .dateTime.year().month().day())
+                    Text("-")
+                    if let endDate {
+                        Text(endDate, format: .dateTime.year().month().day())
+                    } else {
+                        Text("Today")
+                    }
+                }
+                .font(.footnote)
+                .foregroundColor(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(TransactionCycle.fromValue(cycle)?.name ?? "")
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text(amount, format: .customCurrency())
+                    .foregroundColor(amount > 0 ? .green : .red)
+                    .fontWeight(.semibold)
+            }
+        }
+        .padding()
     }
     
     var savingsRow: some View {

@@ -15,7 +15,7 @@ class DataExporter: ObservableObject {
     @Published var exportWasSuccessful: Bool = false
     
     var disableExportButton: Bool {
-        !(exportSavings || exportTransactions)
+        !(exportSavings || exportTransactions || exportRecurringTransactions)
     }
     
     private func getCSVExportString(for list: [CSVRepresentable], headers: String) -> String {
@@ -59,6 +59,12 @@ class DataExporter: ObservableObject {
         writeStringToDisk(content: savings, filename: savingsFilename)
     }
     
+    private func handleExportRecurringTransactions() {
+        let recurringTransactions = getCSVExportString(for: RecurringTransactionFetchController.all.items.value, headers: CSVValidHeaders.recurringTransactionCSV)
+        let recurringTransactionsFilename = getFilenameWithPrefix(filename: "recurring_transactions")
+        writeStringToDisk(content: recurringTransactions, filename: recurringTransactionsFilename)
+    }
+    
     // MARK: - Intents
     func triggerExport() {
         if exportSavings {
@@ -66,6 +72,9 @@ class DataExporter: ObservableObject {
         }
         if exportTransactions {
             handleExportTransactions()
+        }
+        if exportRecurringTransactions {
+            handleExportRecurringTransactions()
         }
     }
 }

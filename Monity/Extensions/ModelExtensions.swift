@@ -120,6 +120,34 @@ extension SavingsEntry: CSVRepresentable {
     }
 }
 
+extension RecurringTransaction: CSVRepresentable {
+    private var wrappedCSVName: String {
+        let name = self.wrappedName
+        if name.contains(",") {
+            return "\"\(name)\""
+        }
+        return name
+    }
+    
+    private var wrappedCategoryCSVName: String {
+        let name = self.category?.wrappedName ?? ""
+        if name.contains(",") {
+            return "\"\(name)\""
+        }
+        return name
+    }
+    
+    var commaSeparatedString: String {
+        let name = self.wrappedCSVName
+        let amount = self.amount
+        let cycle = self.cycle
+        let start_date = Utils.formatDateToISOString(self.startDate ?? Date())
+        let end_date = (self.endDate != nil) ? Utils.formatDateToISOString(self.endDate!) : ""
+        let category = self.wrappedCategoryCSVName
+        return "\(name),\(amount),\(category),\(cycle),\(start_date),\(end_date)"
+    }
+}
+
 extension RecurringTransaction {
     var wrappedName: String {
         self.name ?? ""

@@ -106,6 +106,7 @@ struct ImportCSVSummary: Identifiable, Equatable {
 struct CSVValidHeaders {
     static let transactionCSV: String = "description,amount,date,type,category"
     static let savingsCSV: String = "amount,date,category_name,category_label"
+    static let recurringTransactionCSV: String = "name,amount,category,cycle,start_date,end_date"
 }
 
 struct AbstractTransaction {
