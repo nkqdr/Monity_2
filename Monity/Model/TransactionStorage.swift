@@ -71,7 +71,7 @@ class TransactionStorage {
             let isExpense: Bool = rowContents[3] == "0" || rowContents[3] == "expense"
             let categoryName: String = rowContents[4]
             var category = categories.first(where: { $0.wrappedName == categoryName })
-            if category == nil {
+            if category == nil, !categoryName.isEmpty {
                 let newCategory = TransactionCategory(context: self.context)
                 newCategory.name = categoryName
                 newCategory.id = UUID()

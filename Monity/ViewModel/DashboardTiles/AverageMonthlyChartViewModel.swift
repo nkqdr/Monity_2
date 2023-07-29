@@ -154,6 +154,12 @@ class AverageMonthlyChartViewModel: ObservableObject {
     // MARK: - Intents
     
     private func dragChartRight() -> Bool {
+        if (showingExpenses && allExpenseDataPoints.count < 12) {
+            return false
+        }
+        if (!showingExpenses && allIncomeDataPoints.count < 12) {
+            return false
+        }
         let newVal = Calendar.current.date(byAdding: DateComponents(month: -1), to: selectedUpperBoundDate) ?? Date()
         if (showingExpenses && allExpenseDataPoints.first?.date.isSameMonthAs(Calendar.current.date(byAdding: DateComponents(year: -1, month: 2), to: newVal) ?? Date()) ?? true ) {
             return false
