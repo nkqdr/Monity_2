@@ -88,6 +88,7 @@
 		60B50E142906F5F400396308 /* SavingsCategoryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E132906F5F400396308 /* SavingsCategoryFormView.swift */; };
 		60B50E162906F73A00396308 /* SettingsSavingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E152906F73A00396308 /* SettingsSavingsViewModel.swift */; };
 		60B50E1A2907020E00396308 /* SavingsCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E192907020E00396308 /* SavingsCategoryViewModel.swift */; };
+		60B8219D2A759AB700CD02E9 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 60B8219C2A759AB700CD02E9 /* Algorithms */; };
 		60BA8EE529E06A5A00DA4A9C /* TransactionCategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE429E06A5A00DA4A9C /* TransactionCategoryPicker.swift */; };
 		60BA8EE729E06E3700DA4A9C /* MonthExpenseCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE629E06E3700DA4A9C /* MonthExpenseCalculator.swift */; };
 		60BA8EE929E0770600DA4A9C /* ExpensesGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA8EE829E0770600DA4A9C /* ExpensesGroupBox.swift */; };
@@ -255,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60B8219D2A759AB700CD02E9 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +566,7 @@
 			);
 			name = Monity;
 			packageProductDependencies = (
+				60B8219C2A759AB700CD02E9 /* Algorithms */,
 			);
 			productName = Monity;
 			productReference = 60BD9F0E28F35B6F001FF5FF /* Monity.app */;
@@ -639,6 +642,7 @@
 			);
 			mainGroup = 60BD9F0528F35B6F001FF5FF;
 			packageReferences = (
+				60B8219B2A759AB700CD02E9 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 60BD9F0F28F35B6F001FF5FF /* Products */;
 			projectDirPath = "";
@@ -1153,6 +1157,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		60B8219B2A759AB700CD02E9 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60B8219C2A759AB700CD02E9 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60B8219B2A759AB700CD02E9 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */ = {
