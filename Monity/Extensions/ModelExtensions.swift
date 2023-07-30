@@ -36,7 +36,7 @@ extension Transaction: CSVRepresentable {
         let isExpense: Bool
         let categoryName: String
     }
-    typealias CSVDataDype = CSVData
+    typealias CSVDataType = CSVData
     
     static func decodeFromCSV(csvRow: String) -> CSVData {
         let rowContents = Utils.separateCSVRow(csvRow)
@@ -138,7 +138,7 @@ extension SavingsEntry: CSVRepresentable, CSVDecodable {
         let categoryName: String
         let categoryLabel: SavingsCategoryLabel
     }
-    typealias CSVDataDype = CSVData
+    typealias CSVDataType = CSVData
     
     static func decodeFromCSV(csvRow: String) -> CSVData {
         let rowContents = Utils.separateCSVRow(csvRow)
@@ -172,7 +172,7 @@ extension RecurringTransaction: CSVRepresentable {
         let startDate: Date
         let endDate: Date?
     }
-    typealias CSVDataDype = CSVData
+    typealias CSVDataType = CSVData
     
     static func decodeFromCSV(csvRow: String) -> CSVData {
         let rowContents = Utils.separateCSVRow(csvRow)

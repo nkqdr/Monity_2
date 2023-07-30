@@ -65,15 +65,16 @@ class DataExporter: ObservableObject {
     
     // MARK: - Intents
     func triggerExport() -> Bool {
+        var successful: Bool = false
         if exportSavings {
-            return handleExportSavings()
+            successful = handleExportSavings()
         }
         if exportTransactions {
-            return handleExportTransactions()
+            successful = handleExportTransactions()
         }
         if exportRecurringTransactions {
-            return handleExportRecurringTransactions()
+            successful = handleExportRecurringTransactions()
         }
-        return false
+        return successful
     }
 }

@@ -9,8 +9,8 @@ import Foundation
 import CoreData
 
 protocol CSVDecodable {
-    associatedtype CSVDataDype
-    static func decodeFromCSV(csvRow: String) -> CSVDataDype
+    associatedtype CSVDataType
+    static func decodeFromCSV(csvRow: String) -> CSVDataType
 }
 
 protocol CSVEncodable {
