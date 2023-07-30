@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import CoreData
 
 extension TransactionCategory {
     var wrappedName: String {

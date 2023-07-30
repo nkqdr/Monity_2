@@ -37,13 +37,8 @@ class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransac
     }
 }
 
-class RecurringTransactionStorage {
+class RecurringTransactionStorage: ResettableStorage<RecurringTransaction> {
     static let main: RecurringTransactionStorage = RecurringTransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
-    private let context: NSManagedObjectContext
-    
-    init(managedObjectContext: NSManagedObjectContext) {
-        self.context = managedObjectContext
-    }
     
     func add(set rows: [String]) -> Bool {
         let categoriesFetchRequest = TransactionCategory.fetchRequest()
@@ -99,29 +94,6 @@ class RecurringTransactionStorage {
                 return true
             } else {
                 return false
-            }
-        }
-    }
-    
-    func delete(_ transaction: RecurringTransaction) {
-        self.context.delete(transaction)
-        do {
-            try self.context.save()
-        } catch {
-            self.context.rollback()
-            print("Failed to save context \(error.localizedDescription)")
-        }
-    }
-    
-    func deleteAll() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = RecurringTransaction.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        self.context.performAndWait {
-            do {
-                try self.context.executeAndMergeChanges(using: deleteRequest)
-            } catch let error as NSError {
-                print(error)
             }
         }
     }

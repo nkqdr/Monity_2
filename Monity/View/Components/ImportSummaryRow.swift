@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ImportSummaryRow: View {
-    var summary: ImportCSVSummary
+    var resource: CSVValidHeaders
     var row: String
     var rowContents: [String] {
         Utils.separateCSVRow(row)
@@ -15,11 +15,11 @@ struct ImportSummaryRow: View {
     
     var body: some View {
         Group {
-            if summary.resource == CSVValidHeaders.transactionCSV {
+            if resource == CSVValidHeaders.transactionCSV {
                 transactionRow
-            } else if summary.resource == CSVValidHeaders.savingsCSV {
+            } else if resource == CSVValidHeaders.savingsCSV {
                 savingsRow
-            } else if summary.resource == CSVValidHeaders.recurringTransactionCSV {
+            } else if resource == CSVValidHeaders.recurringTransactionCSV {
                 recurringExpenseRow
             }
         }
@@ -119,8 +119,8 @@ struct ImportSummaryRow_Previews: PreviewProvider {
         let transactionRow = "\"Seife, Vitamin C und Zahnpasta\",3.26,2022-07-07T20:00:36.411800,0,\"Sonstiges, und Anderes\""
         let savingRow = "5000.0,2022-10-15T11:17:28.381013,Savings,Saved"
         VStack {
-            ImportSummaryRow(summary: ImportCSVSummary(resource: CSVValidHeaders.transactionCSV, rowsAmount: 1, rows: [transactionRow]), row: transactionRow)
-            ImportSummaryRow(summary: ImportCSVSummary(resource: CSVValidHeaders.savingsCSV, rowsAmount: 1, rows: [savingRow]), row: savingRow)
+            ImportSummaryRow(resource: CSVValidHeaders.transactionCSV, row: transactionRow)
+            ImportSummaryRow(resource: CSVValidHeaders.savingsCSV, row: savingRow)
         }
     }
 }

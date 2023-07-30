@@ -93,25 +93,21 @@ struct ExportOptionSheet: View {
     }
 }
 
-struct More_SystemView: View {
-    @StateObject private var content = SettingsSystemViewModel()
-    @State private var showDeleteAllConfirmation: Bool = false
-    @State private var showSelectorSheet: Bool = false
-    // These are needed because an error occurs when directly using the value in the ViewModel
-    @State private var importSummary: ImportCSVSummary?
-    @State private var exportHasErrors: Bool = false
-    @State private var exportWasSuccessful: Bool = false
+struct ImportSummaryView: View {
+    var summary: ImportCSVSummary
+    var onImport: () -> Void
+    var onCancel: () -> Void
     
-    func buildImportSummaryView(_ summary: ImportCSVSummary) -> some View {
+    var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Import Summary")
-                        .font(.title3)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                         .fontWeight(.semibold)
                     Text(summary.resourceName)
-                        .font(.title)
+                        .font(.headline)
                         .fontWeight(.bold)
                 }
                 Spacer()
@@ -128,24 +124,34 @@ struct More_SystemView: View {
             .padding()
             ScrollView {
                 ForEach(summary.rows, id: \.self) { row in
-                    ImportSummaryRow(summary: summary, row: row)
+                    ImportSummaryRow(resource: summary.resource, row: row)
                 }
                 .padding()
             }
             HStack {
                 Button("Cancel", role: .destructive) {
-                    content.importSummary = nil
+                    onCancel()
                 }
                 .buttonStyle(.borderless)
                 Spacer()
                 Button("Import") {
-                    content.importCSV()
+                    onImport()
                 }
                 .buttonStyle(.borderedProminent)
             }
             .padding()
         }
     }
+}
+
+struct More_SystemView: View {
+    @StateObject private var content = SettingsSystemViewModel()
+    @State private var showDeleteAllConfirmation: Bool = false
+    @State private var showSelectorSheet: Bool = false
+    // These are needed because an error occurs when directly using the value in the ViewModel
+    @State private var importSummary: ImportCSVSummary?
+    @State private var exportHasErrors: Bool = false
+    @State private var exportWasSuccessful: Bool = false
     
     var body: some View {
         List {
@@ -163,7 +169,11 @@ struct More_SystemView: View {
                 .presentationDetents([.height(220)])
         }
         .sheet(item: $importSummary) { summary in
-            buildImportSummaryView(summary)
+            ImportSummaryView(summary: summary, onImport: {
+                content.importCSV()
+            }, onCancel: {
+                content.importSummary = nil
+            })
         }
         .alert("Could not read this file", isPresented: $content.showInvalidFileAlert) {
             Button("Try again") {
