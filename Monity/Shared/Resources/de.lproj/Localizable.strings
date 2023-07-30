@@ -182,6 +182,9 @@
 "Export Transactions" = "Transaktionen exportieren";
 
 /* No comment provided by engineer. */
+"Export Recurring Expenses" = "Regelmäßige Ausgaben exportieren";
+
+/* No comment provided by engineer. */
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
 
 /* No comment provided by engineer. */
@@ -344,10 +347,7 @@
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
 
 /* No comment provided by engineer. */
-"Registered savings entries:" = "Registrierte Vermögenseinträge:";
-
-/* No comment provided by engineer. */
-"Registered transactions:" = "Registrierte Transaktionen:";
+"Savings entries" = "Vermögenseinträge";
 
 /* No comment provided by engineer. */
 "Rows:" = "Reihen";
@@ -503,7 +503,7 @@
 "Show Savings" = "Vermögen anzeigen";
 
 /* No comment provided by engineer. */
-"This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Optik. Ihre Daten werden nicht gelöscht.";
+"This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Darstellung. Ihre Daten werden nicht gelöscht.";
 
 /* No comment provided by engineer. */
 "Reset" = "Zurücksetzen";

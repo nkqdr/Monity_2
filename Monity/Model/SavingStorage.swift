@@ -23,21 +23,17 @@ class SavingStorage: CoreDataModelStorage<SavingsEntry> {
         guard let savingsCategories else { return false }
         var categories = savingsCategories
         for row in rows {
-            let rowContents = Utils.separateCSVRow(row)
-            let amount: Double = Double(rowContents[0]) ?? 0
-            let date: Date = Utils.formatFlutterDateStringToDate(rowContents[1])
-            let categoryName: String = rowContents[2]
-            let categoryLabel: SavingsCategoryLabel = SavingsCategoryLabel.by(rowContents[3])
-            var category = categories.first(where: { $0.wrappedName == categoryName })
+            let csvObj = SavingsEntry.decodeFromCSV(csvRow: row)
+            var category = categories.first(where: { $0.wrappedName == csvObj.categoryName })
             if category == nil {
                 let newCategory = SavingsCategory(context: PersistenceController.shared.container.viewContext)
                 newCategory.id = UUID()
-                newCategory.name = categoryName
-                newCategory.label = categoryLabel.rawValue
+                newCategory.name = csvObj.categoryName
+                newCategory.label = csvObj.categoryLabel.rawValue
                 category = newCategory
                 categories.append(newCategory)
             }
-            let _ = add(amount: amount, category: category, date: date, saveContext: false)
+            let _ = add(amount: csvObj.amount, category: category, date: csvObj.date, saveContext: false)
         }
         try? PersistenceController.shared.container.viewContext.save()
         return true

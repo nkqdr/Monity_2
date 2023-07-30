@@ -37,15 +37,33 @@ class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransac
     }
 }
 
-class RecurringTransactionStorage {
+class RecurringTransactionStorage: ResettableStorage<RecurringTransaction> {
     static let main: RecurringTransactionStorage = RecurringTransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
-    private let context: NSManagedObjectContext
     
-    init(managedObjectContext: NSManagedObjectContext) {
-        self.context = managedObjectContext
+    func add(set rows: [String]) -> Bool {
+        let categoriesFetchRequest = TransactionCategory.fetchRequest()
+        let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
+        guard let transactionCategories = currentCategories else {
+            return false
+        }
+        var categories = transactionCategories
+        for row in rows {
+            let obj = RecurringTransaction.decodeFromCSV(csvRow: row)
+            var category = categories.first(where: { $0.wrappedName == obj.categoryName })
+            if category == nil, !obj.categoryName.isEmpty {
+                let newCategory = TransactionCategory(context: self.context)
+                newCategory.name = obj.categoryName
+                newCategory.id = UUID()
+                category = newCategory
+                categories.append(newCategory)
+            }
+            let _ = add(name: obj.name, category: category, amount: obj.amount, startDate: obj.startDate, endDate: obj.endDate, cycle: obj.cycle, isDeducted: true, saveContext: false)
+        }
+        try? self.context.save()
+        return true
     }
     
-    func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool) -> RecurringTransaction {
+    func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool, saveContext: Bool = true) -> RecurringTransaction {
         self.context.performAndWait {
             let transaction = RecurringTransaction(context: self.context)
             transaction.name = name
@@ -56,7 +74,9 @@ class RecurringTransactionStorage {
             transaction.isDeducted = isDeducted
             transaction.id = UUID()
             transaction.category = category
-            try? self.context.save()
+            if saveContext {
+                try? self.context.save()
+            }
             return transaction
         }
     }
@@ -75,16 +95,6 @@ class RecurringTransactionStorage {
             } else {
                 return false
             }
-        }
-    }
-    
-    func delete(_ transaction: RecurringTransaction) {
-        self.context.delete(transaction)
-        do {
-            try self.context.save()
-        } catch {
-            self.context.rollback()
-            print("Failed to save context \(error.localizedDescription)")
         }
     }
 }

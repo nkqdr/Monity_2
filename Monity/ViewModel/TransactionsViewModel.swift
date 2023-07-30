@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Algorithms
 
 class MonthlyTransactionsViewModel: ItemListViewModel<Transaction> {
     @Published var currentTransactionsByDate: [TransactionsByDate] = []
@@ -50,19 +51,20 @@ class MonthlyTransactionsViewModel: ItemListViewModel<Transaction> {
     
     private func updateTransactionsByDate(_ transactionList: [Transaction]? = nil) {
         let transactions = transactionList ?? self.items
-        let uniqueDates = Set(transactions.map { $0.date?.removeTimeStamp ?? Date() })
-        
+        let chunkedTransactions = transactions.chunked(by: {
+            Calendar.current.isDate($0.wrappedDate, inSameDayAs: $1.wrappedDate)
+        })
         var byDate: [TransactionsByDate] = []
-        for uniqueDate in uniqueDates {
-            let newTransactions = transactions.filter { $0.date?.isSameDayAs(uniqueDate) ?? false }
-            let existing = currentTransactionsByDate.first(where: { $0.date.isSameDayAs(uniqueDate)})
-            if let existing {
-                var newExisting = existing
-                newExisting.setTransactions(newTransactions)
-                byDate.append(newExisting)
-            } else {
-                byDate.append(TransactionsByDate(date: uniqueDate, transactions: newTransactions))
+        for chunk in chunkedTransactions {
+            let day = chunk.first?.wrappedDate ?? Date()
+            let transactionBlock = currentTransactionsByDate.first(where: { Calendar.current.isDate(day, inSameDayAs: $0.date)})
+            guard let transactionBlock else {
+                byDate.append(TransactionsByDate(date: day, transactions: Array(chunk)))
+                continue
             }
+            var newBlock = transactionBlock
+            newBlock.setTransactions(Array(chunk))
+            byDate.append(newBlock)
         }
         currentTransactionsByDate = byDate.filter { !$0.transactions.isEmpty }.sorted {
             $0.date > $1.date

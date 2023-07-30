@@ -14,18 +14,40 @@ class SettingsSystemViewModel: ObservableObject {
     @Published var showFilePicker: Bool = false
     @Published var showInvalidFileAlert: Bool = false
     @Published var importSummary: ImportCSVSummary?
+    @Published var totalTransactionCount: Int = 0
+    @Published var totalSavingsCount: Int = 0
+    @Published var totalRecurringTransactionCount: Int = 0
     @Published var csvFileContent: String = "" {
         didSet {
             let rows = csvFileContent.split(whereSeparator: \.isNewline)
-            let header: String = String(rows.first ?? "")
-            if header == CSVValidHeaders.transactionCSV {
-                importSummary = ImportCSVSummary(resourceName: "Transactions", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
-            } else if header == CSVValidHeaders.savingsCSV {
-                importSummary = ImportCSVSummary(resourceName: "Savings", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
-            } else {
+            let header: CSVValidHeaders? = CSVValidHeaders.fromValue(String(rows.first ?? ""))
+            guard let header else {
                 importSummary = nil
                 showInvalidFileAlert.toggle()
+                return
             }
+            importSummary = ImportCSVSummary(resource: header, rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
+        }
+    }
+    
+    private var transactionCancellable: AnyCancellable?
+    private var recurringTransactionCancellable: AnyCancellable?
+    private var savingsCancellable: AnyCancellable?
+    
+    init() {
+        let transactionPublisher = TransactionFetchController.all.items.eraseToAnyPublisher()
+        self.transactionCancellable = transactionPublisher.sink { values in
+            self.totalTransactionCount = values.count
+        }
+        
+        let recurringTransactionPublisher = RecurringTransactionFetchController.all.items.eraseToAnyPublisher()
+        self.recurringTransactionCancellable = recurringTransactionPublisher.sink { values in
+            self.totalRecurringTransactionCount = values.count
+        }
+        
+        let savingsPublisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        self.savingsCancellable = savingsPublisher.sink { values in
+            self.totalSavingsCount = values.count
         }
     }
     
@@ -44,6 +66,13 @@ class SettingsSystemViewModel: ObservableObject {
         }
     }
     
+    func importRecurringTransactionsCSV(_ rows: [String]) {
+        let result = RecurringTransactionStorage.main.add(set: rows)
+        if !result {
+            showInvalidFileAlert.toggle()
+        }
+    }
+    
     // MARK: - Intents
     
     func importCSV() {
@@ -55,6 +84,8 @@ class SettingsSystemViewModel: ObservableObject {
                 self.importTransactionsCSV(summary.rows)
             } else if summary.resourceName == "Savings" {
                 self.importSavingsCSV(summary.rows)
+            } else if summary.resourceName == "Recurring expenses" {
+                self.importRecurringTransactionsCSV(summary.rows)
             }
         }
         // End with this to close the sheet
@@ -62,8 +93,8 @@ class SettingsSystemViewModel: ObservableObject {
     }
     
     func deleteTransactionData() {
-        TransactionCategoryStorage.main.deleteAll()
         TransactionStorage.main.deleteAll()
+        TransactionCategoryStorage.main.deleteAll()
     }
     
     func deleteSavingsData() {
@@ -71,9 +102,13 @@ class SettingsSystemViewModel: ObservableObject {
         SavingStorage.shared.deleteAll()
     }
     
+    func deleteRecurringTransactionData() {
+        RecurringTransactionStorage.main.deleteAll()
+    }
+    
     func deleteAllData() {
-        // Delete categories, so that all items will be deleted by cascade.
         deleteTransactionData()
         deleteSavingsData()
+        deleteRecurringTransactionData()
     }
 }

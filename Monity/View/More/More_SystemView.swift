@@ -7,30 +7,107 @@
 
 import SwiftUI
 
-struct More_SystemView: View {
-    @StateObject private var content = SettingsSystemViewModel()
-    @ObservedObject private var savingsContent = SavingsViewModel.shared
-    @ObservedObject private var transactionsContent = TransactionsViewModel.shared
+struct StoredItemsTile: View {
+    @State private var showDeleteConfirmation: Bool = false
+    var label: LocalizedStringKey
+    var amount: Int
+    var deleteConfirmationLabel: LocalizedStringKey
+    var deleteConfirmationMessage: LocalizedStringKey = "This cannot be undone!"
+    var onDelete: () -> Void
+    
+    var body: some View {
+        HStack {
+            Text(label)+Text(":")
+            Spacer()
+            Text(amount, format: .number)
+                .foregroundColor(.secondary)
+        }
+        .contextMenu {
+            Button(role: .destructive) {
+                showDeleteConfirmation.toggle()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .confirmationDialog(deleteConfirmationLabel, isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                onDelete()
+            }
+        } message: {
+            Text(deleteConfirmationMessage)
+        }
+    }
+}
+
+struct ExportOptionSheet: View {
     @ObservedObject private var dataExporter: DataExporter = DataExporter()
-    @State private var showDeleteAllConfirmation: Bool = false
-    @State private var showDeleteSavingsConfirmation: Bool = false
-    @State private var showDeleteTransactionsConfirmation: Bool = false
-    @State private var showSelectorSheet: Bool = false
-    // These are needed because an error occurs when directly using the value in the ViewModel
-    @State private var importSummary: ImportCSVSummary?
     @State private var exportHasErrors: Bool = false
     @State private var exportWasSuccessful: Bool = false
+    @Binding var isOpen: Bool
     
-    func buildImportSummaryView(_ summary: ImportCSVSummary) -> some View {
+    var body: some View {
+        VStack {
+            Toggle(isOn: $dataExporter.exportTransactions) {
+                Text("Export Transactions")
+            }
+            Toggle(isOn: $dataExporter.exportRecurringTransactions) {
+                Text("Export Recurring Expenses")
+            }
+            Toggle(isOn: $dataExporter.exportSavings) {
+                Text("Export Savings")
+            }
+            Spacer()
+            HStack {
+                Button("Cancel", role: .destructive) {
+                    isOpen = false
+                }
+                .buttonStyle(.borderless)
+                Spacer()
+                Button("Export to CSV") {
+                    let val = dataExporter.triggerExport()
+                    if val {
+                        exportWasSuccessful = true
+                    } else {
+                        exportHasErrors = true
+                    }
+                }
+                .disabled(dataExporter.disableExportButton)
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding()
+        .alert("Exporting error", isPresented: $exportHasErrors) {
+            Button("Try again", role: .cancel) {
+                isOpen = false
+            }
+        } message: {
+            Text("Something didn't work.")
+        }
+        .alert("Export successful!", isPresented: $exportWasSuccessful) {
+            Button("OK", role: .cancel) {
+                isOpen = false
+            }
+        } message: {
+            Text("You can find the .csv files in your Documents directory.")
+        }
+    }
+}
+
+struct ImportSummaryView: View {
+    var summary: ImportCSVSummary
+    var onImport: () -> Void
+    var onCancel: () -> Void
+    
+    var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Import Summary")
-                        .font(.title3)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                         .fontWeight(.semibold)
                     Text(summary.resourceName)
-                        .font(.title)
+                        .font(.headline)
                         .fontWeight(.bold)
                 }
                 Spacer()
@@ -47,24 +124,34 @@ struct More_SystemView: View {
             .padding()
             ScrollView {
                 ForEach(summary.rows, id: \.self) { row in
-                    ImportSummaryRow(summary: summary, row: row)
+                    ImportSummaryRow(resource: summary.resource, row: row)
                 }
                 .padding()
             }
             HStack {
                 Button("Cancel", role: .destructive) {
-                    content.importSummary = nil
+                    onCancel()
                 }
                 .buttonStyle(.borderless)
                 Spacer()
                 Button("Import") {
-                    content.importCSV()
+                    onImport()
                 }
                 .buttonStyle(.borderedProminent)
             }
             .padding()
         }
     }
+}
+
+struct More_SystemView: View {
+    @StateObject private var content = SettingsSystemViewModel()
+    @State private var showDeleteAllConfirmation: Bool = false
+    @State private var showSelectorSheet: Bool = false
+    // These are needed because an error occurs when directly using the value in the ViewModel
+    @State private var importSummary: ImportCSVSummary?
+    @State private var exportHasErrors: Bool = false
+    @State private var exportWasSuccessful: Bool = false
     
     var body: some View {
         List {
@@ -73,50 +160,20 @@ struct More_SystemView: View {
             exportSection
         }
         .sync($content.importSummary, with: $importSummary)
-        .sync($dataExporter.exportHasErrors, with: $exportHasErrors, delay: 0.5)
-        .sync($dataExporter.exportWasSuccessful, with: $exportWasSuccessful, delay: 0.5)
         .sheet(isPresented: $content.showFilePicker) {
             DocumentPicker(fileContent: $content.csvFileContent)
                 .ignoresSafeArea()
         }
         .sheet(isPresented: $showSelectorSheet) {
-            VStack {
-                Toggle(isOn: $dataExporter.exportTransactions) {
-                    Text("Export Transactions")
-                }
-                Toggle(isOn: $dataExporter.exportSavings) {
-                    Text("Export Savings")
-                }
-                Spacer()
-                HStack {
-                    Button("Cancel", role: .destructive) {
-                        showSelectorSheet = false
-                    }
-                    .buttonStyle(.borderless)
-                    Spacer()
-                    Button("Export to CSV") {
-                        showSelectorSheet = false
-                        dataExporter.triggerExport()
-                    }
-                    .disabled(dataExporter.disableExportButton)
-                    .buttonStyle(.borderedProminent)
-                }
-            }
-            .padding()
-            .presentationDetents([.height(180)])
+            ExportOptionSheet(isOpen: $showSelectorSheet)
+                .presentationDetents([.height(220)])
         }
         .sheet(item: $importSummary) { summary in
-            buildImportSummaryView(summary)
-        }
-        .alert("Exporting error", isPresented: $exportHasErrors) {
-            Button("Try again", role: .cancel) { }
-        } message: {
-            Text("Something didn't work.")
-        }
-        .alert("Export successful!", isPresented: $exportWasSuccessful) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("You can find the .csv files in your Documents directory.")
+            ImportSummaryView(summary: summary, onImport: {
+                content.importCSV()
+            }, onCancel: {
+                content.importSummary = nil
+            })
         }
         .alert("Could not read this file", isPresented: $content.showInvalidFileAlert) {
             Button("Try again") {
@@ -132,54 +189,33 @@ struct More_SystemView: View {
         } message: {
             Text("This cannot be undone!")
         }
-        .confirmationDialog("Are you sure you want to delete all savings data?", isPresented: $showDeleteSavingsConfirmation, titleVisibility: .visible) {
-            Button("Delete", role: .destructive) {
-                content.deleteSavingsData()
-            }
-        } message: {
-            Text("This cannot be undone!")
-        }
-        .confirmationDialog("Are you sure you want to delete all transaction data?", isPresented: $showDeleteTransactionsConfirmation, titleVisibility: .visible) {
-            Button("Delete", role: .destructive) {
-                content.deleteTransactionData()
-            }
-        } message: {
-            Text("This cannot be undone!")
-        }
         .navigationTitle("System")
         .navigationBarTitleDisplayMode(.inline)
     }
     
     var dataSection: some View {
         Section(header: Text("Saved Data"), footer: Text("Manage all data you have ever saved in this app.")) {
-            HStack {
-                Text("Registered transactions:")
-                Spacer()
-                Text(transactionsContent.items.count, format: .number)
-                    .foregroundColor(.secondary)
-            }
-            .contextMenu {
-                Button(role: .destructive) {
-                    showDeleteTransactionsConfirmation.toggle()
-                } label: {
-                    Label("Delete Transaction data", systemImage: "trash")
+            StoredItemsTile(
+                label: "Transactions",
+                amount: content.totalTransactionCount,
+                deleteConfirmationLabel: "Are you sure you want to delete all transaction data?") {
+                    content.deleteTransactionData()
                 }
-            }
-            HStack {
-                Text("Registered savings entries:")
-                Spacer()
-                Text(savingsContent.items.count, format: .number)
-                    .foregroundColor(.secondary)
-            }
-            .contextMenu {
-                Button(role: .destructive) {
-                    showDeleteSavingsConfirmation.toggle()
-                } label: {
-                    Label("Delete Savings data", systemImage: "trash")
+            StoredItemsTile(
+                label: "Savings entries",
+                amount: content.totalSavingsCount,
+                deleteConfirmationLabel: "Are you sure you want to delete all savings data?") {
+                    content.deleteSavingsData()
                 }
-            }
+            StoredItemsTile(
+                label: "Recurring expenses",
+                amount: content.totalRecurringTransactionCount,
+                deleteConfirmationLabel: "Are you sure you want to delete all recurring expenses data?") {
+                    content.deleteRecurringTransactionData()
+                }
             HStack {
                 Text("Used storage:")
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text(content.storageUsedString)
                     .foregroundColor(.secondary)

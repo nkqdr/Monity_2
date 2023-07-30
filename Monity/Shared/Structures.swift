@@ -98,14 +98,13 @@ struct AssetAllocationDataPoint: Identifiable {
 
 struct ImportCSVSummary: Identifiable, Equatable {
     var id: UUID = UUID()
-    var resourceName: LocalizedStringKey
+    var resource: CSVValidHeaders
     var rowsAmount: Int
     var rows: [String]
-}
-
-struct CSVValidHeaders {
-    static let transactionCSV: String = "description,amount,date,type,category"
-    static let savingsCSV: String = "amount,date,category_name,category_label"
+    
+    var resourceName: LocalizedStringKey {
+        self.resource.resourceName
+    }
 }
 
 struct AbstractTransaction {

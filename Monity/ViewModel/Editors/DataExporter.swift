@@ -10,14 +10,13 @@ import Foundation
 class DataExporter: ObservableObject {
     @Published var exportTransactions: Bool = false
     @Published var exportSavings: Bool = false
-    @Published var exportHasErrors: Bool = false
-    @Published var exportWasSuccessful: Bool = false
+    @Published var exportRecurringTransactions: Bool = false
     
     var disableExportButton: Bool {
-        !(exportSavings || exportTransactions)
+        !(exportSavings || exportTransactions || exportRecurringTransactions)
     }
     
-    private func getCSVExportString(for list: [CSVRepresentable], headers: String) -> String {
+    private func getCSVExportString(for list: [any CSVRepresentable], headers: String) -> String {
         var exportString: String = headers + "\n"
         for item in list {
             exportString += item.commaSeparatedString + "\n"
@@ -30,14 +29,14 @@ class DataExporter: ObservableObject {
         return filename + "-" + "\(date.year ?? 0)-\(date.month ?? 0)-\(date.day ?? 0)-\(date.hour ?? 0)-\(date.minute ?? 0)-\(date.second ?? 0)" + ".csv"
     }
     
-    private func writeStringToDisk(content: String, filename: String) {
+    private func writeStringToDisk(content: String, filename: String) -> Bool {
         let filePath = getDocumentsDirectory().appendingPathComponent(filename)
         
         do {
             try content.write(to: filePath, atomically: true, encoding: .utf8)
-            exportWasSuccessful = true
+            return true
         } catch {
-            exportHasErrors = true
+            return false
         }
     }
     
@@ -46,25 +45,36 @@ class DataExporter: ObservableObject {
         return paths[0]
     }
     
-    private func handleExportTransactions() {
-        let transactions = getCSVExportString(for: TransactionFetchController.all.items.value, headers: CSVValidHeaders.transactionCSV)
+    private func handleExportTransactions() -> Bool {
+        let transactions = getCSVExportString(for: TransactionFetchController.all.items.value, headers: CSVValidHeaders.transactionCSV.rawValue)
         let transactionsFilename = getFilenameWithPrefix(filename: "transactions")
-        writeStringToDisk(content: transactions, filename: transactionsFilename)
+        return writeStringToDisk(content: transactions, filename: transactionsFilename)
     }
     
-    private func handleExportSavings() {
-        let savings = getCSVExportString(for: SavingStorage.shared.items.value, headers: CSVValidHeaders.savingsCSV)
+    private func handleExportSavings() -> Bool {
+        let savings = getCSVExportString(for: SavingStorage.shared.items.value, headers: CSVValidHeaders.savingsCSV.rawValue)
         let savingsFilename = getFilenameWithPrefix(filename: "savings")
-        writeStringToDisk(content: savings, filename: savingsFilename)
+        return writeStringToDisk(content: savings, filename: savingsFilename)
+    }
+    
+    private func handleExportRecurringTransactions() -> Bool {
+        let recurringTransactions = getCSVExportString(for: RecurringTransactionFetchController.all.items.value, headers: CSVValidHeaders.recurringTransactionCSV.rawValue)
+        let recurringTransactionsFilename = getFilenameWithPrefix(filename: "recurring_transactions")
+        return writeStringToDisk(content: recurringTransactions, filename: recurringTransactionsFilename)
     }
     
     // MARK: - Intents
-    func triggerExport() {
+    func triggerExport() -> Bool {
+        var successful: Bool = false
         if exportSavings {
-            handleExportSavings()
+            successful = handleExportSavings()
         }
         if exportTransactions {
-            handleExportTransactions()
+            successful = handleExportTransactions()
         }
+        if exportRecurringTransactions {
+            successful = handleExportRecurringTransactions()
+        }
+        return successful
     }
 }

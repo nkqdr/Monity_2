@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ImportSummaryRow: View {
-    var summary: ImportCSVSummary
+    var resource: CSVValidHeaders
     var row: String
     var rowContents: [String] {
         Utils.separateCSVRow(row)
@@ -15,41 +15,76 @@ struct ImportSummaryRow: View {
     
     var body: some View {
         Group {
-            if summary.resourceName == "Transactions" {
+            if resource == CSVValidHeaders.transactionCSV {
                 transactionRow
-            } else if summary.resourceName == "Savings" {
+            } else if resource == CSVValidHeaders.savingsCSV {
                 savingsRow
+            } else if resource == CSVValidHeaders.recurringTransactionCSV {
+                recurringExpenseRow
             }
         }
         .frame(maxHeight: 100)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
     }
     
-    var savingsRow: some View {
-        let amount: Double = Double(rowContents[0]) ?? 0
-        let date: Date = Utils.formatFlutterDateStringToDate(rowContents[1])
-        let categoryName: String = rowContents[2]
-        let categoryLabel: SavingsCategoryLabel = SavingsCategoryLabel.by(rowContents[3])
-        
+    var recurringExpenseRow: some View {
+        let obj = RecurringTransaction.decodeFromCSV(csvRow: row)        
         return HStack {
             VStack(alignment: .leading) {
-                Text(categoryName)
+                if !obj.categoryName.isEmpty {
+                    Text(obj.categoryName)
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                }
+                Text(obj.name)
+                    .fontWeight(.bold)
+                Spacer()
+                HStack {
+                    Text(obj.startDate, format: .dateTime.year().month().day())
+                    Text("-")
+                    if let endDate = obj.endDate {
+                        Text(endDate, format: .dateTime.year().month().day())
+                    } else {
+                        Text("Today")
+                    }
+                }
+                .font(.footnote)
+                .foregroundColor(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(obj.cycle.name)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text(obj.amount, format: .customCurrency())
+                    .foregroundColor(obj.amount > 0 ? .green : .red)
+                    .fontWeight(.semibold)
+            }
+        }
+        .padding()
+    }
+    
+    var savingsRow: some View {
+        let csvObj = SavingsEntry.decodeFromCSV(csvRow: row)
+        return HStack {
+            VStack(alignment: .leading) {
+                Text(csvObj.categoryName)
                     .fontWeight(.bold)
                 Spacer()
                 HStack {
                     Circle()
-                        .foregroundColor(categoryLabel.color)
+                        .foregroundColor(csvObj.categoryLabel.color)
                         .frame(width: 15)
-                    Text(LocalizedStringKey(categoryLabel.rawValue))
+                    Text(LocalizedStringKey(csvObj.categoryLabel.rawValue))
                 }
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(date, format: .dateTime.year().month().day())
+                Text(csvObj.date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(amount, format: .customCurrency())
-                    .foregroundColor(amount > 0 ? .green : .red)
+                Text(csvObj.amount, format: .customCurrency())
+                    .foregroundColor(csvObj.amount > 0 ? .green : .red)
                     .fontWeight(.semibold)
             }
         }
@@ -57,26 +92,21 @@ struct ImportSummaryRow: View {
     }
     
     var transactionRow: some View {
-        let description: String = rowContents[0]
-        let amount: Double = Double(rowContents[1]) ?? 0
-        let date: Date = Utils.formatFlutterDateStringToDate(rowContents[2])
-        let isExpense: Bool = rowContents[3] == "0"
-        let categoryName: String = rowContents[4]
-        
+        let csvObj = Transaction.decodeFromCSV(csvRow: row)
         return HStack {
             VStack(alignment: .leading) {
-                Text(categoryName)
+                Text(csvObj.categoryName)
                     .fontWeight(.bold)
                 Spacer()
-                Text(description)
+                Text(csvObj.description)
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(date, format: .dateTime.year().month().day())
+                Text(csvObj.date, format: .dateTime.year().month().day())
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(amount, format: .customCurrency())
-                    .foregroundColor(isExpense ? .red : .green)
+                Text(csvObj.amount, format: .customCurrency())
+                    .foregroundColor(csvObj.isExpense ? .red : .green)
                     .fontWeight(.semibold)
             }
         }
@@ -89,8 +119,8 @@ struct ImportSummaryRow_Previews: PreviewProvider {
         let transactionRow = "\"Seife, Vitamin C und Zahnpasta\",3.26,2022-07-07T20:00:36.411800,0,\"Sonstiges, und Anderes\""
         let savingRow = "5000.0,2022-10-15T11:17:28.381013,Savings,Saved"
         VStack {
-            ImportSummaryRow(summary: ImportCSVSummary(resourceName: "Transactions", rowsAmount: 1, rows: [transactionRow]), row: transactionRow)
-            ImportSummaryRow(summary: ImportCSVSummary(resourceName: "Savings", rowsAmount: 1, rows: [savingRow]), row: savingRow)
+            ImportSummaryRow(resource: CSVValidHeaders.transactionCSV, row: transactionRow)
+            ImportSummaryRow(resource: CSVValidHeaders.savingsCSV, row: savingRow)
         }
     }
 }

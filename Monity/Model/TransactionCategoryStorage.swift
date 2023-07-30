@@ -18,13 +18,8 @@ class TransactionCategoryFetchController: CoreDataModelStorage<TransactionCatego
     }
 }
 
-class TransactionCategoryStorage {
+class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
     static let main: TransactionCategoryStorage = TransactionCategoryStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
-    private let context: NSManagedObjectContext
-    
-    public init(managedObjectContext: NSManagedObjectContext) {
-        self.context = managedObjectContext
-    }
     
     func add(name: String) -> TransactionCategory {
         let category = TransactionCategory(context: self.context)
@@ -41,41 +36,6 @@ class TransactionCategoryStorage {
                 return true
             } else {
                 return false
-            }
-        }
-    }
-    
-    func delete(_ category: TransactionCategory) {
-        self.context.delete(category)
-        do {
-            try self.context.save()
-        } catch {
-            self.context.rollback()
-            print("Failed to save context \(error.localizedDescription)")
-        }
-    }
-    
-    func delete(allIn categories: [TransactionCategory]) {
-        for category in categories {
-            self.context.delete(category)
-        }
-        do {
-            try self.context.save()
-        } catch {
-            self.context.rollback()
-            print("Failed to save context \(error.localizedDescription)")
-        }
-    }
-    
-    func deleteAll() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TransactionCategory.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        self.context.performAndWait {
-            do {
-                try self.context.executeAndMergeChanges(using: deleteRequest)
-            } catch let error as NSError {
-                print(error)
             }
         }
     }

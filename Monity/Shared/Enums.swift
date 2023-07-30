@@ -8,8 +8,36 @@
 import Foundation
 import SwiftUI
 
-enum TransactionCycle: Int16, CaseIterable {
+enum CSVValidHeaders: String, CaseIterable {
+    case transactionCSV = "description,amount,date,type,category"
+    case savingsCSV = "amount,date,category_name,category_label"
+    case recurringTransactionCSV = "name,amount,category,cycle,start_date,end_date"
     
+    var resourceName: LocalizedStringKey {
+        switch self {
+        case .transactionCSV:
+            return "Transactions"
+        case .savingsCSV:
+            return "Savings"
+        case .recurringTransactionCSV:
+            return "Recurring expenses"
+        }
+    }
+    
+    static func fromValue(_ value: String?) -> CSVValidHeaders? {
+        guard let givenValue = value else {
+            return nil
+        }
+        for val in self.allCases {
+            if val.rawValue == givenValue {
+                return val
+            }
+        }
+        return nil
+    }
+}
+
+enum TransactionCycle: Int16, CaseIterable {
     case monthly = 0
     case yearly = 1
     case weekly = 2
@@ -45,7 +73,7 @@ enum TransactionCycle: Int16, CaseIterable {
         guard let givenValue = value else {
             return nil
         }
-        for val in TransactionCycle.allCases {
+        for val in self.allCases {
             if val.rawValue == givenValue {
                 return val
             }
