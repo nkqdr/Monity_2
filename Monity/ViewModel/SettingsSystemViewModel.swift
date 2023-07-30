@@ -17,17 +17,13 @@ class SettingsSystemViewModel: ObservableObject {
     @Published var csvFileContent: String = "" {
         didSet {
             let rows = csvFileContent.split(whereSeparator: \.isNewline)
-            let header: String = String(rows.first ?? "")
-            if header == CSVValidHeaders.transactionCSV {
-                importSummary = ImportCSVSummary(resourceName: "Transactions", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
-            } else if header == CSVValidHeaders.savingsCSV {
-                importSummary = ImportCSVSummary(resourceName: "Savings", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
-            } else if header == CSVValidHeaders.recurringTransactionCSV {
-                importSummary = ImportCSVSummary(resourceName: "Recurring expenses", rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
-            } else {
+            let header: CSVValidHeaders? = CSVValidHeaders.fromValue(String(rows.first ?? ""))
+            guard let header else {
                 importSummary = nil
                 showInvalidFileAlert.toggle()
+                return
             }
+            importSummary = ImportCSVSummary(resource: header, rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
         }
     }
     

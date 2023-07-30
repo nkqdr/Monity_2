@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 extension TransactionCategory {
     var wrappedName: String {
@@ -29,6 +30,31 @@ extension Transaction {
 }
 
 extension Transaction: CSVRepresentable {
+    struct CSVData {
+        let description: String
+        let amount: Double
+        let date: Date
+        let isExpense: Bool
+        let categoryName: String
+    }
+    typealias CSVDataDype = CSVData
+    
+    static func decodeFromCSV(csvRow: String) -> CSVData {
+        let rowContents = Utils.separateCSVRow(csvRow)
+        let description: String = rowContents[0]
+        let amount: Double = Double(rowContents[1]) ?? 0
+        let date: Date = Utils.formatFlutterDateStringToDate(rowContents[2])
+        let isExpense: Bool = rowContents[3] == "0" || rowContents[3] == "expense"
+        let categoryName: String = rowContents[4]
+        return CSVData(
+            description: description,
+            amount: amount,
+            date: date,
+            isExpense: isExpense,
+            categoryName: categoryName
+        )
+    }
+    
     private var wrappedCSVText: String {
         if self.wrappedText.contains(",") {
             return "\"\(self.wrappedText)\""
@@ -106,7 +132,25 @@ extension SavingsEntry {
     }
 }
 
-extension SavingsEntry: CSVRepresentable {
+extension SavingsEntry: CSVRepresentable, CSVDecodable {
+    struct CSVData {
+        let amount: Double
+        let date: Date
+        let categoryName: String
+        let categoryLabel: SavingsCategoryLabel
+    }
+    typealias CSVDataDype = CSVData
+    
+    static func decodeFromCSV(csvRow: String) -> CSVData {
+        let rowContents = Utils.separateCSVRow(csvRow)
+        let amount: Double = Double(rowContents[0]) ?? 0
+        let date: Date = Utils.formatFlutterDateStringToDate(rowContents[1])
+        let categoryName: String = rowContents[2]
+        let categoryLabel: SavingsCategoryLabel = SavingsCategoryLabel.by(rowContents[3])
+        return CSVData(amount: amount, date: date, categoryName: categoryName, categoryLabel: categoryLabel)
+    }
+    
+    
     private var wrappedCSVcategoryName: String {
         let name = self.category?.wrappedName ?? ""
         if name.contains(",") {
@@ -121,6 +165,37 @@ extension SavingsEntry: CSVRepresentable {
 }
 
 extension RecurringTransaction: CSVRepresentable {
+    struct CSVData {
+        let name: String
+        let amount: Double
+        let categoryName: String
+        let cycle: TransactionCycle
+        let startDate: Date
+        let endDate: Date?
+    }
+    typealias CSVDataDype = CSVData
+    
+    static func decodeFromCSV(csvRow: String) -> CSVData {
+        let rowContents = Utils.separateCSVRow(csvRow)
+        let name: String = rowContents[0]
+        let amount: Double = Double(rowContents[1]) ?? 0
+        let categoryName: String = rowContents[2]
+        let cycleNum: Int16 = Int16(rowContents[3]) ?? 0
+        let startDate: Date = Utils.formatFlutterDateStringToDate(rowContents[4])
+        let endDateContent: String = rowContents[5]
+        let endDate: Date? = endDateContent.isEmpty ? nil : Utils.formatFlutterDateStringToDate(endDateContent)
+        let cycle = TransactionCycle.fromValue(cycleNum) ?? TransactionCycle.monthly
+        return CSVData(
+            name: name,
+            amount: amount,
+            categoryName: categoryName,
+            cycle: cycle,
+            startDate: startDate,
+            endDate: endDate
+        )
+    }
+    
+    
     private var wrappedCSVName: String {
         let name = self.wrappedName
         if name.contains(",") {

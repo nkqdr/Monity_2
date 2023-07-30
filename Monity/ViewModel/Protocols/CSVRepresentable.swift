@@ -6,7 +6,15 @@
 //
 
 import Foundation
+import CoreData
 
-protocol CSVRepresentable {
+protocol CSVDecodable {
+    associatedtype CSVDataDype
+    static func decodeFromCSV(csvRow: String) -> CSVDataDype
+}
+
+protocol CSVEncodable {
     var commaSeparatedString: String { get }
 }
+
+protocol CSVRepresentable: CSVDecodable, CSVEncodable { }

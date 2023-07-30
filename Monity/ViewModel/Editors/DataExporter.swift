@@ -18,7 +18,7 @@ class DataExporter: ObservableObject {
         !(exportSavings || exportTransactions || exportRecurringTransactions)
     }
     
-    private func getCSVExportString(for list: [CSVRepresentable], headers: String) -> String {
+    private func getCSVExportString(for list: [any CSVRepresentable], headers: String) -> String {
         var exportString: String = headers + "\n"
         for item in list {
             exportString += item.commaSeparatedString + "\n"
@@ -48,19 +48,19 @@ class DataExporter: ObservableObject {
     }
     
     private func handleExportTransactions() {
-        let transactions = getCSVExportString(for: TransactionFetchController.all.items.value, headers: CSVValidHeaders.transactionCSV)
+        let transactions = getCSVExportString(for: TransactionFetchController.all.items.value, headers: CSVValidHeaders.transactionCSV.rawValue)
         let transactionsFilename = getFilenameWithPrefix(filename: "transactions")
         writeStringToDisk(content: transactions, filename: transactionsFilename)
     }
     
     private func handleExportSavings() {
-        let savings = getCSVExportString(for: SavingStorage.shared.items.value, headers: CSVValidHeaders.savingsCSV)
+        let savings = getCSVExportString(for: SavingStorage.shared.items.value, headers: CSVValidHeaders.savingsCSV.rawValue)
         let savingsFilename = getFilenameWithPrefix(filename: "savings")
         writeStringToDisk(content: savings, filename: savingsFilename)
     }
     
     private func handleExportRecurringTransactions() {
-        let recurringTransactions = getCSVExportString(for: RecurringTransactionFetchController.all.items.value, headers: CSVValidHeaders.recurringTransactionCSV)
+        let recurringTransactions = getCSVExportString(for: RecurringTransactionFetchController.all.items.value, headers: CSVValidHeaders.recurringTransactionCSV.rawValue)
         let recurringTransactionsFilename = getFilenameWithPrefix(filename: "recurring_transactions")
         writeStringToDisk(content: recurringTransactions, filename: recurringTransactionsFilename)
     }

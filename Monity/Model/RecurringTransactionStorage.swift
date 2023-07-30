@@ -53,25 +53,16 @@ class RecurringTransactionStorage {
         }
         var categories = transactionCategories
         for row in rows {
-            let rowContents = Utils.separateCSVRow(row)
-            
-            let name: String = rowContents[0]
-            let amount: Double = Double(rowContents[1]) ?? 0
-            let categoryName: String = rowContents[2]
-            let cycleNum: Int16 = Int16(rowContents[3]) ?? 0
-            let startDate: Date = Utils.formatFlutterDateStringToDate(rowContents[4])
-            let endDateContent: String = rowContents[5]
-            let endDate: Date? = endDateContent.isEmpty ? nil : Utils.formatFlutterDateStringToDate(endDateContent)
-            let cycle = TransactionCycle.fromValue(cycleNum) ?? TransactionCycle.monthly
-            var category = categories.first(where: { $0.wrappedName == categoryName })
-            if category == nil, !categoryName.isEmpty {
+            let obj = RecurringTransaction.decodeFromCSV(csvRow: row)
+            var category = categories.first(where: { $0.wrappedName == obj.categoryName })
+            if category == nil, !obj.categoryName.isEmpty {
                 let newCategory = TransactionCategory(context: self.context)
-                newCategory.name = categoryName
+                newCategory.name = obj.categoryName
                 newCategory.id = UUID()
                 category = newCategory
                 categories.append(newCategory)
             }
-            let _ = add(name: name, category: category, amount: amount, startDate: startDate, endDate: endDate, cycle: cycle, isDeducted: true, saveContext: false)
+            let _ = add(name: obj.name, category: category, amount: obj.amount, startDate: obj.startDate, endDate: obj.endDate, cycle: obj.cycle, isDeducted: true, saveContext: false)
         }
         try? self.context.save()
         return true

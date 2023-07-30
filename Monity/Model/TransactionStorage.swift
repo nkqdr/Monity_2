@@ -64,21 +64,16 @@ class TransactionStorage {
         }
         var categories = transactionCategories
         for row in rows {
-            let rowContents = Utils.separateCSVRow(row)
-            let description: String = rowContents[0]
-            let amount: Double = Double(rowContents[1]) ?? 0
-            let date: Date = Utils.formatFlutterDateStringToDate(rowContents[2])
-            let isExpense: Bool = rowContents[3] == "0" || rowContents[3] == "expense"
-            let categoryName: String = rowContents[4]
-            var category = categories.first(where: { $0.wrappedName == categoryName })
-            if category == nil, !categoryName.isEmpty {
+            let obj = Transaction.decodeFromCSV(csvRow: row)
+            var category = categories.first(where: { $0.wrappedName == obj.categoryName })
+            if category == nil, !obj.categoryName.isEmpty {
                 let newCategory = TransactionCategory(context: self.context)
-                newCategory.name = categoryName
+                newCategory.name = obj.categoryName
                 newCategory.id = UUID()
                 category = newCategory
                 categories.append(newCategory)
             }
-            let _ = add(text: description, isExpense: isExpense, amount: amount, category: category, date: date, saveContext: false)
+            let _ = add(text: obj.description, isExpense: obj.isExpense, amount: obj.amount, category: category, date: obj.date, saveContext: false)
         }
         try? self.context.save()
         return true
