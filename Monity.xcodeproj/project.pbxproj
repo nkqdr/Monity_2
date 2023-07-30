@@ -118,6 +118,7 @@
 		60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */; };
 		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
 		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
+		60DD7F2C2A767BAC00786D5E /* ResettableStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8219E2A766F3D00CD02E9 /* ResettableStorage.swift */; };
 		60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605928FD412100FAB25A /* BudgetBattery.swift */; };
 		60E7605C28FD454D00FAB25A /* TransactionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605B28FD454D00FAB25A /* TransactionSummary.swift */; };
 		60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */; };
@@ -801,6 +802,7 @@
 				601E840D2A5A0B4A00067A65 /* TransactionEditor.swift in Sources */,
 				601E84102A5A0B7000067A65 /* CSVRepresentable.swift in Sources */,
 				601E840E2A5A0B5700067A65 /* Utils.swift in Sources */,
+				60DD7F2C2A767BAC00786D5E /* ResettableStorage.swift in Sources */,
 				601E840A2A5A0B2B00067A65 /* CoreDataModelStorage.swift in Sources */,
 				601E840F2A5A0B6300067A65 /* ModelExtensions.swift in Sources */,
 				60BD9F2928F35B70001FF5FF /* DateTests.swift in Sources */,
