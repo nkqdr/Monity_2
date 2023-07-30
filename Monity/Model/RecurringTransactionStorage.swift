@@ -112,4 +112,17 @@ class RecurringTransactionStorage {
             print("Failed to save context \(error.localizedDescription)")
         }
     }
+    
+    func deleteAll() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = RecurringTransaction.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        self.context.performAndWait {
+            do {
+                try self.context.executeAndMergeChanges(using: deleteRequest)
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+    }
 }

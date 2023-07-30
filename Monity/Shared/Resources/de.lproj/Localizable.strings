@@ -347,10 +347,7 @@
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
 
 /* No comment provided by engineer. */
-"Registered savings entries:" = "Registrierte Vermögenseinträge:";
-
-/* No comment provided by engineer. */
-"Registered transactions:" = "Registrierte Transaktionen:";
+"Savings entries" = "Vermögenseinträge";
 
 /* No comment provided by engineer. */
 "Rows:" = "Reihen";
