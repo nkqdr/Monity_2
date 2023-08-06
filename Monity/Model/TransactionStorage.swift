@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class TransactionFetchController: CoreDataModelStorage<Transaction> {
+class TransactionFetchController: BaseFetchController<Transaction> {
     static let all = TransactionFetchController()
     static let currentMonth = TransactionFetchController.generateCurrentMonth()
     

@@ -21,7 +21,7 @@ class AssetAllocationViewModel: ObservableObject {
     private var savingsCancellable: AnyCancellable?
     
     init() {
-        let savingsPub = SavingStorage.shared.items.eraseToAnyPublisher()
+        let savingsPub = SavingsFetchController.all.items.eraseToAnyPublisher()
         
         self.savingsCancellable = savingsPub.sink { items in
             var latestByCategory: [SavingsCategory: SavingsEntry] = Dictionary()

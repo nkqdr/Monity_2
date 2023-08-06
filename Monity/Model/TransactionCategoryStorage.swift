@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class TransactionCategoryFetchController: CoreDataModelStorage<TransactionCategory> {
+class TransactionCategoryFetchController: BaseFetchController<TransactionCategory> {
     static let all = TransactionCategoryFetchController()
     
     private init() {

@@ -45,7 +45,7 @@ class SettingsSystemViewModel: ObservableObject {
             self.totalRecurringTransactionCount = values.count
         }
         
-        let savingsPublisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        let savingsPublisher = SavingsFetchController.all.items.eraseToAnyPublisher()
         self.savingsCancellable = savingsPublisher.sink { values in
             self.totalSavingsCount = values.count
         }
@@ -60,7 +60,7 @@ class SettingsSystemViewModel: ObservableObject {
     }
     
     func importSavingsCSV(_ rows: [String]) {
-        let result = SavingStorage.shared.add(set: rows)
+        let result = SavingStorage.main.add(set: rows)
         if !result {
             showInvalidFileAlert.toggle()
         }
@@ -98,8 +98,8 @@ class SettingsSystemViewModel: ObservableObject {
     }
     
     func deleteSavingsData() {
-        SavingsCategoryStorage.shared.deleteAll()
-        SavingStorage.shared.deleteAll()
+        SavingsCategoryStorage.main.deleteAll()
+        SavingStorage.main.deleteAll()
     }
     
     func deleteRecurringTransactionData() {

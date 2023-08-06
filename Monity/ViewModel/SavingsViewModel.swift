@@ -15,12 +15,12 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     }
     
     private init() {
-        let publisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
     private init(category: SavingsCategory) {
-        let publisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
         itemCancellable = publisher.sink { entries in
             self.items = entries.filter { $0.category == category}
@@ -30,6 +30,6 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     // MARK: - Intent
     
     override func deleteItem(_ item: SavingsEntry) {
-        SavingStorage.shared.delete(item)
+        SavingStorage.main.delete(item)
     }
 }

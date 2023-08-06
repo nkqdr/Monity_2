@@ -10,13 +10,13 @@ import Foundation
 class SettingsSavingsViewModel: ItemListViewModel<SavingsCategory> {
     
     init() {
-        let itemPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
+        let itemPublisher = SavingsCategoryFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: itemPublisher)
     }
     
     // MARK: - Intents
     
     override func deleteItem(_ item: SavingsCategory) {
-        SavingsCategoryStorage.shared.delete(item)
+        SavingsCategoryStorage.main.delete(item)
     }
 }

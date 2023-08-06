@@ -7,15 +7,19 @@
 
 import Foundation
 
-class SavingStorage: CoreDataModelStorage<SavingsEntry> {
-    static let shared: SavingStorage = SavingStorage()
+class SavingsFetchController: BaseFetchController<SavingsEntry> {
+    static let all: SavingsFetchController = SavingsFetchController()
     
     private init() {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
         ])
     }
-    
+}
+
+class SavingStorage: ResettableStorage<SavingsEntry> {
+    static let main: SavingStorage = SavingStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
+
     func add(set rows: [String]) -> Bool {
         let categoriesFetchRequest = SavingsCategory.fetchRequest()
         let savingsCategories: [SavingsCategory]? = try? PersistenceController.shared.container.viewContext.fetch(categoriesFetchRequest)
@@ -62,16 +66,6 @@ class SavingStorage: CoreDataModelStorage<SavingsEntry> {
             } else {
                 return false
             }
-        }
-    }
-
-    func delete(_ entry: SavingsEntry) {
-        PersistenceController.shared.container.viewContext.delete(entry)
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            PersistenceController.shared.container.viewContext.rollback()
-            print("Failed to save context \(error.localizedDescription)")
         }
     }
 }

@@ -42,8 +42,8 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     private var entryCancellable: AnyCancellable?
     
     public init() {
-        let categoryPublisher = SavingsCategoryStorage.shared.items.eraseToAnyPublisher()
-        let entryPublisher = SavingStorage.shared.items.eraseToAnyPublisher()
+        let categoryPublisher = SavingsCategoryFetchController.all.items.eraseToAnyPublisher()
+        let entryPublisher = SavingsFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: categoryPublisher)
         entryCancellable = entryPublisher.sink { entries in
             self.savingEntries = entries
@@ -108,6 +108,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     }
     
     func toggleHiddenFor(_ category: SavingsCategory) {
-        let _ = SavingsCategoryStorage.shared.update(category, isHidden: !category.isHidden)
+        let _ = SavingsCategoryStorage.main.update(category, isHidden: !category.isHidden)
     }
 }
