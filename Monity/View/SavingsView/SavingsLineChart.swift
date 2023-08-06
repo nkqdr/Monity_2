@@ -11,10 +11,7 @@ import Charts
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
     var dataPoints: [ValueTimeDataPoint]
-    
-    private var currentNetWorth: Double {
-        dataPoints.last?.value ?? 0
-    }
+    var currentNetWorth: Double = 0
     
     private var minYValue: Double {
         dataPoints.map { $0.value }.min() ?? 0
@@ -87,7 +84,6 @@ struct SavingsDPLineChart: View {
         }
         .frame(height: 200)
         .foregroundColor(currentNetWorth >= 0 ? .green : .red)
-//        .animation(.easeInOut, value: content.filteredLineChartData)
     }
     
     var body: some View {
@@ -122,56 +118,20 @@ struct SavingsDPLineChart: View {
 }
 
 struct SavingsLineChart: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
-    
-    var timeframePicker: some View {
-        // The picker holds the number of seconds for the selected timeframe.
-        Picker("Timeframe", selection: $content.timeFrameToDisplay) {
-            Text("picker.lastmonth").tag(2592000)
-            Text("picker.sixmonths").tag(15552000)
-            Text("picker.lastyear").tag(31536000)
-            Text("picker.fiveyears").tag(157680000)
-            Text("picker.max").tag(-1)
-        }
-        .pickerStyle(.segmented)
-    }
+    @ObservedObject private var viewModel = SavingsLineChartViewModel()
     
     var body: some View {
         VStack {
-            SavingsDPLineChart(dataPoints: content.filteredLineChartData)
-            timeframePicker
+            SavingsDPLineChart(dataPoints: viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
+            // The picker holds the number of seconds for the selected timeframe.
+            Picker("Timeframe", selection: $viewModel.selectedTimeframe) {
+                ForEach(SavingsLineChartViewModel.possibleTimeframeLowerBounds) { config in
+                    Text(LocalizedStringKey(config.label)).tag(config.tagValue)
+                }
+            }
+            .pickerStyle(.segmented)
         }
         .padding(.horizontal)
-    }
-}
-
-struct StaticSavingsLineChart: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
-    
-    private var dataPoints: [ValueTimeDataPoint] {
-        content.filteredLineChartData
-    }
-    
-    private var minYValue: Double {
-        dataPoints.map { $0.value }.min() ?? 0
-    }
-    
-    private var maxYValue: Double {
-        dataPoints.map { $0.value }.max() ?? 0
-    }
-    
-    var body: some View {
-        Chart(dataPoints) {
-            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
-                .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                .interpolationMethod(.catmullRom)
-        }
-        .chartYAxis(.hidden)
-        .chartXAxis(.hidden)
-        .chartYScale(domain: minYValue ... maxYValue)
-        .frame(height: 120)
-        .foregroundColor(content.percentChangeInLastYear >= 0 ? .green : .red)
-        .padding(.vertical, 10)
     }
 }
 

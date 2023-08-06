@@ -28,10 +28,7 @@
 		601E84122A5A0B8200067A65 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8D29AE608B00F45E5F /* Enums.swift */; };
 		602E45C228F95D46003FD564 /* CurrentMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C128F95D46003FD564 /* CurrentMonth.swift */; };
 		602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C328F9608D003FD564 /* ShapeExtensions.swift */; };
-		602E998A29E15B980063BBC7 /* SavingsProjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998929E15B980063BBC7 /* SavingsProjections.swift */; };
 		602E998C29E15C700063BBC7 /* SavingsLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998B29E15C700063BBC7 /* SavingsLineChart.swift */; };
-		602E998E29E15EF80063BBC7 /* SavingsCategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */; };
-		602E999029E1690A0063BBC7 /* SavingsCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */; };
 		602E999429E18B2F0063BBC7 /* SavingsEntryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E999329E18B2F0063BBC7 /* SavingsEntryManager.swift */; };
 		602E999629E18E970063BBC7 /* DashboardSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E999529E18E970063BBC7 /* DashboardSettingsView.swift */; };
 		602FB1E82A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602FB1E72A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift */; };
@@ -67,7 +64,6 @@
 		60804B9229AE642700F45E5F /* RecurringTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */; };
 		60804B9429AE66EB00F45E5F /* RecurringTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */; };
 		60804B9629AE673F00F45E5F /* RecurringTransactionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9529AE673F00F45E5F /* RecurringTransactionEditor.swift */; };
-		608B80BB29B6469700047F3D /* SavingsPredictionBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */; };
 		608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608B80BC29B6544500047F3D /* TypeExtensions.swift */; };
 		608B80C029B656CC00047F3D /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 608B80C229B656CC00047F3D /* Localizable.stringsdict */; };
 		608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608C4D2C290D2AFC00FFB45A /* ListBase.swift */; };
@@ -117,6 +113,7 @@
 		60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */; };
 		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
 		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
+		60D8B2632A7FD416009BAA96 /* SavingsLineChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8B2622A7FD416009BAA96 /* SavingsLineChartViewModel.swift */; };
 		60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605928FD412100FAB25A /* BudgetBattery.swift */; };
 		60E7605C28FD454D00FAB25A /* TransactionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605B28FD454D00FAB25A /* TransactionSummary.swift */; };
 		60E7605E28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */; };
@@ -151,10 +148,7 @@
 		602BA992290F07C100830481 /* Monity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Monity.entitlements; sourceTree = "<group>"; };
 		602E45C128F95D46003FD564 /* CurrentMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMonth.swift; sourceTree = "<group>"; };
 		602E45C328F9608D003FD564 /* ShapeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeExtensions.swift; sourceTree = "<group>"; };
-		602E998929E15B980063BBC7 /* SavingsProjections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsProjections.swift; sourceTree = "<group>"; };
 		602E998B29E15C700063BBC7 /* SavingsLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsLineChart.swift; sourceTree = "<group>"; };
-		602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryTile.swift; sourceTree = "<group>"; };
-		602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCategoryList.swift; sourceTree = "<group>"; };
 		602E999329E18B2F0063BBC7 /* SavingsEntryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsEntryManager.swift; sourceTree = "<group>"; };
 		602E999529E18E970063BBC7 /* DashboardSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSettingsView.swift; sourceTree = "<group>"; };
 		602FB1E72A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSummaryViewModel.swift; sourceTree = "<group>"; };
@@ -190,7 +184,6 @@
 		60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionFormView.swift; sourceTree = "<group>"; };
 		60804B9529AE673F00F45E5F /* RecurringTransactionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionEditor.swift; sourceTree = "<group>"; };
-		608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsPredictionBox.swift; sourceTree = "<group>"; };
 		608B80BC29B6544500047F3D /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
 		608B80C129B656CC00047F3D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		608B80C329B656D000047F3D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -245,6 +238,7 @@
 		60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryEditor.swift; sourceTree = "<group>"; };
 		60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtensions.swift; sourceTree = "<group>"; };
+		60D8B2622A7FD416009BAA96 /* SavingsLineChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsLineChartViewModel.swift; sourceTree = "<group>"; };
 		60E7605928FD412100FAB25A /* BudgetBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetBattery.swift; sourceTree = "<group>"; };
 		60E7605B28FD454D00FAB25A /* TransactionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSummary.swift; sourceTree = "<group>"; };
 		60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageMonthlyChartViewModel.swift; sourceTree = "<group>"; };
@@ -283,6 +277,7 @@
 				6000FF7928F5FEDD0083595D /* CurrentMonthViewModel.swift */,
 				60E7605D28FD4D3600FAB25A /* AverageMonthlyChartViewModel.swift */,
 				602FB1E72A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift */,
+				60D8B2622A7FD416009BAA96 /* SavingsLineChartViewModel.swift */,
 			);
 			path = DashboardTiles;
 			sourceTree = "<group>";
@@ -291,11 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				60BD9F5528F35D7A001FF5FF /* SavingsDetailView.swift */,
-				602E998929E15B980063BBC7 /* SavingsProjections.swift */,
-				608B80BA29B6469700047F3D /* SavingsPredictionBox.swift */,
 				602E998B29E15C700063BBC7 /* SavingsLineChart.swift */,
-				602E998D29E15EF80063BBC7 /* SavingsCategoryTile.swift */,
-				602E998F29E1690A0063BBC7 /* SavingsCategoryList.swift */,
 				60387383290AE54400AB7D0E /* SavingsCategoryListView.swift */,
 			);
 			path = SavingsView;
@@ -721,7 +712,6 @@
 				60BA8EF529E0897A00DA4A9C /* MonthIncomeCalculator.swift in Sources */,
 				6040E6ED29E694CE00939904 /* AssetAllocationViewModel.swift in Sources */,
 				60B50E122906F43100396308 /* SavingsCategoryEditor.swift in Sources */,
-				608B80BB29B6469700047F3D /* SavingsPredictionBox.swift in Sources */,
 				602E45C228F95D46003FD564 /* CurrentMonth.swift in Sources */,
 				60B50E162906F73A00396308 /* SettingsSavingsViewModel.swift in Sources */,
 				60804B9229AE642700F45E5F /* RecurringTransactionsViewModel.swift in Sources */,
@@ -729,10 +719,8 @@
 				6097917C28F944E600FA5621 /* CurrencyPieChart.swift in Sources */,
 				60BD9F5428F35D66001FF5FF /* TransactionsView.swift in Sources */,
 				60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */,
-				602E999029E1690A0063BBC7 /* SavingsCategoryList.swift in Sources */,
 				600921ED290EA5DB004897F7 /* DataExporter.swift in Sources */,
 				6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */,
-				602E998E29E15EF80063BBC7 /* SavingsCategoryTile.swift in Sources */,
 				600D8850291698B0002BE3F5 /* AssetAllocationPieChart.swift in Sources */,
 				603ADF90290554140075CB90 /* LargeValuePerMonthChart.swift in Sources */,
 				608C4D32290D2F1F00FFB45A /* NavigationGroupBoxLabel.swift in Sources */,
@@ -743,6 +731,7 @@
 				60552B0A29082FEF001F2B39 /* BaseClasses.swift in Sources */,
 				604DBDDB29B1DAE4008C26ED /* RecurringTransactionsDetailView.swift in Sources */,
 				60BA8EE929E0770600DA4A9C /* ExpensesGroupBox.swift in Sources */,
+				60D8B2632A7FD416009BAA96 /* SavingsLineChartViewModel.swift in Sources */,
 				600921EF290EB3E4004897F7 /* CSVRepresentable.swift in Sources */,
 				6097917728F935B400FA5621 /* PieChart.swift in Sources */,
 				60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */,
@@ -764,7 +753,6 @@
 				60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				60B50E1A2907020E00396308 /* SavingsCategoryViewModel.swift in Sources */,
-				602E998A29E15B980063BBC7 /* SavingsProjections.swift in Sources */,
 				6000FF7A28F5FEDE0083595D /* CurrentMonthViewModel.swift in Sources */,
 				60BD9F1228F35B6F001FF5FF /* MonityApp.swift in Sources */,
 				602E998C29E15C700063BBC7 /* SavingsLineChart.swift in Sources */,

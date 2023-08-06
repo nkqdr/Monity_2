@@ -8,6 +8,179 @@
 import SwiftUI
 import Charts
 
+fileprivate struct SavingsCategoryTile: View {
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @EnvironmentObject private var entryManager: SavingsEntryManager
+    var category: SavingsCategory
+    
+    private var currentAmount: Double? {
+        category.lastEntry?.amount
+    }
+    
+    private var groupBoxLabel: some View {
+        NavigationGroupBoxLabel(
+            title: LocalizedStringKey(category.wrappedName),
+            subtitle: LocalizedStringKey(category.lastEntry?.wrappedDate.formatted(.dateTime.year().month().day()) ?? ""),
+            labelStyle: .primary
+        )
+    }
+    
+    var body: some View {
+        NavigationLink(destination: SavingsCategoryListView(category: category)) {
+            GroupBox(label: groupBoxLabel) {
+                HStack(alignment: .top) {
+                    Spacer()
+                    if let currentAmount {
+                        Text(currentAmount.formatted(.customCurrency()))
+                            .tintedBackground(currentAmount >= 0 ? .green : .red)
+                    } else {
+                        Text("-")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            .groupBoxStyle(CustomGroupBox())
+            .contextMenu {
+                if !category.isHidden {
+                    Button {
+                        withAnimation(.spring()) {
+                            entryManager.editor = SavingsEditor(entry: nil)
+                            entryManager.editor.category = category
+                            entryManager.showSheet.toggle()
+                        }
+                    } label: {
+                        Label("New entry", systemImage: "plus")
+                    }
+                }
+                Divider()
+                Button(role: category.isHidden ? .cancel : .destructive) {
+                    withAnimation(.spring()) {
+                        content.toggleHiddenFor(category)
+                    }
+                } label: {
+                    if category.isHidden {
+                        Label("Show", systemImage: "eye.fill")
+                    } else {
+                        Label("Hide", systemImage: "eye.slash.fill")
+                    }
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+fileprivate struct SavingsCategoryList: View {
+    var categories: [SavingsCategory]
+    
+    private var sortedCategories: [SavingsCategory] {
+        categories.sorted { c1, c2 in
+            c1.lastEntry?.amount ?? 0 > c2.lastEntry?.amount ?? 0
+        }
+    }
+    
+    var body: some View {
+        LazyVGrid(columns: [GridItem(), GridItem()]) {
+            ForEach(sortedCategories, id: \.self) { category in
+                SavingsCategoryTile(category: category)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+    }
+}
+
+fileprivate struct SavingsProjections: View {
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @AppStorage(AppStorageKeys.showSavingsProjections) private var showProjections: Bool = true
+    private let savingsProjectionYears: [Int] = [1, 5, 10, 25, 50]
+    
+    var horizontalScrollView: some View {
+        VStack(alignment: .leading) {
+            Text("Future Projections").textCase(.uppercase).font(.footnote).foregroundColor(.secondary).padding(.bottom, 1)
+                .padding(.horizontal, 30)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(savingsProjectionYears, id: \.self) { yearAmount in
+                        SavingsPredictionBox(yearAmount: yearAmount)
+                            .frame(minWidth: 300, minHeight: 50)
+                    }
+                }
+                .padding(.horizontal)
+            }
+            HStack(alignment: .bottom) {
+                Text("Average change per year:")
+                    .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
+                Spacer()
+                Text(content.yearlySavingsRate, format: .customCurrency())
+                    .font(.footnote).foregroundColor(content.yearlySavingsRate >= 0 ? .green : .red).padding(.top, 1)
+            }
+            .padding(.horizontal, 30)
+        }
+    }
+    
+    var body: some View {
+        if (showProjections) {
+            horizontalScrollView
+                .padding(.vertical)
+        }
+    }
+}
+
+fileprivate struct SavingsPredictionBox: View {
+    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    var yearAmount: Int
+    
+    private var projection: Double {
+        content.getXYearProjection(yearAmount)
+    }
+    
+    private var accentColor: Color {
+        projection >= 0 ? .green : .red
+    }
+    
+    private var percentageChange: Double {
+        guard content.currentNetWorth > 0 else { return 0 }
+        return (projection / content.currentNetWorth - 1).round(to: 3)
+    }
+    
+    private var predictionDate: Date {
+        Calendar.current.date(byAdding: DateComponents(year: yearAmount), to: Date()) ?? Date()
+    }
+    
+    private var arrowIcon: String {
+        projection >= 0 ? "arrow.up.forward.square.fill" : "arrow.down.forward.square.fill"
+    }
+    
+    private var label: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading) {
+                Text("\(yearAmount) Years").groupBoxLabelTextStyle()
+                Text(predictionDate, format: .dateTime.year().month())
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Label(percentageChange.formatted(.percent), systemImage: arrowIcon)
+                .foregroundColor(accentColor)
+                .font(.subheadline)
+        }
+    }
+    
+    var body: some View {
+        GroupBox(label: label) {
+            HStack {
+                Spacer()
+                Text(projection, format: .customCurrency())
+                    .fontWeight(.bold)
+                    .tintedBackground(accentColor)
+            }
+        }
+        .groupBoxStyle(CustomGroupBox())
+        .frame(maxHeight: 100)
+    }
+}
+
 struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false

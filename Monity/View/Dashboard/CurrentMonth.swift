@@ -1,5 +1,5 @@
 //
-//  CurrentMonthDetailView.swift
+//  CurrentMonth.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 14.10.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BudgetDisplayString: View {
+fileprivate struct BudgetDisplayString: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
     var remainingAmount: Double
     
@@ -69,7 +69,7 @@ struct CurrentMonthOverviewTile: View {
 
 
 
-struct CurrentMonthDetailView: View {
+fileprivate struct CurrentMonthDetailView: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
     @State private var showDateSelectorSheet: Bool = false

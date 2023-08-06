@@ -22,12 +22,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
             yearlySavingsRate = calculateYearlySavingsRate()
         }
     }
-    @Published var timeFrameToDisplay: Int = 31536000 {
-        didSet {
-            generateFilteredLineChartDataPoints()
-            yearlySavingsRate = calculateYearlySavingsRate()
-        }
-    }
     @Published var percentChangeInLastYear: Double = 0
     @Published var allLineChartData: [ValueTimeDataPoint] = [] {
         didSet {
@@ -80,7 +74,7 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     }
     
     var lowerBoundDate: Date {
-        timeFrameToDisplay > 0 ? Date(timeIntervalSinceNow: -Double(timeFrameToDisplay)).removeTimeStamp ?? Date() : Date.distantPast
+        Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
     }
     
     func generateFilteredLineChartDataPoints() {
