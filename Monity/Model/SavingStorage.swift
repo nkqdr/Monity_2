@@ -15,6 +15,12 @@ class SavingsFetchController: BaseFetchController<SavingsEntry> {
             NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
         ])
     }
+    
+    init(since: Date) {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
+        ], predicate: NSPredicate(format: "date >= %@", since as NSDate))
+    }
 }
 
 class SavingStorage: ResettableStorage<SavingsEntry> {
@@ -22,7 +28,7 @@ class SavingStorage: ResettableStorage<SavingsEntry> {
 
     func add(set rows: [String]) -> Bool {
         let categoriesFetchRequest = SavingsCategory.fetchRequest()
-        let savingsCategories: [SavingsCategory]? = try? PersistenceController.shared.container.viewContext.fetch(categoriesFetchRequest)
+        let savingsCategories: [SavingsCategory]? = try? self.context.fetch(categoriesFetchRequest)
         
         guard let savingsCategories else { return false }
         var categories = savingsCategories
@@ -30,7 +36,7 @@ class SavingStorage: ResettableStorage<SavingsEntry> {
             let csvObj = SavingsEntry.decodeFromCSV(csvRow: row)
             var category = categories.first(where: { $0.wrappedName == csvObj.categoryName })
             if category == nil {
-                let newCategory = SavingsCategory(context: PersistenceController.shared.container.viewContext)
+                let newCategory = SavingsCategory(context: self.context)
                 newCategory.id = UUID()
                 newCategory.name = csvObj.categoryName
                 newCategory.label = csvObj.categoryLabel.rawValue
@@ -39,29 +45,29 @@ class SavingStorage: ResettableStorage<SavingsEntry> {
             }
             let _ = add(amount: csvObj.amount, category: category, date: csvObj.date, saveContext: false)
         }
-        try? PersistenceController.shared.container.viewContext.save()
+        try? self.context.save()
         return true
     }
     
     func add(amount: Double, category: SavingsCategory?, date: Date = Date(), saveContext: Bool = true) -> SavingsEntry {
-        let entry = SavingsEntry(context: PersistenceController.shared.container.viewContext)
+        let entry = SavingsEntry(context: self.context)
         entry.id = UUID()
         entry.date = date
         entry.amount = amount
         entry.category = category
         if saveContext {
-            try? PersistenceController.shared.container.viewContext.save()
+            try? self.context.save()
         }
         return entry
     }
     
     func update(_ entry: SavingsEntry, editor: SavingsEditor) -> Bool {
-        PersistenceController.shared.container.viewContext.performAndWait {
+        self.context.performAndWait {
             guard let category = editor.category else { return false }
             entry.amount = editor.amount
             entry.category = category
             entry.date = editor.timestamp
-            if let _ = try? PersistenceController.shared.container.viewContext.save() {
+            if let _ = try? self.context.save() {
                 return true
             } else {
                 return false

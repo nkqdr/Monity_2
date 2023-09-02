@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Accelerate
 
 
 class SavingsLineChartViewModel: ObservableObject {
@@ -69,11 +70,11 @@ class SavingsLineChartViewModel: ObservableObject {
     
     private func updateDataPoints(with savingsEntries: [SavingsEntry]) {
         var dataPoints: [ValueTimeDataPoint] = []
-        let uniqueDates: Set<Date> = Set(savingsEntries.map { $0.wrappedDate.removeTimeStamp ?? Date() })
+        let uniqueDates: Set<Date> = Set(savingsEntries.map { $0.wrappedDate.removeTimeStamp! })
         
         for uniqueDate in uniqueDates {
-            let netWorthAtUniqueDate: Double = self.allSavingsCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 }.reduce(0, +)
-            if let existingDataPoint = self.lineChartDataPoints.first(where: { $0.date == uniqueDate && $0.value == netWorthAtUniqueDate}) {
+            let netWorthAtUniqueDate: Double = vDSP.sum(allSavingsCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 }) 
+            if let existingDataPoint = lineChartDataPoints.first(where: { $0.date == uniqueDate && $0.value == netWorthAtUniqueDate}) {
                 dataPoints.append(existingDataPoint)
                 continue
             }

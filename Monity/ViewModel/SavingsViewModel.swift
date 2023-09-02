@@ -9,6 +9,58 @@ import Foundation
 import Combine
 import Accelerate
 
+class SavingsTileViewModel: ObservableObject {
+    @Published var dataPoints: [ValueTimeDataPoint] = []
+    @Published var allCategories: [SavingsCategory] = []
+    @Published var savingsInLastYear: [SavingsEntry] = [] {
+        didSet {
+            setPercentageChangeLastYear()
+            generateLineChartDataPoints()
+        }
+    }
+    @Published var percentChangeInLastYear: Double = 0
+    
+    private var savingsCancellable: AnyCancellable?
+    private var categoryCancellable: AnyCancellable?
+    private var savingsFetchController: SavingsFetchController
+    
+    init() {
+        let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
+        self.savingsFetchController = SavingsFetchController(since: oneYearAgo)
+        let publisher = self.savingsFetchController.items.eraseToAnyPublisher()
+        let categoryPublisher = SavingsCategoryFetchController.all.items.eraseToAnyPublisher()
+        self.categoryCancellable = categoryPublisher.sink { categories in
+            self.allCategories = categories
+        }
+        self.savingsCancellable = publisher.sink { entries in
+            self.savingsInLastYear = entries
+        }
+    }
+    
+    private func setPercentageChangeLastYear() {
+        let currentNetWorth = vDSP.sum(allCategories.map { $0.lastEntry?.amount ?? 0 })
+        let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
+        let netWorthOneYearAgo = vDSP.sum(allCategories.map { $0.lastEntryBefore(oneYearAgo)?.amount ?? 0 })
+        if netWorthOneYearAgo != 0 {
+            percentChangeInLastYear = (currentNetWorth - netWorthOneYearAgo) / netWorthOneYearAgo
+        } else {
+            percentChangeInLastYear = 0
+        }
+    }
+    
+    private func generateLineChartDataPoints() {
+        var dataPoints: [ValueTimeDataPoint] = []
+        let uniqueDates: Set<Date> = Set(savingsInLastYear.map { $0.wrappedDate.removeTimeStamp! })
+        for uniqueDate in uniqueDates {
+            let netWorthAtUniqueDate: Double = vDSP.sum(allCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 })
+            dataPoints.append(ValueTimeDataPoint(date: uniqueDate, value: netWorthAtUniqueDate))
+        }
+        self.dataPoints = dataPoints.sorted {
+            $0.date < $1.date
+        }
+    }
+}
+
 class SavingsPredictionViewModel: ObservableObject {
     @Published var allCategories: [SavingsCategory] = [] {
         didSet {

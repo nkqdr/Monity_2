@@ -132,7 +132,7 @@ struct SavingsDPLineChart: View {
 }
 
 struct SavingsLineChart: View {
-    @ObservedObject private var viewModel = SavingsLineChartViewModel()
+    @StateObject private var viewModel = SavingsLineChartViewModel()
     
     var body: some View {
         VStack {

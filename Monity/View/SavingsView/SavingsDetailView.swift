@@ -187,7 +187,7 @@ fileprivate struct SavingsPredictionBox: View {
 struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @StateObject private var content = SavingsCategoryViewModel.shared
     @ObservedObject private var entryManager = SavingsEntryManager()
     
     var noCategories: some View {

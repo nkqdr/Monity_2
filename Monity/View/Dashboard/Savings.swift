@@ -9,11 +9,7 @@ import SwiftUI
 import Charts
 
 fileprivate struct StaticSavingsLineChart: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
-    
-    private var dataPoints: [ValueTimeDataPoint] {
-        content.filteredLineChartData
-    }
+    var dataPoints: [ValueTimeDataPoint]
     
     private var minYValue: Double {
         dataPoints.map { $0.value }.min() ?? 0
@@ -33,13 +29,13 @@ fileprivate struct StaticSavingsLineChart: View {
         .chartXAxis(.hidden)
         .chartYScale(domain: minYValue ... maxYValue)
         .frame(height: 120)
-        .foregroundColor(content.percentChangeInLastYear >= 0 ? .green : .red)
+        .foregroundColor(!dataPoints.isEmpty && dataPoints.first!.value <= dataPoints.last!.value ? .green : .red)
         .padding(.vertical, 10)
     }
 }
 
 struct SavingsTile: View {
-    @ObservedObject private var content = SavingsCategoryViewModel()
+    @ObservedObject private var content = SavingsTileViewModel()
     @AppStorage(AppStorageKeys.showSavingsOnDashboard) private var showSavingsOnDashboard: Bool = true
     
     @ViewBuilder
@@ -55,7 +51,7 @@ struct SavingsTile: View {
                 }
             }
             .groupBoxLabelTextStyle()
-            StaticSavingsLineChart()
+            StaticSavingsLineChart(dataPoints: content.dataPoints)
         }
     }
     
