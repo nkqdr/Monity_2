@@ -42,13 +42,13 @@ struct CashflowChartGroupBox: View {
         Chart(content.cashFlowData) {
             AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
                 .opacity(0.5)
-                .interpolationMethod(.catmullRom)
+                .interpolationMethod(.monotone)
             LineMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 2))
-                .interpolationMethod(.catmullRom)
+                .interpolationMethod(.monotone)
                 .symbol {
                     Circle()
-                        .frame(width: 8)
+                        .frame(width: 6)
                 }
         }
         .chartYAxis() {

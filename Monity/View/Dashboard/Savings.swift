@@ -23,7 +23,7 @@ fileprivate struct StaticSavingsLineChart: View {
         Chart(dataPoints) {
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                .interpolationMethod(.catmullRom)
+                .interpolationMethod(.monotone)
         }
         .chartYAxis(.hidden)
         .chartXAxis(.hidden)
