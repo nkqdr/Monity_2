@@ -12,14 +12,13 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     static let shared = SavingsCategoryViewModel()
     @Published var shownCategories: [SavingsCategory] = []
     @Published var hiddenCategories: [SavingsCategory] = []
-    @Published var yearlySavingsRate: Double = 0
     @Published var savingEntries: [SavingsEntry] = [] {
         didSet {
+            print("Did set")
             currentNetWorth = items.map { $0.lastEntry?.amount ?? 0 }.reduce(0, +)
             uniqueDates = Set(savingEntries.map { $0.wrappedDate.removeTimeStamp ?? Date() })
             generateLineChartDataPoints()
             generateFilteredLineChartDataPoints()
-            yearlySavingsRate = calculateYearlySavingsRate()
         }
     }
     @Published var percentChangeInLastYear: Double = 0
@@ -42,19 +41,6 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         entryCancellable = entryPublisher.sink { entries in
             self.savingEntries = entries
         }
-    }
-    
-    private func calculateYearlySavingsRate() -> Double {
-        let sortedEntries = filteredLineChartData.sorted {
-            $0.date < $1.date
-        }
-        guard let firstEntry = sortedEntries.first, let lastEntry = sortedEntries.last, sortedEntries.count > 1 else {
-            return 0
-        }
-        let amountDiff = abs(firstEntry.value - lastEntry.value)
-        let dayDiff = Calendar.current.numberOfDaysBetween(firstEntry.date, and: lastEntry.date)
-        let amountPerDay = amountDiff / Double(dayDiff)
-        return amountPerDay * 365
     }
     
     func generateLineChartDataPoints() {
@@ -92,16 +78,5 @@ class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
         } else {
             percentChangeInLastYear = 0
         }
-    }
-    
-    
-    // MARK: - Intents
-    
-    func getXYearProjection(_ years: Int) -> Double {
-        return currentNetWorth + Double(years) * yearlySavingsRate
-    }
-    
-    func toggleHiddenFor(_ category: SavingsCategory) {
-        let _ = SavingsCategoryStorage.main.update(category, isHidden: !category.isHidden)
     }
 }

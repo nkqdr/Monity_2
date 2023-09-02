@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SavingsCategoryListView: View {
     var category: SavingsCategory
-    @ObservedObject var content: SavingsViewModel
+    @StateObject var content: SavingsViewModel
     
     init(category: SavingsCategory) {
         self.category = category
-        self.content = SavingsViewModel.forCategory(category)
+        self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
     }
     
     var lineChart: some View {

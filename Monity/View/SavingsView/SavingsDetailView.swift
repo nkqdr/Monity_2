@@ -9,7 +9,6 @@ import SwiftUI
 import Charts
 
 fileprivate struct SavingsCategoryTile: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
     @EnvironmentObject private var entryManager: SavingsEntryManager
     var category: SavingsCategory
     
@@ -55,7 +54,10 @@ fileprivate struct SavingsCategoryTile: View {
                 Divider()
                 Button(role: category.isHidden ? .cancel : .destructive) {
                     withAnimation(.spring()) {
-                        content.toggleHiddenFor(category)
+                        let _ = SavingsCategoryStorage.main.update(
+                            category,
+                            isHidden: !category.isHidden
+                        )
                     }
                 } label: {
                     if category.isHidden {
@@ -91,7 +93,7 @@ fileprivate struct SavingsCategoryList: View {
 }
 
 fileprivate struct SavingsProjections: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @StateObject private var viewModel = SavingsPredictionViewModel()
     @AppStorage(AppStorageKeys.showSavingsProjections) private var showProjections: Bool = true
     private let savingsProjectionYears: [Int] = [1, 5, 10, 25, 50]
     
@@ -104,6 +106,7 @@ fileprivate struct SavingsProjections: View {
                     ForEach(savingsProjectionYears, id: \.self) { yearAmount in
                         SavingsPredictionBox(yearAmount: yearAmount)
                             .frame(minWidth: 300, minHeight: 50)
+                            .environmentObject(viewModel)
                     }
                 }
                 .padding(.horizontal)
@@ -112,8 +115,8 @@ fileprivate struct SavingsProjections: View {
                 Text("Average change per year:")
                     .font(.footnote).foregroundColor(.secondary).padding(.top, 5)
                 Spacer()
-                Text(content.yearlySavingsRate, format: .customCurrency())
-                    .font(.footnote).foregroundColor(content.yearlySavingsRate >= 0 ? .green : .red).padding(.top, 1)
+                Text(viewModel.yearlySavingsRate, format: .customCurrency())
+                    .font(.footnote).foregroundColor(viewModel.yearlySavingsRate >= 0 ? .green : .red).padding(.top, 1)
             }
             .padding(.horizontal, 30)
         }
@@ -128,11 +131,11 @@ fileprivate struct SavingsProjections: View {
 }
 
 fileprivate struct SavingsPredictionBox: View {
-    @ObservedObject private var content = SavingsCategoryViewModel.shared
+    @EnvironmentObject private var viewModel: SavingsPredictionViewModel
     var yearAmount: Int
     
     private var projection: Double {
-        content.getXYearProjection(yearAmount)
+        viewModel.getXYearProjection(yearAmount)
     }
     
     private var accentColor: Color {
@@ -140,8 +143,8 @@ fileprivate struct SavingsPredictionBox: View {
     }
     
     private var percentageChange: Double {
-        guard content.currentNetWorth > 0 else { return 0 }
-        return (projection / content.currentNetWorth - 1).round(to: 3)
+        guard viewModel.currentNetWorth > 0 else { return 0 }
+        return (projection / viewModel.currentNetWorth - 1).round(to: 3)
     }
     
     private var predictionDate: Date {
