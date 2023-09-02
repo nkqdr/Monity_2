@@ -13,6 +13,20 @@ struct SavingsDPLineChart: View {
     var dataPoints: [ValueTimeDataPoint]
     var currentNetWorth: Double = 0
     
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint], currentNetWorth: Double) {
+        self.dataPoints = dataPoints
+        self.selectedElement = selectedElement
+        self.currentNetWorth = currentNetWorth
+    }
+    
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint]) {
+        self.init(
+            selectedElement: selectedElement,
+            dataPoints: dataPoints,
+            currentNetWorth: dataPoints.last?.value ?? 0
+        )
+    }
+    
     private var minYValue: Double {
         dataPoints.map { $0.value }.min() ?? 0
     }
