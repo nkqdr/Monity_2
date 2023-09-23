@@ -143,7 +143,7 @@ fileprivate struct ExportSection: View {
                 fileName = res.1
                 showExporter = true
             } label: {
-                Label("Recurring Expenses", systemImage: "square.and.arrow.up")
+                Label("Recurring expenses", systemImage: "square.and.arrow.up")
             }
             Button {
                 let res = dataExporter.getSavingsCSVContent()

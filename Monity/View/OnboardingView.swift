@@ -114,7 +114,7 @@ fileprivate struct TransactionCategoryPage: View {
         if (selectedCategories.isEmpty) {
             return
         }
-        let _ = TransactionCategoryStorage.main.addIfNotExisting(set: selectedCategories)
+        let _ = TransactionCategoryStorage.main.addIfNotExisting(set: selectedCategories.map { $0.localized })
     }
     
     var body: some View {
@@ -127,7 +127,7 @@ fileprivate struct TransactionCategoryPage: View {
             
             TagView(spacing: 8) {
                 ForEach($selectedCategoryNames) { $tag in
-                    Toggle(tag.name, isOn: $tag.isSelected)
+                    Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
                         .toggleStyle(.button)
                         .buttonStyle(for: tag.isSelected)
                 }
@@ -221,7 +221,7 @@ fileprivate struct SavingsCategoriesPage: View {
         if (selectedCategories.isEmpty) {
             return
         }
-        let _ = SavingsCategoryStorage.main.addIfNotExisting(set: selectedCategories)
+        let _ = SavingsCategoryStorage.main.addIfNotExisting(set: selectedCategories.map { $0.localized })
     }
     
     var body: some View {
@@ -233,7 +233,7 @@ fileprivate struct SavingsCategoriesPage: View {
             SplashScreenBox(title: "Savings categories", content: "Define savings categories for a deeper insight into your investments and bank accounts, ensuring precise tracking and better financial control.", emoji: "ℹ️")
             TagView(spacing: 8) {
                 ForEach($selectedCategoryNames) { $tag in
-                    Toggle(tag.name, isOn: $tag.isSelected)
+                    Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
                         .toggleStyle(.button)
                         .buttonStyle(for: tag.isSelected)
                 }

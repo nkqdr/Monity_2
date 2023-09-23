@@ -1,4 +1,7 @@
 /* No comment provided by engineer. */
+" / Day" = " / Tag";
+
+/* No comment provided by engineer. */
 "%lld related entries will be deleted." = "%lld verknüpfte Einträge werden gelöscht.";
 
 /* No comment provided by engineer. */
@@ -8,10 +11,25 @@
 "%lld transactions" = "%lld Transaktionen";
 
 /* No comment provided by engineer. */
+"1. Set a monthly spending limit" = "1. Monatliches Ausgabenlimit";
+
+/* No comment provided by engineer. */
+"2. Define transaction categories" = "Transaktionskategorien";
+
+/* No comment provided by engineer. */
+"3. Define categories for savings" = "Vermögenskategorien";
+
+/* No comment provided by engineer. */
 "About" = "Über";
 
 /* No comment provided by engineer. */
 "Active" = "Aktiv";
+
+/* No comment provided by engineer. */
+"Active expenses" = "Aktive Ausgaben";
+
+/* No comment provided by engineer. */
+"All done!" = "Fertig!";
 
 /* No comment provided by engineer. */
 "Amount" = "Betrag";
@@ -30,6 +48,9 @@
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete all App-Data?" = "Sind Sie sicher, dass Sie alle App-Daten löschen wollen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete all recurring expenses data?" = "Sind Sie sicher, dass Sie alle Daten für wiederkehrende Ausgaben löschen wollen?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete all savings data?" = "Sind Sie sicher, dass Sie alle Vermögensdaten löschen wollen?";
@@ -62,9 +83,6 @@
 "Average change per year:" = "Durchschnittliche Änderung pro Jahr:";
 
 /* No comment provided by engineer. */
-"Average daily expenses:" = "Durchschnittliche Tagesausgaben:";
-
-/* No comment provided by engineer. */
 "Bi-Weekly" = "Zweiwöchentlich";
 
 /* No comment provided by engineer. */
@@ -75,6 +93,9 @@
 
 /* No comment provided by engineer. */
 "Categories" = "Kategorien";
+
+/* No comment provided by engineer. */
+"Categorize transactions in Monity for a detailed expense and income analysis, helping you understand where your money flows." = "Kategorisieren Sie Transaktionen in Monity für eine detaillierte Ausgaben- und Einnahmenanalyse, so dass Sie wissen, wohin Ihr Geld fließt.";
 
 /* No comment provided by engineer. */
 "Category" = "Kategorie";
@@ -119,6 +140,9 @@
 "Days left:" = "Verbleibende Tage:";
 
 /* No comment provided by engineer. */
+"Define savings categories for a deeper insight into your investments and bank accounts, ensuring precise tracking and better financial control." = "Definieren Sie Vermögenskategorien, um einen tieferen Einblick in Ihre Anlagen und Bankkonten zu erhalten und so eine genaue Nachverfolgung und bessere Finanzkontrolle zu gewährleisten.";
+
+/* No comment provided by engineer. */
 "Delete" = "Löschen";
 
 /* No comment provided by engineer. */
@@ -131,13 +155,7 @@
 "Delete monthly limit" = "Monatliches Limit löschen";
 
 /* No comment provided by engineer. */
-"Delete Savings data" = "Vermögensdaten löschen";
-
-/* No comment provided by engineer. */
 "Delete transaction" = "Transaktion löschen";
-
-/* No comment provided by engineer. */
-"Delete Transaction data" = "Transaktionsdaten löschen";
 
 /* No comment provided by engineer. */
 "Description" = "Beschreibung";
@@ -161,6 +179,9 @@
 "End date" = "Enddatum";
 
 /* No comment provided by engineer. */
+"Entries" = "Einträge";
+
+/* No comment provided by engineer. */
 "Expense" = "Ausgabe";
 
 /* No comment provided by engineer. */
@@ -170,31 +191,19 @@
 "Export Data" = "Daten exportieren";
 
 /* No comment provided by engineer. */
-"Export Savings" = "Vermögen exportieren";
-
-/* No comment provided by engineer. */
-"Export successful!" = "Export erfolgreich!";
-
-/* No comment provided by engineer. */
-"Export to CSV" = "Als CSV exportieren";
-
-/* No comment provided by engineer. */
-"Export Transactions" = "Transaktionen exportieren";
-
-/* No comment provided by engineer. */
-"Export Recurring Expenses" = "Regelmäßige Ausgaben exportieren";
+"Export failed!" = "Export fehlgeschlagen!";
 
 /* No comment provided by engineer. */
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
-
-/* No comment provided by engineer. */
-"Exporting error" = "Export-Error";
 
 /* No comment provided by engineer. */
 "Future Projections" = "Projektionen";
 
 /* No comment provided by engineer. */
 "General" = "Allgemein";
+
+/* No comment provided by engineer. */
+"Get started" = "Los geht's!";
 
 /* No comment provided by engineer. */
 "Go to Settings > Savings to define your categories." = "Gehen Sie zu Einstellungen > Vermögen, um Ihre Kategorien zu definieren.";
@@ -227,16 +236,19 @@
 "income.plural" = "Einnahmen";
 
 /* No comment provided by engineer. */
-"Invested" = "Investiert";
+"Introduction" = "Einführung";
 
 /* No comment provided by engineer. */
-"Is deducted" = "Wird abgebucht";
+"Invested" = "Investiert";
 
 /* No comment provided by engineer. */
 "Label" = "Kennzeichnung";
 
 /* No comment provided by engineer. */
 "Last Year" = "Letztes Jahr";
+
+/* No comment provided by engineer. */
+"Let's start!" = "Los geht's!";
 
 /* No comment provided by engineer. */
 "Limit" = "Limit";
@@ -246,9 +258,6 @@
 
 /* No comment provided by engineer. */
 "Manage all data you have ever saved in this app." = "Verwalten Sie alle Daten, die Sie jemals in dieser App gespeichert haben.";
-
-/* No comment provided by engineer. */
-"Middle" = "Mitte";
 
 /* No comment provided by engineer. */
 "Month" = "Monat";
@@ -261,6 +270,9 @@
 
 /* No comment provided by engineer. */
 "More" = "Mehr";
+
+/* No comment provided by engineer. */
+"My promise" = "Mein Versprechen";
 
 /* No comment provided by engineer. */
 "Name" = "Name";
@@ -302,7 +314,7 @@
 "Optional" = "Optional";
 
 /* No comment provided by engineer. */
-"Over the last year" = "Im letzten Jahr";
+"Other" = "Andere";
 
 /* No comment provided by engineer. */
 "Payment details" = "Zahlungsdetails";
@@ -335,25 +347,28 @@
 "Predicted total expenses:" = "Geschätzte Gesamtausgaben:";
 
 /* No comment provided by engineer. */
-"Ratio" = "Verhältnis";
-
-/* No comment provided by engineer. */
 "Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
 
 /* No comment provided by engineer. */
 "Recurring expenses" = "Regelmäßige Ausgaben";
 
+/* Alert message in the asset allocation section. */
+"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
+
 /* No comment provided by engineer. */
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
 
 /* No comment provided by engineer. */
-"Savings entries" = "Vermögenseinträge";
+"Reset" = "Zurücksetzen";
 
 /* No comment provided by engineer. */
 "Rows:" = "Reihen";
 
 /* No comment provided by engineer. */
 "Save" = "Speichern";
+
+/* No comment provided by engineer. */
+"Save & Continue" = "Speichern & Weiter";
 
 /* No comment provided by engineer. */
 "Saved" = "Gespart";
@@ -365,16 +380,25 @@
 "Savings" = "Vermögen";
 
 /* No comment provided by engineer. */
+"Savings categories" = "Vermögenskategorien";
+
+/* No comment provided by engineer. */
+"Savings entries" = "Vermögenseinträge";
+
+/* No comment provided by engineer. */
 "Savings Overview" = "Vermögensübersicht";
+
+/* No comment provided by engineer. */
+"Select as many categories as you want. You can further customize them in the settings." = "Wählen Sie so viele Kategorien aus, wie Sie möchten. Sie können sie in den Einstellungen weiter anpassen.";
 
 /* No comment provided by engineer. */
 "Select CSV" = "CSV auswählen";
 
 /* No comment provided by engineer. */
-"Select Data" = "Daten auswählen";
+"Selected month" = "Ausgewählter Monat";
 
 /* No comment provided by engineer. */
-"Selected month" = "Ausgewählter Monat";
+"Set a monthly limit to create a budget and unlock valuable insights for better financial control." = "Legen Sie ein monatliches Limit fest, um ein Budget zu erstellen und wertvolle Erkenntnisse für eine bessere Finanzkontrolle zu gewinnen.";
 
 /* No comment provided by engineer. */
 "Set monthly limit" = "Monatliches Limit setzen";
@@ -392,7 +416,16 @@
 "Show average mark" = "Durchschnitt anzeigen";
 
 /* No comment provided by engineer. */
-"Something didn't work." = "Etwas hat nicht funktioniert.";
+"Show in month overview" = "In Monatsübersicht anzeigen";
+
+/* No comment provided by engineer. */
+"Show projections" = "Projektionen anzeigen";
+
+/* No comment provided by engineer. */
+"Show Savings" = "Vermögen anzeigen";
+
+/* No comment provided by engineer. */
+"Skip" = "Später";
 
 /* No comment provided by engineer. */
 "Start date" = "Startdatum";
@@ -401,7 +434,13 @@
 "System" = "System";
 
 /* No comment provided by engineer. */
+"Take Control of Your Finances" = "Kontrollieren Sie Ihre Finanzen";
+
+/* No comment provided by engineer. */
 "Tap the chart for more details." = "Tippe auf den Graphen um Details anzuzeigen.";
+
+/* No comment provided by engineer. */
+"The export failed with this message: %@" = "Der Export ist mit dieser Meldung fehlgeschlagen: %@";
 
 /* No comment provided by engineer. */
 "These will help you categorize all of your expenses and income" = "Diese helfen Ihnen, alle Ihre Ausgaben und Einnahmen zu kategorisieren";
@@ -410,13 +449,31 @@
 "This cannot be undone!" = "Das kann nicht rückgängig gemacht werden!";
 
 /* No comment provided by engineer. */
+"This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Darstellung. Ihre Daten werden nicht gelöscht.";
+
+/* No comment provided by engineer. */
 "Timeframe" = "Zeitfenster";
+
+/* No comment provided by engineer. */
+"Timestamp" = "Zeitpunkt";
 
 /* No comment provided by engineer. */
 "Today" = "Heute";
 
 /* No comment provided by engineer. */
 "Total" = "Gesamt";
+
+/* No comment provided by engineer. */
+"Total spendings until now:" = "Bisherige Ausgaben:";
+
+/* No comment provided by engineer. */
+"Total spendings:" = "Gesamtausgaben:";
+
+/* No comment provided by engineer. */
+"Track expenses, income, accounts, and investments – Watch your wealth soar with Monity!" = "Behalten Sie Ausgaben, Einnahmen, Konten und Investitionen im Auge - Beobachten Sie, wie sich Ihr Vermögen mit Monity vermehrt!";
+
+/* No comment provided by engineer. */
+"Transaction categories" = "Transaktionskategorien";
 
 /* No comment provided by engineer. */
 "Transaction date" = "Transaktionsdatum";
@@ -431,25 +488,16 @@
 "Try again" = "Erneut versuchen";
 
 /* No comment provided by engineer. */
-"Type" = "Typ";
-
-/* No comment provided by engineer. */
-"Unlabeled" = "Unbekannt";
-
-/* No comment provided by engineer. */
 "Used storage:" = "Benutzter Speicher:";
-
-/* No comment provided by engineer. */
-"Value" = "Wert";
 
 /* No comment provided by engineer. */
 "Version %@" = "Version %@";
 
 /* No comment provided by engineer. */
-"View month summary" = "Monatsübersicht anzeigen";
+"Weekly" = "Wöchentlich";
 
 /* No comment provided by engineer. */
-"Weekly" = "Wöchentlich";
+"Welcome to Monity!" = "Willkommen bei Monity!";
 
 /* No comment provided by engineer. */
 "Yearly" = "Jährlich";
@@ -458,7 +506,7 @@
 "You are currently paying %@ per month." = "Sie zahlen derzeit %@ pro Monat.";
 
 /* No comment provided by engineer. */
-"You can find the .csv files in your Documents directory." = "Sie finden die .csv-Dateien in Ihrem Dokumentenverzeichnis.";
+"You can adjust your monthly limit anytime in the settings." = "Sie können Ihr monatliches Limit jederzeit in den Einstellungen anpassen.";
 
 /* No comment provided by engineer. */
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
@@ -467,10 +515,13 @@
 "You saved %lld%% of your income." = "Sie sparen %lld%% Ihres Einkommens.";
 
 /* No comment provided by engineer. */
-"Your monthly limit:" = "Ihr monatliches Limit:";
+"Your data is yours to control. It's stored exclusively on your device or in your iCloud account if you choose. Your privacy is my priority. Enjoy Monity with confidence." = "Sie haben die Kontrolle über Ihre Daten. Sie werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert, wenn Sie dies wünschen. Ihre Privatsphäre ist meine Priorität. Genießen Sie Monity mit Vertrauen.";
 
 /* No comment provided by engineer. */
-"Active expenses" = "Aktive Ausgaben";
+"Your financial goals, your rules. Begin your journey to financial empowerment today by using Monity to take control of your finances and thrive." = "Ihre finanziellen Ziele, Ihre Regeln. Beginnen Sie noch heute Ihre Reise zur finanziellen Selbstbestimmung, indem Sie Monity nutzen, um die Kontrolle über Ihre Finanzen zu übernehmen und erfolgreich zu sein.";
+
+/* No comment provided by engineer. */
+"Your monthly limit:" = "Ihr monatliches Limit:";
 
 /* No comment provided by engineer. */
 "Your wealth decreased by %lld%%" = "Ihr Vermögen ist um %lld%% gesunken";
@@ -478,38 +529,20 @@
 /* No comment provided by engineer. */
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
 
-/* No comment provided by engineer. */
-"Show in month overview" = "In Monatsübersicht anzeigen";
+// MARK: - Onboarding default categories
 
-/* No comment provided by engineer. */
-"Show projections" = "Projektionen anzeigen";
+"Rent" = "Miete";
+"Hobbies" = "Hobbies";
+"Work" = "Arbeit";
+"Gifts" = "Geschenke";
+"Free-time" = "Freizeit";
+"Clothes" = "Kleidung";
+"Groceries" = "Lebensmittel";
+"University" = "Universität";
+"Insurance" = "Versicherungen";
+"Savings" = "Ersparnisse";
+"Checking" = "Girokonto";
+"Crypto" = "Crypto";
+"Wallet" = "Geldbeutel";
+"Stock portfolio" = "Aktiendepot";
 
-/* Alert message in the asset allocation section. */
-"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
-
-/* No comment provided by engineer. */
-"No category" = "Ohne Kategorie";
-
-/* No comment provided by engineer. */
-" / Day" = " / Tag";
-
-/* No comment provided by engineer. */
-"Entries" = "Einträge";
-
-/* No comment provided by engineer. */
-"Timestamp" = "Zeitpunkt";
-
-/* No comment provided by engineer. */
-"Show Savings" = "Vermögen anzeigen";
-
-/* No comment provided by engineer. */
-"This setting only implies visual changes. Your data will not be deleted" = "Diese Einstellung beeinflusst nur die Darstellung. Ihre Daten werden nicht gelöscht.";
-
-/* No comment provided by engineer. */
-"Reset" = "Zurücksetzen";
-
-/* No comment provided by engineer. */
-"Total spendings until now:" = "Bisherige Ausgaben:";
-
-/* No comment provided by engineer. */
-"Total spendings:" = "Gesamtausgaben:";
