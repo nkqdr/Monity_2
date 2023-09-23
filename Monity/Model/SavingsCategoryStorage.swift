@@ -31,6 +31,28 @@ class SavingsCategoryStorage: ResettableStorage<SavingsCategory> {
         return category
     }
     
+    func addIfNotExisting(set savingsCategories: [String]) -> Bool {
+        let categoriesFetchRequest = SavingsCategory.fetchRequest()
+        let currentCategories: [SavingsCategory]? = try? self.context.fetch(categoriesFetchRequest)
+        guard let existingSavingsCategories = currentCategories else {
+            return false
+        }
+        
+        for category in savingsCategories {
+            if existingSavingsCategories.contains(where: { tmpCategory in
+                tmpCategory.wrappedName == category
+            }) {
+                continue
+            }
+            let newCategory = SavingsCategory(context: self.context)
+            newCategory.name = category
+            newCategory.id = UUID()
+            newCategory.isHidden = false
+        }
+        try? self.context.save()
+        return true
+    }
+    
     func update(_ category: SavingsCategory, name: String? = nil, label: SavingsCategoryLabel? = nil, isHidden: Bool? = nil) -> Bool {
         self.context.performAndWait {
             category.name = name ?? category.name

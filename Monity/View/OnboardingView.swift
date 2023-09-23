@@ -109,6 +109,14 @@ fileprivate struct TransactionCategoryPage: View {
         "Rent", "Hobbies", "Work", "Gifts", "Free-time", "Clothes", "Groceries", "University", "Insurance"
     ].compactMap { Tag(name: $0) }
     
+    private func handleCreateCategories() {
+        let selectedCategories = selectedCategoryNames.filter({ $0.isSelected }).map { $0.name }
+        if (selectedCategories.isEmpty) {
+            return
+        }
+        let _ = TransactionCategoryStorage.main.addIfNotExisting(set: selectedCategories)
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
@@ -137,7 +145,8 @@ fileprivate struct TransactionCategoryPage: View {
                 }
                 .buttonStyle(.bordered)
                 Spacer()
-                Button("Continue") {
+                Button("Save & Continue") {
+                    handleCreateCategories()
                     withAnimation {
                         displayedPage += 1
                     }
@@ -171,17 +180,25 @@ fileprivate struct MonthlyLimitPage: View {
             Text("You can adjust your monthly limit anytime in the settings.").font(.footnote).foregroundColor(.secondary)
             HStack {
                 Button("Skip") {
-                    withAnimation {
-                        displayedPage += 1
+                    let delayTime: Double = isFocused ? 0.65 : 0
+                    isFocused = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
+                        withAnimation {
+                            displayedPage += 1
+                        }
                     }
+                   
                 }
                 .buttonStyle(.bordered)
                 Spacer()
-                Button("Continue") {
-                    withAnimation {
-                        UserDefaults.standard.set(monthlyLimit, forKey: AppStorageKeys.monthlyLimit)
-                        isFocused = false
-                        displayedPage += 1
+                Button("Save & Continue") {
+                    UserDefaults.standard.set(monthlyLimit, forKey: AppStorageKeys.monthlyLimit)
+                    let delayTime: Double = isFocused ? 0.65 : 0
+                    isFocused = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
+                        withAnimation {
+                            displayedPage += 1
+                        }
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -199,6 +216,14 @@ fileprivate struct SavingsCategoriesPage: View {
         "Savings", "Checking", "Crypto", "Wallet", "Stock portfolio"
     ].compactMap { Tag(name: $0) }
     
+    private func handleCreateCategories() {
+        let selectedCategories = selectedCategoryNames.filter({ $0.isSelected }).map { $0.name }
+        if (selectedCategories.isEmpty) {
+            return
+        }
+        let _ = SavingsCategoryStorage.main.addIfNotExisting(set: selectedCategories)
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
@@ -212,7 +237,6 @@ fileprivate struct SavingsCategoriesPage: View {
                         .toggleStyle(.button)
                         .buttonStyle(for: tag.isSelected)
                 }
-                
             }
             .padding(8)
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
@@ -226,7 +250,8 @@ fileprivate struct SavingsCategoriesPage: View {
                 }
                 .buttonStyle(.bordered)
                 Spacer()
-                Button("Continue") {
+                Button("Save & Continue") {
+                    handleCreateCategories()
                     withAnimation {
                         displayedPage += 1
                     }
