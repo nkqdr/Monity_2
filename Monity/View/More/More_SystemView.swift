@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct StoredItemsTile: View {
     @State private var showDeleteConfirmation: Bool = false
@@ -35,60 +36,6 @@ struct StoredItemsTile: View {
             }
         } message: {
             Text(deleteConfirmationMessage)
-        }
-    }
-}
-
-struct ExportOptionSheet: View {
-    @ObservedObject private var dataExporter: DataExporter = DataExporter()
-    @State private var exportHasErrors: Bool = false
-    @State private var exportWasSuccessful: Bool = false
-    @Binding var isOpen: Bool
-    
-    var body: some View {
-        VStack {
-            Toggle(isOn: $dataExporter.exportTransactions) {
-                Text("Export Transactions")
-            }
-            Toggle(isOn: $dataExporter.exportRecurringTransactions) {
-                Text("Export Recurring Expenses")
-            }
-            Toggle(isOn: $dataExporter.exportSavings) {
-                Text("Export Savings")
-            }
-            Spacer()
-            HStack {
-                Button("Cancel", role: .destructive) {
-                    isOpen = false
-                }
-                .buttonStyle(.borderless)
-                Spacer()
-                Button("Export to CSV") {
-                    let val = dataExporter.triggerExport()
-                    if val {
-                        exportWasSuccessful = true
-                    } else {
-                        exportHasErrors = true
-                    }
-                }
-                .disabled(dataExporter.disableExportButton)
-                .buttonStyle(.borderedProminent)
-            }
-        }
-        .padding()
-        .alert("Exporting error", isPresented: $exportHasErrors) {
-            Button("Try again", role: .cancel) {
-                isOpen = false
-            }
-        } message: {
-            Text("Something didn't work.")
-        }
-        .alert("Export successful!", isPresented: $exportWasSuccessful) {
-            Button("OK", role: .cancel) {
-                isOpen = false
-            }
-        } message: {
-            Text("You can find the .csv files in your Documents directory.")
         }
     }
 }
@@ -144,29 +91,104 @@ struct ImportSummaryView: View {
     }
 }
 
+fileprivate struct CSVFile: FileDocument {
+    // tell the system we support only plain text
+    static var readableContentTypes = [UTType.commaSeparatedText]
+    static var writableContentTypes = [UTType.commaSeparatedText]
+
+    // by default our document is empty
+    var text = ""
+
+    // a simple initializer that creates new, empty documents
+    init(initialText: String = "") {
+        text = initialText
+    }
+
+    // this initializer loads data that has been saved previously
+    init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            text = String(decoding: data, as: UTF8.self)
+        }
+    }
+
+    // this will be called when the system wants to write our data to disk
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = Data(text.utf8)
+        return FileWrapper(regularFileWithContents: data)
+    }
+    
+}
+
+fileprivate struct ExportSection: View {
+    @ObservedObject private var dataExporter: DataExporter = DataExporter()
+    @State private var showExporter: Bool = false
+    @State private var fileContents: String = ""
+    @State private var fileName: String = ""
+    @State private var showErrorMessage: Bool = false
+    @State private var errorMessage: String = ""
+    
+    var body: some View {
+        Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
+            Button {
+                let res = dataExporter.getTransactionCSVContent()
+                fileContents = res.0
+                fileName = res.1
+                showExporter = true
+            } label: {
+                Label("Transactions", systemImage: "square.and.arrow.up")
+            }
+            Button {
+                let res = dataExporter.getRecurringTransactionsCSVContent()
+                fileContents = res.0
+                fileName = res.1
+                showExporter = true
+            } label: {
+                Label("Recurring Expenses", systemImage: "square.and.arrow.up")
+            }
+            Button {
+                let res = dataExporter.getSavingsCSVContent()
+                fileContents = res.0
+                fileName = res.1
+                showExporter = true
+            } label: {
+                Label("Savings", systemImage: "square.and.arrow.up")
+            }
+        }
+        .fileExporter(isPresented: $showExporter, document: CSVFile(initialText: fileContents), contentType: .commaSeparatedText, defaultFilename: fileName) { result in
+            switch (result) {
+            case .success:
+                return
+            case .failure(let error):
+                showErrorMessage = true
+                errorMessage = error.localizedDescription
+            }
+        }
+        .alert("Export failed!", isPresented: $showErrorMessage) {
+            Button("OK", role: .cancel) {
+               
+            }
+        } message: {
+            Text("The export failed with this message: \(errorMessage)")
+        }
+    }
+}
+
 struct More_SystemView: View {
     @StateObject private var content = SettingsSystemViewModel()
     @State private var showDeleteAllConfirmation: Bool = false
-    @State private var showSelectorSheet: Bool = false
     // These are needed because an error occurs when directly using the value in the ViewModel
     @State private var importSummary: ImportCSVSummary?
-    @State private var exportHasErrors: Bool = false
-    @State private var exportWasSuccessful: Bool = false
     
     var body: some View {
         List {
             dataSection
             importSection
-            exportSection
+            ExportSection()
         }
         .sync($content.importSummary, with: $importSummary)
         .sheet(isPresented: $content.showFilePicker) {
             DocumentPicker(fileContent: $content.csvFileContent)
                 .ignoresSafeArea()
-        }
-        .sheet(isPresented: $showSelectorSheet) {
-            ExportOptionSheet(isOpen: $showSelectorSheet)
-                .presentationDetents([.height(220)])
         }
         .sheet(item: $importSummary) { summary in
             ImportSummaryView(summary: summary, onImport: {
@@ -233,26 +255,10 @@ struct More_SystemView: View {
     
     var importSection: some View {
         Section(header: Text("Import Data"), footer: Text("Read data from .csv files and import it into Monity.")) {
-            HStack {
-                Spacer()
-                Button("Select CSV") {
-                    content.showFilePicker.toggle()
-                }
-                .buttonStyle(.borderless)
-                Spacer()
-            }
-        }
-    }
-    
-    var exportSection: some View {
-        Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
-            HStack {
-                Spacer()
-                Button("Select Data") {
-                    showSelectorSheet.toggle()
-                }
-                .buttonStyle(.borderless)
-                Spacer()
+            Button {
+                content.showFilePicker.toggle()
+            } label: {
+                Label("Select CSV", systemImage: "doc")
             }
         }
     }
