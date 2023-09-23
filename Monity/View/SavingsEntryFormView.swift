@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct SavingsCategoryPicker: View {
+    @ObservedObject var content = SavingsCategoryPickerViewModel()
     @Binding var selection: SavingsCategory?
-    @ObservedObject var categoryContent = SavingsCategoryViewModel.shared
     
     var body: some View {
         Picker("Category", selection: $selection) {
             Text("None").tag(Optional<SavingsCategory>.none)
-            ForEach(categoryContent.items) { category in
+            ForEach(content.allCategories) { category in
                 Text(category.wrappedName).tag(category as Optional<SavingsCategory>)
             }
         }

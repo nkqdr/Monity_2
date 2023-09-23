@@ -8,8 +8,34 @@
 import SwiftUI
 import Charts
 
+fileprivate struct StaticSavingsLineChart: View {
+    var dataPoints: [ValueTimeDataPoint]
+    
+    private var minYValue: Double {
+        dataPoints.map { $0.value }.min() ?? 0
+    }
+    
+    private var maxYValue: Double {
+        dataPoints.map { $0.value }.max() ?? 0
+    }
+    
+    var body: some View {
+        Chart(dataPoints) {
+            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
+                .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
+                .interpolationMethod(.monotone)
+        }
+        .chartYAxis(.hidden)
+        .chartXAxis(.hidden)
+        .chartYScale(domain: minYValue ... maxYValue)
+        .frame(height: 120)
+        .foregroundColor(!dataPoints.isEmpty && dataPoints.first!.value <= dataPoints.last!.value ? .green : .red)
+        .padding(.vertical, 10)
+    }
+}
+
 struct SavingsTile: View {
-    @ObservedObject private var content = SavingsCategoryViewModel()
+    @ObservedObject private var content = SavingsTileViewModel()
     @AppStorage(AppStorageKeys.showSavingsOnDashboard) private var showSavingsOnDashboard: Bool = true
     
     @ViewBuilder
@@ -25,7 +51,7 @@ struct SavingsTile: View {
                 }
             }
             .groupBoxLabelTextStyle()
-            StaticSavingsLineChart()
+            StaticSavingsLineChart(dataPoints: content.dataPoints)
         }
     }
     

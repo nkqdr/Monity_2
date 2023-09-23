@@ -52,7 +52,7 @@ class DataExporter: ObservableObject {
     }
     
     private func handleExportSavings() -> Bool {
-        let savings = getCSVExportString(for: SavingStorage.shared.items.value, headers: CSVValidHeaders.savingsCSV.rawValue)
+        let savings = getCSVExportString(for: SavingsFetchController.all.items.value, headers: CSVValidHeaders.savingsCSV.rawValue)
         let savingsFilename = getFilenameWithPrefix(filename: "savings")
         return writeStringToDisk(content: savings, filename: savingsFilename)
     }

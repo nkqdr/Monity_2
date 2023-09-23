@@ -43,10 +43,10 @@ class SavingsCategoryEditor: ObservableObject {
     
     public func save() {
         if let category {
-            let res = SavingsCategoryStorage.shared.update(category, name: name, label: label)
+            let res = SavingsCategoryStorage.main.update(category, name: name, label: label)
             print(res)
         } else {
-            let category = SavingsCategoryStorage.shared.add(name: name, label: label)
+            let category = SavingsCategoryStorage.main.add(name: name, label: label)
             print("Added category \(category.wrappedName)")
         }
     }

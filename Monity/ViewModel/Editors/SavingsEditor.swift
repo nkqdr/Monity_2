@@ -39,9 +39,9 @@ class SavingsEditor: ObservableObject {
     
     public func save() {
         if let entry {
-            let _ = SavingStorage.shared.update(entry, editor: self)
+            let _ = SavingStorage.main.update(entry, editor: self)
         } else {
-            let entry = SavingStorage.shared.add(amount: amount, category: category)
+            let entry = SavingStorage.main.add(amount: amount, category: category)
             print("Added entry \(entry.wrappedDate)")
         }
     }

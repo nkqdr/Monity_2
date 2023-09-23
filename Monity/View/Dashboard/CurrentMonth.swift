@@ -1,11 +1,28 @@
 //
-//  CurrentMonthDetailView.swift
+//  CurrentMonth.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 14.10.22.
 //
 
 import SwiftUI
+
+fileprivate struct BudgetDisplayString: View {
+    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
+    var remainingAmount: Double
+    
+    var body: some View {
+        if monthlyLimit != 0 {
+            Text(remainingAmount, format: .customCurrency())
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(remainingAmount >= 0 ? .green : .red)
+        } else {
+            Text("-")
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(.secondary)
+        }
+    }
+}
 
 struct CurrentMonthOverviewTile: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
@@ -27,9 +44,7 @@ struct CurrentMonthOverviewTile: View {
                 VStack(alignment: .leading) {
                     Text("Budget:")
                         .font(.system(size: 18, weight: .semibold))
-                    Text(remainingAmount, format: .customCurrency())
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(remainingAmount >= 0 ? .green : .red)
+                    BudgetDisplayString(remainingAmount: remainingAmount)
                 }
             }
         }
@@ -54,7 +69,7 @@ struct CurrentMonthOverviewTile: View {
 
 
 
-struct CurrentMonthDetailView: View {
+fileprivate struct CurrentMonthDetailView: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
     @State private var remainingAmount: Double = 0
     @State private var showDateSelectorSheet: Bool = false
@@ -74,9 +89,7 @@ struct CurrentMonthDetailView: View {
                     VStack(alignment: .leading) {
                         Text("Budget:")
                             .font(.system(size: 18, weight: .semibold))
-                        Text(remainingAmount, format: .customCurrency())
-                            .font(.system(size: 22, weight: .bold))
-                            .foregroundColor(remainingAmount >= 0 ? .green : .red)
+                        BudgetDisplayString(remainingAmount: remainingAmount)
                     }
                 }
                 Spacer()

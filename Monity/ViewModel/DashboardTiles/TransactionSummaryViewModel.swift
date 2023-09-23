@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Accelerate
+import Algorithms
 
 class TransactionSummaryViewModel: ObservableObject {
     @Published var transactions: [AbstractTransaction] = [] {
@@ -34,7 +35,9 @@ class TransactionSummaryViewModel: ObservableObject {
         
         let publisher = AbstractTransactionWrapper(startDate: oneYearAgo, endDate: today).$wrappedTransactions.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { value in
-            self.transactions = value
+            self.transactions = value.sorted(by: {
+                $0.wrappedDate <= $1.wrappedDate
+            })
         }
     }
     
@@ -47,15 +50,12 @@ class TransactionSummaryViewModel: ObservableObject {
     
     private func createData(isExpense: Bool) -> [ValueTimeDataPoint] {
         let transactionsToUse = self.transactions.filter { $0.isExpense == isExpense }
-        let uniqueMonths: Set<Date> = Set(transactionsToUse.map { $0.date?.removeTimeStampAndDay ?? Date() }.sorted())
-        
-        return uniqueMonths.map { month in
-            let sumOfTransactions = vDSP.sum(transactionsToUse.filter {
-                $0.date?.isSameMonthAs(month) ?? false
-            }.map { $0.amount })
-            return ValueTimeDataPoint(date: month, value: sumOfTransactions)
-        }.sorted { v1, v2 in
-            return v1.date < v2.date
+        let chunkedTransactions = transactionsToUse.chunked(by: {
+            $0.wrappedDate.isSameMonthAs($1.wrappedDate)
+        })
+        return chunkedTransactions.map {
+            let sum = vDSP.sum($0.map { $0.amount })
+            return ValueTimeDataPoint(date: $0.first!.wrappedDate, value: sum)
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class RecurringTransactionFetchController: CoreDataModelStorage<RecurringTransaction> {
+class RecurringTransactionFetchController: BaseFetchController<RecurringTransaction> {
     public static let all = RecurringTransactionFetchController()
     
     private init() {
