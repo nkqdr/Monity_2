@@ -172,7 +172,6 @@ fileprivate struct MonthlyLimitPage: View {
             HStack {
                 Button("Skip") {
                     withAnimation {
-                        
                         displayedPage += 1
                     }
                 }
