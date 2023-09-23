@@ -278,6 +278,7 @@ fileprivate struct FinalWelcomeScreen: View {
             HStack {
                 Spacer()
                 Button {
+                    UserDefaults.standard.set(true, forKey: AppStorageKeys.onboardingDone)
                     withAnimation {
                         isPresented = false
                     }
