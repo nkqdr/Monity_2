@@ -29,6 +29,27 @@ class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
         return category
     }
     
+    func addIfNotExisting(set transactionCategories: [String]) -> Bool {
+        let categoriesFetchRequest = TransactionCategory.fetchRequest()
+        let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
+        guard let existingTransactionCategories = currentCategories else {
+            return false
+        }
+        
+        for category in transactionCategories {
+            if existingTransactionCategories.contains(where: { tmpCategory in
+                tmpCategory.wrappedName == category
+            }) {
+                continue
+            }
+            let newCategory = TransactionCategory(context: self.context)
+            newCategory.name = category
+            newCategory.id = UUID()
+        }
+        try? self.context.save()
+        return true
+    }
+    
     func update(_ category: TransactionCategory, name: String?) -> Bool {
         self.context.performAndWait {
             category.name = name ?? category.name

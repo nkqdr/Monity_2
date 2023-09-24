@@ -22,6 +22,8 @@ struct MainTabView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(\.colorScheme) var colorScheme
     @State private var showOverlay: Bool = false
+    @State private var showOnboarding: Bool = false
+    @AppStorage(AppStorageKeys.onboardingDone) private var onboardingDone: Bool = false
     
     var body: some View {
         TabView(selection: $tabSelection) {
@@ -41,10 +43,19 @@ struct MainTabView: View {
                 }
                 .tag(2)
         }
+        .onAppear {
+            if (!onboardingDone) {
+                showOnboarding = true
+            }
+        }
         .onChange(of: scenePhase) { newPhase in
             withAnimation(.easeInOut) {
                 showOverlay = newPhase != .active
             }
+        }
+        .sheet(isPresented: $showOnboarding) {
+            OnboardingView(isPresented: $showOnboarding)
+                .interactiveDismissDisabled()
         }
         .overlay {
             if showOverlay {

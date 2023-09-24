@@ -12,11 +12,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string>%lld Jahre</string>
 			<key>one</key>
 			<string>%lld Jahr</string>
 			<key>other</key>
+			<string>%lld Jahre</string>
+			<key>zero</key>
 			<string>%lld Jahre</string>
 		</dict>
 	</dict>

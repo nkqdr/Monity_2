@@ -13,6 +13,7 @@
 		600C39B728F53D1000688149 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600C39B628F53D1000688149 /* ViewExtensions.swift */; };
 		600C39B928F54E9800688149 /* MonthYearPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600C39B828F54E9800688149 /* MonthYearPicker.swift */; };
 		600D8850291698B0002BE3F5 /* AssetAllocationPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600D884F291698B0002BE3F5 /* AssetAllocationPieChart.swift */; };
+		60100B202ABEE69A0057ECA4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */; };
 		6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		601E84052A5A040400067A65 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CFBA28F9ABF2007F392D /* DateExtensions.swift */; };
 		601E84082A5A07E300067A65 /* Monity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */; };
@@ -144,6 +145,7 @@
 		600C39B628F53D1000688149 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		600C39B828F54E9800688149 /* MonthYearPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthYearPicker.swift; sourceTree = "<group>"; };
 		600D884F291698B0002BE3F5 /* AssetAllocationPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAllocationPieChart.swift; sourceTree = "<group>"; };
+		60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		602BA992290F07C100830481 /* Monity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Monity.entitlements; sourceTree = "<group>"; };
 		602E45C128F95D46003FD564 /* CurrentMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMonth.swift; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 				60B50E132906F5F400396308 /* SavingsCategoryFormView.swift */,
 				60387381290ADA3F00AB7D0E /* SavingsEntryFormView.swift */,
 				60804B9329AE66EB00F45E5F /* RecurringTransactionFormView.swift */,
+				60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				60804B8E29AE608B00F45E5F /* Enums.swift in Sources */,
 				60BD9F4B28F35D02001FF5FF /* DashboardView.swift in Sources */,
 				603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */,
+				60100B202ABEE69A0057ECA4 /* OnboardingView.swift in Sources */,
 				602FB1E82A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift in Sources */,
 				60BA8EF129E07DA000DA4A9C /* AbstractTransactionWrapper.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
