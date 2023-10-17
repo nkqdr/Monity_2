@@ -26,7 +26,7 @@ struct AddTransactionView: View {
                         .keyboardType(.decimalPad)
                         .focused($amountInputIsFocussed)
                     if let _ = editor.transaction {
-                        DatePicker("Transaction date", selection: $editor.selectedDate, displayedComponents: .date)
+                        DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
                 }
                 Section("Optional") {
@@ -35,7 +35,9 @@ struct AddTransactionView: View {
             }
             .navigationTitle(editor.navigationFormTitle)
             .onAppear {
-                amountInputIsFocussed = true
+                if editor.transaction == nil {
+                    amountInputIsFocussed = true
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

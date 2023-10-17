@@ -23,6 +23,7 @@ struct SavingsCategoryPicker: View {
 
 struct SavingsEntryFormView: View {
     @Binding var isPresented: Bool
+    @FocusState var amountInputIsFocussed: Bool
     @ObservedObject var editor: SavingsEditor
     
     var body: some View {
@@ -31,6 +32,7 @@ struct SavingsEntryFormView: View {
                 SavingsCategoryPicker(selection: $editor.category)
                 TextField("Amount", value: $editor.amount, format: .customCurrency())
                     .keyboardType(.decimalPad)
+                    .focused($amountInputIsFocussed)
                 if let _ = editor.entry {
                     Section {
                         DatePicker("Timestamp", selection: $editor.timestamp)
@@ -38,6 +40,9 @@ struct SavingsEntryFormView: View {
                 }
             }
             .navigationTitle(editor.navigationFormTitle)
+            .onAppear {
+                amountInputIsFocussed = true
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
