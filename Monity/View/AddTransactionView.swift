@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
+    @FocusState var amountInputIsFocussed: Bool
     @StateObject var editor: TransactionEditor
     
     var body: some View {
@@ -23,6 +24,7 @@ struct AddTransactionView: View {
                     .pickerStyle(.segmented)
                     TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
                         .keyboardType(.decimalPad)
+                        .focused($amountInputIsFocussed)
                     if let _ = editor.transaction {
                         DatePicker("Transaction date", selection: $editor.selectedDate, displayedComponents: .date)
                     }
@@ -32,6 +34,9 @@ struct AddTransactionView: View {
                 }
             }
             .navigationTitle(editor.navigationFormTitle)
+            .onAppear {
+                amountInputIsFocussed = true
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
