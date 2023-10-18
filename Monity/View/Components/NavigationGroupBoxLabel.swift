@@ -13,7 +13,7 @@ struct NavigationGroupBoxLabel: View {
     var labelStyle: GroupBoxLabelStyle = .secondary
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             VStack(alignment: .leading) {
                 Text(title).groupBoxLabelTextStyle(labelStyle)
                 if let subtitle {
@@ -26,6 +26,7 @@ struct NavigationGroupBoxLabel: View {
             Image(systemName: "chevron.right")
                 .foregroundColor(.secondary)
                 .font(.footnote)
+                .padding(.top, 4)
         }
     }
 }

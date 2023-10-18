@@ -272,7 +272,7 @@ struct SavingsDetailView: View {
         }
         .sheet(isPresented: $entryManager.showSheet) {
             SavingsEntryFormView(isPresented: $entryManager.showSheet, editor: entryManager.editor)
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.height(210)])
                 .presentationDragIndicator(.hidden)
         }
         .navigationTitle("Savings Overview")
