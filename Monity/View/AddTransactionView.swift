@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Binding var isPresented: Bool
+    @FocusState var amountInputIsFocussed: Bool
     @StateObject var editor: TransactionEditor
     
     var body: some View {
@@ -23,8 +24,9 @@ struct AddTransactionView: View {
                     .pickerStyle(.segmented)
                     TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
                         .keyboardType(.decimalPad)
+                        .focused($amountInputIsFocussed)
                     if let _ = editor.transaction {
-                        DatePicker("Transaction date", selection: $editor.selectedDate, displayedComponents: .date)
+                        DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
                 }
                 Section("Optional") {
@@ -32,6 +34,11 @@ struct AddTransactionView: View {
                 }
             }
             .navigationTitle(editor.navigationFormTitle)
+            .onAppear {
+                if editor.transaction == nil {
+                    amountInputIsFocussed = true
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -42,6 +49,15 @@ struct AddTransactionView: View {
                     Button("Save") {
                         editor.save()
                         isPresented.toggle()
+                    }
+                    .disabled(!editor.isValid)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        hideKeyboard()
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
                     }
                 }
             }

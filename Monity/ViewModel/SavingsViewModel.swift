@@ -14,8 +14,8 @@ class SavingsTileViewModel: ObservableObject {
     @Published var allCategories: [SavingsCategory] = []
     @Published var savingsInLastYear: [SavingsEntry] = [] {
         didSet {
-            setPercentageChangeLastYear()
             generateLineChartDataPoints()
+            setPercentageChangeLastYear()
         }
     }
     @Published var percentChangeInLastYear: Double = 0
@@ -40,9 +40,14 @@ class SavingsTileViewModel: ObservableObject {
     private func setPercentageChangeLastYear() {
         let currentNetWorth = vDSP.sum(allCategories.map { $0.lastEntry?.amount ?? 0 })
         let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
-        let netWorthOneYearAgo = vDSP.sum(allCategories.map { $0.lastEntryBefore(oneYearAgo)?.amount ?? 0 })
+        var netWorthOneYearAgo = vDSP.sum(allCategories.map { $0.lastEntryBefore(oneYearAgo)?.amount ?? 0 })
+        if netWorthOneYearAgo == 0 {
+            // No savings entries before one year ago, so just take the first dataPoint as point of reference
+            netWorthOneYearAgo = dataPoints.first?.value ?? 0
+        }
         if netWorthOneYearAgo != 0 {
             percentChangeInLastYear = (currentNetWorth - netWorthOneYearAgo) / netWorthOneYearAgo
+            print(percentChangeInLastYear)
         } else {
             percentChangeInLastYear = 0
         }

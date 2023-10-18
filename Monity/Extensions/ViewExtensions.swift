@@ -15,11 +15,18 @@ enum GroupBoxLabelStyle {
 extension FormatStyle where Self == FloatingPointFormatStyle<Double> {
     static func customCurrency<Value>() -> FloatingPointFormatStyle<Value>.Currency where Value : BinaryFloatingPoint {
         let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
-        return .currency(code: currencyCode ?? "EUR")
+        return .currency(code: currencyCode ?? Locale.current.currency?.identifier ?? "USD")
     }
 }
 
 extension View {
+    #if canImport(UIKit)
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    #endif
+        
+        
     func deleteSwipeAction(callback: @escaping () -> Void) -> some View {
         self.swipeActions(edge: .trailing) {
             Button(action: callback) {

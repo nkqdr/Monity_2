@@ -69,6 +69,8 @@ struct TransactionsList: View {
         }
         .sheet(isPresented: $showAddTransactionView) {
             AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: currentTransaction))
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
         }
         .onChange(of: showAddTransactionView) { newValue in
             if !newValue {
