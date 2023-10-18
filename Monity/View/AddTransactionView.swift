@@ -50,6 +50,7 @@ struct AddTransactionView: View {
                         editor.save()
                         isPresented.toggle()
                     }
+                    .disabled(!editor.isValid)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()

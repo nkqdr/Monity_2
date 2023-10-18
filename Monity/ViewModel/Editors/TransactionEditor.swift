@@ -17,6 +17,10 @@ class TransactionEditor: ObservableObject {
     @Published var navigationFormTitle: LocalizedStringKey
     var transaction: Transaction?
     
+    var isValid: Bool {
+        givenAmount != 0
+    }
+    
     init(transaction: Transaction? = nil) {
         self.isExpense = transaction?.isExpense ?? true
         self.selectedCategory = transaction?.category ?? nil
