@@ -55,12 +55,12 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions with the given category
-    init(category: TransactionCategory) {
+    init(category: TransactionCategory, isExpense: Bool) {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
         ], keyPathsForRefreshing: [
             #keyPath(Transaction.category.name)
-        ], predicate: NSPredicate(format: "category == %@", category))
+        ], predicate: NSPredicate(format: "category == %@ && isExpense == %@", category, NSNumber(booleanLiteral: isExpense)))
     }
 }
 

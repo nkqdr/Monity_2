@@ -43,16 +43,45 @@ class TransactionCategorySummaryViewModel: ObservableObject {
             dataPoints = CategoryGrouper.group(data: fetchedTransactions);
         }
     }
-    @Published var dataPoints: [ValueTimeDataPoint] = []
+    @Published var dataPoints: [ValueTimeDataPoint] = [] {
+        didSet {
+            let totalSum: Double = vDSP.sum(self.dataPoints.map { $0.value})
+            let average: Double = vDSP.mean(self.dataPoints.map { $0.value})
+            
+            self.retroDP = CategoryRetroDataPoint(
+                category: self.category,
+                total: totalSum,
+                average: average,
+                numTransactions: self.fetchedTransactions.count
+            )
+            
+            let lastYearDataPoints = self.dataPoints.filter { $0.date.isInLastYear}
+            let lastYearTotalSum: Double = vDSP.sum(lastYearDataPoints.map { $0.value })
+            let lastYearAverage: Double = vDSP.mean(lastYearDataPoints.map { $0.value})
+            
+            self.lastYearRetroDP = CategoryRetroDataPoint(
+                category: self.category,
+                total: lastYearTotalSum,
+                average: lastYearAverage,
+                numTransactions: self.fetchedTransactions.count
+            )
+        }
+    }
+    var retroDP: CategoryRetroDataPoint
+    var lastYearRetroDP: CategoryRetroDataPoint
     var category: TransactionCategory
+    var showExpenses: Bool
     
     private var transactionCancellable: AnyCancellable?
     private var transactionFetchController: TransactionFetchController
     private var abstractTransactionWrapper: AbstractTransactionWrapper
     
-    init(category: TransactionCategory) {
+    init(category: TransactionCategory, showExpenses: Bool) {
         self.category = category
-        self.transactionFetchController = TransactionFetchController(category: category)
+        self.showExpenses = showExpenses
+        self.retroDP = CategoryRetroDataPoint(category: category, total: 0, average: 0, numTransactions: 0)
+        self.lastYearRetroDP = CategoryRetroDataPoint(category: category, total: 0, average: 0, numTransactions: 0)
+        self.transactionFetchController = TransactionFetchController(category: category, isExpense: showExpenses)
         self.abstractTransactionWrapper = AbstractTransactionWrapper(transactionController: self.transactionFetchController, recurringTransactionController: RecurringTransactionFetchController(category: category))
         let publisher = self.abstractTransactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { val in
@@ -113,8 +142,9 @@ class AverageMonthlyChartViewModel: ObservableObject {
         var dataPoints: [CategoryRetroDataPoint] = []
         for category in transactionCategories {
             let usedTransactions: [AbstractTransaction] = transactions.filter { $0.category == category && $0.isExpense == isExpense && $0.date?.isInLastYear ?? false }
-            let totalSum: Double = vDSP.sum(usedTransactions.map { $0.amount})
-            let average: Double = vDSP.mean(usedTransactions.map { $0.amount})
+            let groupedDataPoints = CategoryGrouper.group(data: usedTransactions)
+            let totalSum: Double = vDSP.sum(groupedDataPoints.map { $0.value})
+            let average: Double = vDSP.mean(groupedDataPoints.map { $0.value})
             
             if totalSum > 0 {
                 dataPoints.append(CategoryRetroDataPoint(category: category, total: totalSum, average: average, numTransactions: usedTransactions.count))

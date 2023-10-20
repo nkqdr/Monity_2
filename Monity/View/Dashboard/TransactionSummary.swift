@@ -149,7 +149,7 @@ fileprivate struct TransactionCategorySummaryView: View {
     }
     
     init(category: TransactionCategory, showExpenses: Bool) {
-        self._content = StateObject(wrappedValue: TransactionCategorySummaryViewModel(category: category))
+        self._content = StateObject(wrappedValue: TransactionCategorySummaryViewModel(category: category, showExpenses: showExpenses))
         self.category = category
         self.showExpenses = showExpenses
     }
@@ -165,7 +165,37 @@ fileprivate struct TransactionCategorySummaryView: View {
             .listRowBackground(Color.clear)
             
             Section {
-                NavigationLink("View all transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses))
+                HStack {
+                    Text("Total").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(content.retroDP.total, format: .customCurrency())
+                }
+                HStack {
+                    Text("Average per month").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(content.retroDP.average, format: .customCurrency())
+                }
+            } header: {
+                Text("All-Time")
+            }
+            
+            Section {
+                HStack {
+                    Text("Total").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(content.lastYearRetroDP.total, format: .customCurrency())
+                }
+                HStack {
+                    Text("Average per month").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(content.lastYearRetroDP.average, format: .customCurrency())
+                }
+            } header: {
+                Text("Last Year")
+            }
+            
+            Section {
+                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses))
             }
         }
         .navigationTitle(category.wrappedName)
