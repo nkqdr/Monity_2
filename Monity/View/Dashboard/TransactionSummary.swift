@@ -50,7 +50,7 @@ fileprivate struct TransactionOverviewChart: View {
     
     var body: some View {
         ExpenseBarChartWithHeader(
-            data: content.showingExpenses ? content.allExpenseDataPoints : content.allIncomeDataPoints,
+            data: content.barChartDataPoints,
             showAverageBar: showAverageBar,
             color: content.showingExpenses ? .red : .green
         )

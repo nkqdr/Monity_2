@@ -24,6 +24,12 @@ class RecurringTransactionFetchController: BaseFetchController<RecurringTransact
             predicate: NSPredicate(format: "startDate <= %@  && (endDate == NIL || endDate < %@)", date as NSDate, date as NSDate))
     }
     
+    public init(category: TransactionCategory) {
+        super.init(
+            sortDescriptors: [NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)],
+            predicate: NSPredicate(format: "category == %@", category))
+    }
+    
     /// FetchController for only those recurring transactions which were active somewhere in the given date range.
     public init(startDate: Date, endDate: Date) {
         let hangingLeftPredicate = NSPredicate(format: "startDate <= %@ && endDate >= %@", startDate as NSDate, startDate as NSDate)
