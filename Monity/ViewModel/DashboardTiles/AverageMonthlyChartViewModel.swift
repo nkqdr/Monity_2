@@ -7,6 +7,55 @@
 
 import Foundation
 import Combine
+import Accelerate
+
+class TransactionCategorySummaryViewModel: ObservableObject {
+    @Published var fetchedTransactions: [Transaction] = [] {
+        didSet {
+            groupTransactions()
+        }
+    }
+    @Published var dataPoints: [ValueTimeDataPoint] = []
+    var category: TransactionCategory
+    
+    var transactionCancellable: AnyCancellable?
+    var transactionFetchController: TransactionFetchController
+    
+    struct YearMonth: Hashable {
+        let year: Int
+        let month: Int
+    }
+    
+    init(category: TransactionCategory) {
+        self.category = category
+        self.transactionFetchController = TransactionFetchController(category: category)
+        let publisher = self.transactionFetchController.items.eraseToAnyPublisher()
+        self.transactionCancellable = publisher.sink { val in
+            self.fetchedTransactions = val
+        }
+    }
+    
+    func groupTransactions() {
+        let groupedTransactions = Dictionary(grouping: fetchedTransactions) { transaction in
+            let components = Calendar.current.dateComponents([.year, .month], from: transaction.wrappedDate)
+            return YearMonth(year: components.year!, month: components.month!)
+        }
+
+        let monthlySummaries: [(year: Int, month: Int, totalAmount: Double)] = groupedTransactions.map { key, transactions in
+            let totalAmount = vDSP.sum(transactions.map { $0.amount })
+            return (year: key.year, month: key.month, totalAmount: totalAmount)
+        }.sorted { (lhs, rhs) -> Bool in
+            if lhs.year != rhs.year {
+                return lhs.year < rhs.year
+            } else {
+                return lhs.month < rhs.month
+            }
+        }
+        self.dataPoints = monthlySummaries.map {
+            ValueTimeDataPoint(date: Calendar.current.date(from: DateComponents(year: $0.year, month: $0.month))!, value: $0.totalAmount)
+        }
+    }
+}
 
 class AverageMonthlyChartViewModel: ObservableObject {
     static let shared: AverageMonthlyChartViewModel = AverageMonthlyChartViewModel()
@@ -36,8 +85,8 @@ class AverageMonthlyChartViewModel: ObservableObject {
     var totalValue: Double {
         showingExpenses ? totalExpensesThisYear : totalIncomeThisYear
     }
-    private var allExpenseDataPoints: [ValueTimeDataPoint] = []
-    private var allIncomeDataPoints: [ValueTimeDataPoint] = []
+    @Published var allExpenseDataPoints: [ValueTimeDataPoint] = []
+    @Published var allIncomeDataPoints: [ValueTimeDataPoint] = []
     private var allExpenseRetroDataPoints: [CategoryRetroDataPoint] = []
     private var allIncomeRetroDataPoints: [CategoryRetroDataPoint] = []
     

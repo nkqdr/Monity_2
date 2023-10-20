@@ -44,62 +44,37 @@ struct TransactionSummaryTile: View {
     }
 }
 
+fileprivate struct TransactionOverviewChart: View {
+    @StateObject private var content = AverageMonthlyChartViewModel.shared
+    var showAverageBar: Bool
+    
+    var body: some View {
+        ExpenseBarChartWithHeader(
+            data: content.showingExpenses ? content.allExpenseDataPoints : content.allIncomeDataPoints,
+            showAverageBar: showAverageBar,
+            color: content.showingExpenses ? .red : .green
+        )
+    }
+}
+
 
 fileprivate struct TransactionSummaryPage: View {
     @State private var showAverageBar: Bool = false
-    @State private var selectedElement: ValueTimeDataPoint?
     @StateObject private var content = AverageMonthlyChartViewModel.shared
-    
-    var timeframeString: String {
-        if content.showingExpenses {
-            return (content.monthlyExpenseDataPoints.first?.date.formatted(.dateTime.year().month()) ?? "") + " - " + (content.monthlyExpenseDataPoints.last?.date.formatted(.dateTime.year().month()) ?? "")
-        } else {
-            return (content.monthlyIncomeDataPoints.first?.date.formatted(.dateTime.year().month()) ?? "") + " - " + (content.monthlyIncomeDataPoints.last?.date.formatted(.dateTime.year().month()) ?? "")
-        }
-    }
-    
-    @ViewBuilder
-    var correctBarChartHeader: some View {
-        if let selectedElement {
-            VStack(alignment: .leading) {
-                Text(selectedElement.date.formatted(.dateTime.year().month()))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text(selectedElement.value, format: .customCurrency())
-                    .font(.headline.bold())
-                    .foregroundColor(.primary)
-            }
-        } else {
-            VStack(alignment: .leading) {
-                Group {
-                    Text(timeframeString)
-                }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                Text(content.totalValue, format: .customCurrency())
-                    .font(.headline.bold())
-                    .foregroundColor(.primary)
-            }
-            .animation(.none, value: timeframeString)
-        }
-    }
     
     var body: some View {
         List {
             VStack(alignment: .leading) {
-                ZStack(alignment: .topLeading) {
-                    correctBarChartHeader
-                    LargeValuePerMonthChart(selectedElement: $selectedElement, showAverageBar: showAverageBar)
-                        .padding(.vertical)
-                }
+                TransactionOverviewChart(
+                    showAverageBar: showAverageBar
+                )
+                .frame(minHeight: 250)
+                .padding(.bottom)
                 Picker("", selection: $content.showingExpenses) {
                     Text("Expenses").tag(true)
                     Text("income.plural").tag(false)
                 }
                 .pickerStyle(.segmented)
-                .onChange(of: content.showingExpenses) { _ in
-                    selectedElement = nil
-                }
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
@@ -146,21 +121,54 @@ fileprivate struct TransactionCategorySummaryTile: View {
     }
 }
 
-fileprivate struct TransactionCategorySummaryView: View {
+fileprivate struct TransactionListPerCategory: View {
     @State var showEditTransactionView: Bool = false
-    @StateObject private var content: TransactionsCategorySummaryViewModel
+    @StateObject private var content: TransactionListPerCategoryViewModel
     var category: TransactionCategory
     var showExpenses: Bool
     
     init(category: TransactionCategory, showExpenses: Bool) {
-        self._content = StateObject(wrappedValue: TransactionsCategorySummaryViewModel(category: category, showExpenses: showExpenses))
+        self._content = StateObject(wrappedValue: TransactionListPerCategoryViewModel(category: category, showExpenses: showExpenses))
         self.category = category
         self.showExpenses = showExpenses
     }
     
     var body: some View {
         TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: content.transactionsByDate, dateFormat: .dateTime.year().month())
-            .navigationTitle(category.wrappedName)
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+fileprivate struct TransactionCategorySummaryView: View {
+    @StateObject private var content: TransactionCategorySummaryViewModel
+    var category: TransactionCategory
+    var showExpenses: Bool
+    
+    var color: Color {
+        showExpenses ? .red : .green
+    }
+    
+    init(category: TransactionCategory, showExpenses: Bool) {
+        self._content = StateObject(wrappedValue: TransactionCategorySummaryViewModel(category: category))
+        self.category = category
+        self.showExpenses = showExpenses
+    }
+    
+    var body: some View {
+        List {
+            VStack {
+                ExpenseBarChartWithHeader(data: content.dataPoints, color: color)
+                    .frame(minHeight: 250)
+                    .padding(.bottom)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+            
+            Section {
+                NavigationLink("View all transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses))
+            }
+        }
+        .navigationTitle(category.wrappedName)
     }
 }
 

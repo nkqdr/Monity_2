@@ -39,12 +39,28 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
-    init(start: Date, end: Date) {
+    init(start: Date, end: Date, category: TransactionCategory? = nil) {
+        var predicate: NSPredicate
+        if let category {
+            predicate = NSPredicate(format: "date >= %@ && date <= %@ && category == %@", start as NSDate, end as NSDate, category)
+        } else {
+            predicate = NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate)
+        }
+        
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
         ], keyPathsForRefreshing: [
             #keyPath(Transaction.category.name)
-        ], predicate: NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate))
+        ], predicate: predicate)
+    }
+    
+    /// This initializer will create a FetchedResultsController for all transactions with the given category
+    init(category: TransactionCategory) {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
+        ], keyPathsForRefreshing: [
+            #keyPath(Transaction.category.name)
+        ], predicate: NSPredicate(format: "category == %@", category))
     }
 }
 
