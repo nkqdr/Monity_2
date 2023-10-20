@@ -117,6 +117,17 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
         return SavingsViewModel(category: category)
     }
     
+    var lastEntryBeforeLastYear: ValueTimeDataPoint? {
+        let dps = self.category?.lineChartDataPoints(after: Date.distantPast) ?? []
+        let entriesBeforeThisYear = dps.filter { $0.date < Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!}
+        if entriesBeforeThisYear.isEmpty {
+            return dps.first
+        }
+        return entriesBeforeThisYear.last
+    }
+    
+    private var category: SavingsCategory?
+    
     private init() {
         let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
@@ -124,6 +135,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     
     private init(category: SavingsCategory) {
         let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
+        self.category = category
         super.init(itemPublisher: publisher)
         itemCancellable = publisher.sink { entries in
             self.items = entries.filter { $0.category == category}

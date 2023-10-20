@@ -1,5 +1,5 @@
 //
-//  TransactionsCategorySummaryViewModel.swift
+//  TransactionListPerCategoryViewModel.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 23.10.22.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class TransactionsCategorySummaryViewModel: ObservableObject {
+class TransactionListPerCategoryViewModel: ObservableObject {
     private var transactions: [Transaction] = [] {
         didSet {
             relevantTransactions = transactions.filter { $0.category == selectedCategory }
