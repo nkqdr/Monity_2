@@ -14,15 +14,18 @@ struct ExpenseBarChartWithHeader: View {
     @State private var ruleMarkOffset: Double = 0
     @State private var dragGestureTick: Double = 0
     @State private var selectedLowerBoundDate: Date
+    @State private var isDragging = false
     var data: [ValueTimeDataPoint]
     var showAverageBar: Bool
     var color: Color
+    var alwaysShowYmarks: Bool
     
-    init(data: [ValueTimeDataPoint], showAverageBar: Bool = false, color: Color = .green) {
+    init(data: [ValueTimeDataPoint], showAverageBar: Bool = false, color: Color = .green, alwaysShowYmarks: Bool = true) {
         let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
         self.data = data
         self.color = color
         self.showAverageBar = showAverageBar
+        self.alwaysShowYmarks = alwaysShowYmarks
         self._selectedLowerBoundDate = State(initialValue: oneYearAgo)
     }
     
@@ -99,7 +102,9 @@ struct ExpenseBarChartWithHeader: View {
                 AxisMarks { value in
                     let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
                     AxisGridLine()
-                    AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
+                    if selectedElement != nil || isDragging || alwaysShowYmarks {
+                        AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
+                    }
                 }
             }
             .chartXAxis {
@@ -119,14 +124,24 @@ struct ExpenseBarChartWithHeader: View {
                         ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(monthDiff) / 2
                         let element = findElement(location: value.location, proxy: proxy, geometry: geo)
                         Haptics.shared.play(.medium)
-                        if selectedElement?.date == element?.date {
-                          // If tapping the same element, clear the selection.
-                          selectedElement = nil
-                        } else {
-                            selectedElement = element
-                        }
+                          if selectedElement?.date == element?.date {
+                            // If tapping the same element, clear the selection.
+                              withAnimation {
+                                  selectedElement = nil
+                              }
+                          } else if selectedElement == nil && !alwaysShowYmarks {
+                              withAnimation {
+                                  selectedElement = element
+                              }
+                          } else {
+                              selectedElement = element
+                          }
+                          
                       }
                         .exclusively(before: DragGesture().onChanged { value in
+                            withAnimation {
+                                isDragging = true
+                            }
                             let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedData.count) + 4
                             let dragDiff = value.location.x - value.startLocation.x
                             let dragAmount = (dragDiff / barWidth).rounded()
@@ -141,6 +156,10 @@ struct ExpenseBarChartWithHeader: View {
                                         Haptics.shared.play(.medium)
                                     }
                                 }
+                            }
+                        }.onEnded {_ in 
+                            withAnimation {
+                                isDragging = false
                             }
                         })
                   )

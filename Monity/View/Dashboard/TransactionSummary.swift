@@ -64,23 +64,26 @@ fileprivate struct TransactionSummaryPage: View {
     
     var body: some View {
         List {
-            VStack(alignment: .leading) {
-                TransactionOverviewChart(
-                    showAverageBar: showAverageBar
-                )
-                .frame(minHeight: 250)
-                .padding(.bottom)
-                Picker("", selection: $content.showingExpenses) {
-                    Text("Expenses").tag(true)
-                    Text("income.plural").tag(false)
+            Section {
+                VStack(alignment: .leading) {
+                    TransactionOverviewChart(
+                        showAverageBar: showAverageBar
+                    )
+                    .frame(minHeight: 250)
+                    .padding(.bottom)
+                    Picker("", selection: $content.showingExpenses) {
+                        Text("Expenses").tag(true)
+                        Text("income.plural").tag(false)
+                    }
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
             Section {
                 Toggle("Show average mark", isOn: $showAverageBar)
             }
+            
             Section("Categories") {
                 ForEach(content.retroDataPoints) { dataPoint in
                     TransactionCategorySummaryTile(dataPoint: dataPoint, showExpenses: content.showingExpenses)
