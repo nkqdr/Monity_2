@@ -7,26 +7,15 @@
 
 import SwiftUI
 
-struct SavingsCategoryListView: View {
+fileprivate struct SavingsEntryList: View {
     var category: SavingsCategory
-    @StateObject var content: SavingsViewModel
-    
-    init(category: SavingsCategory) {
-        self.category = category
-        self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
-    }
-    
-    var lineChart: some View {
-        SavingsDPLineChart(dataPoints: category.lineChartDataPoints(after: Date.distantPast))
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-    }
+    var content: SavingsViewModel
     
     var body: some View {
         EditableDeletableItemList(
             viewModel: content
         ) { create, edit, delete in
-            lineChart
+            
             Section(header: Text("Entries")) {
                 ForEach(content.items) { entry in
                     EditableDeletableItem(
@@ -55,6 +44,105 @@ struct SavingsCategoryListView: View {
                 isPresented: showSheet,
                 editor: SavingsEditor(entry: currentItem)
             )
+        }
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct SavingsCategoryListView: View {
+    var category: SavingsCategory
+    @StateObject var content: SavingsViewModel
+    
+    init(category: SavingsCategory) {
+        self.category = category
+        self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
+    }
+    
+    var dataPoints: [ValueTimeDataPoint] {
+        category.lineChartDataPoints(after: Date.distantPast)
+    }
+    
+    var performanceLastYear: (Double, Double) {
+        if dataPoints.isEmpty {
+            return (0, 0)
+        }
+        let absPerf = dataPoints.last!.value - (content.lastEntryBeforeLastYear?.value ?? 0)
+        let relPerf = absPerf / (dataPoints.filter { $0.date.isInLastYear && $0.value != 0}.first?.value ?? 1)
+        return (absPerf, relPerf)
+    }
+    
+    var performanceAllTime: (Double, Double) {
+        if dataPoints.isEmpty {
+            return (0, 0)
+        }
+        let absPerf = dataPoints.last!.value - dataPoints.first!.value
+        let relPerf = absPerf / (dataPoints.first(where: {$0.value != 0})?.value ?? 1)
+        return (absPerf, relPerf)
+    }
+    
+    private func getArrowIcon(absChange: Double) -> String {
+        absChange >= 0 ? "arrow.up.forward.square.fill" : "arrow.down.forward.square.fill"
+    }
+    
+    private var shareOfTotalWealth: Double {
+        dataPoints.last!.value / SavingsCategoryViewModel.shared.currentNetWorth
+    }
+    
+    
+    var body: some View {
+        List {
+            SavingsDPLineChart(dataPoints: dataPoints)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            Section {
+                HStack {
+                    Text("Label")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(LocalizedStringKey(category.wrappedLabel))
+                        .tintedBackground(SavingsCategoryLabel.by(category.wrappedLabel).color)
+                }
+                HStack {
+                    Text("Share of total wealth").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(shareOfTotalWealth.round(to: 4), format: .percent)
+                }
+            } header: {
+                Text("Details")
+            }
+            Section {
+                HStack {
+                    Text("All-Time").foregroundStyle(.secondary)
+                    Spacer()
+                    Image(systemName: getArrowIcon(absChange: performanceAllTime.0))
+                        .foregroundStyle(performanceAllTime.0 >= 0 ? .green : .red)
+                    VStack(alignment: .trailing) {
+                        Text(performanceAllTime.1.round(to: 4), format: .percent)
+                            .font(.subheadline)
+                        Text(performanceAllTime.0, format: .customCurrency())
+                            .font(.footnote)
+                    }
+                    .foregroundStyle(performanceAllTime.0 >= 0 ? .green : .red)
+                }
+                HStack {
+                    Text("Last Year").foregroundStyle(.secondary)
+                    Spacer()
+                    Image(systemName: getArrowIcon(absChange: performanceLastYear.0))
+                        .foregroundStyle(performanceLastYear.0 >= 0 ? .green : .red)
+                    VStack(alignment: .trailing) {
+                        Text(performanceLastYear.1.round(to: 4), format: .percent)
+                            .font(.subheadline)
+                        Text(performanceLastYear.0, format: .customCurrency())
+                            .font(.footnote)
+                    }
+                    .foregroundStyle(performanceLastYear.0 >= 0 ? .green : .red)
+                }
+            } header: {
+                Text("Performance")
+            }
+            Section {
+                NavigationLink("All entries", destination: SavingsEntryList(category: category, content: content))
+            }
         }
         .navigationTitle(category.wrappedName)
     }
