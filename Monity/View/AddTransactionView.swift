@@ -29,6 +29,7 @@ struct AddTransactionView: View {
                         .focused($amountInputIsFocussed)
                         .font(.system(size: 32, weight: .bold))
                         .foregroundStyle(accentColor)
+                        .autocorrectionDisabled()
                     Picker("Pick a transaction type", selection: $editor.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
@@ -74,14 +75,14 @@ struct AddTransactionView: View {
                     }
                     .disabled(!editor.isValid)
                 }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        hideKeyboard()
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                }
+//                ToolbarItemGroup(placement: .keyboard) {
+//                    Spacer()
+//                    Button {
+//                        hideKeyboard()
+//                    } label: {
+//                        Image(systemName: "keyboard.chevron.compact.down")
+//                    }
+//                }
             }
         }
     }

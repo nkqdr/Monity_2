@@ -40,13 +40,14 @@ struct SavingsEntryFormView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField("Amount", value: $editor.amount, format: .customCurrency())
+                TextField(0.formatted(.customCurrency()), value: $editor.amount, format: .customCurrency())
                     .keyboardType(.numbersAndPunctuation)
                     .focused($amountInputIsFocussed)
                     .font(.system(size: 32, weight: .bold))
                     .foregroundStyle(textColor)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
+                    .autocorrectionDisabled()
 
                 Section {
                     if editor.entry == nil {
