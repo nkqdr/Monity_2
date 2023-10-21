@@ -168,16 +168,14 @@ fileprivate struct MonthlyLimitPage: View {
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            ScrollView(showsIndicators: false) {
-                SplashScreenBox(title: "Monthly budget", content: "Set a monthly budget to unlock valuable insights for better financial control.", emoji: "ℹ️")
-                SplashScreenBox(content: "What is the maximum amount of money you would like to spend each month?", emoji: "❔")
-                TextField("Monthly budget", value: $monthlyLimit, format: .customCurrency())
-                    .focused($isFocused)
-                    .textFieldStyle(.roundedBorder)
-                    .font(.headline)
-                    .keyboardType(.numbersAndPunctuation)
-                Text("You can adjust your monthly budget anytime in the settings.").font(.footnote).foregroundColor(.secondary)
-            }
+            SplashScreenBox(title: "Monthly budget", content: "Set a monthly budget to unlock valuable insights for better financial control.", emoji: "ℹ️")
+            SplashScreenBox(content: "What is the maximum amount of money you would like to spend each month?", emoji: "❔")
+            TextField("Monthly budget", value: $monthlyLimit, format: .customCurrency())
+                .focused($isFocused)
+                .textFieldStyle(.roundedBorder)
+                .font(.headline)
+                .keyboardType(.numbersAndPunctuation)
+            Text("You can adjust your monthly budget anytime in the settings.").font(.footnote).foregroundColor(.secondary)
             HStack {
                 Button("Skip") {
                     let delayTime: Double = isFocused ? 0.65 : 0
