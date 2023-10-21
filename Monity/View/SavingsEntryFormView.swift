@@ -26,20 +26,38 @@ struct SavingsEntryFormView: View {
     @FocusState var amountInputIsFocussed: Bool
     @ObservedObject var editor: SavingsEditor
     
+    var textColor: Color {
+        guard let amount = editor.amount, amount != 0 else {
+            return .primary
+        }
+        if amount > 0 {
+            return .green
+        } else {
+            return .red
+        }
+    }
+    
     var body: some View {
         NavigationView {
             Form {
-                SavingsCategoryPicker(selection: $editor.category)
                 TextField("Amount", value: $editor.amount, format: .customCurrency())
-                    .keyboardType(.decimalPad)
+                    .keyboardType(.numbersAndPunctuation)
                     .focused($amountInputIsFocussed)
-                if let _ = editor.entry {
-                    Section {
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundStyle(textColor)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+
+                Section {
+                    if editor.entry == nil {
+                        SavingsCategoryPicker(selection: $editor.category)
+                    }
+                    if let _ = editor.entry {
                         DatePicker("Timestamp", selection: $editor.timestamp)
                     }
                 }
+                
             }
-            .navigationTitle(editor.navigationFormTitle)
             .onAppear {
                 amountInputIsFocussed = true
             }
@@ -54,9 +72,11 @@ struct SavingsEntryFormView: View {
                         editor.save()
                         isPresented = false
                     }
-                    .disabled(editor.disableSave)
+                    .disabled(!editor.isValid)
                 }
             }
+            .navigationTitle(editor.navigationFormTitle)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

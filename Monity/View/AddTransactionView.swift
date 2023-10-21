@@ -15,16 +15,24 @@ struct AddTransactionView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Details") {
-                    TransactionCategoryPicker(selection: $editor.selectedCategory)
+                VStack(spacing: 10) {
+                    TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
+                        .keyboardType(.numbersAndPunctuation)
+                        .focused($amountInputIsFocussed)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundStyle(editor.isExpense ? .red : .green)
                     Picker("Pick a transaction type", selection: $editor.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
                     }
                     .pickerStyle(.segmented)
-                    TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
-                        .keyboardType(.decimalPad)
-                        .focused($amountInputIsFocussed)
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                
+                Section {
+                    TransactionCategoryPicker(selection: $editor.selectedCategory)
+                    
                     if let _ = editor.transaction {
                         DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
@@ -34,6 +42,7 @@ struct AddTransactionView: View {
                 }
             }
             .navigationTitle(editor.navigationFormTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if editor.transaction == nil {
                     amountInputIsFocussed = true
