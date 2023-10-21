@@ -11,15 +11,6 @@
 "%lld transactions" = "%lld Transaktionen";
 
 /* No comment provided by engineer. */
-"1. Set a monthly spending limit" = "1. Monatliches Ausgabenlimit";
-
-/* No comment provided by engineer. */
-"2. Define transaction categories" = "Transaktionskategorien";
-
-/* No comment provided by engineer. */
-"3. Define categories for savings" = "Vermögenskategorien";
-
-/* No comment provided by engineer. */
 "About" = "Über";
 
 /* No comment provided by engineer. */
@@ -104,7 +95,7 @@
 "Categories" = "Kategorien";
 
 /* No comment provided by engineer. */
-"Categorize transactions in Monity for a detailed expense and income analysis, helping you understand where your money flows." = "Kategorisieren Sie Transaktionen in Monity für eine detaillierte Ausgaben- und Einnahmenanalyse, so dass Sie wissen, wohin Ihr Geld fließt.";
+"Categorize transactions in Monity for a detailed expense and income analysis, helping you understand where your money flows." = "Kategorisieren Sie Transaktionen in Monity für eine detaillierte Ausgaben- und Einnahmenanalyse. So wissen Sie immer, wohin Ihr Geld fließt.";
 
 /* No comment provided by engineer. */
 "Category" = "Kategorie";
@@ -113,7 +104,7 @@
 "Category name" = "Kategoriename";
 
 /* No comment provided by engineer. */
-"Change limit" = "Limit ändern";
+"Change budget" = "Budget ändern";
 
 /* No comment provided by engineer. */
 "Choose a category" = "Kategorie auswählen";
@@ -158,10 +149,10 @@
 "Delete all data" = "Alle Daten löschen";
 
 /* No comment provided by engineer. */
-"Delete limit" = "Limit löschen";
+"Delete budget" = "Budget löschen";
 
 /* No comment provided by engineer. */
-"Delete monthly limit" = "Monatliches Limit löschen";
+"Delete monthly budget" = "Monatliches Budget löschen";
 
 /* No comment provided by engineer. */
 "Delete transaction" = "Transaktion löschen";
@@ -260,7 +251,7 @@
 "Let's start!" = "Los geht's!";
 
 /* No comment provided by engineer. */
-"Limit" = "Limit";
+"Budget" = "Budget";
 
 /* No comment provided by engineer. */
 "Liquid" = "Liquide";
@@ -284,7 +275,7 @@
 "Monthly" = "Monatlich";
 
 /* No comment provided by engineer. */
-"Monthly limit" = "Monatliches Limit";
+"Monthly budget" = "Monatliches Budget";
 
 /* No comment provided by engineer. */
 "More" = "Mehr";
@@ -422,10 +413,10 @@
 "Selected month" = "Ausgewählter Monat";
 
 /* No comment provided by engineer. */
-"Set a monthly limit to create a budget and unlock valuable insights for better financial control." = "Legen Sie ein monatliches Limit fest, um ein Budget zu erstellen und wertvolle Erkenntnisse für eine bessere Finanzkontrolle zu gewinnen.";
+"Set a monthly budget to unlock valuable insights for better financial control." = "Legen Sie ein monatliches Budget fest, um wertvolle Erkenntnisse für eine bessere Finanzkontrolle zu gewinnen.";
 
 /* No comment provided by engineer. */
-"Set yourself a monthly limit and try to stay in your own budget" = "Setzen Sie sich ein monatliches Limit und versuchen Sie, Ihr eigenes Budget einzuhalten";
+"Establish a monthly budget and aim to stay within your limits." = "Legen Sie ein monatliches Budget fest und versuchen Sie, es einzuhalten.";
 
 /* No comment provided by engineer. */
 "Settings" = "Einstellungen";
@@ -556,7 +547,7 @@
 "You are currently paying %@ per month." = "Sie zahlen derzeit %@ pro Monat.";
 
 /* No comment provided by engineer. */
-"You can adjust your monthly limit anytime in the settings." = "Sie können Ihr monatliches Limit jederzeit in den Einstellungen anpassen.";
+"You can adjust your monthly budget anytime in the settings." = "Sie können Ihr monatliches Budget jederzeit in den Einstellungen anpassen.";
 
 /* No comment provided by engineer. */
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
@@ -565,13 +556,13 @@
 "You saved %lld%% of your income." = "Sie sparen %lld%% Ihres Einkommens.";
 
 /* No comment provided by engineer. */
-"Your data is yours to control. It's stored exclusively on your device or in your iCloud account if you choose. Your privacy is my priority. Enjoy Monity with confidence." = "Sie haben die Kontrolle über Ihre Daten. Sie werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert, wenn Sie dies wünschen. Ihre Privatsphäre ist meine Priorität. Genießen Sie Monity mit Vertrauen.";
+"Your data is yours to control. It is stored exclusively on your device or in your iCloud account. Your privacy is my priority." = "Sie haben die Kontrolle über Ihre Daten. Alle Daten werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert. Ihre Privatsphäre ist meine Priorität.";
 
 /* No comment provided by engineer. */
-"Your financial goals, your rules. Begin your journey to financial empowerment today by using Monity to take control of your finances and thrive." = "Ihre finanziellen Ziele, Ihre Regeln. Beginnen Sie noch heute Ihre Reise zur finanziellen Selbstbestimmung, indem Sie Monity nutzen, um die Kontrolle über Ihre Finanzen zu übernehmen und erfolgreich zu sein.";
+"Monity puts you in charge of your financial journey. Take control today." = "Mit Monity haben Sie Ihre finanzielle Reise selbst in der Hand. Übernehmen Sie noch heute die Kontrolle.";
 
 /* No comment provided by engineer. */
-"Your monthly limit:" = "Ihr monatliches Limit:";
+"Your monthly budget:" = "Ihr monatliches Budget:";
 
 /* No comment provided by engineer. */
 "Your wealth decreased by %lld%%" = "Ihr Vermögen ist um %lld%% gesunken";
@@ -579,3 +570,28 @@
 /* No comment provided by engineer. */
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
 
+/* No comment provided by engineer. */
+"In which categories do you currently have funds saved or invested?" = "In welchen Kategorien haben Sie derzeit Geld gespart oder investiert?";
+
+/* No comment provided by engineer. */
+"What is the maximum amount of money you would like to spend each month?" = "Wie viel Geld möchten Sie monatlich höchstens ausgeben?";
+
+/* No comment provided by engineer. */
+"What are your most active categories for both income and expenses?" = "Welches sind Ihre wichtigsten Kategorien für Einnahmen und Ausgaben?";
+
+// MARK: - Onboarding default categories
+
+"Rent" = "Miete";
+"Hobbies" = "Hobbies";
+"Work" = "Arbeit";
+"Gifts" = "Geschenke";
+"Free-time" = "Freizeit";
+"Clothes" = "Kleidung";
+"Groceries" = "Lebensmittel";
+"University" = "Universität";
+"Insurance" = "Versicherungen";
+"Savings" = "Ersparnisse";
+"Checking" = "Girokonto";
+"Crypto" = "Crypto";
+"Wallet" = "Geldbeutel";
+"Stock portfolio" = "Aktiendepot";

@@ -67,11 +67,11 @@ fileprivate struct SetLimitSheet: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Limit", value: $tmpMonthlyLimit, format: .customCurrency())
+                    TextField("Budget", value: $tmpMonthlyLimit, format: .customCurrency())
                         .keyboardType(.decimalPad)
                         .focused($limitInputIsFocussed)
                 } header: {
-                    Text("Monthly limit")
+                    Text("Monthly budget")
                 }
             }
             .onAppear {
@@ -106,7 +106,7 @@ fileprivate struct MonthlyLimitSection: View {
     }
     
     private var monthlyLimitFooter: some View {
-        Text("Set yourself a monthly limit and try to stay in your own budget")
+        Text("Establish a monthly budget and aim to stay within your limits.")
     }
     
     var body: some View {
@@ -122,7 +122,7 @@ fileprivate struct MonthlyLimitSection: View {
                 }
             }
             HStack {
-                Text("Your monthly limit:")
+                Text("Your monthly budget:")
                 Spacer()
                 if let limit = monthlyLimit {
                     Text(limit, format: .customCurrency())
@@ -134,12 +134,12 @@ fileprivate struct MonthlyLimitSection: View {
                 }
             }
             HStack {
-                Button("Change limit") {
+                Button("Change budget") {
                     showingEditAlert.toggle()
                 }
                 .buttonStyle(.borderless)
                 Spacer()
-                Button("Delete limit", role: .destructive) {
+                Button("Delete budget", role: .destructive) {
                     showingDeleteConfirmation.toggle()
                 }
                 .buttonStyle(.borderless)
@@ -149,7 +149,7 @@ fileprivate struct MonthlyLimitSection: View {
             SetLimitSheet(isPresented: $showingEditAlert)
                 .presentationDetents([.height(200)])
         }
-        .confirmationDialog("Delete monthly limit", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {
                     UserDefaults.standard.removeObject(forKey: AppStorageKeys.monthlyLimit)

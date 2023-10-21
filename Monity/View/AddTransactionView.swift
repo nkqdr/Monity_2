@@ -12,15 +12,24 @@ struct AddTransactionView: View {
     @FocusState var amountInputIsFocussed: Bool
     @StateObject var editor: TransactionEditor
     
+    var accentColor: Color {
+        editor.isExpense ? .red : .green
+    }
+    
+    var placeholderString: String {
+        0.formatted(.customCurrency())
+    }
+    
     var body: some View {
         NavigationView {
             Form {
                 VStack(spacing: 10) {
-                    TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
+                    TextField(placeholderString, value: $editor.givenAmount, format: .customCurrency())
                         .keyboardType(.numbersAndPunctuation)
                         .focused($amountInputIsFocussed)
                         .font(.system(size: 32, weight: .bold))
-                        .foregroundStyle(editor.isExpense ? .red : .green)
+                        .foregroundStyle(accentColor)
+                        .autocorrectionDisabled()
                     Picker("Pick a transaction type", selection: $editor.isExpense) {
                         Text("Income").tag(false)
                         Text("Expense").tag(true)
@@ -32,15 +41,18 @@ struct AddTransactionView: View {
                 
                 Section {
                     TransactionCategoryPicker(selection: $editor.selectedCategory)
-                    
                     if let _ = editor.transaction {
                         DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
                 }
+                .listRowBackground(accentColor.opacity(0.25))
                 Section("Optional") {
                     TextField("Description", text: $editor.description)
                 }
+                .listRowBackground(accentColor.opacity(0.25))
             }
+            .scrollContentBackground(.hidden)
+            .background(accentColor.opacity(0.2))
             .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -56,19 +68,21 @@ struct AddTransactionView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        editor.save()
+                        withAnimation {
+                            editor.save()
+                        }
                         isPresented.toggle()
                     }
                     .disabled(!editor.isValid)
                 }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        hideKeyboard()
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                }
+//                ToolbarItemGroup(placement: .keyboard) {
+//                    Spacer()
+//                    Button {
+//                        hideKeyboard()
+//                    } label: {
+//                        Image(systemName: "keyboard.chevron.compact.down")
+//                    }
+//                }
             }
         }
     }
