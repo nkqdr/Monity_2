@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SplashScreenBox: View {
-    var title: LocalizedStringKey
+    var title: LocalizedStringKey?
     var content: LocalizedStringKey
     var emoji: String
     
@@ -16,7 +16,9 @@ struct SplashScreenBox: View {
         HStack(alignment: .top) {
             Text(emoji).font(.largeTitle)
             VStack(alignment: .leading) {
-                Text(title).font(.headline).bold()
+                if let title {
+                    Text(title).font(.headline).bold()
+                }
                 Text(content).font(.callout).foregroundColor(.secondary)
             }
             Spacer()
@@ -37,7 +39,7 @@ fileprivate struct IntroPage: View {
                 .font(.title)
                 .bold()
             SplashScreenBox(title: "Introduction", content: "Track expenses, income, accounts, and investments – Watch your wealth soar with Monity!", emoji: "ℹ️")
-            SplashScreenBox(title: "My promise", content: "Your data is yours to control. It's stored exclusively on your device or in your iCloud account if you choose. Your privacy is my priority. Enjoy Monity with confidence.", emoji: "🔒")
+            SplashScreenBox(title: "My promise", content: "Your data is yours to control. It's stored exclusively on your device or in your iCloud account. Your privacy is my priority.", emoji: "🔒")
             HStack {
                 Spacer()
                 Button {
@@ -120,20 +122,19 @@ fileprivate struct TransactionCategoryPage: View {
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text("2. Define transaction categories")
-                .font(.title2)
-                .bold()
             SplashScreenBox(title: "Transaction categories", content: "Categorize transactions in Monity for a detailed expense and income analysis, helping you understand where your money flows.", emoji: "ℹ️")
-            
-            TagView(spacing: 8) {
-                ForEach($selectedCategoryNames) { $tag in
-                    Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
-                        .toggleStyle(.button)
-                        .buttonStyle(for: tag.isSelected)
+            SplashScreenBox(content: "What are your most active categories for both income and expenses?", emoji: "❔")
+            ScrollView {
+                TagView(spacing: 4) {
+                    ForEach($selectedCategoryNames) { $tag in
+                        Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
+                            .toggleStyle(.button)
+                            .buttonStyle(for: tag.isSelected)
+                    }
                 }
-                
+                .padding(8)
+                .frame(minHeight: 200)
             }
-            .padding(8)
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
             .frame(maxHeight: 200)
             Text("Select as many categories as you want. You can further customize them in the settings.").font(.footnote).foregroundColor(.secondary)
@@ -168,16 +169,14 @@ fileprivate struct MonthlyLimitPage: View {
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text("1. Set a monthly spending limit")
-                .font(.title2)
-                .bold()
-            SplashScreenBox(title: "Monthly limit", content: "Set a monthly limit to create a budget and unlock valuable insights for better financial control.", emoji: "ℹ️")
-            TextField("Monthly limit", value: $monthlyLimit, format: .customCurrency())
+            SplashScreenBox(title: "Monthly budget", content: "Set a monthly budget to unlock valuable insights for better financial control.", emoji: "ℹ️")
+            SplashScreenBox(content: "What is the maximum amount of money you would like to spend each month?", emoji: "❔")
+            TextField("Monthly budget", value: $monthlyLimit, format: .customCurrency())
                 .focused($isFocused)
                 .textFieldStyle(.roundedBorder)
                 .font(.headline)
                 .keyboardType(.numbersAndPunctuation)
-            Text("You can adjust your monthly limit anytime in the settings.").font(.footnote).foregroundColor(.secondary)
+            Text("You can adjust your monthly budget anytime in the settings.").font(.footnote).foregroundColor(.secondary)
             HStack {
                 Button("Skip") {
                     let delayTime: Double = isFocused ? 0.65 : 0
@@ -227,18 +226,19 @@ fileprivate struct SavingsCategoriesPage: View {
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text("3. Define categories for savings")
-                .font(.title2)
-                .bold()
             SplashScreenBox(title: "Savings categories", content: "Define savings categories for a deeper insight into your investments and bank accounts, ensuring precise tracking and better financial control.", emoji: "ℹ️")
-            TagView(spacing: 8) {
-                ForEach($selectedCategoryNames) { $tag in
-                    Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
-                        .toggleStyle(.button)
-                        .buttonStyle(for: tag.isSelected)
+            SplashScreenBox(content: "In which categories do you currently have funds saved or invested?", emoji: "❔")
+            ScrollView {
+                TagView(spacing: 8) {
+                    ForEach($selectedCategoryNames) { $tag in
+                        Toggle(LocalizedStringKey(tag.name), isOn: $tag.isSelected)
+                            .toggleStyle(.button)
+                            .buttonStyle(for: tag.isSelected)
+                    }
                 }
+                .padding(8)
+                .frame(minHeight: 130)
             }
-            .padding(8)
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
             .frame(maxHeight: 130)
             Text("Select as many categories as you want. You can further customize them in the settings.").font(.footnote).foregroundColor(.secondary)
@@ -274,7 +274,7 @@ fileprivate struct FinalWelcomeScreen: View {
             Text("All done!")
                 .font(.title2)
                 .bold()
-            SplashScreenBox(title: "Take Control of Your Finances", content: "Your financial goals, your rules. Begin your journey to financial empowerment today by using Monity to take control of your finances and thrive.", emoji: "✅")
+            SplashScreenBox(title: "Take Control of Your Finances", content: "Your financial goals, your rules. Begin your journey to financial empowerment today by using Monity to take control of your finances.", emoji: "✅")
             HStack {
                 Spacer()
                 Button {

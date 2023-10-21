@@ -71,7 +71,7 @@ fileprivate struct SetLimitSheet: View {
                         .keyboardType(.decimalPad)
                         .focused($limitInputIsFocussed)
                 } header: {
-                    Text("Monthly limit")
+                    Text("Monthly budget")
                 }
             }
             .onAppear {
