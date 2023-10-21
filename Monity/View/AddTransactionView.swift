@@ -16,11 +16,15 @@ struct AddTransactionView: View {
         editor.isExpense ? .red : .green
     }
     
+    var placeholderString: String {
+        0.formatted(.customCurrency())
+    }
+    
     var body: some View {
         NavigationView {
             Form {
                 VStack(spacing: 10) {
-                    TextField("Amount", value: $editor.givenAmount, format: .customCurrency())
+                    TextField(placeholderString, value: $editor.givenAmount, format: .customCurrency())
                         .keyboardType(.numbersAndPunctuation)
                         .focused($amountInputIsFocussed)
                         .font(.system(size: 32, weight: .bold))
@@ -63,7 +67,9 @@ struct AddTransactionView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        editor.save()
+                        withAnimation {
+                            editor.save()
+                        }
                         isPresented.toggle()
                     }
                     .disabled(!editor.isValid)
