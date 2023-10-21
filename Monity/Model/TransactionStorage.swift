@@ -110,7 +110,7 @@ class TransactionStorage: ResettableStorage<Transaction> {
             transaction.text = editor.description
             transaction.category = editor.selectedCategory
             transaction.isExpense = editor.isExpense
-            transaction.amount = editor.givenAmount
+            transaction.amount = editor.givenAmount ?? 0
             transaction.date = editor.selectedDate
             try? self.context.save()
         }
