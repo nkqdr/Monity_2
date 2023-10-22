@@ -34,7 +34,7 @@ struct EditableDeletableItem<ItemType, Content>: View where Content: View {
                         Label("Edit", systemImage: "pencil")
                     }
                 }
-                if let deleteFunc = onDelete {
+                if let _ = onDelete {
                     Button(role: .destructive) {
                         showConfirmationDialog.toggle()
                     } label: {
