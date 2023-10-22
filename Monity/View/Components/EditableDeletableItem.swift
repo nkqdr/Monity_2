@@ -26,6 +26,22 @@ struct EditableDeletableItem<ItemType, Content>: View where Content: View {
                     editFunc(item)
                 }
             }
+            .contextMenu {
+                if let editFunc = onEdit {
+                    Button {
+                        editFunc(item)
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                }
+                if let _ = onDelete {
+                    Button(role: .destructive) {
+                        showConfirmationDialog.toggle()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+            }
             .confirmationDialog(confirmationTitle, isPresented: $showConfirmationDialog, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     if let deleteFunc = onDelete {
