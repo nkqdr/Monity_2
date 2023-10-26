@@ -38,7 +38,7 @@ class EOYViewModel: ObservableObject {
             self.totalAmountOfIncomeTransactions = newVal.filter { !$0.isExpense }.count
             self.totalAmountOfExpenseTransactions = self.totalAmountOfTransactions - self.totalAmountOfIncomeTransactions
             self.totalIncome = vDSP.sum(newVal.filter { !$0.isExpense }.map { $0.amount })
-            self.totalIncome = vDSP.sum(newVal.filter { $0.isExpense }.map { $0.amount })
+            self.totalExpenses = vDSP.sum(newVal.filter { $0.isExpense }.map { $0.amount })
             self.mostExpensiveCategories = self.computeMostExpensiveCategories(isExpense: true)
             self.mostIncomeCategories = self.computeMostExpensiveCategories(isExpense: false)
         }
