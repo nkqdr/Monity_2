@@ -14,7 +14,8 @@ struct DashboardView: View {
     var showEOYreview: Bool {
         let currentComps = Calendar.current.dateComponents([.month, .day], from: currentDate)
         if currentComps.month != 12 || currentComps.day! < 25 {
-            return false
+            // return false
+            return true
         }
         return true
     }

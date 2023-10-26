@@ -53,7 +53,7 @@ class EOYViewModel: ObservableObject {
             let totalAmount = vDSP.sum(transactions.map { $0.amount })
             return (key, totalAmount: totalAmount)
         }.sorted { (lhs, rhs) -> Bool in
-            return lhs.totalAmount < rhs.totalAmount
+            return lhs.totalAmount > rhs.totalAmount
         }
     }
 }
