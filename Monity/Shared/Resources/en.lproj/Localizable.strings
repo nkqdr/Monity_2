@@ -10,13 +10,13 @@
 "income.plural" = "Income";
 
 /* No comment provided by engineer. */
-"picker.lastmonth" = "Last Month";
+"picker.lastmonth" = "1 Month";
 
 /* No comment provided by engineer. */
 "picker.sixmonths" = "6 Months";
 
 /* No comment provided by engineer. */
-"picker.lastyear" = "Last Year";
+"picker.lastyear" = "1 Year";
 
 /* No comment provided by engineer. */
 "picker.fiveyears" = "5 Years";

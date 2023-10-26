@@ -425,7 +425,7 @@
 "Show" = "Anzeigen";
 
 /* No comment provided by engineer. */
-"Show average mark" = "Durchschnitt anzeigen";
+"Show average" = "Durchschnitt anzeigen";
 
 /* No comment provided by engineer. */
 "Show in month overview" = "In Monatsübersicht anzeigen";
@@ -578,6 +578,12 @@
 
 /* No comment provided by engineer. */
 "What are your most active categories for both income and expenses?" = "Welches sind Ihre wichtigsten Kategorien für Einnahmen und Ausgaben?";
+
+/* No comment provided by engineer. */
+"These values are calculated with all entries you have ever entered" = "Diese Werte werden mit allen Einträgen berechnet, die Sie jemals eingetragen haben";
+
+/* No comment provided by engineer. */
+"These values are calculated with all entries you have entered within the last 12 months" = "Diese Werte werden mit allen Einträgen berechnet, die Sie innerhalb der letzten 12 Monate eingetragen haben";
 
 // MARK: - Onboarding default categories
 
