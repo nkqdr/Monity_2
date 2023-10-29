@@ -11,6 +11,7 @@ import Charts
 fileprivate struct DrawingConstants {
     static let cornerRadius: CGFloat = 15
     static let scrollViewSpacing: CGFloat = 5
+    static let titleTopPaddingFactor: CGFloat = 1 / 7
 }
 
 fileprivate struct IncomeExpenseData: Identifiable {
@@ -53,16 +54,59 @@ fileprivate struct IntroView: View {
     var yearString: String
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("🎊").font(.system(size: 50))
-                Text("Let's reflect on \(yearString)!").font(.title.bold())
-                Text("As we approach the end of \(yearString), it's time to reflect on your financial journey. Our End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.")
-                    .foregroundStyle(.secondary)
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("🎊")
+                        .font(.system(size: 50))
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Text("Let's reflect on \(yearString)!").font(.title.bold())
+                    Text("As we approach the end of \(yearString), it's time to reflect on your financial journey. Our End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.")
+                        .foregroundStyle(.secondary)
+                }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
-        .padding()
+        .padding(.horizontal)
+        .multilineTextAlignment(.center)
+    }
+}
+
+
+fileprivate struct RegisteredTransactionsView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Year in Review:\n Your Transactional Triumphs!")
+                        .font(.title.bold())
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Group {
+                        Group {
+                            Text(content.totalAmountOfIncomeTransactions, format: .number)
+                                .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.1")
+                        }
+                        
+                        Group {
+                            Text(content.totalAmountOfExpenseTransactions, format: .number)
+                                .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
+                        }
+                        
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                    .foregroundStyle(.secondary)
+                   
+                    Text("eoy_review.transactions.3")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .scrollIndicators(.hidden)
+        }
+        .padding(.horizontal)
         .multilineTextAlignment(.center)
     }
 }
@@ -71,22 +115,25 @@ fileprivate struct MostExpensiveCategoriesView: View {
     @EnvironmentObject var content: EOYViewModel
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Cash Chronicles:\n Where Money Flows!")
-                    .font(.title.bold())
-                Text("These were your most expensive categories in the last year")
-                    
-                    .foregroundStyle(.secondary)
-                TopNChart(data: Array(content.mostExpensiveCategories.prefix(5).map {
-                    TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-                }), tint: .red.gradient)
-                .padding()
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Cash Chronicles:\n Where Money Flows!")
+                        .font(.title.bold())
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Text("These were your most expensive categories in the last year")
+                        
+                        .foregroundStyle(.secondary)
+                    TopNChart(data: Array(content.mostExpensiveCategories.prefix(5).map {
+                        TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+                    }), tint: .red.gradient)
+                    .padding()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
-        .padding()
+        .padding(.horizontal)
         .multilineTextAlignment(.center)
     }
 }
@@ -95,28 +142,32 @@ fileprivate struct MostIncomeCategoriesView: View {
     @EnvironmentObject var content: EOYViewModel
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Uncover Your Cash Trails!")
-                    .font(.title.bold())
-                Text("This is how you got your money")
-                    
-                    .foregroundStyle(.secondary)
-                TopNChart(data: Array(content.mostIncomeCategories.prefix(5).map {
-                    TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-                }), tint: .green.gradient)
-                .padding()
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Uncover Your Cash Trails!")
+                        .font(.title.bold())
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Text("This is how you got your money")
+                        
+                        .foregroundStyle(.secondary)
+                    TopNChart(data: Array(content.mostIncomeCategories.prefix(5).map {
+                        TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+                    }), tint: .green.gradient)
+                    .padding()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
-        .padding()
+        .padding(.horizontal)
         .multilineTextAlignment(.center)
     }
 }
 
 fileprivate struct IncomeVsExpenses: View {
     @EnvironmentObject var content: EOYViewModel
+    @StateObject var cashFlowContent = YearlyCashflowViewModel()
     
     private var data: [IncomeExpenseData] {
         [
@@ -152,11 +203,11 @@ fileprivate struct IncomeVsExpenses: View {
     
     @ViewBuilder
     private var cashFlowChart: some View {
-        let minValue: Double = min(0, (content.yearCashflowData.map { $0.value }.min() ?? 10))
-        let absMaxValue: Double = (content.yearCashflowData.map { abs($0.value) }.max() ?? 10)
-        let lastDP: ValueTimeDataPoint? = content.yearCashflowData.last
+        let minValue: Double = min(0, (cashFlowContent.data.map { $0.value }.min() ?? 10))
+        let absMaxValue: Double = (cashFlowContent.data.map { abs($0.value) }.max() ?? 10)
+        let lastDP: ValueTimeDataPoint? = cashFlowContent.data.last
         
-        Chart(content.yearCashflowData) {
+        Chart(cashFlowContent.data) {
             AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
                 .opacity(0.5)
                 .interpolationMethod(.monotone)
@@ -191,101 +242,121 @@ fileprivate struct IncomeVsExpenses: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Financial Harmony:\n Income vs Expenses!")
-                    .font(.title.bold())
-                
-                Group {
-                    if content.totalIncome >= content.totalExpenses {
-                        Text("Well done! You have earned ") + annotatedDiff + Text(" more than you have spent!")
-                    } else {
-                        Text("This year, you have spent ") + annotatedDiff + Text(" more than you have earned. Let's mix things up next year!")
-                    }
-                }
-                .foregroundStyle(.secondary)
-                
-                barChart
-                cashFlowChart
-            }
-        }
-        .scrollIndicators(.hidden)
-        .padding()
-        .multilineTextAlignment(.center)
-    }
-}
-
-fileprivate struct RegisteredTransactionsView: View {
-    @EnvironmentObject var content: EOYViewModel
-    
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Year in Review:\n Your Transactional Triumphs!")
-                    .font(.title.bold())
-                Group {
-                    Group {
-                        Text(content.totalAmountOfIncomeTransactions, format: .number)
-                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.1")
-                    }
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Financial Harmony:\n Income vs Expenses!")
+                        .font(.title.bold())
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
                     
                     Group {
-                        Text(content.totalAmountOfExpenseTransactions, format: .number)
-                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
+                        if content.totalIncome >= content.totalExpenses {
+                            Text("Well done! You have earned ") + annotatedDiff + Text(" more than you have spent!")
+                        } else {
+                            Text("This year, you have spent ") + annotatedDiff + Text(" more than you have earned. Let's mix things up next year!")
+                        }
                     }
-                    
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-                .foregroundStyle(.secondary)
-               
-                Text("eoy_review.transactions.3")
                     .foregroundStyle(.secondary)
+                    
+                    barChart
+                    cashFlowChart
+                }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
-        .padding()
+        .padding(.horizontal)
         .multilineTextAlignment(.center)
     }
 }
 
 fileprivate struct ReviewProgressButtons: View {
     @EnvironmentObject var content: EOYViewModel
+    @Binding var showReport: Bool
+    
+    var backIcon: String {
+        if content.currentlyDisplayedTabIndex == 0 {
+            return "xmark"
+        }
+        return "chevron.backward"
+    }
+    
+    var forwardIcon: String {
+        if (content.currentlyDisplayedTabIndex == 4) {
+            return "checkmark"
+        }
+        return "chevron.forward"
+    }
+    
+    private func playHaptics() {
+        Haptics.shared.play(.medium)
+    }
     
     var body: some View {
-        HStack {
-            Button {
-                withAnimation {
-                    content.currentlyDisplayedTabIndex -= 1
+        VStack {
+            HStack {
+                Spacer()
+                if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < 4 {
+                    Button(role: .destructive) {
+                        playHaptics()
+                        showReport.toggle()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .padding(5)
+                    }
+                    .buttonStyle(.bordered)
+                    .clipShape(Circle())
+                    .padding()
+                    .padding(.top, 5)
                 }
-            } label: {
-                Image(systemName: "chevron.backward")
-                    .padding(5)
             }
-            .buttonStyle(.bordered)
-            .disabled(content.currentlyDisplayedTabIndex <= 0)
             Spacer()
-            Button {
-                withAnimation {
-                    content.currentlyDisplayedTabIndex += 1
+            HStack {
+                Button(role: content.currentlyDisplayedTabIndex == 0 ? .destructive : .cancel) {
+                    withAnimation {
+                        if content.currentlyDisplayedTabIndex <= 0 {
+                            showReport.toggle()
+                            playHaptics()
+                        } else {
+                            content.currentlyDisplayedTabIndex -= 1
+                        }
+                    }
+                } label: {
+                    Image(systemName: backIcon)
+                        .padding(5)
                 }
-            } label: {
-                Image(systemName: "chevron.forward")
-                    .padding(5)
+                .buttonStyle(.bordered)
+                Spacer()
+                Button {
+                    withAnimation {
+                        if content.currentlyDisplayedTabIndex >= 4 {
+                            showReport.toggle()
+                            playHaptics()
+                        } else {
+                            content.currentlyDisplayedTabIndex += 1
+                        }
+                    }
+                } label: {
+                    Image(systemName: forwardIcon)
+                        .padding(5)
+                }
+                .buttonStyle(.bordered)
             }
-            .buttonStyle(.bordered)
-            .disabled(content.currentlyDisplayedTabIndex >= 4)
+            .padding(.horizontal, 25)
+            .padding(.bottom, 8)
+        }
+        .onChange(of: content.currentlyDisplayedTabIndex) { _ in
+            playHaptics()
         }
     }
 }
 
 fileprivate struct EOY_DetailView: View {
     @StateObject private var content = EOYViewModel()
+    @Binding var showReport: Bool
     var yearString: String
    
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             TabView(selection: $content.currentlyDisplayedTabIndex) {
                 IntroView(yearString: yearString)
                     .tag(0)
@@ -300,9 +371,7 @@ fileprivate struct EOY_DetailView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
-            ReviewProgressButtons()
-                .padding(.horizontal, 25)
-                .padding(.bottom, 8)
+            ReviewProgressButtons(showReport: $showReport)
         }
         .environmentObject(content)
     }
@@ -360,7 +429,7 @@ struct EOY_ReviewTile: View {
         .background(Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
         .padding(.horizontal, 5)
         .sheet(isPresented: $showReport) {
-            EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
+            EOY_DetailView(showReport: $showReport, yearString: Date().formatted(.dateTime.year()))
         }
         .onTapGesture {
             showReport.toggle()
@@ -369,7 +438,7 @@ struct EOY_ReviewTile: View {
 }
 
 #Preview {
-    EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
+    EOY_DetailView(showReport: .constant(true), yearString: Date().formatted(.dateTime.year()))
 //    EOY_ReviewTile()
 //    .preferredColorScheme(.dark)
 }
