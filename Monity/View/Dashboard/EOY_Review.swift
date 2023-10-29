@@ -8,6 +8,11 @@
 import SwiftUI
 import Charts
 
+fileprivate struct DrawingConstants {
+    static let cornerRadius: CGFloat = 15
+    static let scrollViewSpacing: CGFloat = 5
+}
+
 fileprivate struct IncomeExpenseData: Identifiable {
     var id = UUID()
     var isExpense: Bool
@@ -31,6 +36,7 @@ fileprivate struct TopNChart<S>: View where S: ShapeStyle {
                         .foregroundColor(.secondary)
                         .font(.footnote)
                 }
+                .cornerRadius(DrawingConstants.cornerRadius - 5)
         }
         .chartXAxis(.hidden)
         .chartYAxis {
@@ -39,104 +45,266 @@ fileprivate struct TopNChart<S>: View where S: ShapeStyle {
             }
         }
         .foregroundStyle(tint)
-        .frame(minHeight: 220)
+        .frame(height: 340)
+    }
+}
+
+fileprivate struct IntroView: View {
+    var yearString: String
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("🎊").font(.system(size: 50))
+                Text("Let's reflect on \(yearString)!").font(.title.bold())
+                Text("As we approach the end of \(yearString), it's time to reflect on your financial journey. Our End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct MostExpensiveCategoriesView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Cash Chronicles:\n Where Money Flows!")
+                    .font(.title.bold())
+                Text("These were your most expensive categories in the last year")
+                    
+                    .foregroundStyle(.secondary)
+                TopNChart(data: Array(content.mostExpensiveCategories.prefix(5).map {
+                    TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+                }), tint: .red.gradient)
+                .padding()
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct MostIncomeCategoriesView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Uncover Your Cash Trails!")
+                    .font(.title.bold())
+                Text("This is how you got your money")
+                    
+                    .foregroundStyle(.secondary)
+                TopNChart(data: Array(content.mostIncomeCategories.prefix(5).map {
+                    TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+                }), tint: .green.gradient)
+                .padding()
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct IncomeVsExpenses: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    private var data: [IncomeExpenseData] {
+        [
+            IncomeExpenseData(isExpense: false, value: content.totalIncome),
+            IncomeExpenseData(isExpense: true, value: content.totalExpenses)
+        ]
+    }
+    
+    @ViewBuilder
+    private var barChart: some View {
+        Chart(data) { dp in
+            BarMark(x: .value("Type", Bundle.main.localizedString(forKey: dp.isExpense ? "Expenses" : "income.plural", value: nil, table: nil)), y: .value("Amount", dp.value))
+                .foregroundStyle(dp.isExpense ? Color.red.gradient : Color.green.gradient)
+                .annotation(position: .top) { _ in
+                    if (dp.value != 0) {
+                        Text(dp.value, format: .customCurrency())
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                    }
+                }
+                .cornerRadius(DrawingConstants.cornerRadius - 5)
+        }
+        .chartYAxis(.hidden)
+        .chartXAxis {
+            AxisMarks(position: .bottom) { _ in
+                AxisValueLabel()
+            }
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+        .frame(height: 200)
+    }
+    
+    @ViewBuilder
+    private var cashFlowChart: some View {
+        let minValue: Double = min(0, (content.yearCashflowData.map { $0.value }.min() ?? 10))
+        let absMaxValue: Double = (content.yearCashflowData.map { abs($0.value) }.max() ?? 10)
+        let lastDP: ValueTimeDataPoint? = content.yearCashflowData.last
+        
+        Chart(content.yearCashflowData) {
+            AreaMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
+                .opacity(0.5)
+                .interpolationMethod(.monotone)
+            LineMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
+                .lineStyle(StrokeStyle(lineWidth: 2))
+                .interpolationMethod(.monotone)
+        }
+        .chartYAxis {
+            AxisMarks { value in
+                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
+                AxisGridLine()
+                AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
+            }
+        }
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .month)) { value in
+                AxisValueLabel(format: .dateTime.month(.narrow))
+            }
+        }
+        .chartYScale(domain: minValue ... absMaxValue)
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+        .frame(height: 200)
+        .foregroundStyle((lastDP != nil && lastDP!.value >= 0) ? .green : .red)
+    }
+    
+    @ViewBuilder
+    var annotatedDiff: Text {
+        let diff = abs(content.totalIncome - content.totalExpenses)
+        Text(diff, format: .customCurrency())
+            .foregroundColor(content.totalIncome >= content.totalExpenses ? .green : .red)
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Financial Harmony:\n Income vs Expenses!")
+                    .font(.title.bold())
+                
+                Group {
+                    if content.totalIncome >= content.totalExpenses {
+                        Text("Well done! You have earned ") + annotatedDiff + Text(" more than you have spent!")
+                    } else {
+                        Text("This year, you have spent ") + annotatedDiff + Text(" more than you have earned. Let's mix things up next year!")
+                    }
+                }
+                .foregroundStyle(.secondary)
+                
+                barChart
+                cashFlowChart
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct RegisteredTransactionsView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Year in Review:\n Your Transactional Triumphs!")
+                    .font(.title.bold())
+                Group {
+                    Group {
+                        Text(content.totalAmountOfIncomeTransactions, format: .number)
+                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.1")
+                    }
+                    
+                    Group {
+                        Text(content.totalAmountOfExpenseTransactions, format: .number)
+                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
+                    }
+                    
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                .foregroundStyle(.secondary)
+               
+                Text("eoy_review.transactions.3")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct ReviewProgressButtons: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    content.currentlyDisplayedTabIndex -= 1
+                }
+            } label: {
+                Image(systemName: "chevron.backward")
+                    .padding(5)
+            }
+            .buttonStyle(.bordered)
+            .disabled(content.currentlyDisplayedTabIndex <= 0)
+            Spacer()
+            Button {
+                withAnimation {
+                    content.currentlyDisplayedTabIndex += 1
+                }
+            } label: {
+                Image(systemName: "chevron.forward")
+                    .padding(5)
+            }
+            .buttonStyle(.bordered)
+            .disabled(content.currentlyDisplayedTabIndex >= 4)
+        }
     }
 }
 
 fileprivate struct EOY_DetailView: View {
     @StateObject private var content = EOYViewModel()
     var yearString: String
-    
-    @ViewBuilder
-    private var mostExpensiveCategories: some View {
-        SummaryTile {
-            TopNChart(data: Array(content.mostExpensiveCategories.prefix(3).map {
-                TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-            }), tint: .red.gradient)
-        } header: {
-            Text("Cash Chronicles: Where Money Flows!")
-        } footer: {
-            Text("These were your most expensive categories in the last year")
-        }
-    }
-    
-    @ViewBuilder
-    private var mostIncomeCategories: some View {
-        SummaryTile {
-            TopNChart(data: Array(content.mostIncomeCategories.prefix(3).map {
-                TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-            }), tint: .green.gradient)
-        } header: {
-            Text("Uncover Your Cash Trails!")
-        } footer: {
-            Text("This is how you got your money")
-        }
-    }
-    
-    @ViewBuilder
-    private var incomeVSexpenses: some View {
-        let data = [
-            IncomeExpenseData(isExpense: false, value: content.totalIncome),
-            IncomeExpenseData(isExpense: true, value: content.totalExpenses)
-        ]
-        
-        SummaryTile {
-            Chart(data) { dp in
-                BarMark(x: .value("Type", dp.isExpense ? "Expenses" : "Income"), y: .value("Amount", dp.value))
-                    .foregroundStyle(dp.isExpense ? Color.red.gradient : Color.green.gradient)
-                    .annotation(position: .top) { _ in
-                        Text(dp.value, format: .customCurrency())
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
-                    }
-            }
-            .chartYAxis(.hidden)
-        } header: {
-            Text("Financial Harmony: Income vs Expenses!")
-        } footer: {
-            Group {
-                if content.totalIncome > content.totalExpenses {
-                    let diff = (content.totalIncome - content.totalExpenses).formatted(.customCurrency())
-                    Text("Well done! You have earned \(diff) more than you have spent!")
-                } else {
-                    let diff = (content.totalExpenses - content.totalIncome).formatted(.customCurrency())
-                    Text("This year, you have spent \(diff) more than you have earned. Let's mix things up next year!")
-                }
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var introBox: some View {
-        GroupBox(label: Text("🎊Let's reflect on \(yearString)!🎊").groupBoxLabelTextStyle(.primary)) {
-            Text("As we approach the end of \(yearString), it's time to reflect on your financial journey. Our End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.").foregroundStyle(.secondary)
-        }
-        .groupBoxStyle(CustomGroupBox())
-    }
-    
+   
     var body: some View {
-        ListBase {
-            ScrollView(showsIndicators: false) {
-                Group {
-                    introBox
-                    
-                    GroupBox {
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("You have registered a total of \(content.totalAmountOfTransactions) transactions this year.")
-                            Text("\(content.totalAmountOfIncomeTransactions) of these transactions were registered as income and \(content.totalAmountOfExpenseTransactions) were registered as expenses.")
-                        }
-                    }
-                    .groupBoxStyle(CustomGroupBox())
-                    
-                    mostExpensiveCategories
-                    mostIncomeCategories
-                    incomeVSexpenses
-                }
-                .padding(.horizontal)
+        ZStack(alignment: .bottom) {
+            TabView(selection: $content.currentlyDisplayedTabIndex) {
+                IntroView(yearString: yearString)
+                    .tag(0)
+                RegisteredTransactionsView()
+                    .tag(1)
+                MostExpensiveCategoriesView()
+                    .tag(2)
+                MostIncomeCategoriesView()
+                    .tag(3)
+                IncomeVsExpenses()
+                    .tag(4)
             }
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            ReviewProgressButtons()
+                .padding(.horizontal, 25)
+                .padding(.bottom, 8)
         }
-        .navigationTitle("\(yearString) Review")
-        .navigationBarTitleDisplayMode(.large)
+        .environmentObject(content)
     }
 }
 
@@ -168,26 +336,28 @@ struct EOY_ReviewTile: View {
     @State private var showReport: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Group {
-                    Text("🎊") +
-                    Text(Date(), format: .dateTime.year()) +
-                    Text(" is coming to an end 🎊")
+        HStack {
+            Text("🎉").font(.system(size: 35))
+            VStack(alignment: .leading) {
+                HStack {
+                    Group {
+                        Text(Date(), format: .dateTime.year()) +
+                        Text(" is coming to an end")
+                    }
+                    .font(.headline.bold())
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
+                        .padding(.top, 4)
                 }
-                .font(.headline.bold())
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.secondary)
-                    .font(.footnote)
-                    .padding(.top, 4)
+                Text("Your Financial Year at a Glance")
             }
-            Text("Your Financial Year at a Glance")
         }
         .foregroundStyle(.primary)
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color.orange.opacity(0.6), in: RoundedRectangle(cornerRadius: 8))
+        .background(Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
         .padding(.horizontal, 5)
         .sheet(isPresented: $showReport) {
             EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
@@ -199,8 +369,7 @@ struct EOY_ReviewTile: View {
 }
 
 #Preview {
-    NavigationStack {
-        EOY_ReviewTile()
-    }
+    EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
+//    EOY_ReviewTile()
 //    .preferredColorScheme(.dark)
 }

@@ -11,6 +11,11 @@ import Combine
 
 class EOYViewModel: ObservableObject {
     typealias CategoryWithAmount = (category: TransactionCategory, totalAmount: Double)
+    struct CashflowTimeData: Hashable {
+        var month: Int
+        var day: Int
+    }
+    @Published var currentlyDisplayedTabIndex: Int = 0
     @Published var totalAmountOfTransactions: Int = 0
     @Published var totalAmountOfIncomeTransactions: Int = 0
     @Published var totalAmountOfExpenseTransactions: Int = 0
@@ -18,6 +23,7 @@ class EOYViewModel: ObservableObject {
     @Published var totalIncome: Double = 0
     @Published var mostExpensiveCategories: [CategoryWithAmount] = []
     @Published var mostIncomeCategories: [CategoryWithAmount] = []
+    @Published var yearCashflowData: [ValueTimeDataPoint] = []
     
     private var allTransactions: [AbstractTransaction] = []
     
@@ -25,11 +31,11 @@ class EOYViewModel: ObservableObject {
     private var transactionWrapper: AbstractTransactionWrapper
     
     init() {
-        let currentComps = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        let currentYear = Calendar.current.component(.year, from: Date())
         let startOfYear: Date = Calendar.current.date(from: DateComponents(
-            year: currentComps.year! - 1,
-            month: currentComps.month!,
-            day: currentComps.day!)
+            year: currentYear,
+            month: 1,
+            day: 1)
         )!
         self.transactionWrapper = AbstractTransactionWrapper(startDate: startOfYear, endDate: Date())
         self.transactionCancellable = self.transactionWrapper.$wrappedTransactions.sink { newVal in
@@ -41,6 +47,7 @@ class EOYViewModel: ObservableObject {
             self.totalExpenses = vDSP.sum(newVal.filter { $0.isExpense }.map { $0.amount })
             self.mostExpensiveCategories = self.computeMostExpensiveCategories(isExpense: true)
             self.mostIncomeCategories = self.computeMostExpensiveCategories(isExpense: false)
+            self.yearCashflowData = self.computeCashFlowDataPoints()
         }
     }
     
@@ -54,6 +61,26 @@ class EOYViewModel: ObservableObject {
             return (key, totalAmount: totalAmount)
         }.sorted { (lhs, rhs) -> Bool in
             return lhs.totalAmount > rhs.totalAmount
+        }
+    }
+    
+    private func computeCashFlowDataPoints() -> [ValueTimeDataPoint] {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let startOfYearDate = Calendar.current.date(from: DateComponents(year: currentYear, month: 1, day: 1))!
+        var dataPoints: [ValueTimeDataPoint] = []
+        
+        let datesEntered: Set<Date> = Set(allTransactions.map { $0.date?.removeTimeStamp ?? Date() })
+        if !datesEntered.contains(startOfYearDate) {
+            dataPoints.append(ValueTimeDataPoint(date: startOfYearDate, value: 0))
+        }
+        for date in datesEntered {
+            dataPoints.append(ValueTimeDataPoint(
+                date: date,
+                value: vDSP.sum(self.allTransactions.filter { $0.date?.removeTimeStamp ?? Date() <= date}.map { $0.isExpense ? -$0.amount : $0.amount}))
+            )
+        }
+        return dataPoints.sorted {
+            $0.date < $1.date
         }
     }
 }

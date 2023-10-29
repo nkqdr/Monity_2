@@ -29,3 +29,12 @@
 
 /* Alert message in the asset allocation section. */
 "recurring_expenses.settings_description" = "If this is enabled, your active recurring transactions will always be included in calculations throughout the app.";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.1" = " income transactions registered";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.2" = " expense transactions registered";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.3" = "This meticulous tracking forms a foundation of insightful financial analysis. Armed with this data, you're empowered to make strategic decisions, shaping a prosperous financial future. Your commitment to financial prudence is commendable, and we're here to support your continued success.";
