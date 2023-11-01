@@ -33,23 +33,24 @@ class YearlyCashflowViewModel: ObservableObject {
     private func computeCashFlowDataPoints() -> [ValueTimeDataPoint] {
         let currentYear = Calendar.current.component(.year, from: Date())
         let startOfYearDate = Calendar.current.date(from: DateComponents(year: currentYear, month: 1, day: 1))!
-        var dataPoints: [ValueTimeDataPoint] = []
-        
-        var currentDate: Date = startOfYearDate
-        var currentAmount: Double = 0
-        for transaction in allTransactions.reversed() {
-            if !transaction.wrappedDate.isSameDayAs(currentDate) {
-                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
-                currentDate = transaction.wrappedDate
-            }
-            
-            if transaction.isExpense {
-                currentAmount -= transaction.amount
-            } else {
-                currentAmount += transaction.amount
-            }
-        }
-        return dataPoints
+        return LineChartDataBuilder.generateCashflowData(for: self.allTransactions, initialDate: startOfYearDate)
+//        var dataPoints: [ValueTimeDataPoint] = []
+//        
+//        var currentDate: Date = startOfYearDate
+//        var currentAmount: Double = 0
+//        for transaction in allTransactions.reversed() {
+//            if !transaction.wrappedDate.isSameDayAs(currentDate) {
+//                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
+//                currentDate = transaction.wrappedDate
+//            }
+//            
+//            if transaction.isExpense {
+//                currentAmount -= transaction.amount
+//            } else {
+//                currentAmount += transaction.amount
+//            }
+//        }
+//        return dataPoints
     }
 }
 

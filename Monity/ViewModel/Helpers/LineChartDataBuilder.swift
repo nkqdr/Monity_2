@@ -30,4 +30,39 @@ class LineChartDataBuilder {
         }
         return data
     }
+    
+    static func generateCashflowData(for transactions: [AbstractTransaction], initialDate: Date? = nil) -> [ValueTimeDataPoint] {
+        var dataPoints: [ValueTimeDataPoint] = []
+        
+        guard !transactions.isEmpty else {
+            return []
+        }
+        
+        let sortedTransactions = transactions.sorted {
+            $0.wrappedDate < $1.wrappedDate
+        }
+        
+        var currentDate: Date
+        if let initialDate {
+            currentDate = initialDate
+        } else {
+            currentDate = transactions.first!.wrappedDate
+        }
+        
+        var currentAmount: Double = 0
+        for transaction in sortedTransactions {
+            if !transaction.wrappedDate.isSameDayAs(currentDate) {
+                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
+                currentDate = transaction.wrappedDate
+            }
+            
+            if transaction.isExpense {
+                currentAmount -= transaction.amount
+            } else {
+                currentAmount += transaction.amount
+            }
+        }
+        dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
+        return dataPoints
+    }
 }

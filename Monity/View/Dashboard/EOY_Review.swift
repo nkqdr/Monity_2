@@ -383,7 +383,7 @@ fileprivate struct ReviewProgressButtons: View {
                     }
                     
                     if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < DrawingConstants.lastTabIndex {
-                        Button(role: .destructive) {
+                        Button {
                             playHaptics()
                             dismiss()
                         } label: {
@@ -392,6 +392,7 @@ fileprivate struct ReviewProgressButtons: View {
                         }
                         .buttonStyle(.bordered)
                         .clipShape(Circle())
+                        .tint(.red)
                     }
                 }
                 .padding()
@@ -399,7 +400,7 @@ fileprivate struct ReviewProgressButtons: View {
             }
             Spacer()
             HStack {
-                Button(role: content.currentlyDisplayedTabIndex == 0 ? .destructive : .cancel) {
+                Button {
                     withAnimation {
                         if content.currentlyDisplayedTabIndex <= 0 {
                             dismiss()
@@ -413,6 +414,7 @@ fileprivate struct ReviewProgressButtons: View {
                         .padding(5)
                 }
                 .buttonStyle(.bordered)
+                .tint(content.currentlyDisplayedTabIndex == 0 ? .red : nil)
                 Spacer()
                 Button {
                     withAnimation {
@@ -428,6 +430,7 @@ fileprivate struct ReviewProgressButtons: View {
                         .padding(5)
                 }
                 .buttonStyle(.bordered)
+                .tint(content.currentlyDisplayedTabIndex == DrawingConstants.lastTabIndex ? .green : nil)
             }
             .padding(.horizontal, 25)
             .padding(.bottom, 8)

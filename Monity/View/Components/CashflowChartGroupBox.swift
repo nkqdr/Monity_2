@@ -94,13 +94,26 @@ struct CashflowChartGroupBox: View {
           }
         }
         .chartBackground { proxy in
-          ZStack(alignment: .topLeading) {
-              if selectedElement == nil {
-                  let lastValue: Double = content.cashFlowData.last?.value ?? 0
-                  Text(lastValue, format: .customCurrency())
-                      .foregroundColor(lastValue >= 0 ? .green : .red)
-                      .font(.title3.bold())
-              }
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        if let selectedElement {
+                            Text(selectedElement.value, format: .customCurrency())
+                              .font(.headline.bold())
+                              .foregroundColor(.primary)
+                            Text("\(selectedElement.date, format: .dateTime.month().day())")
+                              .font(.footnote)
+                              .foregroundStyle(.secondary)
+                        } else {
+                            let lastValue: Double = content.cashFlowData.last?.value ?? 0
+                            Text(lastValue, format: .customCurrency())
+                                .foregroundColor(lastValue >= 0 ? .green : .red)
+                                .font(.headline.bold())
+                        }
+                    }
+                    Spacer()
+                }
+                Spacer()
             GeometryReader { geo in
               if let selectedElement {
                 // Map date to chart X position
@@ -108,32 +121,12 @@ struct CashflowChartGroupBox: View {
                 // Offset the chart X position by chart frame
                 let midStartPositionX = startPositionX + geo[proxy.plotAreaFrame].origin.x
                 let lineHeight = geo[proxy.plotAreaFrame].maxY
-                let boxWidth: CGFloat = 85
-                let boxOffset = max(0, min(geo.size.width - boxWidth, midStartPositionX - boxWidth / 2))
 
                 // Draw the scan line
                 Rectangle()
                   .fill(.quaternary)
                   .frame(width: 2, height: lineHeight)
                   .position(x: midStartPositionX, y: lineHeight / 2)
-
-                // Draw the data info box
-                VStack(alignment: .leading) {
-                  Text("\(selectedElement.date, format: .dateTime.month().day())")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                  Text(selectedElement.value, format: .customCurrency())
-                    .font(.headline.bold())
-                    .foregroundColor(.primary)
-                }
-                .frame(width: boxWidth, alignment: .leading)
-                .background { // some styling
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.regularMaterial)
-                        .padding([.leading, .trailing], -8)
-                        .padding([.top, .bottom], -4)
-                }
-                .offset(x: boxOffset)
               }
             }
           }
