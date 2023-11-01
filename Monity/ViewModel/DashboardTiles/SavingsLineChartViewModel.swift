@@ -22,12 +22,12 @@ class SavingsLineChartViewModel: ObservableObject {
         TimeframeOptionConfig(
             label: "picker.lastmonth",
             tagValue: Calendar.current.date(byAdding: DateComponents(month: -1), to: Date())!,
-            granularity: .second
+            granularity: .day
         ),
         TimeframeOptionConfig(
             label: "picker.sixmonths",
             tagValue: Calendar.current.date(byAdding: DateComponents(month: -6), to: Date())!,
-            granularity: .second
+            granularity: .day
         ),
         TimeframeOptionConfig(
             label: "picker.lastyear",
@@ -69,7 +69,6 @@ class SavingsLineChartViewModel: ObservableObject {
         }
         
         self.savingsCancellable = publisher.sink { values in
-            print("LineChartVM")
             self.allSavingsEntries = values
             self.updateDataPoints(with: values.filter { $0.wrappedDate >= self.selectedTimeframe })
         }

@@ -10,25 +10,42 @@ import Accelerate
 
 class LineChartDataBuilder {
     static func generateSavingsLineChartData(for entries: [SavingsEntry], granularity: Calendar.Component = .day) -> [ValueTimeDataPoint] {
-        let uniqueDates: Set<Date> = Set(entries.map { $0.wrappedDate })
-        let calendar = Calendar.current
-        let granularityDates: Set<DateInterval> = Set(uniqueDates.map { calendar.dateInterval(of: granularity, for: $0)! })
         let categories: Set<SavingsCategory> = Set(entries.map(\.category!))
+        let calendar = Calendar.current
         
-        var dpDict: [Date: Double] = [:]
-        for interval in granularityDates {
-            dpDict[min(interval.end, Date())] = vDSP.sum(categories.map { $0.lastEntryBefore(interval.end) }.map { $0?.amount ?? 0})
+        guard entries.count > 0 else {
+            return []
         }
-
-        var data = dpDict.map { (key, val) in
-            return ValueTimeDataPoint(date: key, value: val)
-        }.sorted {
-            $0.date < $1.date
+        
+        let sortedEntries = entries.sorted {
+            $0.wrappedDate < $1.wrappedDate
         }
-        if [.month].contains(where: { $0 == granularity}) {
-            data.removeLast()
+        
+        var dataPoints: [ValueTimeDataPoint] = []
+        
+        var currentDate: Date = calendar.dateInterval(of: granularity, for: sortedEntries.first!.wrappedDate)!.end.addingTimeInterval(-1)
+        var currentEntries: [SavingsCategory: SavingsEntry] = [:]
+        
+        for category in categories {
+            currentEntries[category] = category.lastEntryBefore(currentDate)
         }
-        return data
+        
+        for entry in sortedEntries {
+            guard let _ = entry.category else {
+                continue
+            }
+            
+            let isInCurrentDP = calendar.isDate(entry.wrappedDate, equalTo: currentDate, toGranularity: granularity)
+            if !isInCurrentDP {
+                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: vDSP.sum(currentEntries.map { $1.amount })))
+                let endOfNextInterval = calendar.dateInterval(of: granularity, for: entry.wrappedDate)!.end.addingTimeInterval(-1)
+                currentDate = min(entry.wrappedDate, endOfNextInterval)
+            }
+            currentEntries[entry.category!] = entry
+        }
+        dataPoints.append(ValueTimeDataPoint(date: currentDate, value: vDSP.sum(currentEntries.map { $1.amount })))
+        
+        return dataPoints
     }
     
     static func generateCashflowData(for transactions: [AbstractTransaction], initialDate: Date? = nil) -> [ValueTimeDataPoint] {
