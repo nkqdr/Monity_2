@@ -21,6 +21,12 @@ class SavingsFetchController: BaseFetchController<SavingsEntry> {
             NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
         ], predicate: NSPredicate(format: "date >= %@", since as NSDate))
     }
+    
+    init(category: SavingsCategory) {
+        super.init(sortDescriptors: [
+            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
+        ], predicate: NSPredicate(format: "category == %@", category))
+    }
 }
 
 class SavingStorage: ResettableStorage<SavingsEntry> {

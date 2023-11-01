@@ -7,32 +7,15 @@
 
 import SwiftUI
 
-fileprivate struct EntryGroup: Identifiable {
-    var id = UUID()
-    var date: Date
-    var entries: [SavingsEntry]
-}
-
 fileprivate struct SavingsEntryList: View {
     var category: SavingsCategory
     var content: SavingsViewModel
-    
-    var groupedEntries: [EntryGroup] {
-        let groupingDict = Dictionary(grouping: content.items) { entry in
-            return Calendar.current.component(.year, from: entry.wrappedDate)
-        }
-        return groupingDict.map { (key, val) in
-            EntryGroup(date: val.first!.wrappedDate, entries: val)
-        }.sorted {
-            $0.date > $1.date
-        }
-    }
     
     var body: some View {
         EditableDeletableItemList(
             viewModel: content
         ) { create, edit, delete in
-            ForEach(groupedEntries) { groupedEntry in
+            ForEach(content.groupedItems) { groupedEntry in
                 Section {
                     ForEach(groupedEntry.entries) { entry in
                         EditableDeletableItem(
@@ -105,7 +88,10 @@ struct SavingsCategoryListView: View {
     }
     
     private var shareOfTotalWealth: Double {
-        dataPoints.last!.value / SavingsCategoryViewModel.shared.currentNetWorth
+        if (dataPoints.isEmpty) {
+            return 0
+        }
+        return dataPoints.last!.value / SavingsCategoryViewModel.shared.currentNetWorth
     }
     
     
