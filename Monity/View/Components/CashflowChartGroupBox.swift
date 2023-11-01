@@ -100,7 +100,7 @@ struct CashflowChartGroupBox: View {
                         if let selectedElement {
                             Text(selectedElement.value, format: .customCurrency())
                               .font(.headline.bold())
-                              .foregroundColor(.primary)
+                              .foregroundColor(selectedElement.value >= 0 ? .green : .red)
                             Text("\(selectedElement.date, format: .dateTime.month().day())")
                               .font(.footnote)
                               .foregroundStyle(.secondary)

@@ -144,6 +144,9 @@ struct SavingsLineChart: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: viewModel.selectedTimeframe) { _ in
+                Haptics.shared.play(.medium)
+            }
         }
         .padding(.horizontal)
     }
