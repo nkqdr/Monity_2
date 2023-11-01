@@ -130,6 +130,7 @@ fileprivate struct MostExpensiveCategoriesView: View {
                     .padding()
                     .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
                 }
+                Spacer(minLength: 50)
             }
             .scrollIndicators(.hidden)
         }
@@ -271,7 +272,7 @@ fileprivate struct IncomeVsExpenses: View {
 
 fileprivate struct ReviewProgressButtons: View {
     @EnvironmentObject var content: EOYViewModel
-    @Binding var showReport: Bool
+    @Environment(\.dismiss) var dismiss
     
     var backIcon: String {
         if content.currentlyDisplayedTabIndex == 0 {
@@ -298,10 +299,9 @@ fileprivate struct ReviewProgressButtons: View {
                 if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < 4 {
                     Button(role: .destructive) {
                         playHaptics()
-                        showReport.toggle()
+                        dismiss()
                     } label: {
                         Image(systemName: "xmark")
-                            .padding(5)
                     }
                     .buttonStyle(.bordered)
                     .clipShape(Circle())
@@ -314,7 +314,7 @@ fileprivate struct ReviewProgressButtons: View {
                 Button(role: content.currentlyDisplayedTabIndex == 0 ? .destructive : .cancel) {
                     withAnimation {
                         if content.currentlyDisplayedTabIndex <= 0 {
-                            showReport.toggle()
+                            dismiss()
                             playHaptics()
                         } else {
                             content.currentlyDisplayedTabIndex -= 1
@@ -329,7 +329,7 @@ fileprivate struct ReviewProgressButtons: View {
                 Button {
                     withAnimation {
                         if content.currentlyDisplayedTabIndex >= 4 {
-                            showReport.toggle()
+                            dismiss()
                             playHaptics()
                         } else {
                             content.currentlyDisplayedTabIndex += 1
@@ -352,7 +352,6 @@ fileprivate struct ReviewProgressButtons: View {
 
 fileprivate struct EOY_DetailView: View {
     @StateObject private var content = EOYViewModel()
-    @Binding var showReport: Bool
     var yearString: String
    
     var body: some View {
@@ -371,33 +370,9 @@ fileprivate struct EOY_DetailView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
-            ReviewProgressButtons(showReport: $showReport)
+            ReviewProgressButtons()
         }
         .environmentObject(content)
-    }
-}
-
-fileprivate struct SummaryTile<H, C, F> : View where H: View, C: View, F: View {
-    var content: () -> C
-    var header: () -> H
-    var footer: () -> F
-    
-    init(content: @escaping () -> C, header: @escaping () -> H, footer: @escaping () -> F) {
-        self.content = content
-        self.header = header
-        self.footer = footer
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            header().font(.headline.bold()).padding(.horizontal)
-            GroupBox {
-                content()
-            }
-            .groupBoxStyle(CustomGroupBox())
-            footer().font(.footnote).foregroundColor(.secondary).padding(.horizontal)
-        }
-        .padding(.top, 20)
     }
 }
 
@@ -429,7 +404,7 @@ struct EOY_ReviewTile: View {
         .background(Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
         .padding(.horizontal, 5)
         .sheet(isPresented: $showReport) {
-            EOY_DetailView(showReport: $showReport, yearString: Date().formatted(.dateTime.year()))
+            EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
         }
         .onTapGesture {
             showReport.toggle()
@@ -438,7 +413,7 @@ struct EOY_ReviewTile: View {
 }
 
 #Preview {
-    EOY_DetailView(showReport: .constant(true), yearString: Date().formatted(.dateTime.year()))
+    EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
 //    EOY_ReviewTile()
 //    .preferredColorScheme(.dark)
 }

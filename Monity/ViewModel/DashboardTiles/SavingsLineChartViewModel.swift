@@ -15,28 +15,34 @@ class SavingsLineChartViewModel: ObservableObject {
         var id = UUID()
         var label: String
         var tagValue: Date
+        var granularity: Calendar.Component
     }
     
     static let possibleTimeframeLowerBounds: [TimeframeOptionConfig] = [
         TimeframeOptionConfig(
             label: "picker.lastmonth",
-            tagValue: Calendar.current.date(byAdding: DateComponents(month: -1), to: Date())!
+            tagValue: Calendar.current.date(byAdding: DateComponents(month: -1), to: Date())!,
+            granularity: .second
         ),
         TimeframeOptionConfig(
             label: "picker.sixmonths",
-            tagValue: Calendar.current.date(byAdding: DateComponents(month: -6), to: Date())!
+            tagValue: Calendar.current.date(byAdding: DateComponents(month: -6), to: Date())!,
+            granularity: .second
         ),
         TimeframeOptionConfig(
             label: "picker.lastyear",
-            tagValue: Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
+            tagValue: Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!,
+            granularity: .day
         ),
         TimeframeOptionConfig(
             label: "picker.fiveyears",
-            tagValue: Calendar.current.date(byAdding: DateComponents(year: -5), to: Date())!
+            tagValue: Calendar.current.date(byAdding: DateComponents(year: -5), to: Date())!,
+            granularity: .weekOfYear
         ),
         TimeframeOptionConfig(
             label: "picker.max",
-            tagValue: Date.distantPast
+            tagValue: Date.distantPast,
+            granularity: .month
         )
     ]
     
@@ -59,31 +65,21 @@ class SavingsLineChartViewModel: ObservableObject {
         
         self.savingsCategoryCancellable = categoryPublisher.sink { categories in
             self.allSavingsCategories = categories
-            self.currentNetWorth = categories.map { $0.lastEntryBefore(Date()) }.map { $0?.amount ?? 0 }.reduce(0, +)
+            self.currentNetWorth = vDSP.sum(categories.map(\.lastEntry).map { $0?.amount ?? 0 })
         }
         
         self.savingsCancellable = publisher.sink { values in
+            print("LineChartVM")
             self.allSavingsEntries = values
             self.updateDataPoints(with: values.filter { $0.wrappedDate >= self.selectedTimeframe })
         }
     }
     
     private func updateDataPoints(with savingsEntries: [SavingsEntry]) {
-        var dataPoints: [ValueTimeDataPoint] = []
-        let uniqueDates: Set<Date> = Set(savingsEntries.map { $0.wrappedDate.removeTimeStamp! })
-        
-        for uniqueDate in uniqueDates {
-            let netWorthAtUniqueDate: Double = vDSP.sum(allSavingsCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 }) 
-            if let existingDataPoint = lineChartDataPoints.first(where: { $0.date == uniqueDate && $0.value == netWorthAtUniqueDate}) {
-                dataPoints.append(existingDataPoint)
-                continue
-            }
-            dataPoints.append(ValueTimeDataPoint(date: uniqueDate, value: netWorthAtUniqueDate))
-        }
-        
-        self.lineChartDataPoints = dataPoints.sorted {
-            $0.date < $1.date
-        }
+        let granularity = SavingsLineChartViewModel.possibleTimeframeLowerBounds.first(where:  {
+            $0.tagValue == self.selectedTimeframe
+        })?.granularity ?? .second
+        self.lineChartDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: savingsEntries, granularity: granularity)
     }
     
 }

@@ -14,7 +14,7 @@ class SavingsTileViewModel: ObservableObject {
     @Published var allCategories: [SavingsCategory] = []
     @Published var savingsInLastYear: [SavingsEntry] = [] {
         didSet {
-            generateLineChartDataPoints()
+            self.dataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: savingsInLastYear)
             setPercentageChangeLastYear()
         }
     }
@@ -47,21 +47,8 @@ class SavingsTileViewModel: ObservableObject {
         }
         if netWorthOneYearAgo != 0 {
             percentChangeInLastYear = (currentNetWorth - netWorthOneYearAgo) / netWorthOneYearAgo
-            print(percentChangeInLastYear)
         } else {
             percentChangeInLastYear = 0
-        }
-    }
-    
-    private func generateLineChartDataPoints() {
-        var dataPoints: [ValueTimeDataPoint] = []
-        let uniqueDates: Set<Date> = Set(savingsInLastYear.map { $0.wrappedDate.removeTimeStamp! })
-        for uniqueDate in uniqueDates {
-            let netWorthAtUniqueDate: Double = vDSP.sum(allCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 })
-            dataPoints.append(ValueTimeDataPoint(date: uniqueDate, value: netWorthAtUniqueDate))
-        }
-        self.dataPoints = dataPoints.sorted {
-            $0.date < $1.date
         }
     }
 }
