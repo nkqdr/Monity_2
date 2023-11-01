@@ -12,6 +12,7 @@ fileprivate struct DrawingConstants {
     static let cornerRadius: CGFloat = 15
     static let scrollViewSpacing: CGFloat = 5
     static let titleTopPaddingFactor: CGFloat = 1 / 7
+    static let lastTabIndex: Int = 5
 }
 
 fileprivate struct IncomeExpenseData: Identifiable {
@@ -51,7 +52,7 @@ fileprivate struct TopNChart<S>: View where S: ShapeStyle {
 }
 
 fileprivate struct IntroView: View {
-    var yearString: String
+    var yearString: String = Date().formatted(.dateTime.year())
     
     var body: some View {
         GeometryReader { proxy in
@@ -111,6 +112,28 @@ fileprivate struct RegisteredTransactionsView: View {
     }
 }
 
+fileprivate struct TopNExpenseCategoriesView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        TopNChart(data: Array(content.mostExpensiveCategories.prefix(5).map {
+            TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+        }), tint: .red.gradient)
+        .padding()
+    }
+}
+
+fileprivate struct TopNIncomeCategoriesView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        TopNChart(data: Array(content.mostIncomeCategories.prefix(5).map {
+            TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
+        }), tint: .green.gradient)
+        .padding()
+    }
+}
+
 fileprivate struct MostExpensiveCategoriesView: View {
     @EnvironmentObject var content: EOYViewModel
     
@@ -124,11 +147,8 @@ fileprivate struct MostExpensiveCategoriesView: View {
                     Text("These were your most expensive categories in the last year")
                         
                         .foregroundStyle(.secondary)
-                    TopNChart(data: Array(content.mostExpensiveCategories.prefix(5).map {
-                        TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-                    }), tint: .red.gradient)
-                    .padding()
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                    TopNExpenseCategoriesView()
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
                 }
                 Spacer(minLength: 50)
             }
@@ -150,13 +170,9 @@ fileprivate struct MostIncomeCategoriesView: View {
                         .font(.title.bold())
                         .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
                     Text("This is how you got your money")
-                        
                         .foregroundStyle(.secondary)
-                    TopNChart(data: Array(content.mostIncomeCategories.prefix(5).map {
-                        TopNChart.DataType( category: $0.category, totalAmount: $0.totalAmount)
-                    }), tint: .green.gradient)
-                    .padding()
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                    TopNIncomeCategoriesView()
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
                 }
             }
             .scrollIndicators(.hidden)
@@ -166,44 +182,10 @@ fileprivate struct MostIncomeCategoriesView: View {
     }
 }
 
-fileprivate struct IncomeVsExpenses: View {
-    @EnvironmentObject var content: EOYViewModel
+fileprivate struct CashflowChart: View {
     @StateObject var cashFlowContent = YearlyCashflowViewModel()
     
-    private var data: [IncomeExpenseData] {
-        [
-            IncomeExpenseData(isExpense: false, value: content.totalIncome),
-            IncomeExpenseData(isExpense: true, value: content.totalExpenses)
-        ]
-    }
-    
-    @ViewBuilder
-    private var barChart: some View {
-        Chart(data) { dp in
-            BarMark(x: .value("Type", Bundle.main.localizedString(forKey: dp.isExpense ? "Expenses" : "income.plural", value: nil, table: nil)), y: .value("Amount", dp.value))
-                .foregroundStyle(dp.isExpense ? Color.red.gradient : Color.green.gradient)
-                .annotation(position: .top) { _ in
-                    if (dp.value != 0) {
-                        Text(dp.value, format: .customCurrency())
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
-                    }
-                }
-                .cornerRadius(DrawingConstants.cornerRadius - 5)
-        }
-        .chartYAxis(.hidden)
-        .chartXAxis {
-            AxisMarks(position: .bottom) { _ in
-                AxisValueLabel()
-            }
-        }
-        .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-        .frame(height: 200)
-    }
-    
-    @ViewBuilder
-    private var cashFlowChart: some View {
+    var body: some View {
         let minValue: Double = min(0, (cashFlowContent.data.map { $0.value }.min() ?? 10))
         let absMaxValue: Double = (cashFlowContent.data.map { abs($0.value) }.max() ?? 10)
         let lastDP: ValueTimeDataPoint? = cashFlowContent.data.last
@@ -231,9 +213,46 @@ fileprivate struct IncomeVsExpenses: View {
         .chartYScale(domain: minValue ... absMaxValue)
         .padding()
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-        .frame(height: 200)
         .foregroundStyle((lastDP != nil && lastDP!.value >= 0) ? .green : .red)
     }
+}
+
+fileprivate struct IncomeExpenseDiffBarChart: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    private var data: [IncomeExpenseData] {
+        [
+            IncomeExpenseData(isExpense: false, value: content.totalIncome),
+            IncomeExpenseData(isExpense: true, value: content.totalExpenses)
+        ]
+    }
+    
+    var body: some View {
+        Chart(data) { dp in
+            BarMark(x: .value("Type", Bundle.main.localizedString(forKey: dp.isExpense ? "Expenses" : "income.plural", value: nil, table: nil)), y: .value("Amount", dp.value))
+                .foregroundStyle(dp.isExpense ? Color.red.gradient : Color.green.gradient)
+                .annotation(position: .top) { _ in
+                    if (dp.value != 0) {
+                        Text(dp.value, format: .customCurrency())
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                    }
+                }
+                .cornerRadius(DrawingConstants.cornerRadius - 5)
+        }
+        .chartYAxis(.hidden)
+        .chartXAxis {
+            AxisMarks(position: .bottom) { _ in
+                AxisValueLabel()
+            }
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+    }
+}
+
+fileprivate struct IncomeVsExpenses: View {
+    @EnvironmentObject var content: EOYViewModel
     
     @ViewBuilder
     var annotatedDiff: Text {
@@ -259,8 +278,31 @@ fileprivate struct IncomeVsExpenses: View {
                     }
                     .foregroundStyle(.secondary)
                     
-                    barChart
-                    cashFlowChart
+                    IncomeExpenseDiffBarChart()
+                        .frame(height: 200)
+                    CashflowChart()
+                        .frame(height: 200)
+                }
+            }
+            .scrollIndicators(.hidden)
+        }
+        .padding(.horizontal)
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct EndOfReportView: View {
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("💰")
+                        .font(.system(size: 50))
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Text("Empowering Your\n Financial Future")
+                        .font(.title.bold())
+                    Text("Congratulations on your financial journey! Your diligence has unlocked valuable insights. Remember, every choice shapes your future. Stay disciplined, save wisely, and invest in your dreams. Your financial freedom starts now. Seize opportunities, make wise choices, and watch your wealth grow. Best of luck on your exciting journey ahead!")
+                        .foregroundStyle(.secondary)
                 }
             }
             .scrollIndicators(.hidden)
@@ -272,6 +314,8 @@ fileprivate struct IncomeVsExpenses: View {
 
 fileprivate struct ReviewProgressButtons: View {
     @EnvironmentObject var content: EOYViewModel
+    @State private var renderedImage = Image(systemName: "photo")
+    @Environment(\.displayScale) var displayScale
     @Environment(\.dismiss) var dismiss
     
     var backIcon: String {
@@ -282,7 +326,7 @@ fileprivate struct ReviewProgressButtons: View {
     }
     
     var forwardIcon: String {
-        if (content.currentlyDisplayedTabIndex == 4) {
+        if (content.currentlyDisplayedTabIndex == DrawingConstants.lastTabIndex) {
             return "checkmark"
         }
         return "chevron.forward"
@@ -292,22 +336,66 @@ fileprivate struct ReviewProgressButtons: View {
         Haptics.shared.play(.medium)
     }
     
+    @MainActor 
+    private func renderImage() {
+        let renderer = ImageRenderer(content: currentExportView)
+        renderer.scale = displayScale
+        if let uiImage = renderer.uiImage {
+            renderedImage = Image(uiImage: uiImage)
+        }
+    }
+    
+    @ViewBuilder
+    private var currentExportView: some View {
+        Group {
+            if content.currentlyDisplayedTabIndex == 2 {
+                TopNExpenseCategoriesView()
+            } else if content.currentlyDisplayedTabIndex == 3 {
+                TopNIncomeCategoriesView()
+            } else if content.currentlyDisplayedTabIndex == 4 {
+                VStack(spacing: 10) {
+                    IncomeExpenseDiffBarChart()
+                    CashflowChart()
+                }
+            }
+        }
+        .background(Color(uiColor: UIColor.systemBackground), in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+        .frame(width: 400, height: 400)
+        .environmentObject(content)
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
-                if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < 4 {
-                    Button(role: .destructive) {
-                        playHaptics()
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
+                HStack {
+                    if [2, 3, 4].contains(where: { $0 == content.currentlyDisplayedTabIndex}) {
+                        ShareLink(
+                            item: renderedImage,
+                            preview: SharePreview(
+                                "Monity Report",
+                                image: renderedImage
+                            )) {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .buttonStyle(.bordered)
+                        .clipShape(Circle())
                     }
-                    .buttonStyle(.bordered)
-                    .clipShape(Circle())
-                    .padding()
-                    .padding(.top, 5)
+                    
+                    if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < DrawingConstants.lastTabIndex {
+                        Button(role: .destructive) {
+                            playHaptics()
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .padding(3)
+                        }
+                        .buttonStyle(.bordered)
+                        .clipShape(Circle())
+                    }
                 }
+                .padding()
+                .padding(.top, 5)
             }
             Spacer()
             HStack {
@@ -328,7 +416,7 @@ fileprivate struct ReviewProgressButtons: View {
                 Spacer()
                 Button {
                     withAnimation {
-                        if content.currentlyDisplayedTabIndex >= 4 {
+                        if content.currentlyDisplayedTabIndex >= DrawingConstants.lastTabIndex {
                             dismiss()
                             playHaptics()
                         } else {
@@ -345,19 +433,19 @@ fileprivate struct ReviewProgressButtons: View {
             .padding(.bottom, 8)
         }
         .onChange(of: content.currentlyDisplayedTabIndex) { _ in
+            renderImage()
             playHaptics()
         }
     }
 }
 
 fileprivate struct EOY_DetailView: View {
-    @StateObject private var content = EOYViewModel()
-    var yearString: String
+    @StateObject var content = EOYViewModel()
    
     var body: some View {
         ZStack {
             TabView(selection: $content.currentlyDisplayedTabIndex) {
-                IntroView(yearString: yearString)
+                IntroView()
                     .tag(0)
                 RegisteredTransactionsView()
                     .tag(1)
@@ -367,6 +455,8 @@ fileprivate struct EOY_DetailView: View {
                     .tag(3)
                 IncomeVsExpenses()
                     .tag(4)
+                EndOfReportView()
+                    .tag(5)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
@@ -404,7 +494,7 @@ struct EOY_ReviewTile: View {
         .background(Color.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
         .padding(.horizontal, 5)
         .sheet(isPresented: $showReport) {
-            EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
+            EOY_DetailView()
         }
         .onTapGesture {
             showReport.toggle()
@@ -413,7 +503,7 @@ struct EOY_ReviewTile: View {
 }
 
 #Preview {
-    EOY_DetailView(yearString: Date().formatted(.dateTime.year()))
+    EOY_DetailView()
 //    EOY_ReviewTile()
 //    .preferredColorScheme(.dark)
 }

@@ -26,12 +26,7 @@ class YearlyCashflowViewModel: ObservableObject {
         self.transactionWrapper = AbstractTransactionWrapper(startDate: startOfYear, endDate: Date())
         self.transactionCancellable = self.transactionWrapper.$wrappedTransactions.sink { newVal in
             self.allTransactions = newVal
-            DispatchQueue.global(qos: .userInteractive).async {
-                let data = self.computeCashFlowDataPoints()
-                DispatchQueue.main.async {
-                    self.data = data
-                }
-            }
+            self.data = self.computeCashFlowDataPoints()
         }
     }
     
@@ -40,19 +35,21 @@ class YearlyCashflowViewModel: ObservableObject {
         let startOfYearDate = Calendar.current.date(from: DateComponents(year: currentYear, month: 1, day: 1))!
         var dataPoints: [ValueTimeDataPoint] = []
         
-        let datesEntered: Set<Date> = Set(allTransactions.map { $0.date?.removeTimeStamp ?? Date() })
-        if !datesEntered.contains(startOfYearDate) {
-            dataPoints.append(ValueTimeDataPoint(date: startOfYearDate, value: 0))
+        var currentDate: Date = startOfYearDate
+        var currentAmount: Double = 0
+        for transaction in allTransactions.reversed() {
+            if !transaction.wrappedDate.isSameDayAs(currentDate) {
+                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
+                currentDate = transaction.wrappedDate
+            }
+            
+            if transaction.isExpense {
+                currentAmount -= transaction.amount
+            } else {
+                currentAmount += transaction.amount
+            }
         }
-        for date in datesEntered {
-            dataPoints.append(ValueTimeDataPoint(
-                date: date,
-                value: vDSP.sum(self.allTransactions.filter { $0.date?.removeTimeStamp ?? Date() <= date}.map { $0.isExpense ? -$0.amount : $0.amount}))
-            )
-        }
-        return dataPoints.sorted {
-            $0.date < $1.date
-        }
+        return dataPoints
     }
 }
 
