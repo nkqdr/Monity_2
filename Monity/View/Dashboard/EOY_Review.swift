@@ -380,6 +380,9 @@ fileprivate struct ReviewProgressButtons: View {
                         }
                         .buttonStyle(.bordered)
                         .clipShape(Circle())
+                        .background {
+                            Circle().fill(.ultraThickMaterial)
+                        }
                     }
                     
                     if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < DrawingConstants.lastTabIndex {
@@ -393,6 +396,9 @@ fileprivate struct ReviewProgressButtons: View {
                         .buttonStyle(.bordered)
                         .clipShape(Circle())
                         .tint(.red)
+                        .background {
+                            Circle().fill(.ultraThickMaterial)
+                        }
                     }
                 }
                 .padding()
@@ -489,6 +495,7 @@ struct EOY_ReviewTile: View {
                         .padding(.top, 4)
                 }
                 Text("Your Financial Year at a Glance")
+                    .foregroundStyle(.secondary)
             }
         }
         .foregroundStyle(.primary)
