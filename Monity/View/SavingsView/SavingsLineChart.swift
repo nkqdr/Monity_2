@@ -28,7 +28,10 @@ struct SavingsDPLineChart: View {
     }
     
     private var minYValue: Double {
-        dataPoints.map { $0.value }.min() ?? 0
+        if dataPoints.isEmpty {
+            return 0
+        }
+        return dataPoints.map { $0.value }.min()!
     }
     
     private var maxYValue: Double {
@@ -51,11 +54,23 @@ struct SavingsDPLineChart: View {
         }
     }
     
+    @ViewBuilder
     var actualChart: some View {
         Chart(dataPoints) {
-            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
+            AreaMark(
+                x: .value("Date", $0.date),
+                yStart: .value("Amount", minYValue),
+                yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
+            )
+                .opacity(0.5)
+                .interpolationMethod(.monotone)
+            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.animate ? $0.value : minYValue))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.monotone)
+            if minYValue < 0 {
+                RuleMark(y: .value("Zero", 0))
+                    .foregroundStyle(.secondary)
+            }
             if let selectedElement, selectedElement.id == $0.id {
                 RuleMark(x: .value("Date", selectedElement.date))
                     .foregroundStyle(Color.secondary)
@@ -134,9 +149,22 @@ struct SavingsDPLineChart: View {
 struct SavingsLineChart: View {
     @StateObject private var viewModel = SavingsLineChartViewModel()
     
+    private func animateLineChart() {
+        for (index, _) in viewModel.lineChartDataPoints.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.005) {
+                withAnimation(.easeInOut) {
+                    viewModel.lineChartDataPoints[index].animate = true
+                }
+            }
+        }
+    }
+    
     var body: some View {
         VStack {
             SavingsDPLineChart(dataPoints: viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
+                .onAppear {
+                    animateLineChart()
+                }
             // The picker holds the number of seconds for the selected timeframe.
             Picker("Timeframe", selection: $viewModel.selectedTimeframe) {
                 ForEach(SavingsLineChartViewModel.possibleTimeframeLowerBounds) { config in
@@ -145,7 +173,8 @@ struct SavingsLineChart: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: viewModel.selectedTimeframe) { _ in
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
+                animateLineChart()
             }
         }
         .padding(.horizontal)
