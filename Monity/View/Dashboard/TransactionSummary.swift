@@ -90,6 +90,9 @@ fileprivate struct TransactionSummaryPage: View {
                 }
             }
         }
+        .onChange(of: content.showingExpenses) { _ in
+            Haptics.shared.play(.soft)
+        }
         .navigationTitle("Transaction Overview")
     }
 }
