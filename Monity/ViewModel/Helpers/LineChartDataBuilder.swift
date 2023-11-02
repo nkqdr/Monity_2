@@ -10,7 +10,9 @@ import Accelerate
 
 class LineChartDataBuilder {
     static func generateSavingsLineChartData(for entries: [SavingsEntry], granularity: Calendar.Component = .day, allowAnimation: Bool = true) -> [ValueTimeDataPoint] {
-        let categories: Set<SavingsCategory> = Set(entries.map(\.category!))
+        let categories: Set<SavingsCategory> = Set(entries.filter {
+            $0.category != nil
+        }.map { $0.category! })
         let calendar = Calendar.current
         
         guard entries.count > 0 else {

@@ -613,3 +613,25 @@
 
 /* EOY review content message that tells the user about his registered transactions */
 "eoy_review.transactions.3" = "This meticulous tracking forms a foundation of insightful financial analysis. Armed with this data, you're empowered to make strategic decisions, shaping a prosperous financial future. Your commitment to financial prudence is commendable, and we're here to support your continued success.";
+
+/* EOY review content message that tells the user about his increased savings */
+"eoy_review.savings.increase.1" = "Congratulations! Your wealth grew by ";
+/* EOY review content message that tells the user about his increased savings */
+"eoy_review.savings.increase.2" = " this past year, reflecting sound financial strategies and investments";
+/* EOY review content message that tells the user about his decreased savings */
+"eoy_review.savings.decrease.1" = "Facing challenges, your resilience stands strong. Despite a decrease of ";
+/* EOY review content message that tells the user about his decreased savings */
+"eoy_review.savings.decrease.2" = " in your wealth this past year, your steadfast financial approach ensures a strong foundation for the future";
+
+"eoy_review.intro.1" = "As we approach the end of ";
+"eoy_review.intro.2" = ", it's time to reflect on your financial journey. This End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.";
+
+"eoy_review.expenses.1" = "Reviewing your top 5 spending categories offers key insights, helping you make informed decisions to manage your budget efficiently";
+
+"eoy_review.income.1" = "Analyzing your top 5 income sources provides strategic insights, enabling you to leverage your strengths for future financial success";
+
+"eoy_review.cashflow.increased.1" = "Well done! You have earned ";
+"eoy_review.cashflow.increased.2" = " more than you have spent!";
+
+"eoy_review.cashflow.decreased.1" = "This year, you have spent ";
+"eoy_review.cashflow.decreased.2" = " more than you have earned. Let's mix things up next year!";

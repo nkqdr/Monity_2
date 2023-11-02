@@ -8,11 +8,21 @@
 import SwiftUI
 import Charts
 
+fileprivate struct MaxTabTagKey: EnvironmentKey {
+    static let defaultValue: Int = 0
+}
+
+fileprivate extension EnvironmentValues {
+    var maxTabTag: Int {
+        get { self[MaxTabTagKey.self] }
+        set { self[MaxTabTagKey.self] = newValue }
+    }
+}
+
 fileprivate struct DrawingConstants {
     static let cornerRadius: CGFloat = 15
     static let scrollViewSpacing: CGFloat = 5
     static let titleTopPaddingFactor: CGFloat = 1 / 7
-    static let lastTabIndex: Int = 5
 }
 
 fileprivate struct IncomeExpenseData: Identifiable {
@@ -62,8 +72,10 @@ fileprivate struct IntroView: View {
                         .font(.system(size: 50))
                         .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
                     Text("Let's reflect on \(yearString)!").font(.title.bold())
-                    Text("As we approach the end of \(yearString), it's time to reflect on your financial journey. Our End-of-Year Report offers a deep dive into your spending habits, income sources, and overall financial health. This detailed analysis isn't just numbers; it's your story of financial growth and smart choices. Let's uncover the insights that will shape your path to financial success in the upcoming year.")
-                        .foregroundStyle(.secondary)
+                    Group {
+                        Text("eoy_review.intro.1") + Text("\(yearString)") + Text("eoy_review.intro.2")
+                    }
+                    .foregroundStyle(.secondary)
                 }
             }
             .scrollIndicators(.hidden)
@@ -94,7 +106,6 @@ fileprivate struct RegisteredTransactionsView: View {
                             Text(content.totalAmountOfExpenseTransactions, format: .number)
                                 .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
                         }
-                        
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -144,7 +155,7 @@ fileprivate struct MostExpensiveCategoriesView: View {
                     Text("Cash Chronicles:\n Where Money Flows!")
                         .font(.title.bold())
                         .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("These were your most expensive categories in the last year")
+                    Text("eoy_review.expenses.1")
                         
                         .foregroundStyle(.secondary)
                     TopNExpenseCategoriesView()
@@ -169,7 +180,7 @@ fileprivate struct MostIncomeCategoriesView: View {
                     Text("Uncover Your Cash Trails!")
                         .font(.title.bold())
                         .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("This is how you got your money")
+                    Text("eoy_review.income.1")
                         .foregroundStyle(.secondary)
                     TopNIncomeCategoriesView()
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
@@ -198,13 +209,7 @@ fileprivate struct CashflowChart: View {
                 .lineStyle(StrokeStyle(lineWidth: 2))
                 .interpolationMethod(.monotone)
         }
-        .chartYAxis {
-            AxisMarks { value in
-                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
-                AxisGridLine()
-                AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
-            }
-        }
+        .chartYAxis(.hidden)
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { value in
                 AxisValueLabel(format: .dateTime.month(.narrow))
@@ -271,9 +276,9 @@ fileprivate struct IncomeVsExpenses: View {
                     
                     Group {
                         if content.totalIncome >= content.totalExpenses {
-                            Text("Well done! You have earned ") + annotatedDiff + Text(" more than you have spent!")
+                            Text("eoy_review.cashflow.increased.1") + annotatedDiff + Text("eoy_review.cashflow.increased.2")
                         } else {
-                            Text("This year, you have spent ") + annotatedDiff + Text(" more than you have earned. Let's mix things up next year!")
+                            Text("eoy_review.cashflow.decreased.1") + annotatedDiff + Text("eoy_review.cashflow.decreased.2")
                         }
                     }
                     .foregroundStyle(.secondary)
@@ -282,6 +287,60 @@ fileprivate struct IncomeVsExpenses: View {
                         .frame(height: 200)
                     CashflowChart()
                         .frame(height: 200)
+                }
+            }
+            .scrollIndicators(.hidden)
+        }
+        .padding(.horizontal)
+        .multilineTextAlignment(.center)
+    }
+}
+
+fileprivate struct SavingsChart: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        SavingsDPLineChart(dataPoints: $content.savingsDataPoints, showHeader: false, showArea: true)
+            .padding()
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .month)) { value in
+                    AxisValueLabel(format: .dateTime.month(.narrow))
+                }
+            }
+    }
+}
+
+fileprivate struct SavingsReportView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var savingsDiff: Double {
+        if content.savingsDataPoints.isEmpty {
+            return 0
+        }
+        return content.savingsDataPoints.last!.value - content.savingsDataPoints.first!.value
+    }
+    
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Your Year in Savings and Net Worth")
+                        .font(.title.bold())
+                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                    Group {
+                        if savingsDiff > 0 {
+                            Text("eoy_review.savings.increase.1") +
+                            Text(savingsDiff, format: .customCurrency()).foregroundColor(.green) +
+                            Text("eoy_review.savings.increase.2")
+                        } else {
+                            Text("eoy_review.savings.decrease.1") +
+                            Text(savingsDiff, format: .customCurrency()).foregroundColor(.red) +
+                            Text("eoy_review.savings.decrease.2")
+                        }
+                    }
+                    .foregroundStyle(.secondary)
+                    SavingsChart()
                 }
             }
             .scrollIndicators(.hidden)
@@ -317,6 +376,7 @@ fileprivate struct ReviewProgressButtons: View {
     @State private var renderedImage = Image(systemName: "photo")
     @Environment(\.displayScale) var displayScale
     @Environment(\.dismiss) var dismiss
+    @Environment(\.maxTabTag) var lastTabIndex
     
     var backIcon: String {
         if content.currentlyDisplayedTabIndex == 0 {
@@ -326,7 +386,7 @@ fileprivate struct ReviewProgressButtons: View {
     }
     
     var forwardIcon: String {
-        if (content.currentlyDisplayedTabIndex == DrawingConstants.lastTabIndex) {
+        if (content.currentlyDisplayedTabIndex == lastTabIndex) {
             return "checkmark"
         }
         return "chevron.forward"
@@ -357,6 +417,8 @@ fileprivate struct ReviewProgressButtons: View {
                     IncomeExpenseDiffBarChart()
                     CashflowChart()
                 }
+            } else if content.currentlyDisplayedTabIndex == 5 && lastTabIndex != 5 {
+                SavingsChart()
             }
         }
         .background(Color(uiColor: UIColor.systemBackground), in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
@@ -369,7 +431,7 @@ fileprivate struct ReviewProgressButtons: View {
             HStack {
                 Spacer()
                 HStack {
-                    if [2, 3, 4].contains(where: { $0 == content.currentlyDisplayedTabIndex}) {
+                    if [2, 3, 4, 5].contains(where: { $0 == content.currentlyDisplayedTabIndex}) {
                         ShareLink(
                             item: renderedImage,
                             preview: SharePreview(
@@ -385,7 +447,7 @@ fileprivate struct ReviewProgressButtons: View {
                         }
                     }
                     
-                    if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < DrawingConstants.lastTabIndex {
+                    if 0 < content.currentlyDisplayedTabIndex && content.currentlyDisplayedTabIndex < lastTabIndex {
                         Button {
                             playHaptics()
                             dismiss()
@@ -424,7 +486,7 @@ fileprivate struct ReviewProgressButtons: View {
                 Spacer()
                 Button {
                     withAnimation {
-                        if content.currentlyDisplayedTabIndex >= DrawingConstants.lastTabIndex {
+                        if content.currentlyDisplayedTabIndex >= lastTabIndex {
                             dismiss()
                             playHaptics()
                         } else {
@@ -436,7 +498,7 @@ fileprivate struct ReviewProgressButtons: View {
                         .padding(5)
                 }
                 .buttonStyle(.bordered)
-                .tint(content.currentlyDisplayedTabIndex == DrawingConstants.lastTabIndex ? .green : nil)
+                .tint(content.currentlyDisplayedTabIndex == lastTabIndex ? .green : nil)
             }
             .padding(.horizontal, 25)
             .padding(.bottom, 8)
@@ -452,6 +514,7 @@ fileprivate struct EOY_DetailView: View {
     @StateObject var content = EOYViewModel()
    
     var body: some View {
+        let showSavingsPage = content.savingsDataPoints.count > 2
         ZStack {
             TabView(selection: $content.currentlyDisplayedTabIndex) {
                 IntroView()
@@ -464,14 +527,19 @@ fileprivate struct EOY_DetailView: View {
                     .tag(3)
                 IncomeVsExpenses()
                     .tag(4)
+                if showSavingsPage {
+                    SavingsReportView()
+                        .tag(5)
+                }
                 EndOfReportView()
-                    .tag(5)
+                    .tag(showSavingsPage ? 6 : 5)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
             ReviewProgressButtons()
         }
         .environmentObject(content)
+        .environment(\.maxTabTag, showSavingsPage ? 6 : 5)
     }
 }
 

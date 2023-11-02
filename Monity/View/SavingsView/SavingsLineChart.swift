@@ -12,20 +12,26 @@ struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
     @Binding var dataPoints: [ValueTimeDataPoint]
     @State private var localDataPoints: [ValueTimeDataPoint]
+    var showHeader: Bool
+    var showArea: Bool
     var currentNetWorth: Double = 0
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
         self._dataPoints = Binding(projectedValue: dataPoints)
         self._localDataPoints = State(initialValue: dataPoints.wrappedValue)
+        self.showHeader = showHeader
+        self.showArea = showArea
         self.selectedElement = selectedElement
         self.currentNetWorth = currentNetWorth
     }
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, showArea: Bool = false) {
         self.init(
             selectedElement: selectedElement,
             dataPoints: dataPoints,
-            currentNetWorth: dataPoints.wrappedValue.last?.value ?? 0
+            currentNetWorth: dataPoints.wrappedValue.last?.value ?? 0,
+            showHeader: showHeader,
+            showArea: showArea
         )
     }
     
@@ -59,13 +65,15 @@ struct SavingsDPLineChart: View {
     @ViewBuilder
     var actualChart: some View {
         Chart(localDataPoints) {
-            AreaMark(
-                x: .value("Date", $0.date),
-                yStart: .value("Amount", minYValue),
-                yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
-            )
-                .opacity(0.5)
-                .interpolationMethod(.monotone)
+            if showArea {
+                AreaMark(
+                    x: .value("Date", $0.date),
+                    yStart: .value("Amount", minYValue),
+                    yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
+                )
+                    .opacity(0.5)
+                    .interpolationMethod(.monotone)
+            }
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.animate ? $0.value : minYValue))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.monotone)
@@ -119,10 +127,13 @@ struct SavingsDPLineChart: View {
     
     var body: some View {
         VStack {
-            chartHeader
+            if showHeader {
+                chartHeader
+            }
             actualChart
         }
         .onChange(of: self.dataPoints) { dps in
+            self.selectedElement = nil
             self.localDataPoints = dps
             animateLineChart()
         }

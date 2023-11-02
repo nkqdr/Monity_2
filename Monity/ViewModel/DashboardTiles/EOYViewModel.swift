@@ -34,23 +34,6 @@ class YearlyCashflowViewModel: ObservableObject {
         let currentYear = Calendar.current.component(.year, from: Date())
         let startOfYearDate = Calendar.current.date(from: DateComponents(year: currentYear, month: 1, day: 1))!
         return LineChartDataBuilder.generateCashflowData(for: self.allTransactions, initialDate: startOfYearDate)
-//        var dataPoints: [ValueTimeDataPoint] = []
-//        
-//        var currentDate: Date = startOfYearDate
-//        var currentAmount: Double = 0
-//        for transaction in allTransactions.reversed() {
-//            if !transaction.wrappedDate.isSameDayAs(currentDate) {
-//                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: currentAmount))
-//                currentDate = transaction.wrappedDate
-//            }
-//            
-//            if transaction.isExpense {
-//                currentAmount -= transaction.amount
-//            } else {
-//                currentAmount += transaction.amount
-//            }
-//        }
-//        return dataPoints
     }
 }
 
@@ -68,11 +51,14 @@ class EOYViewModel: ObservableObject {
     @Published var totalIncome: Double = 0
     @Published var mostExpensiveCategories: [CategoryWithAmount] = []
     @Published var mostIncomeCategories: [CategoryWithAmount] = []
+    @Published var savingsDataPoints: [ValueTimeDataPoint] = []
     
     private var allTransactions: [AbstractTransaction] = []
     
     private var transactionCancellable: AnyCancellable?
+    private var savingsCancellable: AnyCancellable?
     private var transactionWrapper: AbstractTransactionWrapper
+    private var savingsFetchController: SavingsFetchController
     
     init() {
         let currentYear = Calendar.current.component(.year, from: Date())
@@ -81,6 +67,8 @@ class EOYViewModel: ObservableObject {
             month: 1,
             day: 1)
         )!
+        self.savingsFetchController = SavingsFetchController(since: startOfYear)
+        let savingsPublisher = self.savingsFetchController.items.eraseToAnyPublisher()
         self.transactionWrapper = AbstractTransactionWrapper(startDate: startOfYear, endDate: Date())
         self.transactionCancellable = self.transactionWrapper.$wrappedTransactions.sink { newVal in
             self.allTransactions = newVal
@@ -91,6 +79,9 @@ class EOYViewModel: ObservableObject {
             self.totalExpenses = vDSP.sum(newVal.filter { $0.isExpense }.map { $0.amount })
             self.mostExpensiveCategories = self.computeMostExpensiveCategories(isExpense: true)
             self.mostIncomeCategories = self.computeMostExpensiveCategories(isExpense: false)
+        }
+        self.savingsCancellable = savingsPublisher.sink { entries in
+            self.savingsDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: entries, allowAnimation: false)
         }
     }
     

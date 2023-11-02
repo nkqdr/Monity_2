@@ -21,6 +21,13 @@ fileprivate struct StaticSavingsLineChart: View {
     
     var body: some View {
         Chart(dataPoints) {
+//            AreaMark(
+//                x: .value("Date", $0.date),
+//                yStart: .value("Amount", minYValue),
+//                yEnd: .value("AmountEnd", $0.value)
+//            )
+//                .opacity(0.5)
+//                .interpolationMethod(.monotone)
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.monotone)
