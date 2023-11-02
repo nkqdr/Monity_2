@@ -123,7 +123,7 @@ struct ExpenseBarChartWithHeader: View {
                           let monthDiff = Calendar.current.dateComponents([.month], from: slicedData.first!.date, to: slicedData.last!.date).month ?? 1
                         ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(monthDiff) / 2
                         let element = findElement(location: value.location, proxy: proxy, geometry: geo)
-                        Haptics.shared.play(.medium)
+                        Haptics.shared.play(.light)
                           if selectedElement?.date == element?.date {
                             // If tapping the same element, clear the selection.
                               withAnimation {
@@ -153,7 +153,7 @@ struct ExpenseBarChartWithHeader: View {
                                 }
                                 withAnimation {
                                     if (drag(direction: direction)) {
-                                        Haptics.shared.play(.medium)
+                                        Haptics.shared.play(.light)
                                     }
                                 }
                             }

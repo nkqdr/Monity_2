@@ -333,7 +333,7 @@ fileprivate struct ReviewProgressButtons: View {
     }
     
     private func playHaptics() {
-        Haptics.shared.play(.medium)
+        Haptics.shared.play(.soft)
     }
     
     @MainActor 

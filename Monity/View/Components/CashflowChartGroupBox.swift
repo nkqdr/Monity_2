@@ -70,7 +70,7 @@ struct CashflowChartGroupBox: View {
                 SpatialTapGesture()
                   .onEnded { value in
                     let element = findElement(location: value.location, proxy: proxy, geometry: geo)
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.light)
                     if selectedElement?.date == element?.date {
                       // If tapping the same element, clear the selection.
                       setSelectedElement(nil)
@@ -85,7 +85,7 @@ struct CashflowChartGroupBox: View {
                             return
                         }
                         setSelectedElement(newElement)
-                        Haptics.shared.play(.medium)
+                        Haptics.shared.play(.light)
                     }
                     .onEnded { _ in
                         setSelectedElement(nil)

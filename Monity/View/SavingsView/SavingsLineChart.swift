@@ -11,10 +11,12 @@ import Charts
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
     @Binding var dataPoints: [ValueTimeDataPoint]
+    @State private var localDataPoints: [ValueTimeDataPoint]
     var currentNetWorth: Double = 0
     
     init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double) {
         self._dataPoints = Binding(projectedValue: dataPoints)
+        self._localDataPoints = State(initialValue: dataPoints.wrappedValue)
         self.selectedElement = selectedElement
         self.currentNetWorth = currentNetWorth
     }
@@ -28,14 +30,14 @@ struct SavingsDPLineChart: View {
     }
     
     private var minYValue: Double {
-        if dataPoints.isEmpty {
+        if localDataPoints.isEmpty {
             return 0
         }
-        return dataPoints.map { $0.value }.min()!
+        return localDataPoints.map { $0.value }.min()!
     }
     
     private var maxYValue: Double {
-        dataPoints.map { $0.value }.max() ?? 0
+        localDataPoints.map { $0.value }.max() ?? 0
     }
     
     @ViewBuilder
@@ -56,7 +58,7 @@ struct SavingsDPLineChart: View {
     
     @ViewBuilder
     var actualChart: some View {
-        Chart(dataPoints) {
+        Chart(localDataPoints) {
             AreaMark(
                 x: .value("Date", $0.date),
                 yStart: .value("Amount", minYValue),
@@ -88,7 +90,7 @@ struct SavingsDPLineChart: View {
                 SpatialTapGesture()
                   .onEnded { value in
                     let element = findElement(location: value.location, proxy: proxy, geometry: geo)
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.light)
                     if selectedElement?.date == element?.date {
                       // If tapping the same element, clear the selection.
                       selectedElement = nil
@@ -103,7 +105,7 @@ struct SavingsDPLineChart: View {
                             return
                         }
                         selectedElement = newElement
-                        Haptics.shared.play(.medium)
+                        Haptics.shared.play(.light)
                     }
                     .onEnded { _ in
                         selectedElement = nil
@@ -120,8 +122,9 @@ struct SavingsDPLineChart: View {
             chartHeader
             actualChart
         }
-        .onChange(of: self.dataPoints) { _ in
-                animateLineChart()
+        .onChange(of: self.dataPoints) { dps in
+            self.localDataPoints = dps
+            animateLineChart()
         }
         .onAppear {
             animateLineChart()
@@ -129,10 +132,12 @@ struct SavingsDPLineChart: View {
     }
     
     private func animateLineChart() {
-        for (index, _) in self.dataPoints.enumerated() {
+        for (index, _) in self.localDataPoints.enumerated() {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.005) {
-                withAnimation(.easeInOut) {
-                    self.dataPoints[index].animate = true
+                if (index < self.localDataPoints.count) {
+                    withAnimation(.easeInOut) {
+                        self.localDataPoints[index].animate = true
+                    }
                 }
             }
         }
@@ -147,7 +152,7 @@ struct SavingsDPLineChart: View {
             // Find the closest date element.
             var minDistance: TimeInterval = .infinity
             var index: Int? = nil
-            for dataIndex in dataPoints.indices {
+            for dataIndex in self.localDataPoints.indices {
                 let nthDataDistance = dataPoints[dataIndex].date.distance(to: date)
                 if abs(nthDataDistance) < minDistance {
                     minDistance = abs(nthDataDistance)
@@ -155,7 +160,7 @@ struct SavingsDPLineChart: View {
                 }
             }
             if let index {
-                return dataPoints[index]
+                return self.localDataPoints[index]
             }
       }
       return nil

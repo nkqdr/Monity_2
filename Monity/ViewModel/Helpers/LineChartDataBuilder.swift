@@ -9,7 +9,7 @@ import Foundation
 import Accelerate
 
 class LineChartDataBuilder {
-    static func generateSavingsLineChartData(for entries: [SavingsEntry], granularity: Calendar.Component = .day) -> [ValueTimeDataPoint] {
+    static func generateSavingsLineChartData(for entries: [SavingsEntry], granularity: Calendar.Component = .day, allowAnimation: Bool = true) -> [ValueTimeDataPoint] {
         let categories: Set<SavingsCategory> = Set(entries.map(\.category!))
         let calendar = Calendar.current
         
@@ -37,14 +37,25 @@ class LineChartDataBuilder {
             
             let isInCurrentDP = calendar.isDate(entry.wrappedDate, equalTo: currentDate, toGranularity: granularity)
             if !isInCurrentDP {
-                dataPoints.append(ValueTimeDataPoint(date: currentDate, value: vDSP.sum(currentEntries.map { $1.amount })))
+                dataPoints.append(
+                    ValueTimeDataPoint(
+                        date: currentDate,
+                        value: vDSP.sum(currentEntries.map { $1.amount }),
+                        animate: !allowAnimation
+                    )
+                )
                 let endOfNextInterval = calendar.dateInterval(of: granularity, for: entry.wrappedDate)!.end.addingTimeInterval(-1)
                 currentDate = min(entry.wrappedDate, endOfNextInterval)
             }
             currentEntries[entry.category!] = entry
         }
-        dataPoints.append(ValueTimeDataPoint(date: currentDate, value: vDSP.sum(currentEntries.map { $1.amount })))
-        
+        dataPoints.append(
+            ValueTimeDataPoint(
+                date: currentDate,
+                value: vDSP.sum(currentEntries.map { $1.amount }),
+                animate: !allowAnimation
+            )
+        )
         return dataPoints
     }
     
