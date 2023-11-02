@@ -427,11 +427,12 @@ fileprivate struct ReviewProgressButtons: View {
     }
     
     var body: some View {
+        let possibleScreens: [Int] = [2, 3, 4, 5]
         VStack {
             HStack {
                 Spacer()
                 HStack {
-                    if [2, 3, 4, 5].contains(where: { $0 == content.currentlyDisplayedTabIndex}) {
+                    if possibleScreens.contains(where: { $0 == content.currentlyDisplayedTabIndex}) && content.currentlyDisplayedTabIndex != lastTabIndex {
                         ShareLink(
                             item: renderedImage,
                             preview: SharePreview(
