@@ -176,11 +176,19 @@ struct More_TransactionsView: View {
                         confirmationMessage: "\(category.wrappedTransactionsCount) related transactions will be deleted.",
                         onEdit: edit,
                         onDelete: delete) { item in
-                            VStack(alignment: .leading) {
-                                Text(item.wrappedName)
-                                Text("Associated transactions: \(item.wrappedTransactionsCount)")
-                                    .font(.callout)
-                                    .foregroundColor(.secondary)
+                            HStack {
+                                if let icon = item.iconName {
+                                    Image(systemName: icon)
+                                        .padding(.trailing, 10)
+                                        .font(.headline)
+                                        .foregroundStyle(.secondary)
+                                }
+                                VStack(alignment: .leading) {
+                                    Text(item.wrappedName)
+                                    Text("Associated transactions: \(item.wrappedTransactionsCount)")
+                                        .font(.callout)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                     }
                 }

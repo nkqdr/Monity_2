@@ -14,7 +14,6 @@ class TransactionCategoryEditor: ObservableObject {
             disableSave = allCategories.map { $0.wrappedName }.contains(name) || name == ""
         }
     }
-    @Published var navigationFormTitle: LocalizedStringKey
     @Published var disableSave: Bool = true
     @Published var selectedIcon: String?
     private var allCategories: [TransactionCategory]
@@ -30,7 +29,6 @@ class TransactionCategoryEditor: ObservableObject {
     
     init(category: TransactionCategory? = nil) {
         self.name = category?.wrappedName ?? ""
-        self.navigationFormTitle = (category != nil) ? "Edit category" : "New category"
         self.category = category
         self.selectedIcon = category?.iconName
         let fetchRequest = TransactionCategory.fetchRequest()

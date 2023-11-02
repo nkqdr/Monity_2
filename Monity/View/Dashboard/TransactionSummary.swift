@@ -104,6 +104,12 @@ fileprivate struct TransactionCategorySummaryTile: View {
     var body: some View {
         NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenses)) {
             HStack {
+                if let icon = dataPoint.category.iconName {
+                    Image(systemName: icon)
+                        .frame(width: 40)
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
                 VStack(alignment: .leading) {
                     Text(dataPoint.category.wrappedName)
                         .fontWeight(.bold)
@@ -124,6 +130,7 @@ fileprivate struct TransactionCategorySummaryTile: View {
             }
             .padding(.vertical, 2)
         }
+        .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
     }
 }
 

@@ -8,8 +8,20 @@
 import SwiftUI
 
 fileprivate let availableIcons: [String] = [
-    "folder.fill", "paperplane.fill", "tray.fill", "archivebox.fill", "doc.fill",
-    "book.fill", "graduationcap.fill", "gym.bag.fill", "trophy.fill", "keyboard.fill"
+    "cart.fill", "car.fill", "bus.fill", "bag.fill", "house.fill", "fuelpump.fill",
+    "graduationcap.fill", "gym.bag.fill", "pawprint.fill", "hammer.fill",
+    "wrench.adjustable.fill", "tag.fill", "paperplane.fill", "tray.fill",
+    "archivebox.fill", "doc.fill", "folder.fill", "shippingbox.fill", 
+    "book.fill", "trophy.fill", "keyboard.fill",
+    "sun.max.fill", "moon.fill", "sparkles", "drop.fill", "music.note", "mic.fill",
+    "rectangle.3.group.fill", "checkmark.seal.fill", "heart.fill", "shield.checkered",
+    "flag.fill", "phone.fill", "video.fill", "envelope.fill",
+    "ellipsis.circle.fill", "basket.fill", "creditcard.fill",
+    "pianokeys", "printer.fill", "handbag.fill",
+    "suitcase.fill", "lightbulb.fill", "powerplug.fill", "balloon.2.fill",
+    "bed.double.fill", "mountain.2.fill", "lock.fill", "wifi", "display", "airplane",
+    "bandage.fill", "leaf.fill",
+    "carrot.fill", "birthday.cake.fill", "atom"
 ]
 
 fileprivate struct IconSelectionView: View {
@@ -76,7 +88,6 @@ struct TransactionCategoryFormView: View {
             .onAppear {
                 self.focusNameField = true
             }
-            .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
