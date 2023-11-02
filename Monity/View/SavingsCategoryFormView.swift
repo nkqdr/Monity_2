@@ -15,8 +15,13 @@ fileprivate struct SavingsLabelStyle: ViewModifier {
         content
             .padding(5)
             .padding(.horizontal, 10)
-            .tintedBackground(selection == label ? label.color : .secondary, cornerRadius: 10)
+            .tintedBackground(
+                selection == label ? label.color : .secondary,
+                cornerRadius: 10,
+                backgroundOpacity: selection == label ? 0.2 : 0.05
+            )
             .onTapGesture {
+                Haptics.shared.play(.soft)
                 withAnimation {
                     if selection == label {
                         selection = .none
