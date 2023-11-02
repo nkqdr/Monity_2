@@ -187,7 +187,6 @@ struct More_TransactionsView: View {
             }
         } sheetContent: { showAddItemSheet, currentItem in
             TransactionCategoryFormView(
-                isPresented: showAddItemSheet,
                 editor: TransactionCategoryEditor(category: currentItem)
             )
         }

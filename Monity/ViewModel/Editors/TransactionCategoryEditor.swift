@@ -16,13 +16,23 @@ class TransactionCategoryEditor: ObservableObject {
     }
     @Published var navigationFormTitle: LocalizedStringKey
     @Published var disableSave: Bool = true
+    @Published var selectedIcon: String?
     private var allCategories: [TransactionCategory]
     var category: TransactionCategory?
+    
+    var isValid: Bool {
+        let nameIsValid: Bool = self.name != ""
+        let nameIsDirty: Bool = category == nil ? true : category?.wrappedName != self.name
+        let iconIsDirty: Bool = category == nil ? true : category?.iconName != self.selectedIcon
+        
+        return nameIsValid && (nameIsDirty || iconIsDirty)
+    }
     
     init(category: TransactionCategory? = nil) {
         self.name = category?.wrappedName ?? ""
         self.navigationFormTitle = (category != nil) ? "Edit category" : "New category"
         self.category = category
+        self.selectedIcon = category?.iconName
         let fetchRequest = TransactionCategory.fetchRequest()
         let categories = try? PersistenceController.shared.container.viewContext.fetch(fetchRequest)
         self.allCategories = categories ?? []
@@ -32,9 +42,9 @@ class TransactionCategoryEditor: ObservableObject {
     
     public func save() {
         if let c = category {
-            let res = TransactionCategoryStorage.main.update(c, name: name)
+            let res = TransactionCategoryStorage.main.update(c, name: name, iconName: selectedIcon)
         } else {
-            let category = TransactionCategoryStorage.main.add(name: name)
+            let category = TransactionCategoryStorage.main.add(name: name, iconName: selectedIcon)
             print("Added category \(category.wrappedName)")
         }
     }
