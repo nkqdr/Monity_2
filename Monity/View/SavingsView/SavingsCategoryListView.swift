@@ -97,7 +97,7 @@ struct SavingsCategoryListView: View {
     
     var body: some View {
         List {
-            SavingsDPLineChart(dataPoints: dataPoints)
+            SavingsDPLineChart(dataPoints: $content.lineChartDataPoints)
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
             Section {

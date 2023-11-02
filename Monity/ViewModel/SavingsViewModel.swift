@@ -114,6 +114,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
         return SavingsViewModel(category: category)
     }
     @Published var groupedItems: [EntryGroup] = []
+    @Published var lineChartDataPoints: [ValueTimeDataPoint] = []
     
     var lastEntryBeforeLastYear: ValueTimeDataPoint? {
         let dps = self.category?.lineChartDataPoints(after: Date.distantPast) ?? []
@@ -168,6 +169,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     
     override func onItemsSet() {
         self.groupedItems = self.calcGroupedItems()
+        self.lineChartDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: self.items)
     }
     
     // MARK: - Intent

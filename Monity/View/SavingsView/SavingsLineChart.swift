@@ -10,20 +10,20 @@ import Charts
 
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
-    var dataPoints: [ValueTimeDataPoint]
+    @Binding var dataPoints: [ValueTimeDataPoint]
     var currentNetWorth: Double = 0
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint], currentNetWorth: Double) {
-        self.dataPoints = dataPoints
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double) {
+        self._dataPoints = Binding(projectedValue: dataPoints)
         self.selectedElement = selectedElement
         self.currentNetWorth = currentNetWorth
     }
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint]) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>) {
         self.init(
             selectedElement: selectedElement,
             dataPoints: dataPoints,
-            currentNetWorth: dataPoints.last?.value ?? 0
+            currentNetWorth: dataPoints.wrappedValue.last?.value ?? 0
         )
     }
     
@@ -120,6 +120,22 @@ struct SavingsDPLineChart: View {
             chartHeader
             actualChart
         }
+        .onChange(of: self.dataPoints) { _ in
+                animateLineChart()
+        }
+        .onAppear {
+            animateLineChart()
+        }
+    }
+    
+    private func animateLineChart() {
+        for (index, _) in self.dataPoints.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.005) {
+                withAnimation(.easeInOut) {
+                    self.dataPoints[index].animate = true
+                }
+            }
+        }
     }
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
@@ -149,22 +165,9 @@ struct SavingsDPLineChart: View {
 struct SavingsLineChart: View {
     @StateObject private var viewModel = SavingsLineChartViewModel()
     
-    private func animateLineChart() {
-        for (index, _) in viewModel.lineChartDataPoints.enumerated() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.005) {
-                withAnimation(.easeInOut) {
-                    viewModel.lineChartDataPoints[index].animate = true
-                }
-            }
-        }
-    }
-    
     var body: some View {
         VStack {
-            SavingsDPLineChart(dataPoints: viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
-                .onAppear {
-                    animateLineChart()
-                }
+            SavingsDPLineChart(dataPoints: $viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
             // The picker holds the number of seconds for the selected timeframe.
             Picker("Timeframe", selection: $viewModel.selectedTimeframe) {
                 ForEach(SavingsLineChartViewModel.possibleTimeframeLowerBounds) { config in
@@ -174,8 +177,8 @@ struct SavingsLineChart: View {
             .pickerStyle(.segmented)
             .onChange(of: viewModel.selectedTimeframe) { _ in
                 Haptics.shared.play(.soft)
-                animateLineChart()
             }
+            
         }
         .padding(.horizontal)
     }
