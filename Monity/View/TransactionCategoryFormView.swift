@@ -11,7 +11,7 @@ fileprivate let availableIcons: [String] = [
     "cart.fill", "car.fill", "bus.fill", "bag.fill", "house.fill", "fuelpump.fill",
     "graduationcap.fill", "gym.bag.fill", "pawprint.fill", "hammer.fill",
     "wrench.adjustable.fill", "tag.fill", "paperplane.fill", "tray.fill",
-    "archivebox.fill", "doc.fill", "folder.fill", "shippingbox.fill", 
+    "archivebox.fill", "doc.fill", "folder.fill", "shippingbox.fill",
     "book.fill", "trophy.fill", "keyboard.fill",
     "sun.max.fill", "moon.fill", "sparkles", "drop.fill", "music.note", "mic.fill",
     "rectangle.3.group.fill", "checkmark.seal.fill", "heart.fill", "shield.checkered",
