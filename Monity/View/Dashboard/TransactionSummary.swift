@@ -134,13 +134,13 @@ fileprivate struct TransactionCategorySummaryTile: View {
     }
 }
 
-fileprivate struct TransactionListPerCategory: View {
+struct TransactionListPerCategory: View {
     @State var showEditTransactionView: Bool = false
     @StateObject private var content: TransactionListPerCategoryViewModel
     var category: TransactionCategory
-    var showExpenses: Bool
+    var showExpenses: Bool?
     
-    init(category: TransactionCategory, showExpenses: Bool) {
+    init(category: TransactionCategory, showExpenses: Bool?) {
         self._content = StateObject(wrappedValue: TransactionListPerCategoryViewModel(category: category, showExpenses: showExpenses))
         self.category = category
         self.showExpenses = showExpenses
@@ -148,7 +148,6 @@ fileprivate struct TransactionListPerCategory: View {
     
     var body: some View {
         TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: content.transactionsByDate, dateFormat: .dateTime.year().month())
-            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -212,7 +211,7 @@ fileprivate struct TransactionCategorySummaryView: View {
             }
             
             Section {
-                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses))
+                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses).navigationBarTitleDisplayMode(.inline))
             }
         }
         .navigationTitle(category.wrappedName)

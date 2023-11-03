@@ -164,6 +164,7 @@ fileprivate struct MonthlyLimitSection: View {
 
 struct More_TransactionsView: View {
     @StateObject private var content = SettingsTransactionsViewModel()
+    @State private var transactionCategoryForList: TransactionCategory? = nil
     
     var body: some View {
         EditableDeletableItemList(viewModel: content) { create, edit, delete in
@@ -191,12 +192,34 @@ struct More_TransactionsView: View {
                                 }
                             }
                     }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            self.transactionCategoryForList = category
+                        } label: {
+                            Label("Show transactions", systemImage: "list.bullet")
+                        }
+                        .tint(.mint)
+                    }
                 }
             }
         } sheetContent: { showAddItemSheet, currentItem in
             TransactionCategoryFormView(
                 editor: TransactionCategoryEditor(category: currentItem)
             )
+        }
+        .sheet(item: $transactionCategoryForList) { val in
+            NavigationStack {
+                TransactionListPerCategory(category: val, showExpenses: nil)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Close", role: .cancel) {
+                                transactionCategoryForList = nil
+                            }
+                        }
+                    }
+                    .navigationTitle(val.wrappedName)
+                    .navigationBarTitleDisplayMode(.large)
+            }
         }
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
