@@ -130,7 +130,7 @@ fileprivate struct TransactionCategorySummaryTile: View {
             }
             .padding(.vertical, 2)
         }
-        .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+        .listRowInsets(dataPoint.category.iconName != nil ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 16) : nil)
     }
 }
 

@@ -33,15 +33,10 @@ fileprivate struct IconSelectionView: View {
     }
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(iconColor, lineWidth: isActive ? 5 : 0)
-            .background(RoundedRectangle(cornerRadius: 10).fill(iconColor.opacity(0.2)))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay {
-                Image(systemName: name)
-                    .font(.system(size: 20))
-                    .foregroundStyle(isActive ? .primary : .secondary)
-            }
+        Image(systemName: name)
+            .font(.system(size: 20))
+            .frame(width: 50, height: 50)
+            .tintedBackground(isActive ? .accentColor : .secondary, cornerRadius: 8, backgroundOpacity: isActive ? 0.25 : 0.1)
     }
 }
 
@@ -65,7 +60,6 @@ struct TransactionCategoryFormView: View {
                                 name: name,
                                 isActive: name == editor.selectedIcon
                             )
-                            .frame(width: 60, height: 60)
                             .onTapGesture {
                                 Haptics.shared.play(.soft)
                                 withAnimation(.easeInOut(duration: 0.2)) {
