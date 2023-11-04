@@ -22,7 +22,7 @@ fileprivate extension EnvironmentValues {
 fileprivate struct DrawingConstants {
     static let cornerRadius: CGFloat = 15
     static let scrollViewSpacing: CGFloat = 5
-    static let titleTopPaddingFactor: CGFloat = 1 / 7
+    static let titleTopPaddingFactor: CGFloat = 1 / 8
 }
 
 fileprivate struct IncomeExpenseData: Identifiable {
@@ -61,27 +61,40 @@ fileprivate struct TopNChart<S>: View where S: ShapeStyle {
     }
 }
 
-fileprivate struct IntroView: View {
-    var yearString: String = Date().formatted(.dateTime.year())
+fileprivate struct EOYDetailBase<C>: View where C: View {
+    var content: (GeometryProxy) -> C
     
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
-                VStack(spacing: 20) {
-                    Text("🎊")
-                        .font(.system(size: 50))
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("Let's reflect on \(yearString)!").font(.title.bold())
-                    Group {
-                        Text("eoy_review.intro.1") + Text("\(yearString)") + Text("eoy_review.intro.2")
-                    }
-                    .foregroundStyle(.secondary)
-                }
+                content(proxy)
+                Spacer(minLength: 100)
             }
             .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
         .multilineTextAlignment(.center)
+        .padding(.horizontal)
+    }
+}
+
+
+fileprivate struct IntroView: View {
+    var yearString: String = Date().formatted(.dateTime.year())
+    
+    var body: some View {
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("🎊")
+                    .font(.system(size: 50))
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Text("Let's reflect on \(yearString)!").font(.title.bold())
+                Group {
+                    Text("eoy_review.intro.1") + Text("\(yearString)") + Text("eoy_review.intro.2")
+                }
+                .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+        }
     }
 }
 
@@ -90,36 +103,31 @@ fileprivate struct RegisteredTransactionsView: View {
     @EnvironmentObject var content: EOYViewModel
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Year in Review:\n Your Transactional Triumphs!")
-                        .font(.title.bold())
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("Year in Review:\n Your Transactional Triumphs!")
+                    .font(.title.bold())
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Group {
                     Group {
-                        Group {
-                            Text(content.totalAmountOfIncomeTransactions, format: .number)
-                                .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.1")
-                        }
-                        
-                        Group {
-                            Text(content.totalAmountOfExpenseTransactions, format: .number)
-                                .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
-                        }
+                        Text(content.totalAmountOfIncomeTransactions, format: .number)
+                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.1")
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-                    .foregroundStyle(.secondary)
-                   
-                    Text("eoy_review.transactions.3")
-                        .foregroundStyle(.secondary)
+                    
+                    Group {
+                        Text(content.totalAmountOfExpenseTransactions, format: .number)
+                            .font(.system(size: 35, weight: .bold)) + Text("eoy_review.transactions.2")
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
+                .foregroundStyle(.secondary)
+               
+                Text("eoy_review.transactions.3")
+                    .foregroundStyle(.secondary)
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
@@ -149,24 +157,18 @@ fileprivate struct MostExpensiveCategoriesView: View {
     @EnvironmentObject var content: EOYViewModel
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Cash Chronicles:\n Where Money Flows!")
-                        .font(.title.bold())
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("eoy_review.expenses.1")
-                        
-                        .foregroundStyle(.secondary)
-                    TopNExpenseCategoriesView()
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-                }
-                Spacer(minLength: 50)
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("Cash Chronicles:\n Where Money Flows!")
+                    .font(.title.bold())
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Text("eoy_review.expenses.1")
+                    
+                    .foregroundStyle(.secondary)
+                TopNExpenseCategoriesView()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
@@ -174,22 +176,17 @@ fileprivate struct MostIncomeCategoriesView: View {
     @EnvironmentObject var content: EOYViewModel
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Uncover Your Cash Trails!")
-                        .font(.title.bold())
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("eoy_review.income.1")
-                        .foregroundStyle(.secondary)
-                    TopNIncomeCategoriesView()
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
-                }
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("Uncover Your Cash Trails!")
+                    .font(.title.bold())
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Text("eoy_review.income.1")
+                    .foregroundStyle(.secondary)
+                TopNIncomeCategoriesView()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius))
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
@@ -267,32 +264,27 @@ fileprivate struct IncomeVsExpenses: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Financial Harmony:\n Income vs Expenses!")
-                        .font(.title.bold())
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    
-                    Group {
-                        if content.totalIncome >= content.totalExpenses {
-                            Text("eoy_review.cashflow.increased.1") + annotatedDiff + Text("eoy_review.cashflow.increased.2")
-                        } else {
-                            Text("eoy_review.cashflow.decreased.1") + annotatedDiff + Text("eoy_review.cashflow.decreased.2")
-                        }
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("Financial Harmony:\n Income vs Expenses!")
+                    .font(.title.bold())
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                
+                Group {
+                    if content.totalIncome >= content.totalExpenses {
+                        Text("eoy_review.cashflow.increased.1") + annotatedDiff + Text("eoy_review.cashflow.increased.2")
+                    } else {
+                        Text("eoy_review.cashflow.decreased.1") + annotatedDiff + Text("eoy_review.cashflow.decreased.2")
                     }
-                    .foregroundStyle(.secondary)
-                    
-                    IncomeExpenseDiffBarChart()
-                        .frame(height: 200)
-                    CashflowChart()
-                        .frame(height: 200)
                 }
+                .foregroundStyle(.secondary)
+                
+                IncomeExpenseDiffBarChart()
+                    .frame(height: 200)
+                CashflowChart()
+                    .frame(height: 200)
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
@@ -322,52 +314,42 @@ fileprivate struct SavingsReportView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Your Year in Savings and Net Worth")
-                        .font(.title.bold())
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Group {
-                        if savingsDiff > 0 {
-                            Text("eoy_review.savings.increase.1") +
-                            Text(savingsDiff, format: .customCurrency()).foregroundColor(.green) +
-                            Text("eoy_review.savings.increase.2")
-                        } else {
-                            Text("eoy_review.savings.decrease.1") +
-                            Text(savingsDiff, format: .customCurrency()).foregroundColor(.red) +
-                            Text("eoy_review.savings.decrease.2")
-                        }
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("Your Year in Savings and Net Worth")
+                    .font(.title.bold())
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Group {
+                    if savingsDiff > 0 {
+                        Text("eoy_review.savings.increase.1") +
+                        Text(savingsDiff, format: .customCurrency()).foregroundColor(.green) +
+                        Text("eoy_review.savings.increase.2")
+                    } else {
+                        Text("eoy_review.savings.decrease.1") +
+                        Text(savingsDiff, format: .customCurrency()).foregroundColor(.red) +
+                        Text("eoy_review.savings.decrease.2")
                     }
-                    .foregroundStyle(.secondary)
-                    SavingsChart()
                 }
+                .foregroundStyle(.secondary)
+                SavingsChart()
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
 fileprivate struct EndOfReportView: View {
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("💰")
-                        .font(.system(size: 50))
-                        .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
-                    Text("Empowering Your\n Financial Future")
-                        .font(.title.bold())
-                    Text("Congratulations on your financial journey! Your diligence has unlocked valuable insights. Remember, every choice shapes your future. Stay disciplined, save wisely, and invest in your dreams. Your financial freedom starts now. Seize opportunities, make wise choices, and watch your wealth grow. Best of luck on your exciting journey ahead!")
-                        .foregroundStyle(.secondary)
-                }
+        EOYDetailBase { proxy in
+            VStack(spacing: 20) {
+                Text("💰")
+                    .font(.system(size: 50))
+                    .padding(.top, proxy.size.height * DrawingConstants.titleTopPaddingFactor)
+                Text("Empowering Your\n Financial Future")
+                    .font(.title.bold())
+                Text("Congratulations on your financial journey! Your diligence has unlocked valuable insights. Remember, every choice shapes your future. Stay disciplined, save wisely, and invest in your dreams. Your financial freedom starts now. Seize opportunities, make wise choices, and watch your wealth grow. Best of luck on your exciting journey ahead!")
+                    .foregroundStyle(.secondary)
             }
-            .scrollIndicators(.hidden)
         }
-        .padding(.horizontal)
-        .multilineTextAlignment(.center)
     }
 }
 
@@ -485,6 +467,22 @@ fileprivate struct ReviewProgressButtons: View {
                 .buttonStyle(.bordered)
                 .tint(content.currentlyDisplayedTabIndex == 0 ? .red : nil)
                 Spacer()
+                // Page control dots
+                HStack(spacing: 10) {
+                    ForEach(0..<lastTabIndex+1, id: \.self) { index in
+                        Circle()
+                            .frame(width: 6, height: 6)
+                            .foregroundStyle(index == content.currentlyDisplayedTabIndex ? .primary : .secondary)
+                            .onTapGesture {
+                                withAnimation {
+                                    content.currentlyDisplayedTabIndex = index
+                                }
+                            }
+                    }
+                }
+                .padding(10)
+                .background(.ultraThinMaterial, in: Capsule())
+                Spacer()
                 Button {
                     withAnimation {
                         if content.currentlyDisplayedTabIndex >= lastTabIndex {
@@ -511,32 +509,47 @@ fileprivate struct ReviewProgressButtons: View {
     }
 }
 
+fileprivate struct HorizontalPagingView: View {
+    @EnvironmentObject var content: EOYViewModel
+    
+    var body: some View {
+        let showSavingsPage = content.savingsDataPoints.count > 2
+        NavigationView {
+            VStack {
+                HStack(spacing: 0) {
+                    IntroView()
+                        .frame(width: UIScreen.main.bounds.width)
+                    RegisteredTransactionsView()
+                        .frame(width: UIScreen.main.bounds.width)
+                    MostExpensiveCategoriesView()
+                        .frame(width: UIScreen.main.bounds.width)
+                    MostIncomeCategoriesView()
+                        .frame(width: UIScreen.main.bounds.width)
+                    IncomeVsExpenses()
+                        .frame(width: UIScreen.main.bounds.width)
+                    if showSavingsPage {
+                       SavingsReportView()
+                            .frame(width: UIScreen.main.bounds.width)
+                    }
+                    EndOfReportView()
+                        .frame(width: UIScreen.main.bounds.width)
+                }
+                .frame(width: UIScreen.main.bounds.width, alignment: .leading)
+                .offset(x: UIScreen.main.bounds.width * -CGFloat(content.currentlyDisplayedTabIndex), y: 0)
+                .animation(.easeInOut, value: content.currentlyDisplayedTabIndex)
+                
+            }
+        }
+    }
+}
+
 fileprivate struct EOY_DetailView: View {
     @StateObject var content = EOYViewModel()
    
     var body: some View {
         let showSavingsPage = content.savingsDataPoints.count > 2
-        ZStack {
-            TabView(selection: $content.currentlyDisplayedTabIndex) {
-                IntroView()
-                    .tag(0)
-                RegisteredTransactionsView()
-                    .tag(1)
-                MostExpensiveCategoriesView()
-                    .tag(2)
-                MostIncomeCategoriesView()
-                    .tag(3)
-                IncomeVsExpenses()
-                    .tag(4)
-                if showSavingsPage {
-                    SavingsReportView()
-                        .tag(5)
-                }
-                EndOfReportView()
-                    .tag(showSavingsPage ? 6 : 5)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
+        ZStack(alignment: .bottom) {
+            HorizontalPagingView()
             ReviewProgressButtons()
         }
         .environmentObject(content)
