@@ -104,6 +104,12 @@ fileprivate struct TransactionCategorySummaryTile: View {
     var body: some View {
         NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenses)) {
             HStack {
+                if let icon = dataPoint.category.iconName {
+                    Image(systemName: icon)
+                        .frame(width: 40)
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
                 VStack(alignment: .leading) {
                     Text(dataPoint.category.wrappedName)
                         .fontWeight(.bold)
@@ -124,16 +130,17 @@ fileprivate struct TransactionCategorySummaryTile: View {
             }
             .padding(.vertical, 2)
         }
+        .listRowInsets(dataPoint.category.iconName != nil ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 16) : nil)
     }
 }
 
-fileprivate struct TransactionListPerCategory: View {
+struct TransactionListPerCategory: View {
     @State var showEditTransactionView: Bool = false
     @StateObject private var content: TransactionListPerCategoryViewModel
     var category: TransactionCategory
-    var showExpenses: Bool
+    var showExpenses: Bool?
     
-    init(category: TransactionCategory, showExpenses: Bool) {
+    init(category: TransactionCategory, showExpenses: Bool?) {
         self._content = StateObject(wrappedValue: TransactionListPerCategoryViewModel(category: category, showExpenses: showExpenses))
         self.category = category
         self.showExpenses = showExpenses
@@ -141,7 +148,6 @@ fileprivate struct TransactionListPerCategory: View {
     
     var body: some View {
         TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: content.transactionsByDate, dateFormat: .dateTime.year().month())
-            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -205,7 +211,7 @@ fileprivate struct TransactionCategorySummaryView: View {
             }
             
             Section {
-                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses))
+                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses).navigationBarTitleDisplayMode(.inline))
             }
         }
         .navigationTitle(category.wrappedName)

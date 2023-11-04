@@ -7,33 +7,87 @@
 
 import SwiftUI
 
+fileprivate struct SavingsLabelStyle: ViewModifier {
+    @Binding var selection: SavingsCategoryLabel
+    var label: SavingsCategoryLabel
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(5)
+            .padding(.horizontal, 10)
+            .tintedBackground(
+                selection == label ? label.color : .secondary,
+                cornerRadius: 10,
+                backgroundOpacity: selection == label ? 0.2 : 0.05
+            )
+            .onTapGesture {
+                Haptics.shared.play(.soft)
+                withAnimation {
+                    if selection == label {
+                        selection = .none
+                    } else {
+                        selection = label
+                    }
+                }
+            }
+            
+    }
+}
+
+fileprivate struct SavingsLabelPicker: View {
+    @Binding var selection: SavingsCategoryLabel
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Text("Liquid")
+                .modifier(SavingsLabelStyle(selection: $selection, label: .liquid))
+            Spacer()
+            Text("Saved")
+                .modifier(SavingsLabelStyle(selection: $selection, label: .saved))
+            Spacer()
+            Text("Invested")
+                .modifier(SavingsLabelStyle(selection: $selection, label: .invested))
+            Spacer()
+        }
+    }
+}
+
 struct SavingsCategoryFormView: View {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) var dismiss
     @StateObject var editor: SavingsCategoryEditor
+    @FocusState var focusNameField: Bool
     
     var body: some View {
         NavigationView {
             Form {
                 TextField("Category name", text: $editor.name)
-                Picker("Label", selection: $editor.label) {
-                    Text("None").tag(SavingsCategoryLabel.none)
-                    Text("Liquid").tag(SavingsCategoryLabel.liquid)
-                    Text("Saved").tag(SavingsCategoryLabel.saved)
-                    Text("Invested").tag(SavingsCategoryLabel.invested)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                    .font(.largeTitle.bold())
+                    .focused($focusNameField)
+                Section {
+                    SavingsLabelPicker(selection: $editor.label)
+                } header: {
+                    Text("Label")
                 }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             }
-            .navigationTitle(editor.navigationFormTitle)
+            .onAppear {
+                focusNameField = true
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        isPresented = false
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         editor.save()
-                        isPresented = false
+                        dismiss()
                     }
                     .disabled(editor.disableSave)
                 }
@@ -44,6 +98,6 @@ struct SavingsCategoryFormView: View {
 
 struct SavingsCategoryFormView_Previews: PreviewProvider {
     static var previews: some View {
-        SavingsCategoryFormView(isPresented: .constant(true), editor: SavingsCategoryEditor())
+        SavingsCategoryFormView(editor: SavingsCategoryEditor())
     }
 }

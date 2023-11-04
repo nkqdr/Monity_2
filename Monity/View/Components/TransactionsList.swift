@@ -52,6 +52,12 @@ struct TransactionsList: View {
                         onEdit: showEditSheetForTransaction,
                         onDelete: deleteTransaction) { item in
                             HStack {
+                                if let icon = transaction.category?.iconName {
+                                    Image(systemName: icon)
+                                        .padding(.trailing, 10)
+                                        .font(.title3)
+                                        .foregroundStyle(.secondary)
+                                }
                                 VStack(alignment: .leading) {
                                     Text(LocalizedStringKey(item.category?.wrappedName ?? "No category"))
                                         .font(.headline)

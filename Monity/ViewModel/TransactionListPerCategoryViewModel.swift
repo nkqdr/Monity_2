@@ -23,10 +23,10 @@ class TransactionListPerCategoryViewModel: ObservableObject {
     
     private var transactionCancellable: AnyCancellable?
     private var selectedCategory: TransactionCategory
-    private var showExpenses: Bool
+    private var showExpenses: Bool?
     private let fetchController = TransactionFetchController.all
     
-    init(category: TransactionCategory, showExpenses: Bool) {
+    init(category: TransactionCategory, showExpenses: Bool?) {
         self.selectedCategory = category
         self.showExpenses = showExpenses
         let transactionPublisher = fetchController.items.eraseToAnyPublisher()
@@ -39,7 +39,10 @@ class TransactionListPerCategoryViewModel: ObservableObject {
         var byDate: [TransactionsByDate] = []
         let uniqueDates = Set(relevantTransactions.map { $0.date?.removeTimeStampAndDay ?? Date() })
         for uniqueDate in uniqueDates {
-            let newTransactions = relevantTransactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false && $0.isExpense == showExpenses }
+            var newTransactions = relevantTransactions.filter { $0.date?.isSameMonthAs(uniqueDate) ?? false }
+            if let isExpense = self.showExpenses {
+                newTransactions = newTransactions.filter { $0.isExpense == isExpense }
+            }
             let existing = transactionsByDate.first(where: { $0.date.isSameMonthAs(uniqueDate)})
             if let existing {
                 var newExisting = existing

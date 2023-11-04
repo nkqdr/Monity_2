@@ -21,9 +21,10 @@ class TransactionCategoryFetchController: BaseFetchController<TransactionCategor
 class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
     static let main: TransactionCategoryStorage = TransactionCategoryStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
     
-    func add(name: String) -> TransactionCategory {
+    func add(name: String, iconName: String?) -> TransactionCategory {
         let category = TransactionCategory(context: self.context)
         category.name = name
+        category.iconName = iconName
         category.id = UUID()
         try? self.context.save()
         return category
@@ -50,9 +51,10 @@ class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
         return true
     }
     
-    func update(_ category: TransactionCategory, name: String?) -> Bool {
+    func update(_ category: TransactionCategory, name: String?, iconName: String?) -> Bool {
         self.context.performAndWait {
             category.name = name ?? category.name
+            category.iconName = iconName
             if let _ = try? self.context.save() {
                 return true
             } else {

@@ -81,3 +81,7 @@ struct SavingsEntryFormView: View {
         }
     }
 }
+
+#Preview {
+    SavingsEntryFormView(isPresented: .constant(true), editor: SavingsEditor())
+}

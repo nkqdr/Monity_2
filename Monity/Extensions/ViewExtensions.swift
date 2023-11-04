@@ -81,13 +81,13 @@ extension View {
         }
     }
     
-    func tintedBackground(_ tint: Color? = .accentColor, cornerRadius: CGFloat = 5) -> some View {
+    func tintedBackground(_ tint: Color? = .accentColor, cornerRadius: CGFloat = 5, backgroundOpacity: Double = 0.1) -> some View {
         self.foregroundColor(tint)
             .padding(5)
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundColor(tint)
-                    .opacity(0.1)
+                    .opacity(backgroundOpacity)
             }
     }
     

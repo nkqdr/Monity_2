@@ -87,8 +87,13 @@ struct PieSliceView<LabelStyle>: View where LabelStyle: ViewModifier {
     var midRadians: Double {
         return Double.pi / 2.0 - (pieSliceData.startAngle + pieSliceData.endAngle).radians / 2.0
     }
+    
+    var angleDiff: Double {
+        pieSliceData.endAngle.degrees - pieSliceData.startAngle.degrees
+    }
         
     var body: some View {
+        let _ = print(angleDiff)
         GeometryReader { geometry in
             ZStack {
                 Path { path in
@@ -108,7 +113,7 @@ struct PieSliceView<LabelStyle>: View where LabelStyle: ViewModifier {
                     
                 }
                 .fill(pieSliceData.color.gradient)
-                if showLabels {
+                if showLabels && abs(angleDiff) >= 10 {
                     Text(pieSliceData.text)
                         .position(
                             x: geometry.size.width * 0.5 * CGFloat(1.0 + 0.78 * cos(midRadians)),

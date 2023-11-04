@@ -54,7 +54,6 @@ struct More_SavingsView: View {
             }
         } sheetContent: { showAddSheet, currentItem in
             SavingsCategoryFormView(
-                isPresented: showAddSheet,
                 editor: SavingsCategoryEditor(category: currentItem)
             )
         }

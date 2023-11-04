@@ -164,6 +164,7 @@ fileprivate struct MonthlyLimitSection: View {
 
 struct More_TransactionsView: View {
     @StateObject private var content = SettingsTransactionsViewModel()
+    @State private var transactionCategoryForList: TransactionCategory? = nil
     
     var body: some View {
         EditableDeletableItemList(viewModel: content) { create, edit, delete in
@@ -176,20 +177,49 @@ struct More_TransactionsView: View {
                         confirmationMessage: "\(category.wrappedTransactionsCount) related transactions will be deleted.",
                         onEdit: edit,
                         onDelete: delete) { item in
-                            VStack(alignment: .leading) {
-                                Text(item.wrappedName)
-                                Text("Associated transactions: \(item.wrappedTransactionsCount)")
-                                    .font(.callout)
-                                    .foregroundColor(.secondary)
+                            HStack {
+                                if let icon = item.iconName {
+                                    Image(systemName: icon)
+                                        .padding(.trailing, 10)
+                                        .font(.headline)
+                                        .foregroundStyle(.secondary)
+                                }
+                                VStack(alignment: .leading) {
+                                    Text(item.wrappedName)
+                                    Text("Associated transactions: \(item.wrappedTransactionsCount)")
+                                        .font(.callout)
+                                        .foregroundColor(.secondary)
+                                }
                             }
+                    }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            self.transactionCategoryForList = category
+                        } label: {
+                            Label("Show transactions", systemImage: "list.bullet")
+                        }
+                        .tint(.mint)
                     }
                 }
             }
         } sheetContent: { showAddItemSheet, currentItem in
             TransactionCategoryFormView(
-                isPresented: showAddItemSheet,
                 editor: TransactionCategoryEditor(category: currentItem)
             )
+        }
+        .sheet(item: $transactionCategoryForList) { val in
+            NavigationStack {
+                TransactionListPerCategory(category: val, showExpenses: nil)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Close", role: .cancel) {
+                                transactionCategoryForList = nil
+                            }
+                        }
+                    }
+                    .navigationTitle(val.wrappedName)
+                    .navigationBarTitleDisplayMode(.large)
+            }
         }
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)

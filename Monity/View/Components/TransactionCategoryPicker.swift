@@ -12,10 +12,17 @@ struct TransactionCategoryPicker: View {
     @State private var allCategories: [TransactionCategory] = []
     
     var body: some View {
-        Picker("Choose a category", selection: $selection) {
+        Picker("Category", selection: $selection) {
             Text("None").tag(Optional<TransactionCategory>.none)
             ForEach(allCategories) { category in
-                Text(category.wrappedName).tag(category as TransactionCategory?)
+                Group {
+                    if let icon = category.iconName {
+                        Label(category.wrappedName, systemImage: icon)
+                    } else {
+                        Text(category.wrappedName)
+                    }
+                }
+                .tag(category as TransactionCategory?)
             }
         }.onReceive(TransactionCategoryFetchController.all.items.eraseToAnyPublisher()) { categories in
             allCategories = categories
