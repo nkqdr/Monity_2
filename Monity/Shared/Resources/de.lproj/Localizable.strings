@@ -2,6 +2,9 @@
 " / Day" = " / Tag";
 
 /* No comment provided by engineer. */
+" is coming to an end" = " neigt sich dem Ende zu";
+
+/* No comment provided by engineer. */
 "%lld related entries will be deleted." = "%lld verknüpfte Einträge werden gelöscht.";
 
 /* No comment provided by engineer. */
@@ -21,6 +24,15 @@
 
 /* No comment provided by engineer. */
 "All done!" = "Fertig!";
+
+/* No comment provided by engineer. */
+"All entries" = "Alle Einträge";
+
+/* No comment provided by engineer. */
+"All transactions" = "Alle Transaktionen";
+
+/* No comment provided by engineer. */
+"All-Time" = "Alle Zeiten";
 
 /* No comment provided by engineer. */
 "Amount" = "Betrag";
@@ -74,10 +86,16 @@
 "Average change per year:" = "Durchschnittliche Änderung pro Jahr:";
 
 /* No comment provided by engineer. */
+"Average per month" = "Durchschnitt pro Monat";
+
+/* No comment provided by engineer. */
 "Bi-Weekly" = "Zweiwöchentlich";
 
 /* No comment provided by engineer. */
 "Billionaire Luminary" = "Milliardär-Lichtgestalt";
+
+/* No comment provided by engineer. */
+"Budget" = "Budget";
 
 /* No comment provided by engineer. */
 "Budget:" = "Budget:";
@@ -90,6 +108,9 @@
 
 /* No comment provided by engineer. */
 "Cash Champion" = "Geldchampion";
+
+/* No comment provided by engineer. */
+"Cash Chronicles:\n Where Money Flows!" = "Wo dein Geld wirklich hingeht!";
 
 /* No comment provided by engineer. */
 "Categories" = "Kategorien";
@@ -114,6 +135,9 @@
 
 /* No comment provided by engineer. */
 "Configuration" = "Konfiguration";
+
+/* No comment provided by engineer. */
+"Congratulations on your financial journey! Your diligence has unlocked valuable insights. Remember, every choice shapes your future. Stay disciplined, save wisely, and invest in your dreams. Your financial freedom starts now. Seize opportunities, make wise choices, and watch your wealth grow. Best of luck on your exciting journey ahead!" = "Herzlichen Glückwunsch zu Ihrer finanziellen Reise! Ihr Fleiß hat Ihnen wertvolle Einblicke verschafft. Denken Sie daran, dass jede Entscheidung Ihre Zukunft beeinflusst. Bleiben Sie diszipliniert, sparen Sie klug und investieren Sie in Ihre Träume. Ihre finanzielle Freiheit beginnt jetzt. Ergreifen Sie Gelegenheiten, treffen Sie kluge Entscheidungen, und beobachten Sie, wie Ihr Vermögen wächst. Viel Glück auf der aufregenden Reise, die vor Ihnen liegt!";
 
 /* No comment provided by engineer. */
 "Could not read this file" = "Datei konnte nicht gelesen werden";
@@ -176,10 +200,58 @@
 "Edit transaction" = "Transaktion bearbeiten";
 
 /* No comment provided by engineer. */
-"End date" = "Enddatum";
+"Empowering Your\n Financial Future" = "Stärkung Ihrer \nfinanziellen Zukunft";
 
 /* No comment provided by engineer. */
-"Entries" = "Einträge";
+"End date" = "Enddatum";
+
+/* (No Comment) */
+"eoy_review.cashflow.decreased.1" = "Dieses Jahr haben Sie ";
+
+/* (No Comment) */
+"eoy_review.cashflow.decreased.2" = " mehr ausgegeben als Sie eingenommen haben. Lassen Sie uns nächstes Jahr die Dinge anders angehen!";
+
+/* (No Comment) */
+"eoy_review.cashflow.increased.1" = "Gut gemacht! Sie haben ";
+
+/* (No Comment) */
+"eoy_review.cashflow.increased.2" = " mehr verdient als Sie ausgegeben haben!";
+
+/* (No Comment) */
+"eoy_review.expenses.1" = "Die Überprüfung Ihrer 5 wichtigsten Ausgabenkategorien bietet wichtige Einblicke und hilft Ihnen, fundierte Entscheidungen zu treffen, um Ihr Budget effizient zu verwalten.";
+
+/* (No Comment) */
+"eoy_review.income.1" = "Die Analyse Ihrer 5 wichtigsten Einkommensquellen liefert strategische Erkenntnisse, die es Ihnen ermöglichen, Ihre Stärken für zukünftigen finanziellen Erfolg zu nutzen.";
+
+/* (No Comment) */
+"eoy_review.intro.1" = "Das Jahr ";
+
+/* (No Comment) */
+"eoy_review.intro.2" = " neigt sich dem Ende zu und es ist an der Zeit, über Ihre finanzielle Entwicklung zu reflektieren. Dieser Jahresendbericht bietet einen tiefen Einblick in Ihre Ausgabengewohnheiten, Einkommensquellen und Ihre allgemeine finanzielle Situation. Bei dieser detaillierten Analyse handelt es sich nicht nur um Zahlen, sondern um Ihre Geschichte des finanziellen Wachstums und kluger Entscheidungen. Lassen Sie uns die Erkenntnisse aufdecken, die Ihren Weg zum finanziellen Erfolg im kommenden Jahr bestimmen werden.";
+
+/* EOY review content message that tells the user about his decreased savings */
+"eoy_review.savings.decrease.1" = "Angesichts der Herausforderungen bleibt Ihre Widerstandsfähigkeit stark. Obwohl Ihr Vermögen im vergangenen Jahr um ";
+
+/* EOY review content message that tells the user about his decreased savings */
+"eoy_review.savings.decrease.2" = " gesunken ist, sorgt Ihre unerschütterliche finanzielle Einstellung für ein starkes Fundament für die Zukunft.";
+
+/* EOY review content message that tells the user about his increased savings */
+"eoy_review.savings.increase.1" = "Herzlichen Glückwunsch! Ihr Vermögen ist im vergangenen Jahr um ";
+
+/* EOY review content message that tells the user about his increased savings */
+"eoy_review.savings.increase.2" = " gewachsen, was auf gute Finanzstrategien und Investitionen zurückzuführen ist.";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.1" = " registrierte Einkommenstransaktionen";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.2" = " registrierte Ausgabentransaktionen";
+
+/* EOY review content message that tells the user about his registered transactions */
+"eoy_review.transactions.3" = "Diese sorgfältige Verfolgung bildet die Grundlage für eine aufschlussreiche Finanzanalyse. Mit diesen Daten sind Sie in der Lage, strategische Entscheidungen zu treffen und eine erfolgreiche finanzielle Zukunft zu gestalten. Ihr Engagement für finanzielle Umsicht ist lobenswert, und wir sind hier, um Ihren anhaltenden Erfolg zu unterstützen.";
+
+/* No comment provided by engineer. */
+"Establish a monthly budget and aim to stay within your limits." = "Legen Sie ein monatliches Budget fest und versuchen Sie, es einzuhalten.";
 
 /* No comment provided by engineer. */
 "Expense" = "Ausgabe";
@@ -195,6 +267,9 @@
 
 /* No comment provided by engineer. */
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
+
+/* No comment provided by engineer. */
+"Financial Harmony:\n Income vs Expenses!" = "Finanzielle Harmonie: \nEinkommen vs Ausgaben!";
 
 /* No comment provided by engineer. */
 "Future Projections" = "Projektionen";
@@ -230,6 +305,9 @@
 "Import Summary" = "Import Zusammenfassung";
 
 /* No comment provided by engineer. */
+"In which categories do you currently have funds saved or invested?" = "In welchen Kategorien haben Sie derzeit Geld gespart oder investiert?";
+
+/* No comment provided by engineer. */
 "Income" = "Einnahme";
 
 /* No comment provided by engineer. */
@@ -248,10 +326,10 @@
 "Last Year" = "Letztes Jahr";
 
 /* No comment provided by engineer. */
-"Let's start!" = "Los geht's!";
+"Let's reflect on %@!" = "Lassen Sie uns das Jahr %@ reflektieren!";
 
 /* No comment provided by engineer. */
-"Budget" = "Budget";
+"Let's start!" = "Los geht's!";
 
 /* No comment provided by engineer. */
 "Liquid" = "Liquide";
@@ -267,6 +345,12 @@
 
 /* No comment provided by engineer. */
 "Mastering the art of saving and shining bright! Low expenses, high savings!" = "Die Kunst des Sparens beherrschen und glänzen! Geringe Ausgaben, hohe Einsparungen!";
+
+/* No comment provided by engineer. */
+"Monity puts you in charge of your financial journey. Take control today." = "Mit Monity haben Sie Ihre finanzielle Reise selbst in der Hand. Übernehmen Sie noch heute die Kontrolle.";
+
+/* No comment provided by engineer. */
+"Monity Report" = "Monity Bericht";
 
 /* No comment provided by engineer. */
 "Month" = "Monat";
@@ -416,16 +500,16 @@
 "Set a monthly budget to unlock valuable insights for better financial control." = "Legen Sie ein monatliches Budget fest, um wertvolle Erkenntnisse für eine bessere Finanzkontrolle zu gewinnen.";
 
 /* No comment provided by engineer. */
-"Establish a monthly budget and aim to stay within your limits." = "Legen Sie ein monatliches Budget fest und versuchen Sie, es einzuhalten.";
+"Settings" = "Einstellungen";
 
 /* No comment provided by engineer. */
-"Settings" = "Einstellungen";
+"Share of total wealth" = "Anteil an Gesamtvermögen";
 
 /* No comment provided by engineer. */
 "Show" = "Anzeigen";
 
 /* No comment provided by engineer. */
-"Show average mark" = "Durchschnitt anzeigen";
+"Show average" = "Durchschnitt anzeigen";
 
 /* No comment provided by engineer. */
 "Show in month overview" = "In Monatsübersicht anzeigen";
@@ -459,6 +543,12 @@
 
 /* No comment provided by engineer. */
 "The export failed with this message: %@" = "Der Export ist mit dieser Meldung fehlgeschlagen: %@";
+
+/* No comment provided by engineer. */
+"These values are calculated with all entries you have entered within the last 12 months" = "Diese Werte werden mit allen Einträgen berechnet, die Sie innerhalb der letzten 12 Monate eingetragen haben";
+
+/* No comment provided by engineer. */
+"These values are calculated with all entries you have ever entered" = "Diese Werte werden mit allen Einträgen berechnet, die Sie jemals eingetragen haben";
 
 /* No comment provided by engineer. */
 "These will help you categorize all of your expenses and income" = "Diese helfen Ihnen, alle Ihre Ausgaben und Einnahmen zu kategorisieren";
@@ -506,24 +596,16 @@
 "Transactions" = "Transaktionen";
 
 /* No comment provided by engineer. */
-"Average per month" = "Durchschnitt pro Monat";
-
-/* No comment provided by engineer. */
-"All-Time" = "Alle Zeiten";
-
-/* No comment provided by engineer. */
-"All entries" = "Alle Einträge";
-
-"Share of total wealth" = "Anteil an Gesamtvermögen";
-
-/* No comment provided by engineer. */
-"All transactions" = "Alle Transaktionen";
-
-/* No comment provided by engineer. */
 "Try again" = "Erneut versuchen";
 
 /* No comment provided by engineer. */
 "Turning financial dreams into reality without breaking the bank. Moderate expenses, maximum aspirations!" = "Finanzielle Träume in die Tat umsetzen, ohne die Bank zu sprengen. Mäßige Ausgaben, maximale Ziele!";
+
+/* No comment provided by engineer. */
+"Type" = "Typ";
+
+/* No comment provided by engineer. */
+"Uncover Your Cash Trails!" = "Geldspuren verfolgen!";
 
 /* No comment provided by engineer. */
 "Used storage:" = "Benutzter Speicher:";
@@ -539,6 +621,15 @@
 
 /* No comment provided by engineer. */
 "Welcome to Monity!" = "Willkommen bei Monity!";
+
+/* No comment provided by engineer. */
+"What are your most active categories for both income and expenses?" = "Welches sind Ihre wichtigsten Kategorien für Einnahmen und Ausgaben?";
+
+/* No comment provided by engineer. */
+"What is the maximum amount of money you would like to spend each month?" = "Wie viel Geld möchten Sie monatlich höchstens ausgeben?";
+
+/* No comment provided by engineer. */
+"Year in Review:\n Your Transactional Triumphs!" = "Rückblick auf das Jahr: \nIhre Transaktionstriumphe!";
 
 /* No comment provided by engineer. */
 "Yearly" = "Jährlich";
@@ -559,7 +650,7 @@
 "Your data is yours to control. It is stored exclusively on your device or in your iCloud account. Your privacy is my priority." = "Sie haben die Kontrolle über Ihre Daten. Alle Daten werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert. Ihre Privatsphäre ist meine Priorität.";
 
 /* No comment provided by engineer. */
-"Monity puts you in charge of your financial journey. Take control today." = "Mit Monity haben Sie Ihre finanzielle Reise selbst in der Hand. Übernehmen Sie noch heute die Kontrolle.";
+"Your Financial Year at a Glance" = "Ihr Finanzjahr auf einen Blick";
 
 /* No comment provided by engineer. */
 "Your monthly budget:" = "Ihr monatliches Budget:";
@@ -571,27 +662,8 @@
 "Your wealth increased by %lld%%" = "Ihr Vermögen ist um %lld%% gestiegen";
 
 /* No comment provided by engineer. */
-"In which categories do you currently have funds saved or invested?" = "In welchen Kategorien haben Sie derzeit Geld gespart oder investiert?";
+"Your Year in Savings and Net Worth" = "Ihr Jahr der Ersparnisse";
 
 /* No comment provided by engineer. */
-"What is the maximum amount of money you would like to spend each month?" = "Wie viel Geld möchten Sie monatlich höchstens ausgeben?";
+"Zero" = "Null";
 
-/* No comment provided by engineer. */
-"What are your most active categories for both income and expenses?" = "Welches sind Ihre wichtigsten Kategorien für Einnahmen und Ausgaben?";
-
-// MARK: - Onboarding default categories
-
-"Rent" = "Miete";
-"Hobbies" = "Hobbies";
-"Work" = "Arbeit";
-"Gifts" = "Geschenke";
-"Free-time" = "Freizeit";
-"Clothes" = "Kleidung";
-"Groceries" = "Lebensmittel";
-"University" = "Universität";
-"Insurance" = "Versicherungen";
-"Savings" = "Ersparnisse";
-"Checking" = "Girokonto";
-"Crypto" = "Crypto";
-"Wallet" = "Geldbeutel";
-"Stock portfolio" = "Aktiendepot";

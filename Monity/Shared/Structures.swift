@@ -83,6 +83,7 @@ struct ValueTimeDataPoint: Identifiable, Equatable {
     var id: UUID = UUID()
     var date: Date
     var value: Double
+    var animate: Bool = false
     
     var description: String {
         return "\(date) -> \(value)"

@@ -81,7 +81,7 @@ fileprivate struct TransactionSummaryPage: View {
                 .listRowInsets(EdgeInsets())
             }
             Section {
-                Toggle("Show average mark", isOn: $showAverageBar)
+                Toggle("Show average", isOn: $showAverageBar)
             }
             
             Section("Categories") {
@@ -89,6 +89,9 @@ fileprivate struct TransactionSummaryPage: View {
                     TransactionCategorySummaryTile(dataPoint: dataPoint, showExpenses: content.showingExpenses)
                 }
             }
+        }
+        .onChange(of: content.showingExpenses) { _ in
+            Haptics.shared.play(.soft)
         }
         .navigationTitle("Transaction Overview")
     }
@@ -180,6 +183,8 @@ fileprivate struct TransactionCategorySummaryView: View {
                 }
             } header: {
                 Text("All-Time")
+            } footer: {
+                Text("These values are calculated with all entries you have ever entered")
             }
             
             Section {
@@ -195,6 +200,8 @@ fileprivate struct TransactionCategorySummaryView: View {
                 }
             } header: {
                 Text("Last Year")
+            } footer: {
+                Text("These values are calculated with all entries you have entered within the last 12 months")
             }
             
             Section {

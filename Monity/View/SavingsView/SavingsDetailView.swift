@@ -188,7 +188,7 @@ struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
     @StateObject private var content = SavingsCategoryViewModel.shared
-    @ObservedObject private var entryManager = SavingsEntryManager()
+    @StateObject private var entryManager = SavingsEntryManager()
     
     var noCategories: some View {
         VStack {

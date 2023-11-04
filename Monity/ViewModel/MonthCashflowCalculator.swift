@@ -13,7 +13,8 @@ class MonthCashflowCalculator: ObservableObject {
     
     private var transactions: [AbstractTransaction] = [] {
         didSet {
-            cashFlowData = getCashFlowDataPoints()
+            let startOfMonthDate: Date = selectedDate.startOfThisMonth
+            self.cashFlowData = LineChartDataBuilder.generateCashflowData(for: transactions, initialDate: startOfMonthDate)
         }
     }
     private var selectedDate: Date
@@ -24,25 +25,6 @@ class MonthCashflowCalculator: ObservableObject {
         let transactionPublisher = AbstractTransactionWrapper(date: date).$wrappedTransactions.eraseToAnyPublisher()
         transactionCancellable = transactionPublisher.sink { value in
             self.transactions = value
-        }
-    }
-    
-    private func getCashFlowDataPoints() -> [ValueTimeDataPoint] {
-        var dataPoints: [ValueTimeDataPoint] = []
-        let startOfMonthDate: Date = selectedDate.startOfThisMonth
-        
-        let datesEntered: Set<Date> = Set(transactions.map { $0.date?.removeTimeStamp ?? Date() })
-        if !datesEntered.contains(startOfMonthDate) {
-            dataPoints.append(ValueTimeDataPoint(date: startOfMonthDate, value: 0))
-        }
-        for date in datesEntered {
-            dataPoints.append(ValueTimeDataPoint(
-                date: date,
-                value: transactions.filter { $0.date?.removeTimeStamp ?? Date() <= date}.map { $0.isExpense ? -$0.amount : $0.amount}.reduce(0, +))
-            )
-        }
-        return dataPoints.sorted {
-            $0.date < $1.date
         }
     }
 }

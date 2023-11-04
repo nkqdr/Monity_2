@@ -10,29 +10,40 @@ import Charts
 
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
-    var dataPoints: [ValueTimeDataPoint]
+    @Binding var dataPoints: [ValueTimeDataPoint]
+    @State private var localDataPoints: [ValueTimeDataPoint]
+    var showHeader: Bool
+    var showArea: Bool
     var currentNetWorth: Double = 0
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint], currentNetWorth: Double) {
-        self.dataPoints = dataPoints
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
+        self._dataPoints = Binding(projectedValue: dataPoints)
+        self._localDataPoints = State(initialValue: dataPoints.wrappedValue)
+        self.showHeader = showHeader
+        self.showArea = showArea
         self.selectedElement = selectedElement
         self.currentNetWorth = currentNetWorth
     }
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: [ValueTimeDataPoint]) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, showArea: Bool = false) {
         self.init(
             selectedElement: selectedElement,
             dataPoints: dataPoints,
-            currentNetWorth: dataPoints.last?.value ?? 0
+            currentNetWorth: dataPoints.wrappedValue.last?.value ?? 0,
+            showHeader: showHeader,
+            showArea: showArea
         )
     }
     
     private var minYValue: Double {
-        dataPoints.map { $0.value }.min() ?? 0
+        if localDataPoints.isEmpty {
+            return 0
+        }
+        return localDataPoints.map { $0.value }.min()!
     }
     
     private var maxYValue: Double {
-        dataPoints.map { $0.value }.max() ?? 0
+        localDataPoints.map { $0.value }.max() ?? 0
     }
     
     @ViewBuilder
@@ -51,11 +62,25 @@ struct SavingsDPLineChart: View {
         }
     }
     
+    @ViewBuilder
     var actualChart: some View {
-        Chart(dataPoints) {
-            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
+        Chart(localDataPoints) {
+            if showArea {
+                AreaMark(
+                    x: .value("Date", $0.date),
+                    yStart: .value("Amount", minYValue),
+                    yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
+                )
+                    .opacity(0.5)
+                    .interpolationMethod(.monotone)
+            }
+            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.animate ? $0.value : minYValue))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.monotone)
+            if minYValue < 0 {
+                RuleMark(y: .value("Zero", 0))
+                    .foregroundStyle(.secondary)
+            }
             if let selectedElement, selectedElement.id == $0.id {
                 RuleMark(x: .value("Date", selectedElement.date))
                     .foregroundStyle(Color.secondary)
@@ -73,7 +98,7 @@ struct SavingsDPLineChart: View {
                 SpatialTapGesture()
                   .onEnded { value in
                     let element = findElement(location: value.location, proxy: proxy, geometry: geo)
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.light)
                     if selectedElement?.date == element?.date {
                       // If tapping the same element, clear the selection.
                       selectedElement = nil
@@ -88,7 +113,7 @@ struct SavingsDPLineChart: View {
                             return
                         }
                         selectedElement = newElement
-                        Haptics.shared.play(.medium)
+                        Haptics.shared.play(.light)
                     }
                     .onEnded { _ in
                         selectedElement = nil
@@ -102,8 +127,30 @@ struct SavingsDPLineChart: View {
     
     var body: some View {
         VStack {
-            chartHeader
+            if showHeader {
+                chartHeader
+            }
             actualChart
+        }
+        .onChange(of: self.dataPoints) { dps in
+            self.selectedElement = nil
+            self.localDataPoints = dps
+            animateLineChart()
+        }
+        .onAppear {
+            animateLineChart()
+        }
+    }
+    
+    private func animateLineChart() {
+        for (index, _) in self.localDataPoints.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.005) {
+                if (index < self.localDataPoints.count) {
+                    withAnimation(.easeInOut) {
+                        self.localDataPoints[index].animate = true
+                    }
+                }
+            }
         }
     }
     
@@ -116,7 +163,7 @@ struct SavingsDPLineChart: View {
             // Find the closest date element.
             var minDistance: TimeInterval = .infinity
             var index: Int? = nil
-            for dataIndex in dataPoints.indices {
+            for dataIndex in self.localDataPoints.indices {
                 let nthDataDistance = dataPoints[dataIndex].date.distance(to: date)
                 if abs(nthDataDistance) < minDistance {
                     minDistance = abs(nthDataDistance)
@@ -124,7 +171,7 @@ struct SavingsDPLineChart: View {
                 }
             }
             if let index {
-                return dataPoints[index]
+                return self.localDataPoints[index]
             }
       }
       return nil
@@ -136,7 +183,7 @@ struct SavingsLineChart: View {
     
     var body: some View {
         VStack {
-            SavingsDPLineChart(dataPoints: viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
+            SavingsDPLineChart(dataPoints: $viewModel.lineChartDataPoints, currentNetWorth: viewModel.currentNetWorth)
             // The picker holds the number of seconds for the selected timeframe.
             Picker("Timeframe", selection: $viewModel.selectedTimeframe) {
                 ForEach(SavingsLineChartViewModel.possibleTimeframeLowerBounds) { config in
@@ -144,6 +191,10 @@ struct SavingsLineChart: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: viewModel.selectedTimeframe) { _ in
+                Haptics.shared.play(.soft)
+            }
+            
         }
         .padding(.horizontal)
     }

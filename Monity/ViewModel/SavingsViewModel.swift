@@ -14,7 +14,7 @@ class SavingsTileViewModel: ObservableObject {
     @Published var allCategories: [SavingsCategory] = []
     @Published var savingsInLastYear: [SavingsEntry] = [] {
         didSet {
-            generateLineChartDataPoints()
+            self.dataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: savingsInLastYear)
             setPercentageChangeLastYear()
         }
     }
@@ -47,21 +47,8 @@ class SavingsTileViewModel: ObservableObject {
         }
         if netWorthOneYearAgo != 0 {
             percentChangeInLastYear = (currentNetWorth - netWorthOneYearAgo) / netWorthOneYearAgo
-            print(percentChangeInLastYear)
         } else {
             percentChangeInLastYear = 0
-        }
-    }
-    
-    private func generateLineChartDataPoints() {
-        var dataPoints: [ValueTimeDataPoint] = []
-        let uniqueDates: Set<Date> = Set(savingsInLastYear.map { $0.wrappedDate.removeTimeStamp! })
-        for uniqueDate in uniqueDates {
-            let netWorthAtUniqueDate: Double = vDSP.sum(allCategories.map { $0.lastEntryBefore(uniqueDate) }.map { $0?.amount ?? 0 })
-            dataPoints.append(ValueTimeDataPoint(date: uniqueDate, value: netWorthAtUniqueDate))
-        }
-        self.dataPoints = dataPoints.sorted {
-            $0.date < $1.date
         }
     }
 }
@@ -112,10 +99,22 @@ class SavingsCategoryPickerViewModel: ObservableObject {
 }
 
 class SavingsViewModel: ItemListViewModel<SavingsEntry> {
+    struct EntryGroup: Identifiable {
+        var id = UUID()
+        var date: Date
+        var entries: [SavingsEntry]
+        
+        mutating func setEntries(_ entries: [SavingsEntry]) {
+            self.entries = entries
+        }
+    }
+    
     static let shared = SavingsViewModel()
     static func forCategory(_ category: SavingsCategory) -> SavingsViewModel {
         return SavingsViewModel(category: category)
     }
+    @Published var groupedItems: [EntryGroup] = []
+    @Published var lineChartDataPoints: [ValueTimeDataPoint] = []
     
     var lastEntryBeforeLastYear: ValueTimeDataPoint? {
         let dps = self.category?.lineChartDataPoints(after: Date.distantPast) ?? []
@@ -127,19 +126,50 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     }
     
     private var category: SavingsCategory?
+    private var fetchController: SavingsFetchController
     
     private init() {
-        let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
+        self.fetchController = SavingsFetchController.all
+        let publisher = self.fetchController.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
     private init(category: SavingsCategory) {
-        let publisher = SavingsFetchController.all.items.eraseToAnyPublisher()
+        self.fetchController = SavingsFetchController(category: category)
+        let publisher = self.fetchController.items.eraseToAnyPublisher()
         self.category = category
         super.init(itemPublisher: publisher)
-        itemCancellable = publisher.sink { entries in
-            self.items = entries.filter { $0.category == category}
+    }
+    
+    private func calcGroupedItems() -> [EntryGroup] {
+        var groups: [EntryGroup] = []
+        let uniqueYears: [Date] = Dictionary(grouping: self.items) { item in
+            let comps = Calendar.current.dateComponents([.year], from: item.wrappedDate)
+            return Calendar.current.date(from: comps)!
+        }.keys.sorted {
+            $0 > $1
         }
+        
+        for year in uniqueYears {
+            let itemsInGroup = self.items.filter { Calendar.current.isDate($0.wrappedDate, equalTo: year, toGranularity: .year)}
+            var group = self.groupedItems.first(where: { Calendar.current.isDate($0.date, equalTo: year, toGranularity: .year)})
+            
+            if group != nil  {
+                group!.setEntries(itemsInGroup)
+            } else {
+                group = EntryGroup(date: year, entries: itemsInGroup)
+            }
+            groups.append(group!)
+        }
+        
+        return groups.sorted {
+            $0.date > $1.date
+        }
+    }
+    
+    override func onItemsSet() {
+        self.groupedItems = self.calcGroupedItems()
+        self.lineChartDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: self.items)
     }
     
     // MARK: - Intent
