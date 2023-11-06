@@ -10,16 +10,22 @@ import Charts
 
 fileprivate struct SavingsCategoryTile: View {
     @EnvironmentObject private var entryManager: SavingsEntryManager
+    @StateObject private var content: SavingsCategoryTileViewModel
     var category: SavingsCategory
     
+    init(category: SavingsCategory) {
+        self.category = category
+        self._content = StateObject(wrappedValue: SavingsCategoryTileViewModel(category: category))
+    }
+    
     private var currentAmount: Double? {
-        category.lastEntry?.amount
+        content.latestEntry?.amount
     }
     
     private var groupBoxLabel: some View {
         NavigationGroupBoxLabel(
             title: LocalizedStringKey(category.wrappedName),
-            subtitle: LocalizedStringKey(category.lastEntry?.wrappedDate.formatted(.dateTime.year().month().day()) ?? ""),
+            subtitle: LocalizedStringKey(content.latestEntry?.wrappedDate.formatted(.dateTime.year().month().day()) ?? ""),
             labelStyle: .primary
         )
     }

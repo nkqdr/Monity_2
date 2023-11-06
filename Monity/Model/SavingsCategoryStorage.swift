@@ -13,7 +13,7 @@ class SavingsCategoryFetchController: BaseFetchController<SavingsCategory> {
     private init() {
         super.init(sortDescriptors: [
             NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)
-        ])
+        ], keyPathsForRefreshing: [#keyPath(SavingsCategory.entries)])
     }
 }
 
