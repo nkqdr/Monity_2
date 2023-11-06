@@ -18,28 +18,30 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions.
-    private init() {
-        super.init(sortDescriptors: [
+    private init(
+        sortDescriptors: [NSSortDescriptor] = [
             NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
-        ], keyPathsForRefreshing: [
-            #keyPath(Transaction.category.name)
-        ])
+        ],
+        keyPathsForRefreshing: Set<String> = [
+            #keyPath(Transaction.category.name),
+            #keyPath(Transaction.category.iconName)
+        ],
+        predicate: NSPredicate? = nil
+    ) {
+        super.init(sortDescriptors: sortDescriptors, keyPathsForRefreshing: keyPathsForRefreshing, predicate: predicate)
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given month.
-    init(month: Int?, year: Int?) {
+    convenience init(month: Int?, year: Int?) {
         let date: Date = Calendar.current.date(from: DateComponents(year: year, month: month)) ?? Date()
         let startOfMonth: Date = date.startOfThisMonth.removeTimeStamp!
         let endOfMonth: Date = Calendar.current.date(byAdding: DateComponents(month: 1), to: startOfMonth) ?? date
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
-        ], keyPathsForRefreshing: [
-            #keyPath(Transaction.category.name)
-        ], predicate: NSPredicate(format: "date >= %@ && date < %@", startOfMonth as NSDate, endOfMonth as NSDate))
+
+        self.init(predicate: NSPredicate(format: "date >= %@ && date < %@", startOfMonth as NSDate, endOfMonth as NSDate))
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
-    init(start: Date, end: Date, category: TransactionCategory? = nil) {
+    convenience init(start: Date, end: Date, category: TransactionCategory? = nil) {
         var predicate: NSPredicate
         if let category {
             predicate = NSPredicate(format: "date >= %@ && date <= %@ && category == %@", start as NSDate, end as NSDate, category)
@@ -47,20 +49,17 @@ class TransactionFetchController: BaseFetchController<Transaction> {
             predicate = NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate)
         }
         
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
-        ], keyPathsForRefreshing: [
-            #keyPath(Transaction.category.name)
-        ], predicate: predicate)
+        self.init(predicate: predicate)
     }
     
     /// This initializer will create a FetchedResultsController for all transactions with the given category
-    init(category: TransactionCategory, isExpense: Bool) {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \Transaction.date, ascending: false)
-        ], keyPathsForRefreshing: [
-            #keyPath(Transaction.category.name)
-        ], predicate: NSPredicate(format: "category == %@ && isExpense == %@", category, NSNumber(booleanLiteral: isExpense)))
+    convenience init(category: TransactionCategory, isExpense: Bool) {
+        self.init(
+            predicate: NSPredicate(
+                format: "category == %@ && isExpense == %@",
+                category, NSNumber(booleanLiteral: isExpense)
+            )
+        )
     }
 }
 
