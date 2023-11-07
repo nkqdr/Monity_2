@@ -19,7 +19,7 @@ struct TransactionSummaryTile: View {
     private var actualTile: some View {
         VStack(alignment: .leading) {
             if let percentage {
-                Text("You saved \(Int((1 - percentage) * 100))% of your income.")
+                Text("You saved \(Int((1 - percentage) * 100))% of your income")
                     .groupBoxLabelTextStyle()
             } else {
                 Text("Register your transactions to build the statistics!")

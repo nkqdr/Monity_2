@@ -632,7 +632,7 @@
 "Yearly" = "Jährlich";
 
 /* No comment provided by engineer. */
-"You are currently paying %@ per month." = "Sie zahlen derzeit %@ pro Monat.";
+"You are currently paying %@ per month" = "Sie zahlen derzeit %@ pro Monat";
 
 /* No comment provided by engineer. */
 "You can adjust your monthly budget anytime in the settings." = "Sie können Ihr monatliches Budget jederzeit in den Einstellungen anpassen.";
@@ -641,7 +641,7 @@
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
 
 /* No comment provided by engineer. */
-"You saved %lld%% of your income." = "Sie sparen %lld%% Ihres Einkommens.";
+"You saved %lld%% of your income" = "Sie sparen %lld%% Ihres Einkommens";
 
 /* No comment provided by engineer. */
 "Your data is yours to control. It is stored exclusively on your device or in your iCloud account. Your privacy is my priority." = "Sie haben die Kontrolle über Ihre Daten. Alle Daten werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert. Ihre Privatsphäre ist meine Priorität.";
