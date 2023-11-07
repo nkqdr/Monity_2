@@ -202,6 +202,9 @@
 /* No comment provided by engineer. */
 "End date" = "Enddatum";
 
+/* No comment provided by engineer. */
+"Entries:" = "Einträge";
+
 /* (No Comment) */
 "eoy_review.cashflow.decreased.1" = "Dieses Jahr haben Sie ";
 
@@ -266,6 +269,12 @@
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
 
 /* No comment provided by engineer. */
+"File could not be read" = "Datei konnte nicht gelesen werden";
+
+/* No comment provided by engineer. */
+"File successfully read" = "Datei erfolgreich gelesen";
+
+/* No comment provided by engineer. */
 "Financial Harmony:\n Income vs Expenses!" = "Finanzielle Harmonie: \nEinkommen vs Ausgaben!";
 
 /* No comment provided by engineer. */
@@ -296,7 +305,13 @@
 "Import" = "Importieren";
 
 /* No comment provided by engineer. */
+"Import CSV data" = "CSV-Daten importieren";
+
+/* No comment provided by engineer. */
 "Import Data" = "Daten importieren";
+
+/* No comment provided by engineer. */
+"Import data seamlessly from previous versions of Monity or any compatible app. As long as the file meets our import standards, your financial data integration is hassle-free." = "Importieren Sie Daten nahtlos aus früheren Versionen von Monity oder jeder anderen kompatiblen Anwendung. Solange die Datei unseren Import-Standards entspricht, verläuft die Integration Ihrer Finanzdaten reibungslos.";
 
 /* No comment provided by engineer. */
 "Import Summary" = "Import Zusammenfassung";
@@ -434,7 +449,13 @@
 "Platinum Prestige" = "Platin-Prestige";
 
 /* No comment provided by engineer. */
+"Please ensure that the selected file has the correct format." = "Bitte stellen Sie sicher, dass die ausgewählte Datei das richtige Format hat.";
+
+/* No comment provided by engineer. */
 "Please make sure to use a csv file with the correct format." = "Bitte stellen Sie sicher, dass Sie eine csv-Datei mit dem richtigen Format verwenden.";
+
+/* No comment provided by engineer. */
+"Please select a .csv file" = "Bitte wählen Sie eine .csv-Datei aus";
 
 /* No comment provided by engineer. */
 "Predicted total expenses:" = "Geschätzte Gesamtausgaben:";
@@ -456,9 +477,6 @@
 
 /* No comment provided by engineer. */
 "Reset" = "Zurücksetzen";
-
-/* No comment provided by engineer. */
-"Rows:" = "Reihen";
 
 /* No comment provided by engineer. */
 "Save" = "Speichern";
@@ -600,6 +618,9 @@
 
 /* No comment provided by engineer. */
 "Type" = "Typ";
+
+/* No comment provided by engineer. */
+"Type of data: " = "Art der Daten: ";
 
 /* No comment provided by engineer. */
 "Uncover Your Cash Trails!" = "Geldspuren verfolgen!";
