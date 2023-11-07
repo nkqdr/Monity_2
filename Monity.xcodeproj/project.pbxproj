@@ -61,6 +61,7 @@
 		60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */; };
 		6061F5852AE258F20042F8BE /* ExpenseBarChartWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6061F5842AE258F20042F8BE /* ExpenseBarChartWithHeader.swift */; };
 		6069D1E52AE8252B00EA8CCB /* EOYViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */; };
+		60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60724E8B2AFAA84800FA7409 /* AppDelegate.swift */; };
 		6078317329E70573001FEC51 /* MonthYearPickerForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078317229E70573001FEC51 /* MonthYearPickerForm.swift */; };
 		60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8B29AE5FE500F45E5F /* RecurringTransactionStorage.swift */; };
 		60804B8E29AE608B00F45E5F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8D29AE608B00F45E5F /* Enums.swift */; };
@@ -185,6 +186,7 @@
 		60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichFetchRequest.swift; sourceTree = "<group>"; };
 		6061F5842AE258F20042F8BE /* ExpenseBarChartWithHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseBarChartWithHeader.swift; sourceTree = "<group>"; };
 		6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOYViewModel.swift; sourceTree = "<group>"; };
+		60724E8B2AFAA84800FA7409 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078317229E70573001FEC51 /* MonthYearPickerForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthYearPickerForm.swift; sourceTree = "<group>"; };
 		60804B8B29AE5FE500F45E5F /* RecurringTransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionStorage.swift; sourceTree = "<group>"; };
 		60804B8D29AE608B00F45E5F /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 				60BD9F4428F35C66001FF5FF /* ViewModel */,
 				60BD9F4128F35B81001FF5FF /* Model */,
 				60BD9F1128F35B6F001FF5FF /* MonityApp.swift */,
+				60724E8B2AFAA84800FA7409 /* AppDelegate.swift */,
 				60BD9F1528F35B70001FF5FF /* Assets.xcassets */,
 				60BD9F1F28F35B70001FF5FF /* Info.plist */,
 				60BD9F1728F35B70001FF5FF /* Preview Content */,
@@ -771,6 +774,7 @@
 				60B50E142906F5F400396308 /* SavingsCategoryFormView.swift in Sources */,
 				608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */,
 				60387380290AD86400AB7D0E /* SavingsEditor.swift in Sources */,
+				60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */,
 				60BA8EED29E07BAC00DA4A9C /* MonthCashflowCalculator.swift in Sources */,
 				60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
