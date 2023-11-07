@@ -56,29 +56,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, ObservableObject {
     options connectionOptions: UIScene.ConnectionOptions
   ) {
       windowScene = scene as? UIWindowScene
-      setupPrivacyBlurWindow(hidden: true)
+      setupPrivacyBlurWindow()
   }
 
 // without a second app window, the blur view will not appear above a sheet, fullScreenCover etc.
 // special thanks to Federico Zanetello (www.fivestars.blog) for this function
-    func setupPrivacyBlurWindow(hidden: Bool) {
+    func setupPrivacyBlurWindow() {
         guard let windowScene = windowScene else {
             return
           }
 
       let blurViewController = UIHostingController(rootView: PrivacyBlurView())
         blurViewController.view.backgroundColor = .clear
-            
-        let transition = CATransition()
-            transition.duration = 0.8
-            transition.type = CATransitionType.moveIn
-        transition.subtype = CATransitionSubtype.fromTop
-        transition.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.default)
 
       let blurWindow = PassThroughWindow(windowScene: windowScene)
-        blurWindow.layer.add(transition, forKey: kCATransition)
         blurWindow.rootViewController = blurViewController
-        blurWindow.isHidden = hidden
+        blurWindow.isHidden = true
       self.blurWindow = blurWindow
     }
     
