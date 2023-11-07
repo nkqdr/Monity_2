@@ -31,7 +31,7 @@ fileprivate struct SavingsCategoryTile: View {
     }
     
     var body: some View {
-        NavigationLink(destination: SavingsCategoryListView(category: category)) {
+        NavigationLink(destination: SavingsCategoryListView(category: category, entryManager: entryManager)) {
             GroupBox(label: groupBoxLabel) {
                 HStack(alignment: .top) {
                     Spacer()
