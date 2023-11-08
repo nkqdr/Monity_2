@@ -13,6 +13,7 @@ class CSVImporter: ObservableObject {
     @Published var importHasError: Bool = false
     @Published var isReading: Bool = false
     @Published var showDocumentPicker: Bool = false
+    @Published var importProgress: Double = 0
     @Published var csvFileContent: String = "" {
         didSet {
             if !csvFileContent.isEmpty {
@@ -24,6 +25,7 @@ class CSVImporter: ObservableObject {
     
     
     // MARK: - Helper functions
+    
     func importTransactionsCSV(_ rows: [String]) {
         let result = TransactionStorage.main.add(set: rows)
         if !result {
@@ -70,17 +72,23 @@ class CSVImporter: ObservableObject {
     
     // MARK: - Intents
     
-    func importCSV() {
+    func importCSV(dismissFunc: @escaping () -> Void) {
         guard let summary = importSummary else {
             return
         }
         DispatchQueue.main.async {
+            self.importProgress = 0
             if summary.resourceName == "Transactions" {
                 self.importTransactionsCSV(summary.rows)
             } else if summary.resourceName == "Savings" {
                 self.importSavingsCSV(summary.rows)
             } else if summary.resourceName == "Recurring expenses" {
                 self.importRecurringTransactionsCSV(summary.rows)
+            }
+            Haptics.shared.notify(.success)
+            self.importProgress = 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                dismissFunc()
             }
         }
     }

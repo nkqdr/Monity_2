@@ -254,12 +254,22 @@ fileprivate struct ImportCSVWizard: View {
             HStack(spacing: 0) {
                 firstPage
                     .frame(width: UIScreen.main.bounds.width)
-                ImportSummaryView(summary: $csvImporter.importSummary)
-                    .frame(width: UIScreen.main.bounds.width)
+                ZStack {
+                    if csvImporter.importProgress < 1 {
+                        ImportSummaryView(summary: $csvImporter.importSummary)
+                    }
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 80))
+                        .transition(.scale)
+                        .foregroundStyle(.green)
+                        .scaleEffect(csvImporter.importProgress)
+                }
+                .frame(width: UIScreen.main.bounds.width)
             }
             .frame(width: UIScreen.main.bounds.width, alignment: .leading)
             .offset(x: UIScreen.main.bounds.width * -CGFloat(currentlySelectedPageIndex), y: 0)
             .animation(.easeInOut, value: currentlySelectedPageIndex)
+            .animation(.interpolatingSpring(stiffness: 300, damping: 15), value: csvImporter.importProgress)
             
             // MARK: Buttons
             HStack {
@@ -278,7 +288,7 @@ fileprivate struct ImportCSVWizard: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(currentlySelectedPageIndex == 0 ? .red : nil)
-                .disabled(csvImporter.isReading)
+                .disabled(csvImporter.isReading || csvImporter.importProgress == 1)
                 Spacer()
                 Button {
                     Haptics.shared.play(.soft)
@@ -287,8 +297,11 @@ fileprivate struct ImportCSVWizard: View {
                             currentlySelectedPageIndex += 1
                         }
                     } else {
-                        csvImporter.importCSV()
-                        dismiss()
+                        withAnimation {
+                            csvImporter.importCSV(dismissFunc: {
+                                dismiss()
+                            })
+                        }
                     }
                 } label: {
                     Group {
@@ -301,7 +314,7 @@ fileprivate struct ImportCSVWizard: View {
                     .padding(5)
                 }
                 .buttonStyle(.bordered)
-                .disabled(csvImporter.importSummary == nil)
+                .disabled(csvImporter.importSummary == nil || csvImporter.importProgress == 1)
                 .tint(currentlySelectedPageIndex == 1 ? .green : nil)
             }
             .padding()
