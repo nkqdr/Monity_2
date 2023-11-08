@@ -7,6 +7,9 @@
 
 import Foundation
 import Combine
+import Algorithms
+import CoreData
+
 
 class CSVImporter: ObservableObject {
     @Published var importSummary: ImportCSVSummary?
@@ -14,6 +17,7 @@ class CSVImporter: ObservableObject {
     @Published var isReading: Bool = false
     @Published var showDocumentPicker: Bool = false
     @Published var importProgress: Double = 0
+    @Published var importComplete: Bool = false
     @Published var csvFileContent: String = "" {
         didSet {
             if !csvFileContent.isEmpty {
@@ -26,28 +30,7 @@ class CSVImporter: ObservableObject {
     
     // MARK: - Helper functions
     
-    func importTransactionsCSV(_ rows: [String]) {
-        let result = TransactionStorage.main.add(set: rows)
-        if !result {
-            showInvalidFileAlert.toggle()
-        }
-    }
-    
-    func importSavingsCSV(_ rows: [String]) {
-        let result = SavingStorage.main.add(set: rows)
-        if !result {
-            showInvalidFileAlert.toggle()
-        }
-    }
-    
-    func importRecurringTransactionsCSV(_ rows: [String]) {
-        let result = RecurringTransactionStorage.main.add(set: rows)
-        if !result {
-            showInvalidFileAlert.toggle()
-        }
-    }
-    
-    func handleContentChange() {
+    private func handleContentChange() {
         isReading = true
         importSummary = nil
         DispatchQueue.global(qos: .userInteractive).async {
@@ -73,22 +56,45 @@ class CSVImporter: ObservableObject {
     // MARK: - Intents
     
     func importCSV(dismissFunc: @escaping () -> Void) {
+        self.importComplete = false
         guard let summary = importSummary else {
             return
         }
-        DispatchQueue.main.async {
-            self.importProgress = 0
-            if summary.resourceName == "Transactions" {
-                self.importTransactionsCSV(summary.rows)
-            } else if summary.resourceName == "Savings" {
-                self.importSavingsCSV(summary.rows)
-            } else if summary.resourceName == "Recurring expenses" {
-                self.importRecurringTransactionsCSV(summary.rows)
-            }
-            Haptics.shared.notify(.success)
-            self.importProgress = 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                dismissFunc()
+        let moc: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        moc.persistentStoreCoordinator = PersistenceController.shared.container.persistentStoreCoordinator
+        
+        var storage: CoreDataStorage
+        if summary.resourceName == "Transactions" {
+            storage = TransactionStorage(managedObjectContext: moc)
+        } else if summary.resourceName == "Savings" {
+            storage = SavingStorage(managedObjectContext: moc)
+        } else if summary.resourceName == "Recurring expenses" {
+            storage = RecurringTransactionStorage(managedObjectContext: moc)
+        } else {
+            return
+        }
+        self.importProgress = 0.0001
+        DispatchQueue.global(qos: .background).async {
+            let chunks = summary.rows.chunks(ofCount: 10_000)
+            for (index, chunk) in chunks.enumerated() {
+                let result = storage.add(set: chunk)
+                DispatchQueue.main.async {
+                    if !result {
+                        self.showInvalidFileAlert.toggle()
+                    } else {
+                        self.importProgress = ((Double(index) + 1) / Double(chunks.count))
+                        print(self.importProgress)
+                        if self.importProgress == 1 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.importComplete = true
+                                Haptics.shared.notify(.success)
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
+                                dismissFunc()
+                            }
+                        }
+                    }
+                }
             }
         }
     }

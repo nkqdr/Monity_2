@@ -46,7 +46,7 @@ class RecurringTransactionFetchController: BaseFetchController<RecurringTransact
 class RecurringTransactionStorage: ResettableStorage<RecurringTransaction> {
     static let main: RecurringTransactionStorage = RecurringTransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
     
-    func add(set rows: [String]) -> Bool {
+    override func add(set rows: any Sequence<String>) -> Bool {
         let categoriesFetchRequest = TransactionCategory.fetchRequest()
         let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
         guard let transactionCategories = currentCategories else {

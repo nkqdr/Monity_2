@@ -66,7 +66,7 @@ class TransactionFetchController: BaseFetchController<Transaction> {
 class TransactionStorage: ResettableStorage<Transaction> {
     public static let main = TransactionStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
     
-    func add(set rows: [String]) -> Bool {
+    override func add(set rows: any Sequence<String>) -> Bool {
         let categoriesFetchRequest = TransactionCategory.fetchRequest()
         let currentCategories: [TransactionCategory]? = try? self.context.fetch(categoriesFetchRequest)
         guard let transactionCategories = currentCategories else {

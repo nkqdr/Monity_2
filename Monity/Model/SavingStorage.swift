@@ -32,7 +32,7 @@ class SavingsFetchController: BaseFetchController<SavingsEntry> {
 class SavingStorage: ResettableStorage<SavingsEntry> {
     static let main: SavingStorage = SavingStorage(managedObjectContext: PersistenceController.shared.container.viewContext)
 
-    func add(set rows: [String]) -> Bool {
+    override func add(set rows: any Sequence<String>) -> Bool {
         let categoriesFetchRequest = SavingsCategory.fetchRequest()
         let savingsCategories: [SavingsCategory]? = try? self.context.fetch(categoriesFetchRequest)
         
