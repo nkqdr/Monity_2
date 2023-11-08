@@ -52,21 +52,23 @@ class RecurringTransactionStorage: ResettableStorage<RecurringTransaction> {
         guard let transactionCategories = currentCategories else {
             return false
         }
-        var categories = transactionCategories
-        for row in rows {
-            let obj = RecurringTransaction.decodeFromCSV(csvRow: row)
-            var category = categories.first(where: { $0.wrappedName == obj.categoryName })
-            if category == nil, !obj.categoryName.isEmpty {
-                let newCategory = TransactionCategory(context: self.context)
-                newCategory.name = obj.categoryName
-                newCategory.id = UUID()
-                category = newCategory
-                categories.append(newCategory)
+        return self.context.performAndWait {
+            var categories = transactionCategories
+            for row in rows {
+                let obj = RecurringTransaction.decodeFromCSV(csvRow: row)
+                var category = categories.first(where: { $0.wrappedName == obj.categoryName })
+                if category == nil, !obj.categoryName.isEmpty {
+                    let newCategory = TransactionCategory(context: self.context)
+                    newCategory.name = obj.categoryName
+                    newCategory.id = UUID()
+                    category = newCategory
+                    categories.append(newCategory)
+                }
+                let _ = add(name: obj.name, category: category, amount: obj.amount, startDate: obj.startDate, endDate: obj.endDate, cycle: obj.cycle, isDeducted: true, saveContext: false)
             }
-            let _ = add(name: obj.name, category: category, amount: obj.amount, startDate: obj.startDate, endDate: obj.endDate, cycle: obj.cycle, isDeducted: true, saveContext: false)
+            try? self.context.save()
+            return true
         }
-        try? self.context.save()
-        return true
     }
     
     func add(name: String, category: TransactionCategory?, amount: Double, startDate: Date, endDate: Date?, cycle: TransactionCycle, isDeducted: Bool, saveContext: Bool = true) -> RecurringTransaction {

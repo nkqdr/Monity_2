@@ -72,21 +72,23 @@ class TransactionStorage: ResettableStorage<Transaction> {
         guard let transactionCategories = currentCategories else {
             return false
         }
-        var categories = transactionCategories
-        for row in rows {
-            let obj = Transaction.decodeFromCSV(csvRow: row)
-            var category = categories.first(where: { $0.wrappedName == obj.categoryName })
-            if category == nil, !obj.categoryName.isEmpty {
-                let newCategory = TransactionCategory(context: self.context)
-                newCategory.name = obj.categoryName
-                newCategory.id = UUID()
-                category = newCategory
-                categories.append(newCategory)
+        return self.context.performAndWait {
+            var categories = transactionCategories
+            for row in rows {
+                let obj = Transaction.decodeFromCSV(csvRow: row)
+                var category = categories.first(where: { $0.wrappedName == obj.categoryName })
+                if category == nil, !obj.categoryName.isEmpty {
+                    let newCategory = TransactionCategory(context: self.context)
+                    newCategory.name = obj.categoryName
+                    newCategory.id = UUID()
+                    category = newCategory
+                    categories.append(newCategory)
+                }
+                let _ = add(text: obj.description, isExpense: obj.isExpense, amount: obj.amount, category: category, date: obj.date, saveContext: false)
             }
-            let _ = add(text: obj.description, isExpense: obj.isExpense, amount: obj.amount, category: category, date: obj.date, saveContext: false)
+            try? self.context.save()
+            return true
         }
-        try? self.context.save()
-        return true
     }
     
     func add(text: String, isExpense: Bool, amount: Double, category: TransactionCategory?, date: Date = Date(), saveContext: Bool = true) {
