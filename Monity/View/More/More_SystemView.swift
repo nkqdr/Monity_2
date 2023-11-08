@@ -187,6 +187,7 @@ fileprivate struct ImportCSVWizard: View {
     @StateObject private var csvImporter = CSVImporter()
     @State private var selectedStructurePreview: CSVValidHeaders = CSVValidHeaders.transactionCSV
     @State private var currentlySelectedPageIndex: Int = 0
+    @State private var showAvailableFormatsView: Bool = false
     
     private var tableColumns: [Substring] {
         selectedStructurePreview.rawValue.split(separator: ",")
@@ -194,58 +195,69 @@ fileprivate struct ImportCSVWizard: View {
     
     @ViewBuilder
     var firstPage: some View {
-        ScrollView {
-            VStack {
-                Text("⤵️").font(.largeTitle).padding(.bottom, 10).padding(.top, 120)
-                Text("Import CSV data")
-                    .font(.title.bold())
-                    .padding(.bottom, 30)
-                Text("Import data seamlessly from previous versions of Monity or any compatible app. As long as the file meets our import standards, your financial data integration is hassle-free.")
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal)
-                HStack {
-                    if csvImporter.isReading {
-                        ProgressView()
-                    } else if let summary = csvImporter.importSummary, !csvImporter.importHasError {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundStyle(.green)
-                        VStack(alignment: .leading) {
-                            Text("File successfully read")
-                            Group {
-                                Text("Type of data: ") + Text(summary.resourceName)
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    Text("⤵️").font(.largeTitle).padding(.bottom, 10).padding(.top, 50)
+                    Text("Import CSV data")
+                        .font(.title.bold())
+                        .padding(.bottom, 30)
+                    Text("Import data seamlessly from previous versions of Monity or any compatible app. As long as the file meets our import standards, your financial data integration is hassle-free.")
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+                    HStack {
+                        if csvImporter.isReading {
+                            ProgressView()
+                        } else if let summary = csvImporter.importSummary, !csvImporter.importHasError {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundStyle(.green)
+                            VStack(alignment: .leading) {
+                                Text("File successfully read")
+                                Group {
+                                    Text("Type of data: ") + Text(summary.resourceName)
+                                }
+                                .font(.footnote).foregroundStyle(.secondary)
                             }
-                            .font(.footnote).foregroundStyle(.secondary)
+                            Spacer()
+                        } else if csvImporter.importHasError {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundStyle(.red)
+                            VStack(alignment: .leading) {
+                                Text("File could not be read")
+                                Text("Please ensure that the selected file has the correct format.").font(.footnote).foregroundStyle(.secondary)
+                            }
+                            .multilineTextAlignment(.leading)
+                            Spacer()
+                        } else {
+                            Text("Please select a .csv file").font(.subheadline).foregroundStyle(.secondary)
                         }
-                        Spacer()
-                    } else if csvImporter.importHasError {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundStyle(.red)
-                        VStack(alignment: .leading) {
-                            Text("File could not be read")
-                            Text("Please ensure that the selected file has the correct format.").font(.footnote).foregroundStyle(.secondary)
-                        }
-                        .multilineTextAlignment(.leading)
-                        Spacer()
-                    } else {
-                        Text("Please select a .csv file").font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, minHeight: 80)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    .padding()
+                    Button {
+                        csvImporter.showDocumentPicker.toggle()
+                    } label: {
+                        Label("Select CSV", systemImage: "doc")
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(csvImporter.isReading)
+                }
+            }
+            .scrollIndicators(.hidden)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showAvailableFormatsView.toggle()
+                    } label: {
+                        Label("Help", systemImage: "questionmark.circle")
                     }
                 }
-                .padding()
-                .frame(maxWidth: .infinity, minHeight: 80)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
-                .padding()
-                Button {
-                    csvImporter.showDocumentPicker.toggle()
-                } label: {
-                    Label("Select CSV", systemImage: "doc")
-                }
-                .buttonStyle(.bordered)
-                .disabled(csvImporter.isReading)
             }
         }
-        .scrollIndicators(.hidden)
         .multilineTextAlignment(.center)
     }
     
@@ -324,7 +336,10 @@ fileprivate struct ImportCSVWizard: View {
                     .padding(5)
                 }
                 .buttonStyle(.bordered)
-                .disabled(csvImporter.importSummary == nil || csvImporter.importProgress > 0)
+                .disabled(
+                    csvImporter.importSummary == nil
+                    || csvImporter.importProgress > 0
+                    || (currentlySelectedPageIndex == 1 && csvImporter.importSummary?.rowsAmount == 0))
                 .tint(currentlySelectedPageIndex == 1 ? .green : nil)
             }
             .padding()
@@ -340,6 +355,102 @@ fileprivate struct ImportCSVWizard: View {
             DocumentPicker(fileContent: $csvImporter.csvFileContent)
                 .ignoresSafeArea()
         }
+        .sheet(isPresented: $showAvailableFormatsView) {
+            AvailableCSVFormatsView()
+        }
+    }
+}
+
+fileprivate struct AvailableCSVFormatsView: View {
+    var body: some View {
+        ScrollView {
+            VStack {
+                Group {
+                    HStack(alignment: .top) {
+                        Text("ℹ️").font(.largeTitle)
+                        VStack(alignment: .leading) {
+                            Text("How to import .csv files").font(.headline).bold()
+                            Text("You can import three essential data types: Transactions, Savings Entries, and Recurring Expenses.")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                Group {
+                    Text("Below, you'll find the valid CSV headers for each category. Simply match your file's headers to these standards for seamless integration.")
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                
+                ForEach(CSVValidHeaders.allCases, id: \.hashValue) { headers in
+                    let cols = headers.rawValue.split(separator: ",")
+                    let types = headers.types.split(separator: ",")
+                    VStack(alignment: .leading) {
+                        Text(headers.resourceName).font(.subheadline.bold())
+                            .padding(.horizontal)
+                        Grid(alignment: .leading) {
+                            ForEach(Array(cols.enumerated()), id: \.0) { i, col in
+                                let type = types[i]
+                                GridRow {
+                                    Text(col).font(.footnote.monospaced())
+                                    Spacer()
+                                    Text(type).font(.footnote.monospaced())
+                                }
+                            }
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    }
+//                    LazyHGrid(rows: cols.map { _ in GridItem(alignment: .leading) }) {
+//                        ForEach(cols, id: \.hashValue) { col in
+//                            Text(col).font(.footnote.monospaced())
+//                        }
+//                        ForEach(Array(headers.types.split(separator: ",").enumerated()), id: \.0) { _, type in
+//                            Text(type).font(.footnote.monospaced())
+//                        }
+//                    }
+//                    .padding()
+//                    .frame(maxWidth: .infinity)
+//                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    
+//                    VStack(alignment: .leading) {
+//                        Text(headers.resourceName).font(.subheadline.bold())
+//                        Group {
+//                            HStack(spacing: 8) {
+//                                VStack(alignment: .leading) {
+//                                    ForEach(headers.rawValue.split(separator: ","), id: \.hashValue) { col in
+//                                        VStack(spacing: 10) {
+//                                            Text(col).font(.footnote.monospaced())
+//                                        }
+//                                    }
+//                                }
+//                                Divider()
+//                                VStack(alignment: .leading) {
+//                                    ForEach(headers.types.split(separator: ","), id: \.hashValue) { col in
+//                                        VStack(spacing: 10) {
+//                                            Text(col).font(.footnote.monospaced())
+//                                        }
+//                                    }
+//                                }
+//                                .frame(maxWidth: .infinity)
+//                            }
+//                        }
+//                        .padding()
+//                        .frame(maxWidth: .infinity)
+//                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+//                    }
+                }
+                .padding(.top, 20)
+            }
+            .padding()
+            .padding(.top, 50)
+        }
+        .scrollIndicators(.hidden)
     }
 }
 
@@ -420,6 +531,6 @@ struct More_SystemView: View {
 
 struct Settings_SystemView_Previews: PreviewProvider {
     static var previews: some View {
-        ImportCSVWizard()
+        AvailableCSVFormatsView()
     }
 }

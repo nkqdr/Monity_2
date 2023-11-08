@@ -24,6 +24,17 @@ enum CSVValidHeaders: String, CaseIterable {
         }
     }
     
+    var types: String {
+        switch self {
+        case .transactionCSV:
+            return "string,float,ISO-8601-string,expense | income,string"
+        case .savingsCSV:
+            return "float,ISO-8601-string,string,Invested | Saved | Liquid"
+        case .recurringTransactionCSV:
+            return "string,float,string,int,ISO-8601-string,ISO-8601-string"
+        }
+    }
+    
     static func fromValue(_ value: String?) -> CSVValidHeaders? {
         guard let givenValue = value else {
             return nil
