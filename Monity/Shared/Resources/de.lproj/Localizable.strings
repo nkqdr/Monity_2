@@ -89,6 +89,9 @@
 "Average per month" = "Durchschnitt pro Monat";
 
 /* No comment provided by engineer. */
+"Below, you'll find the valid CSV headers for each category. Simply match your file's headers to these standards for seamless integration." = "Im Folgenden finden Sie die gültigen CSV-Kopfzeilen für jede Kategorie. Passen Sie die Kopfzeilen Ihrer Datei einfach an diese Standards an, um eine nahtlose Integration zu ermöglichen.";
+
+/* No comment provided by engineer. */
 "Bi-Weekly" = "Zweiwöchentlich";
 
 /* No comment provided by engineer. */
@@ -302,6 +305,9 @@
 "Hide" = "Verstecken";
 
 /* No comment provided by engineer. */
+"How to import .csv files" = "Wie importiere ich .csv-Dateien?";
+
+/* No comment provided by engineer. */
 "Import" = "Importieren";
 
 /* No comment provided by engineer. */
@@ -467,10 +473,10 @@
 "Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
 
 /* No comment provided by engineer. */
-"Recurring expenses" = "Regelmäßige Ausgaben";
+"Recurring expenses" = "Wiederkehrende Ausgaben";
 
 /* Alert message in the asset allocation section. */
-"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
+"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven wiederkehrenden Ausgaben immer in die Berechnungen der App einbezogen.";
 
 /* No comment provided by engineer. */
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
@@ -491,7 +497,7 @@
 "Saved Data" = "Gespeicherte Daten";
 
 /* No comment provided by engineer. */
-"Savings" = "Ersparnisse";
+"Savings" = "Vermögen";
 
 /* No comment provided by engineer. */
 "Savings categories" = "Vermögenskategorien";
@@ -534,6 +540,9 @@
 
 /* No comment provided by engineer. */
 "Show Savings" = "Vermögen anzeigen";
+
+/* No comment provided by engineer. */
+"Show transactions" = "Transaktionen anzeigen";
 
 /* No comment provided by engineer. */
 "Skip" = "Später";
@@ -657,6 +666,9 @@
 
 /* No comment provided by engineer. */
 "You can adjust your monthly budget anytime in the settings." = "Sie können Ihr monatliches Budget jederzeit in den Einstellungen anpassen.";
+
+/* No comment provided by engineer. */
+"You can import three essential data types: Transactions, Savings Entries, and Recurring Expenses." = "Sie können drei wesentliche Datentypen importieren: Transaktionen, Vermögenseinträge und wiederkehrende Ausgaben.";
 
 /* No comment provided by engineer. */
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
