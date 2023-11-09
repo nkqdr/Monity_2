@@ -54,10 +54,13 @@ class CoreDataStorage {
     init(managedObjectContext: NSManagedObjectContext) {
         self.context = managedObjectContext
     }
+    
+    func add(set rows: any Sequence<String>) -> Bool {
+        fatalError("add(set:) has not been implemented")
+    }
 }
 
 class ResettableStorage<T>: CoreDataStorage where T: NSManagedObject {
-    
     func delete(_ obj: T) {
         self.context.performAndWait {
             self.context.delete(obj)

@@ -9,7 +9,9 @@ import SwiftUI
 
 @main
 struct MonityApp: App {
+    @UIApplicationDelegateAdaptor var delegate: AppDelegate
     let persistenceController = PersistenceController.shared
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()
@@ -17,13 +19,35 @@ struct MonityApp: App {
     }
 }
 
-struct MainTabView: View {
-    @State private var tabSelection = 1
-    @Environment(\.scenePhase) var scenePhase
+struct PrivacyBlurView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State private var showOverlay: Bool = false
-    @State private var showOnboarding: Bool = false
+    
+    var body: some View {
+        ZStack {
+            Rectangle().foregroundStyle(.regularMaterial).ignoresSafeArea()
+            VStack {
+                Group {
+                    if colorScheme == .dark {
+                        Image("IconImageDark").resizable()
+                    } else {
+                        Image("IconImageLight").resizable()
+                    }
+                }
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
+        }
+    }
+}
+
+struct MainTabView: View {
+    @EnvironmentObject var sceneDelegate: SceneDelegate
+    @Environment(\.scenePhase) var scenePhase
+    
     @AppStorage(AppStorageKeys.onboardingDone) private var onboardingDone: Bool = false
+    @State private var tabSelection = 1
+    @State private var showOnboarding: Bool = false
+    
     
     var body: some View {
         TabView(selection: $tabSelection) {
@@ -49,31 +73,15 @@ struct MainTabView: View {
             }
         }
         .onChange(of: scenePhase) { newPhase in
-            withAnimation(.easeInOut) {
-                showOverlay = newPhase != .active
+            if newPhase != .active {
+                sceneDelegate.show()
+            } else {
+                sceneDelegate.hide()
             }
         }
         .sheet(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
                 .interactiveDismissDisabled()
-        }
-        .overlay {
-            if showOverlay {
-                ZStack {
-                    Rectangle().foregroundStyle(.regularMaterial).ignoresSafeArea()
-                    VStack {
-                        Group {
-                            if colorScheme == .dark {
-                                Image("IconImageDark").resizable()
-                            } else {
-                                Image("IconImageLight").resizable()
-                            }
-                        }
-                        .frame(width: 100, height: 100)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                    }
-                }
-            }
         }
     }
 }

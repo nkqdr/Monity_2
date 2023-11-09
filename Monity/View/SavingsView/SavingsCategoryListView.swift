@@ -54,10 +54,12 @@ fileprivate struct SavingsEntryList: View {
 
 struct SavingsCategoryListView: View {
     var category: SavingsCategory
+    var entryManager: SavingsEntryManager
     @StateObject var content: SavingsViewModel
     
-    init(category: SavingsCategory) {
+    init(category: SavingsCategory, entryManager: SavingsEntryManager) {
         self.category = category
+        self.entryManager = entryManager
         self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
     }
     
@@ -148,6 +150,17 @@ struct SavingsCategoryListView: View {
             }
             Section {
                 NavigationLink("All entries", destination: SavingsEntryList(category: category, content: content))
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    entryManager.editor = SavingsEditor(entry: nil)
+                    entryManager.editor.category = category
+                    entryManager.showSheet.toggle()
+                } label: {
+                    Label("Add", systemImage: "plus")
+                }
             }
         }
         .navigationTitle(category.wrappedName)

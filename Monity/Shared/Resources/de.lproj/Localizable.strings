@@ -89,6 +89,9 @@
 "Average per month" = "Durchschnitt pro Monat";
 
 /* No comment provided by engineer. */
+"Below, you'll find the valid CSV headers for each category. Simply match your file's headers to these standards for seamless integration." = "Im Folgenden finden Sie die gültigen CSV-Kopfzeilen für jede Kategorie. Passen Sie die Kopfzeilen Ihrer Datei einfach an diese Standards an, um eine nahtlose Integration zu ermöglichen.";
+
+/* No comment provided by engineer. */
 "Bi-Weekly" = "Zweiwöchentlich";
 
 /* No comment provided by engineer. */
@@ -202,6 +205,9 @@
 /* No comment provided by engineer. */
 "End date" = "Enddatum";
 
+/* No comment provided by engineer. */
+"Entries:" = "Einträge";
+
 /* (No Comment) */
 "eoy_review.cashflow.decreased.1" = "Dieses Jahr haben Sie ";
 
@@ -266,6 +272,12 @@
 "Export your App-Data into .csv format and save it on your device." = "Exportieren Sie Ihre App-Daten in das .csv-Format und speichern Sie sie auf Ihrem Gerät.";
 
 /* No comment provided by engineer. */
+"File could not be read" = "Datei konnte nicht gelesen werden";
+
+/* No comment provided by engineer. */
+"File successfully read" = "Datei erfolgreich gelesen";
+
+/* No comment provided by engineer. */
 "Financial Harmony:\n Income vs Expenses!" = "Finanzielle Harmonie: \nEinkommen vs Ausgaben!";
 
 /* No comment provided by engineer. */
@@ -293,10 +305,19 @@
 "Hide" = "Verstecken";
 
 /* No comment provided by engineer. */
+"How to import .csv files" = "Wie importiere ich .csv-Dateien?";
+
+/* No comment provided by engineer. */
 "Import" = "Importieren";
 
 /* No comment provided by engineer. */
+"Import CSV data" = "CSV-Daten importieren";
+
+/* No comment provided by engineer. */
 "Import Data" = "Daten importieren";
+
+/* No comment provided by engineer. */
+"Import data seamlessly from previous versions of Monity or any compatible app. As long as the file meets our import standards, your financial data integration is hassle-free." = "Importieren Sie Daten nahtlos aus früheren Versionen von Monity oder jeder anderen kompatiblen Anwendung. Solange die Datei unseren Import-Standards entspricht, verläuft die Integration Ihrer Finanzdaten reibungslos.";
 
 /* No comment provided by engineer. */
 "Import Summary" = "Import Zusammenfassung";
@@ -434,7 +455,13 @@
 "Platinum Prestige" = "Platin-Prestige";
 
 /* No comment provided by engineer. */
+"Please ensure that the selected file has the correct format." = "Bitte stellen Sie sicher, dass die ausgewählte Datei das richtige Format hat.";
+
+/* No comment provided by engineer. */
 "Please make sure to use a csv file with the correct format." = "Bitte stellen Sie sicher, dass Sie eine csv-Datei mit dem richtigen Format verwenden.";
+
+/* No comment provided by engineer. */
+"Please select a .csv file" = "Bitte wählen Sie eine .csv-Datei aus";
 
 /* No comment provided by engineer. */
 "Predicted total expenses:" = "Geschätzte Gesamtausgaben:";
@@ -446,19 +473,16 @@
 "Read data from .csv files and import it into Monity." = "Lesen Sie Daten aus .csv-Dateien und importieren Sie sie in Monity.";
 
 /* No comment provided by engineer. */
-"Recurring expenses" = "Regelmäßige Ausgaben";
+"Recurring expenses" = "Wiederkehrende Ausgaben";
 
 /* Alert message in the asset allocation section. */
-"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven regelmäßigen Ausgaben immer in die Berechnungen der App einbezogen.";
+"recurring_expenses.settings_description" = "Wenn diese Option aktiviert ist, werden Ihre aktiven wiederkehrenden Ausgaben immer in die Berechnungen der App einbezogen.";
 
 /* No comment provided by engineer. */
 "Register your transactions to build the statistics!" = "Registrieren Sie Ihre Transaktionen, um die Statistik zu erstellen!";
 
 /* No comment provided by engineer. */
 "Reset" = "Zurücksetzen";
-
-/* No comment provided by engineer. */
-"Rows:" = "Reihen";
 
 /* No comment provided by engineer. */
 "Save" = "Speichern";
@@ -473,7 +497,7 @@
 "Saved Data" = "Gespeicherte Daten";
 
 /* No comment provided by engineer. */
-"Savings" = "Ersparnisse";
+"Savings" = "Vermögen";
 
 /* No comment provided by engineer. */
 "Savings categories" = "Vermögenskategorien";
@@ -516,6 +540,9 @@
 
 /* No comment provided by engineer. */
 "Show Savings" = "Vermögen anzeigen";
+
+/* No comment provided by engineer. */
+"Show transactions" = "Transaktionen anzeigen";
 
 /* No comment provided by engineer. */
 "Skip" = "Später";
@@ -602,6 +629,9 @@
 "Type" = "Typ";
 
 /* No comment provided by engineer. */
+"Type of data: " = "Art der Daten: ";
+
+/* No comment provided by engineer. */
 "Uncover Your Cash Trails!" = "Geldspuren verfolgen!";
 
 /* No comment provided by engineer. */
@@ -632,16 +662,19 @@
 "Yearly" = "Jährlich";
 
 /* No comment provided by engineer. */
-"You are currently paying %@ per month." = "Sie zahlen derzeit %@ pro Monat.";
+"You are currently paying %@ per month" = "Sie zahlen derzeit %@ pro Monat";
 
 /* No comment provided by engineer. */
 "You can adjust your monthly budget anytime in the settings." = "Sie können Ihr monatliches Budget jederzeit in den Einstellungen anpassen.";
 
 /* No comment provided by engineer. */
+"You can import three essential data types: Transactions, Savings Entries, and Recurring Expenses." = "Sie können drei wesentliche Datentypen importieren: Transaktionen, Vermögenseinträge und wiederkehrende Ausgaben.";
+
+/* No comment provided by engineer. */
 "You may need to restart the app for the changes to take effect." = "Möglicherweise müssen Sie die App neu starten, damit die Änderungen wirksam werden.";
 
 /* No comment provided by engineer. */
-"You saved %lld%% of your income." = "Sie sparen %lld%% Ihres Einkommens.";
+"You saved %lld%% of your income" = "Sie sparen %lld%% Ihres Einkommens";
 
 /* No comment provided by engineer. */
 "Your data is yours to control. It is stored exclusively on your device or in your iCloud account. Your privacy is my priority." = "Sie haben die Kontrolle über Ihre Daten. Alle Daten werden ausschließlich auf Ihrem Gerät oder in Ihrem iCloud-Konto gespeichert. Ihre Privatsphäre ist meine Priorität.";
