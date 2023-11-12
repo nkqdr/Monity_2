@@ -7,6 +7,34 @@
 
 import SwiftUI
 
+fileprivate struct RecurringTransactionListTile: View {
+    @ObservedObject var transaction: RecurringTransaction
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(transaction.wrappedName)
+                if let startDate = transaction.startDate {
+                    Group {
+                        Text(startDate, format: .dateTime.year().month().day()) + Text(" - ") + (transaction.endDate != nil ? Text(transaction.endDate!, format: .dateTime.year().month().day()) : Text("Today"))
+                    }
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                }
+                   
+            }
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(transaction.amount, format: .customCurrency())
+                    .foregroundColor(.red)
+                Text(TransactionCycle.fromValue(transaction.cycle)?.name ?? "")
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+            }
+        }
+    }
+}
+
 struct RecurringTransactionsDetailView: View {
     @ObservedObject private var content = RecurringTransactionsViewModel.shared
     @State private var showArchivedTransactions: Bool = false
@@ -54,10 +82,10 @@ struct RecurringTransactionsDetailView: View {
             .listRowBackground(Color(UIColor.systemGroupedBackground))
             .listRowInsets(EdgeInsets())
             Section(header: savingsCategoriesHeader(create)) {
-                ForEach(content.activeTransactions) { category in
+                ForEach(content.activeTransactions) { entry in
                     EditableDeletableItem(
-                        item: category,
-                        confirmationTitle: "Are you sure you want to delete \(category.wrappedName)?",
+                        item: entry,
+                        confirmationTitle: "Are you sure you want to delete \(entry.wrappedName)?",
                         onEdit: edit,
                         onDelete: delete) { item in
                             RecurringTransactionListTile(transaction: item)

@@ -34,7 +34,7 @@ struct RecurringTransactionsLineChart: View {
         Chart(content.chartDataPoints) {
             LineMark(x: .value("Date", $0.date), y: .value("Amount", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                .interpolationMethod(.stepEnd)
+                .interpolationMethod(.stepCenter)
             if let selectedElement, selectedElement.id == $0.id {
                 RuleMark(x: .value("Date", selectedElement.date))
                     .foregroundStyle(Color.secondary)
@@ -42,6 +42,13 @@ struct RecurringTransactionsLineChart: View {
             }
         }
         .chartYAxis(displayMode == .display ? .hidden : .automatic)
+        .chartYAxis {
+            AxisMarks { value in
+                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
+                AxisGridLine()
+                AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
+            }
+        }
     }
     
     var interactiveChart: some View {

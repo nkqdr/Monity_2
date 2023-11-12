@@ -14,8 +14,11 @@ class RecurringTransactionsViewModel: ItemListViewModel<RecurringTransaction> {
     @Published var chartDataPoints: [ValueTimeDataPoint] = []
     @Published var currentMonthlyPayment: Double = 0
     
+    private var fetchController: RecurringTransactionFetchController
+    
     private init() {
-        let publisher = RecurringTransactionFetchController.all.items.eraseToAnyPublisher()
+        self.fetchController = RecurringTransactionFetchController.all
+        let publisher = self.fetchController.items.eraseToAnyPublisher()
         super.init(itemPublisher: publisher)
     }
     
