@@ -257,6 +257,7 @@ struct SavingsDetailView: View {
                 ListBase {
                     ScrollView {
                         SavingsCategoryList(categories: content.hiddenCategories)
+                            .environmentObject(entryManager)
                     }
                 }
                 .navigationTitle("Hidden Categories")
