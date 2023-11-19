@@ -22,5 +22,6 @@ struct CustomGroupBox: GroupBoxStyle {
         .padding(15)
         .frame(maxWidth: .infinity)
         .background(RoundedRectangle(cornerRadius: 8).fill(Color(UIColor.secondarySystemGroupedBackground)))
+        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
     }
 }
