@@ -35,7 +35,6 @@ fileprivate struct StaticSavingsLineChart: View {
         .chartYAxis(.hidden)
         .chartXAxis(.hidden)
         .chartYScale(domain: minYValue ... maxYValue)
-        .frame(height: 120)
         .foregroundColor(!dataPoints.isEmpty && dataPoints.first!.value <= dataPoints.last!.value ? .green : .red)
         .padding(.vertical, 10)
     }
@@ -69,6 +68,16 @@ struct SavingsTile: View {
                     actualTile
                 }
                 .groupBoxStyle(CustomGroupBox())
+                .contextMenu {
+                    RenderAndShareButton(height: 250) {
+                        VStack(alignment: .leading) {
+                            Text("Last Year").groupBoxLabelTextStyle(.secondary)
+                            Spacer()
+                            actualTile
+                        }
+                        .padding()
+                    }
+                }
             }
             .buttonStyle(.plain)
         }

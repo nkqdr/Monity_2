@@ -58,6 +58,7 @@
 		60587B8428F3E22E0097D4F4 /* TransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */; };
 		60587B8628F3E68A0097D4F4 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */; };
 		60587B8B28F3F15B0097D4F4 /* RichFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */; };
+		6061CDEF2B0A45190091369A /* RenderAndShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6061CDEE2B0A45190091369A /* RenderAndShareButton.swift */; };
 		6061F5852AE258F20042F8BE /* ExpenseBarChartWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6061F5842AE258F20042F8BE /* ExpenseBarChartWithHeader.swift */; };
 		6069D1E52AE8252B00EA8CCB /* EOYViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */; };
 		60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60724E8B2AFAA84800FA7409 /* AppDelegate.swift */; };
@@ -182,6 +183,7 @@
 		60587B8328F3E22E0097D4F4 /* TransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStorage.swift; sourceTree = "<group>"; };
 		60587B8528F3E68A0097D4F4 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
 		60587B8A28F3F15B0097D4F4 /* RichFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichFetchRequest.swift; sourceTree = "<group>"; };
+		6061CDEE2B0A45190091369A /* RenderAndShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderAndShareButton.swift; sourceTree = "<group>"; };
 		6061F5842AE258F20042F8BE /* ExpenseBarChartWithHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseBarChartWithHeader.swift; sourceTree = "<group>"; };
 		6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOYViewModel.swift; sourceTree = "<group>"; };
 		60724E8B2AFAA84800FA7409 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 				60BA8EF229E0893300DA4A9C /* IncomeGroupBox.swift */,
 				6078317229E70573001FEC51 /* MonthYearPickerForm.swift */,
 				6061F5842AE258F20042F8BE /* ExpenseBarChartWithHeader.swift */,
+				6061CDEE2B0A45190091369A /* RenderAndShareButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */,
 				60100B202ABEE69A0057ECA4 /* OnboardingView.swift in Sources */,
 				6019B5652B3B3A5D00EF9138 /* EOY_Review.swift in Sources */,
+				6061CDEF2B0A45190091369A /* RenderAndShareButton.swift in Sources */,
 				602FB1E82A59B3F200B2D1A5 /* TransactionSummaryViewModel.swift in Sources */,
 				60BA8EF129E07DA000DA4A9C /* AbstractTransactionWrapper.swift in Sources */,
 				60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */,
