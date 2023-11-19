@@ -69,7 +69,7 @@ struct SavingsTile: View {
                 }
                 .groupBoxStyle(CustomGroupBox())
                 .contextMenu {
-                    RenderAndShareButton(height: 250) {
+                    RenderAndShareButton(previewTitle: "Savings", height: 250) {
                         VStack(alignment: .leading) {
                             Text("Last Year").groupBoxLabelTextStyle(.secondary)
                             Spacer()

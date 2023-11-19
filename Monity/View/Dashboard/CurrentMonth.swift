@@ -57,7 +57,7 @@ struct CurrentMonthOverviewTile: View {
             }
             .groupBoxStyle(CustomGroupBox())
             .contextMenu {
-                RenderAndShareButton(height: 100) {
+                RenderAndShareButton(previewTitle: "Current Month", height: 100) {
                     VStack(alignment: .leading) {
                         Text("Current Month").groupBoxLabelTextStyle(.secondary)
                         Spacer()

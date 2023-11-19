@@ -26,7 +26,7 @@ struct RecurringTransactionsTile: View {
             }
             .groupBoxStyle(CustomGroupBox())
             .contextMenu {
-                RenderAndShareButton(height: 250) {
+                RenderAndShareButton(previewTitle: "Recurring expenses", height: 250) {
                     VStack(alignment: .leading) {
                         Text("Recurring expenses").groupBoxLabelTextStyle(.secondary)
                         Spacer()

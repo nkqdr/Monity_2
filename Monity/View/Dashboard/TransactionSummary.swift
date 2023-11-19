@@ -40,7 +40,7 @@ struct TransactionSummaryTile: View {
             }
             .groupBoxStyle(CustomGroupBox())
             .contextMenu {
-                RenderAndShareButton {
+                RenderAndShareButton(previewTitle: "Transactions") {
                     VStack(alignment: .leading) {
                         Text("Last Year").groupBoxLabelTextStyle(.secondary)
                         Spacer()

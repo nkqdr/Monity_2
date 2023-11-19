@@ -11,6 +11,8 @@ struct RenderAndShareButton<C>: View where C: View {
     @Environment(\.displayScale) var displayScale
     @Environment(\.colorScheme) var colorScheme
     @State private var renderedImage = Image(systemName: "photo")
+    var previewTitle: LocalizedStringKey
+    var message: LocalizedStringKey? = nil
     var width: CGFloat = 400
     var height: CGFloat = 400
     var content: () -> C
@@ -37,8 +39,9 @@ struct RenderAndShareButton<C>: View where C: View {
     var body: some View {
         ShareLink(
             item: renderedImage,
+            message: message != nil ? Text(message!) : nil,
             preview: SharePreview(
-                "Test",
+                previewTitle,
                 image: renderedImage
             )) {
             Label("Share", systemImage: "square.and.arrow.up")
