@@ -6,26 +6,36 @@
 //
 
 import Foundation
+import CoreData
 
 class SavingsFetchController: BaseFetchController<SavingsEntry> {
     static let all: SavingsFetchController = SavingsFetchController()
     
-    private init() {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
-        ])
+    private init(managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        super.init(
+            sortDescriptors: [NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)],
+            managedObjectContext: managedObjectContext
+        )
     }
     
-    init(since: Date) {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
-        ], predicate: NSPredicate(format: "date >= %@", since as NSDate))
+    init(since: Date, managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        super.init(
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
+            ],
+            predicate: NSPredicate(format: "date >= %@", since as NSDate),
+            managedObjectContext: managedObjectContext
+        )
     }
     
-    init(category: SavingsCategory) {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
-        ], predicate: NSPredicate(format: "category == %@", category))
+    init(category: SavingsCategory, managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        super.init(
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
+            ],
+            predicate: NSPredicate(format: "category == %@", category),
+            managedObjectContext: managedObjectContext
+        )
     }
 }
 

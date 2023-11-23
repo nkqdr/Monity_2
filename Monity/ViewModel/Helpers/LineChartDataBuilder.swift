@@ -9,7 +9,7 @@ import Foundation
 import Accelerate
 
 class LineChartDataBuilder {
-    static func generateSavingsLineChartData(for entries: [SavingsEntry], granularity: Calendar.Component = .day, allowAnimation: Bool = true) -> [ValueTimeDataPoint] {
+    static func generateSavingsLineChartData(for entries: [SavingsEntry], lowerBound: Date = Date.distantPast, granularity: Calendar.Component = .day, allowAnimation: Bool = true) -> [ValueTimeDataPoint] {
         let categories: Set<SavingsCategory> = Set(entries.filter {
             $0.category != nil
         }.map { $0.category! })
@@ -58,7 +58,9 @@ class LineChartDataBuilder {
                 animate: !allowAnimation
             )
         )
-        return dataPoints
+        return dataPoints.filter {
+            $0.date >= lowerBound
+        }
     }
     
     static func generateCashflowData(for transactions: [AbstractTransaction], initialDate: Date? = nil) -> [ValueTimeDataPoint] {

@@ -28,6 +28,10 @@
 		601E84102A5A0B7000067A65 /* CSVRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600921EE290EB3E4004897F7 /* CSVRepresentable.swift */; };
 		601E84112A5A0B7900067A65 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		601E84122A5A0B8200067A65 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8D29AE608B00F45E5F /* Enums.swift */; };
+		602493A22B0FEA6F000BAA9B /* SavingsCalculationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602493A12B0FEA6F000BAA9B /* SavingsCalculationTest.swift */; };
+		602493A32B0FEC08000BAA9B /* SavingStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B50E0D2906F19C00396308 /* SavingStorage.swift */; };
+		602493A42B0FEDAF000BAA9B /* SavingsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038737F290AD86400AB7D0E /* SavingsEditor.swift */; };
+		602493A52B0FEFFC000BAA9B /* LineChartDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CCD21E2AF2A1F100DA0DCB /* LineChartDataBuilder.swift */; };
 		602E45C228F95D46003FD564 /* CurrentMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C128F95D46003FD564 /* CurrentMonth.swift */; };
 		602E45C428F9608D003FD564 /* ShapeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E45C328F9608D003FD564 /* ShapeExtensions.swift */; };
 		602E998C29E15C700063BBC7 /* SavingsLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E998B29E15C700063BBC7 /* SavingsLineChart.swift */; };
@@ -152,6 +156,7 @@
 		60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		6019B5642B3B3A5D00EF9138 /* EOY_Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOY_Review.swift; sourceTree = "<group>"; };
+		602493A12B0FEA6F000BAA9B /* SavingsCalculationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsCalculationTest.swift; sourceTree = "<group>"; };
 		602BA992290F07C100830481 /* Monity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Monity.entitlements; sourceTree = "<group>"; };
 		602E45C128F95D46003FD564 /* CurrentMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMonth.swift; sourceTree = "<group>"; };
 		602E45C328F9608D003FD564 /* ShapeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeExtensions.swift; sourceTree = "<group>"; };
@@ -438,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				60BD9F2828F35B70001FF5FF /* DateTests.swift */,
+				602493A12B0FEA6F000BAA9B /* SavingsCalculationTest.swift */,
 			);
 			path = MonityTests;
 			sourceTree = "<group>";
@@ -805,14 +811,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				602493A42B0FEDAF000BAA9B /* SavingsEditor.swift in Sources */,
 				601E840B2A5A0B3300067A65 /* RichFetchRequest.swift in Sources */,
 				601E840C2A5A0B3E00067A65 /* Persistence.swift in Sources */,
 				601E84112A5A0B7900067A65 /* Structures.swift in Sources */,
 				601E84092A5A0B2200067A65 /* TransactionStorage.swift in Sources */,
 				601E84122A5A0B8200067A65 /* Enums.swift in Sources */,
+				602493A22B0FEA6F000BAA9B /* SavingsCalculationTest.swift in Sources */,
 				601E840D2A5A0B4A00067A65 /* TransactionEditor.swift in Sources */,
+				602493A52B0FEFFC000BAA9B /* LineChartDataBuilder.swift in Sources */,
 				601E84102A5A0B7000067A65 /* CSVRepresentable.swift in Sources */,
 				601E840E2A5A0B5700067A65 /* Utils.swift in Sources */,
+				602493A32B0FEC08000BAA9B /* SavingStorage.swift in Sources */,
 				601E840A2A5A0B2B00067A65 /* BaseClasses.swift in Sources */,
 				601E840F2A5A0B6300067A65 /* ModelExtensions.swift in Sources */,
 				60BD9F2928F35B70001FF5FF /* DateTests.swift in Sources */,

@@ -67,7 +67,7 @@ class EOYViewModel: ObservableObject {
             month: 1,
             day: 1)
         )!
-        self.savingsFetchController = SavingsFetchController(since: startOfYear)
+        self.savingsFetchController = SavingsFetchController.all
         let savingsPublisher = self.savingsFetchController.items.eraseToAnyPublisher()
         self.transactionWrapper = AbstractTransactionWrapper(startDate: startOfYear, endDate: Date())
         self.transactionCancellable = self.transactionWrapper.$wrappedTransactions.sink { newVal in
@@ -81,7 +81,7 @@ class EOYViewModel: ObservableObject {
             self.mostIncomeCategories = self.computeMostExpensiveCategories(isExpense: false)
         }
         self.savingsCancellable = savingsPublisher.sink { entries in
-            self.savingsDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: entries, allowAnimation: false)
+            self.savingsDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: entries, lowerBound: startOfYear, allowAnimation: false)
         }
     }
     
