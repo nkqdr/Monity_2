@@ -19,6 +19,10 @@ fileprivate struct StaticSavingsLineChart: View {
         dataPoints.map { $0.value }.max() ?? 0
     }
     
+    private var tint: Color {
+        !dataPoints.isEmpty && dataPoints.first!.value <= dataPoints.last!.value ? .green : .red
+    }
+    
     var body: some View {
         Chart(dataPoints) {
 //            AreaMark(
@@ -28,15 +32,24 @@ fileprivate struct StaticSavingsLineChart: View {
 //            )
 //                .opacity(0.5)
 //                .interpolationMethod(.monotone)
+            RuleMark(y: .value("StartOfYear", dataPoints.first!.value))
+                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 5]))
+                .annotation(position: .top, alignment: .trailing) {
+                    Text(dataPoints.first!.value, format: .customCurrency())
+                        .font(.footnote)
+                        .foregroundStyle(.gray)
+                }
+                .foregroundStyle(Color.gray)
             LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value))
                 .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                 .interpolationMethod(.monotone)
+                .foregroundStyle(tint)
         }
         .chartYAxis(.hidden)
         .chartXAxis(.hidden)
         .chartYScale(domain: minYValue ... maxYValue)
-        .foregroundColor(!dataPoints.isEmpty && dataPoints.first!.value <= dataPoints.last!.value ? .green : .red)
         .padding(.vertical, 10)
+        .frame(height: 170)
     }
 }
 
