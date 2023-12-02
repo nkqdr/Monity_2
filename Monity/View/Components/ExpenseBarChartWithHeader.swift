@@ -11,7 +11,6 @@ import Accelerate
 
 struct ExpenseBarChartWithHeader: View {
     @State private var selectedElement: ValueTimeDataPoint?
-    @State private var ruleMarkOffset: Double = 0
     @State private var dragGestureTick: Double = 0
     @State private var selectedLowerBoundDate: Date
     @State private var isDragging = false
@@ -75,6 +74,20 @@ struct ExpenseBarChartWithHeader: View {
         }
     }
     
+    func barChartOpacity(for dp: ValueTimeDataPoint) -> CGFloat {
+        let somethingIsSelected: Bool = selectedElement != nil
+        let dpIsCurrentlySelected: Bool = somethingIsSelected && dp.id == selectedElement!.id
+        if dpIsCurrentlySelected {
+            return 1
+        }
+        // dp is not the currently selected data point
+        if somethingIsSelected {
+            return 0.3
+        }
+        // Nothing is currently selected
+        return showAverageBar ? 0.3 : 1
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             chartHeader
@@ -89,14 +102,10 @@ struct ExpenseBarChartWithHeader: View {
                                 .foregroundColor(color)
                         }
                 }
-                if let selectedElement, selectedElement.id == $0.id {
-                    RuleMark(x: .value("Month", selectedElement.date))
-                        .offset(x: ruleMarkOffset)
-                        .foregroundStyle(Color.secondary)
-                        .lineStyle(StrokeStyle(lineWidth: 1))
-                }
                 BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
-                    .foregroundStyle(color.opacity(showAverageBar ? 0.3 : 1).gradient)
+                    .foregroundStyle(color.gradient)
+                    .opacity(barChartOpacity(for: $0))
+                    .cornerRadius(5)
             }
             .chartYAxis {
                 AxisMarks { value in
@@ -121,7 +130,6 @@ struct ExpenseBarChartWithHeader: View {
                     SpatialTapGesture()
                       .onEnded { value in
                           let monthDiff = Calendar.current.dateComponents([.month], from: slicedData.first!.date, to: slicedData.last!.date).month ?? 1
-                        ruleMarkOffset = Double(proxy.plotAreaSize.width) / Double(monthDiff) / 2
                         let element = findElement(location: value.location, proxy: proxy, geometry: geo)
                         Haptics.shared.play(.light)
                           if selectedElement?.date == element?.date {
@@ -134,7 +142,9 @@ struct ExpenseBarChartWithHeader: View {
                                   selectedElement = element
                               }
                           } else {
-                              selectedElement = element
+                              withAnimation {
+                                  selectedElement = element
+                              }
                           }
                           
                       }
@@ -157,7 +167,7 @@ struct ExpenseBarChartWithHeader: View {
                                     }
                                 }
                             }
-                        }.onEnded {_ in 
+                        }.onEnded {_ in
                             withAnimation {
                                 isDragging = false
                             }
