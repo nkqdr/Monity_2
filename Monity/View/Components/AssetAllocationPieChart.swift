@@ -83,6 +83,7 @@ struct AssetAllocationPieChart: View {
                             .font(.footnote)
                         }
                     }
+                    .cornerRadius(5)
             }
             .chartYAxis {
                 AxisMarks { value in

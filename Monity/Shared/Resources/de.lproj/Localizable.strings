@@ -560,6 +560,9 @@
 "System" = "System";
 
 /* No comment provided by engineer. */
+"Share" = "Teilen";
+
+/* No comment provided by engineer. */
 "Take Control of Your Finances" = "Kontrollieren Sie Ihre Finanzen";
 
 /* No comment provided by engineer. */
@@ -696,4 +699,48 @@
 
 /* No comment provided by engineer. */
 "Zero" = "Null";
+
+// MARK: - Onboarding default categories
+
+/* No comment provided by engineer. */
+"Rent" = "Miete";
+
+/* No comment provided by engineer. */
+"Hobbies" = "Hobbies";
+
+/* No comment provided by engineer. */
+"Work" = "Arbeit";
+
+/* No comment provided by engineer. */
+"Gifts" = "Geschenke";
+
+/* No comment provided by engineer. */
+"Free-time" = "Freizeit";
+
+/* No comment provided by engineer. */
+"Clothes" = "Kleidung";
+
+/* No comment provided by engineer. */
+"Groceries" = "Lebensmittel";
+
+/* No comment provided by engineer. */
+"University" = "Universität";
+
+/* No comment provided by engineer. */
+"Insurance" = "Versicherungen";
+
+/* No comment provided by engineer. */
+"Savings" = "Ersparnisse";
+
+/* No comment provided by engineer. */
+"Checking" = "Girokonto";
+
+/* No comment provided by engineer. */
+"Crypto" = "Crypto";
+
+/* No comment provided by engineer. */
+"Wallet" = "Geldbeutel";
+
+/* No comment provided by engineer. */
+"Stock portfolio" = "Aktiendepot";
 

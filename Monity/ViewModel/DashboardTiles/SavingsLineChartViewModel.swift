@@ -48,7 +48,7 @@ class SavingsLineChartViewModel: ObservableObject {
     
     @Published var selectedTimeframe: Date = possibleTimeframeLowerBounds[2].tagValue {
         didSet {
-            self.updateDataPoints(with: allSavingsEntries.filter { $0.wrappedDate >= self.selectedTimeframe })
+            self.updateDataPoints()
         }
     }
     @Published var lineChartDataPoints: [ValueTimeDataPoint] = []
@@ -70,15 +70,15 @@ class SavingsLineChartViewModel: ObservableObject {
         
         self.savingsCancellable = publisher.sink { values in
             self.allSavingsEntries = values
-            self.updateDataPoints(with: values.filter { $0.wrappedDate >= self.selectedTimeframe })
+            self.updateDataPoints()
         }
     }
     
-    private func updateDataPoints(with savingsEntries: [SavingsEntry]) {
+    private func updateDataPoints() {
         let granularity = SavingsLineChartViewModel.possibleTimeframeLowerBounds.first(where:  {
             $0.tagValue == self.selectedTimeframe
         })?.granularity ?? .second
-        self.lineChartDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: savingsEntries, granularity: granularity)
+        self.lineChartDataPoints = LineChartDataBuilder.generateSavingsLineChartData(for: allSavingsEntries, lowerBound: self.selectedTimeframe, granularity: granularity)
     }
     
 }

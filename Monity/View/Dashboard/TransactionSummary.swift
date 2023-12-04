@@ -39,6 +39,16 @@ struct TransactionSummaryTile: View {
                 actualTile
             }
             .groupBoxStyle(CustomGroupBox())
+            .contextMenu {
+                RenderAndShareButton(previewTitle: "Transactions") {
+                    VStack(alignment: .leading) {
+                        Text("Last Year").groupBoxLabelTextStyle(.secondary)
+                        Spacer()
+                        actualTile
+                    }
+                    .padding()
+                }
+            }
         }
         .buttonStyle(.plain)
     }

@@ -10,16 +10,31 @@ import SwiftUI
 struct RecurringTransactionsTile: View {
     @ObservedObject private var content = RecurringTransactionsViewModel.shared
     
+    @ViewBuilder
+    private var actualTile: some View {
+        VStack(alignment: .leading) {
+            Text("You are currently paying \(content.currentMonthlyPayment.formatted(.customCurrency())) per month")
+                .groupBoxLabelTextStyle()
+            RecurringTransactionsLineChart()
+        }
+    }
+    
     var body: some View {
         NavigationLink(destination: RecurringTransactionsDetailView()) {
             GroupBox(label: NavigationGroupBoxLabel(title: "Recurring expenses")) {
-                VStack(alignment: .leading) {
-                    Text("You are currently paying \(content.currentMonthlyPayment.formatted(.customCurrency())) per month")
-                        .groupBoxLabelTextStyle()
-                    RecurringTransactionsLineChart()
-                }
+                actualTile
             }
             .groupBoxStyle(CustomGroupBox())
+            .contextMenu {
+                RenderAndShareButton(previewTitle: "Recurring expenses", height: 250) {
+                    VStack(alignment: .leading) {
+                        Text("Recurring expenses").groupBoxLabelTextStyle(.secondary)
+                        Spacer()
+                        actualTile
+                    }
+                    .padding()
+                }
+            }
         }
         .buttonStyle(.plain)
     }

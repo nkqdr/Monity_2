@@ -48,12 +48,6 @@ struct CurrentMonthOverviewTile: View {
                 }
             }
         }
-        .onChange(of: monthlyLimit) { newValue in
-            remainingAmount = newValue - content.spentThisMonth
-        }
-        .onAppear {
-            remainingAmount = monthlyLimit - content.spentThisMonth
-        }
     }
     
     var body: some View {
@@ -62,8 +56,24 @@ struct CurrentMonthOverviewTile: View {
                 actualTile
             }
             .groupBoxStyle(CustomGroupBox())
+            .contextMenu {
+                RenderAndShareButton(previewTitle: "Current Month", height: 100) {
+                    VStack(alignment: .leading) {
+                        Text("Current Month").groupBoxLabelTextStyle(.secondary)
+                        Spacer()
+                        actualTile
+                    }
+                    .padding()
+                }
+            }
         }
         .buttonStyle(.plain)
+        .onChange(of: monthlyLimit) { newValue in
+            remainingAmount = newValue - content.spentThisMonth
+        }
+        .onAppear {
+            remainingAmount = monthlyLimit - content.spentThisMonth
+        }
     }
 }
 
