@@ -129,7 +129,6 @@ struct ExpenseBarChartWithHeader: View {
                   .gesture(
                     SpatialTapGesture()
                       .onEnded { value in
-                          let monthDiff = Calendar.current.dateComponents([.month], from: slicedData.first!.date, to: slicedData.last!.date).month ?? 1
                         let element = findElement(location: value.location, proxy: proxy, geometry: geo)
                         Haptics.shared.play(.light)
                           if selectedElement?.date == element?.date {

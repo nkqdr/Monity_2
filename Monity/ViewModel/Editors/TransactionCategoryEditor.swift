@@ -40,7 +40,7 @@ class TransactionCategoryEditor: ObservableObject {
     
     public func save() {
         if let c = category {
-            let res = TransactionCategoryStorage.main.update(c, name: name, iconName: selectedIcon)
+            let _ = TransactionCategoryStorage.main.update(c, name: name, iconName: selectedIcon)
         } else {
             let category = TransactionCategoryStorage.main.add(name: name, iconName: selectedIcon)
             print("Added category \(category.wrappedName)")
