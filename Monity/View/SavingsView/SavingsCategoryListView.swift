@@ -58,6 +58,7 @@ struct SavingsCategoryListView: View {
     @StateObject var content: SavingsViewModel
     @State private var showPredictions: Bool = false
     @State private var predictionYearsRange: Double = 1
+    @State private var showEditSheet: Bool = false
     
     init(category: SavingsCategory, entryManager: SavingsEntryManager) {
         self.category = category
@@ -179,14 +180,28 @@ struct SavingsCategoryListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    entryManager.editor = SavingsEditor(entry: nil)
-                    entryManager.editor.category = category
-                    entryManager.showSheet.toggle()
+                Menu {
+                    Button {
+                        entryManager.editor = SavingsEditor(entry: nil)
+                        entryManager.editor.category = category
+                        entryManager.showSheet.toggle()
+                    } label: {
+                        Label("Add entry", systemImage: "plus")
+                    }
+                    Button {
+                        showEditSheet.toggle()
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
                 } label: {
-                    Label("Add", systemImage: "plus")
+                    Label("Actions", systemImage: "ellipsis.circle")
                 }
             }
+        }
+        .sheet(isPresented: $showEditSheet) {
+            SavingsCategoryFormView(
+                editor: SavingsCategoryEditor(category: category)
+            )
         }
         .navigationTitle(category.wrappedName)
     }
