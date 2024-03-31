@@ -74,12 +74,15 @@ struct SavingsCategoryFormView: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
                 Section {
-                    HStack {
+                    ZStack(alignment: .trailing) {
                         TextField("0", value: $editor.interestRate, format: .number)
                             .keyboardType(.decimalPad)
                             .textFieldStyle(.roundedBorder)
-                            .frame(maxWidth: 60)
-                        Text("% p.a.")
+                            .frame(maxWidth: 115)
+                            .onChange(of: editor.interestRate) {
+                                editor.interestRate = Double(String($0).prefix(5))!
+                            }
+                        Text("% p.a.").foregroundStyle(.secondary).padding(.trailing, 6)
                     }
                     .font(.headline)
                     .padding()

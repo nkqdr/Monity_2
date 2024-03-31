@@ -11,6 +11,7 @@ import Charts
 fileprivate struct SavingsCategoryTile: View {
     @EnvironmentObject private var entryManager: SavingsEntryManager
     @ObservedObject var category: SavingsCategory
+    @State private var showEditSheet: Bool = false
     
     private var currentAmount: Double? {
         category.lastEntry?.amount
@@ -39,6 +40,11 @@ fileprivate struct SavingsCategoryTile: View {
                 }
             }
             .groupBoxStyle(CustomGroupBox())
+            .sheet(isPresented: $showEditSheet) {
+                SavingsCategoryFormView(
+                    editor: SavingsCategoryEditor(category: category)
+                )
+            }
             .contextMenu {
                 if !category.isHidden {
                     Button {
@@ -49,6 +55,11 @@ fileprivate struct SavingsCategoryTile: View {
                         }
                     } label: {
                         Label("New entry", systemImage: "plus")
+                    }
+                    Button {
+                        showEditSheet.toggle()
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
                     }
                 }
                 Divider()
@@ -207,12 +218,6 @@ struct SavingsDetailView: View {
                 .font(.footnote)
                 .foregroundColor(.secondary)
             Spacer()
-            Button {
-                entryManager.editor = SavingsEditor(entry: nil)
-                entryManager.showSheet.toggle()
-            } label: {
-                Image(systemName: "plus")
-            }
         }
         .padding(.vertical, 1)
         .padding(.horizontal)

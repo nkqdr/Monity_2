@@ -58,7 +58,7 @@ struct SavingsDPLineChart: View {
     @ViewBuilder
     var chartHeader: some View {
         let netWorthToDisplay: Double = selectedElement != nil ? selectedElement!.value : predictionDataPoints.isEmpty ? currentNetWorth : predictionDataPoints.last!.value
-        let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : predictionDataPoints.isEmpty ? Date() : predictionDataPoints.last!.date
+        let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : predictionDataPoints.isEmpty ? localDataPoints.last?.date ?? Date() : predictionDataPoints.last!.date
         HStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {

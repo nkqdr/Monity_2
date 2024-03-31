@@ -187,7 +187,7 @@ struct SavingsCategoryListView: View {
                         entryManager.editor.category = category
                         entryManager.showSheet.toggle()
                     } label: {
-                        Label("Add entry", systemImage: "plus")
+                        Label("New entry", systemImage: "plus")
                     }
                     Button {
                         showEditSheet.toggle()
