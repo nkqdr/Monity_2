@@ -53,9 +53,11 @@ fileprivate struct SavingsEntryList: View {
 }
 
 struct SavingsCategoryListView: View {
-    var category: SavingsCategory
+    @ObservedObject var category: SavingsCategory
     var entryManager: SavingsEntryManager
     @StateObject var content: SavingsViewModel
+    @State private var showPredictions: Bool = false
+    @State private var predictionYearsRange: Double = 1
     
     init(category: SavingsCategory, entryManager: SavingsEntryManager) {
         self.category = category
@@ -99,9 +101,20 @@ struct SavingsCategoryListView: View {
     
     var body: some View {
         List {
-            SavingsDPLineChart(dataPoints: $content.lineChartDataPoints)
+            SavingsDPLineChart(
+                dataPoints: $content.lineChartDataPoints,
+                predictionDataPoints: showPredictions ? .constant(category.getPredictionData(years: Int(predictionYearsRange))) : .constant([]))
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
+            Section {
+                Toggle("Show predictions", isOn: $showPredictions)
+                if showPredictions {
+                    VStack {
+                        Slider(value: $predictionYearsRange, in: 1...50, step: 1)
+                        Text("\(Int(predictionYearsRange)) Years")
+                    }
+                }
+            }
             Section {
                 HStack {
                     Text("Label")
@@ -114,6 +127,11 @@ struct SavingsCategoryListView: View {
                     Text("Share of total wealth").foregroundStyle(.secondary)
                     Spacer()
                     Text(shareOfTotalWealth.round(to: 4), format: .percent)
+                }
+                HStack {
+                    Text("Interest Rate").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(category.interestRate / 100, format: .percent) + Text(" p.a.")
                 }
             } header: {
                 Text("Details")

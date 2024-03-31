@@ -73,6 +73,8 @@ struct SavingsCategoryFormView: View {
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
+                TextField("Interest Rate", value: $editor.interestRate, format: .number)
+                    .keyboardType(.decimalPad)
             }
             .onAppear {
                 focusNameField = true

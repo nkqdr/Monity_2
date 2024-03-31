@@ -113,6 +113,20 @@ extension SavingsCategory {
         return entriesBefore.last
     }
     
+    func getPredictionData(years: Int) -> [ValueTimeDataPoint] {
+        guard let lastEntry = self.lastEntry else {
+            return []
+        }
+        let interestFactor: Double = 1.0 + (self.interestRate / 100)
+        var entries: [ValueTimeDataPoint] = []
+        for yearAmount in 0...years {
+            let date: Date = Calendar.current.date(byAdding: .year, value: yearAmount, to: lastEntry.wrappedDate)!
+            let amount: Double = lastEntry.amount * pow(interestFactor, Double(yearAmount))
+            entries.append(ValueTimeDataPoint(date: date, value: amount))
+        }
+        return entries
+    }
+    
     var lastEntry: SavingsEntry? {
         self.entryArray.last
     }
