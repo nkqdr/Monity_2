@@ -10,16 +10,16 @@ import Charts
 
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
-    @Binding var dataPoints: [ValueTimeDataPoint]
-    @Binding var predictionDataPoints: [ValueTimeDataPoint]
     @State private var localDataPoints: [ValueTimeDataPoint]
+    @Binding var dataPoints: [ValueTimeDataPoint]
+    var predictionDataPoints: [ValueTimeDataPoint]
     var showHeader: Bool
     var showArea: Bool
     var currentNetWorth: Double = 0
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, predictionDataPoints: Binding<[ValueTimeDataPoint]> = .constant([]), currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, predictionDataPoints: [ValueTimeDataPoint] = [], currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
         self._dataPoints = Binding(projectedValue: dataPoints)
-        self._predictionDataPoints = Binding(projectedValue: predictionDataPoints)
+        self.predictionDataPoints = predictionDataPoints
         self._localDataPoints = State(initialValue: dataPoints.wrappedValue)
         self.showHeader = showHeader
         self.showArea = showArea
@@ -27,7 +27,7 @@ struct SavingsDPLineChart: View {
         self.currentNetWorth = currentNetWorth
     }
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, predictionDataPoints: Binding<[ValueTimeDataPoint]> = .constant([]), showArea: Bool = false) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, predictionDataPoints: [ValueTimeDataPoint] = [], showArea: Bool = false) {
         self.init(
             selectedElement: selectedElement,
             dataPoints: dataPoints,
@@ -61,9 +61,20 @@ struct SavingsDPLineChart: View {
         let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : predictionDataPoints.isEmpty ? Date() : predictionDataPoints.last!.date
         HStack {
             VStack(alignment: .leading) {
-                Text(netWorthToDisplay, format: .customCurrency())
-                    .font(.title2.bold())
-                    .foregroundStyle(timeToDisplay <= Date() ? .primary : .secondary)
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text(netWorthToDisplay, format: .customCurrency())
+                        .font(.title2.bold())
+                        .foregroundStyle(timeToDisplay <= Date() ? .primary : .secondary)
+                    if timeToDisplay > Date() {
+                        Group {
+                            Text(netWorthToDisplay - currentNetWorth >= 0 ? "(+" : "(") +
+                            Text(netWorthToDisplay - currentNetWorth, format: .customCurrency()) +
+                            Text(")")
+                        }
+                        .foregroundStyle(netWorthToDisplay - currentNetWorth >= 0 ? .green : .red)
+                        .font(.footnote)
+                    }
+                }
                 Text(timeToDisplay, format: .dateTime.year().month().day())
                     .font(.footnote)
                     .foregroundColor(.secondary)

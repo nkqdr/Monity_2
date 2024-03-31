@@ -104,9 +104,10 @@ struct SavingsCategoryListView: View {
         List {
             SavingsDPLineChart(
                 dataPoints: $content.lineChartDataPoints,
-                predictionDataPoints: showPredictions ? .constant(category.getPredictionData(years: Int(predictionYearsRange))) : .constant([]))
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+                predictionDataPoints: showPredictions ? category.getPredictionData(years: Int(predictionYearsRange)) : []
+            )
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
             Section {
                 Toggle("Show prediction", isOn: $showPredictions.animation())
                 if showPredictions {
