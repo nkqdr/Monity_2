@@ -107,13 +107,20 @@ struct SavingsCategoryListView: View {
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
             Section {
-                Toggle("Show predictions", isOn: $showPredictions)
+                Toggle("Show prediction", isOn: $showPredictions.animation())
                 if showPredictions {
-                    VStack {
-                        Slider(value: $predictionYearsRange, in: 1...50, step: 1)
+                    HStack {
                         Text("\(Int(predictionYearsRange)) Years")
+                            .frame(minWidth: 100, alignment: .leading)
+                        Spacer()
+                        Slider(value: $predictionYearsRange, in: 1...50, step: 1)
+                            .onChange(of: predictionYearsRange) { _ in
+                                Haptics.shared.play(.soft)
+                            }
                     }
                 }
+            } header: {
+                Text("Prediction")
             }
             Section {
                 HStack {
