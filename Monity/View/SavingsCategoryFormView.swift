@@ -73,8 +73,21 @@ struct SavingsCategoryFormView: View {
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
-                TextField("Interest Rate", value: $editor.interestRate, format: .number)
-                    .keyboardType(.decimalPad)
+                Section {
+                    HStack {
+                        TextField("0", value: $editor.interestRate, format: .number)
+                            .keyboardType(.decimalPad)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(maxWidth: 60)
+                        Text("% p.a.")
+                    }
+                    .font(.headline)
+                    .padding()
+                } header: {
+                    Text("Interest Rate")
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             }
             .onAppear {
                 focusNameField = true
