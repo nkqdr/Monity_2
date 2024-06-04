@@ -21,6 +21,7 @@ class SavingsCategoryEditor: ObservableObject {
     }
     @Published var navigationFormTitle: LocalizedStringKey
     @Published var disableSave: Bool = true
+    @Published var interestRate: Double
     private var allCategories: [SavingsCategory]
     var category: SavingsCategory?
     
@@ -32,6 +33,7 @@ class SavingsCategoryEditor: ObservableObject {
         let fetchRequest = SavingsCategory.fetchRequest()
         let categories = try? PersistenceController.shared.container.viewContext.fetch(fetchRequest)
         self.allCategories = categories ?? []
+        self.interestRate = category?.interestRate ?? 0
     }
     
     private func shouldDisableSave() -> Bool {
@@ -43,9 +45,9 @@ class SavingsCategoryEditor: ObservableObject {
     
     public func save() {
         if let category {
-            let _ = SavingsCategoryStorage.main.update(category, name: name, label: label)
+            let _ = SavingsCategoryStorage.main.update(category, name: name, label: label, interestRate: interestRate)
         } else {
-            let category = SavingsCategoryStorage.main.add(name: name, label: label)
+            let category = SavingsCategoryStorage.main.add(name: name, label: label, interestRate: interestRate)
             print("Added category \(category.wrappedName)")
         }
     }

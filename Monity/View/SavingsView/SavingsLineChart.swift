@@ -10,14 +10,16 @@ import Charts
 
 struct SavingsDPLineChart: View {
     @State private var selectedElement: ValueTimeDataPoint?
-    @Binding var dataPoints: [ValueTimeDataPoint]
     @State private var localDataPoints: [ValueTimeDataPoint]
+    @Binding var dataPoints: [ValueTimeDataPoint]
+    var predictionDataPoints: [ValueTimeDataPoint]
     var showHeader: Bool
     var showArea: Bool
     var currentNetWorth: Double = 0
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, predictionDataPoints: [ValueTimeDataPoint] = [], currentNetWorth: Double, showHeader: Bool = true, showArea: Bool = false) {
         self._dataPoints = Binding(projectedValue: dataPoints)
+        self.predictionDataPoints = predictionDataPoints
         self._localDataPoints = State(initialValue: dataPoints.wrappedValue)
         self.showHeader = showHeader
         self.showArea = showArea
@@ -25,35 +27,54 @@ struct SavingsDPLineChart: View {
         self.currentNetWorth = currentNetWorth
     }
     
-    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, showArea: Bool = false) {
+    init(selectedElement: ValueTimeDataPoint? = nil, dataPoints: Binding<[ValueTimeDataPoint]>, showHeader: Bool = true, predictionDataPoints: [ValueTimeDataPoint] = [], showArea: Bool = false) {
         self.init(
             selectedElement: selectedElement,
             dataPoints: dataPoints,
+            predictionDataPoints: predictionDataPoints,
             currentNetWorth: dataPoints.wrappedValue.last?.value ?? 0,
             showHeader: showHeader,
             showArea: showArea
         )
     }
     
+    private var allEntries: [ValueTimeDataPoint] {
+        var allEntries = localDataPoints
+        allEntries.append(contentsOf: predictionDataPoints)
+        return allEntries
+    }
+    
     private var minYValue: Double {
-        if localDataPoints.isEmpty {
+        if self.allEntries.isEmpty {
             return 0
         }
-        return localDataPoints.map { $0.value }.min()!
+        return self.allEntries.map { $0.value }.min()!
     }
     
     private var maxYValue: Double {
-        localDataPoints.map { $0.value }.max() ?? 0
+        return self.allEntries.map { $0.value }.max() ?? 0
     }
     
     @ViewBuilder
     var chartHeader: some View {
-        let netWorthToDisplay: Double = selectedElement != nil ? selectedElement!.value : currentNetWorth
-        let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : Date()
+        let netWorthToDisplay: Double = selectedElement != nil ? selectedElement!.value : predictionDataPoints.isEmpty ? currentNetWorth : predictionDataPoints.last!.value
+        let timeToDisplay: Date = selectedElement != nil ? selectedElement!.date : predictionDataPoints.isEmpty ? localDataPoints.last?.date ?? Date() : predictionDataPoints.last!.date
         HStack {
             VStack(alignment: .leading) {
-                Text(netWorthToDisplay, format: .customCurrency())
-                    .font(.title2.bold())
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text(netWorthToDisplay, format: .customCurrency())
+                        .font(.title2.bold())
+                        .foregroundStyle(timeToDisplay <= Date() ? .primary : .secondary)
+                    if timeToDisplay > Date() {
+                        Group {
+                            Text(netWorthToDisplay - currentNetWorth >= 0 ? "(+" : "(") +
+                            Text(netWorthToDisplay - currentNetWorth, format: .customCurrency()) +
+                            Text(")")
+                        }
+                        .foregroundStyle(netWorthToDisplay - currentNetWorth >= 0 ? .green : .red)
+                        .font(.footnote)
+                    }
+                }
                 Text(timeToDisplay, format: .dateTime.year().month().day())
                     .font(.footnote)
                     .foregroundColor(.secondary)
@@ -64,27 +85,43 @@ struct SavingsDPLineChart: View {
     
     @ViewBuilder
     var actualChart: some View {
-        Chart(localDataPoints) {
-            if showArea {
-                AreaMark(
+        Chart {
+            ForEach(localDataPoints) {
+                if showArea {
+                    AreaMark(
+                        x: .value("Date", $0.date),
+                        yStart: .value("Amount", minYValue),
+                        yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
+                    )
+                        .opacity(0.5)
+                        .interpolationMethod(.monotone)
+                }
+                LineMark(
                     x: .value("Date", $0.date),
-                    yStart: .value("Amount", minYValue),
-                    yEnd: .value("AmountEnd", $0.animate ? $0.value : minYValue)
+                    y: .value("Net-Worth", $0.animate ? $0.value : minYValue),
+                    series: .value("entries", "A")
                 )
-                    .opacity(0.5)
+                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
                     .interpolationMethod(.monotone)
+                if minYValue < 0 {
+                    RuleMark(y: .value("Zero", 0))
+                        .foregroundStyle(.secondary)
+                }
+                if let selectedElement, selectedElement.id == $0.id {
+                    RuleMark(x: .value("Date", selectedElement.date))
+                        .foregroundStyle(Color.secondary)
+                        .lineStyle(StrokeStyle(lineWidth: 1))
+                }
             }
-            LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.animate ? $0.value : minYValue))
-                .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round))
-                .interpolationMethod(.monotone)
-            if minYValue < 0 {
-                RuleMark(y: .value("Zero", 0))
-                    .foregroundStyle(.secondary)
-            }
-            if let selectedElement, selectedElement.id == $0.id {
-                RuleMark(x: .value("Date", selectedElement.date))
-                    .foregroundStyle(Color.secondary)
-                    .lineStyle(StrokeStyle(lineWidth: 1))
+            ForEach(predictionDataPoints) {
+                LineMark(x: .value("Date", $0.date), y: .value("Net-Worth", $0.value), series: .value("predictions", "B"))
+                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, dash: [5, 5]))
+                    .interpolationMethod(.monotone)
+                if let selectedElement, selectedElement.id == $0.id {
+                    RuleMark(x: .value("Date", selectedElement.date))
+                        .foregroundStyle(Color.secondary)
+                        .lineStyle(StrokeStyle(lineWidth: 1))
+                }
             }
         }
         .chartYAxis(.hidden)
@@ -163,15 +200,15 @@ struct SavingsDPLineChart: View {
             // Find the closest date element.
             var minDistance: TimeInterval = .infinity
             var index: Int? = nil
-            for dataIndex in self.localDataPoints.indices {
-                let nthDataDistance = dataPoints[dataIndex].date.distance(to: date)
+            for dataIndex in self.allEntries.indices {
+                let nthDataDistance = self.allEntries[dataIndex].date.distance(to: date)
                 if abs(nthDataDistance) < minDistance {
                     minDistance = abs(nthDataDistance)
                     index = dataIndex
                 }
             }
             if let index {
-                return self.localDataPoints[index]
+                return self.allEntries[index]
             }
       }
       return nil

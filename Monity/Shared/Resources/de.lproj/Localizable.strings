@@ -700,6 +700,15 @@
 /* No comment provided by engineer. */
 "Zero" = "Null";
 
+/* No comment provided by engineer. */
+"Interest Rate" = "Verzinsung";
+
+/* No comment provided by engineer. */
+"Prediction" = "Vorhersage";
+
+/* No comment provided by engineer. */
+"Show prediction" = "Vorhersage anzeigen";
+
 // MARK: - Onboarding default categories
 
 /* No comment provided by engineer. */

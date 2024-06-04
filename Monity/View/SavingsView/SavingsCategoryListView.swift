@@ -53,9 +53,12 @@ fileprivate struct SavingsEntryList: View {
 }
 
 struct SavingsCategoryListView: View {
-    var category: SavingsCategory
+    @ObservedObject var category: SavingsCategory
     var entryManager: SavingsEntryManager
     @StateObject var content: SavingsViewModel
+    @State private var showPredictions: Bool = false
+    @State private var predictionYearsRange: Double = 1
+    @State private var showEditSheet: Bool = false
     
     init(category: SavingsCategory, entryManager: SavingsEntryManager) {
         self.category = category
@@ -99,9 +102,28 @@ struct SavingsCategoryListView: View {
     
     var body: some View {
         List {
-            SavingsDPLineChart(dataPoints: $content.lineChartDataPoints)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+            SavingsDPLineChart(
+                dataPoints: $content.lineChartDataPoints,
+                predictionDataPoints: showPredictions ? category.getPredictionData(years: Int(predictionYearsRange)) : []
+            )
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+            Section {
+                Toggle("Show prediction", isOn: $showPredictions.animation())
+                if showPredictions {
+                    HStack {
+                        Text("\(Int(predictionYearsRange)) Years")
+                            .frame(minWidth: 100, alignment: .leading)
+                        Spacer()
+                        Slider(value: $predictionYearsRange, in: 1...50, step: 1)
+                            .onChange(of: predictionYearsRange) { _ in
+                                Haptics.shared.play(.soft)
+                            }
+                    }
+                }
+            } header: {
+                Text("Prediction")
+            }
             Section {
                 HStack {
                     Text("Label")
@@ -114,6 +136,11 @@ struct SavingsCategoryListView: View {
                     Text("Share of total wealth").foregroundStyle(.secondary)
                     Spacer()
                     Text(shareOfTotalWealth.round(to: 4), format: .percent)
+                }
+                HStack {
+                    Text("Interest Rate").foregroundStyle(.secondary)
+                    Spacer()
+                    Text(category.interestRate / 100, format: .percent) + Text(" p.a.")
                 }
             } header: {
                 Text("Details")
@@ -154,14 +181,28 @@ struct SavingsCategoryListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    entryManager.editor = SavingsEditor(entry: nil)
-                    entryManager.editor.category = category
-                    entryManager.showSheet.toggle()
+                Menu {
+                    Button {
+                        entryManager.editor = SavingsEditor(entry: nil)
+                        entryManager.editor.category = category
+                        entryManager.showSheet.toggle()
+                    } label: {
+                        Label("New entry", systemImage: "plus")
+                    }
+                    Button {
+                        showEditSheet.toggle()
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
                 } label: {
-                    Label("Add", systemImage: "plus")
+                    Label("Actions", systemImage: "ellipsis.circle")
                 }
             }
+        }
+        .sheet(isPresented: $showEditSheet) {
+            SavingsCategoryFormView(
+                editor: SavingsCategoryEditor(category: category)
+            )
         }
         .navigationTitle(category.wrappedName)
     }
