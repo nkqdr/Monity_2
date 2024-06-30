@@ -54,19 +54,6 @@ struct TransactionSummaryTile: View {
     }
 }
 
-fileprivate struct TransactionOverviewChart: View {
-    @StateObject private var content = AverageMonthlyChartViewModel.shared
-    var showAverageBar: Bool
-    
-    var body: some View {
-        ExpenseBarChartWithHeader(
-            data: content.barChartDataPoints,
-            showAverageBar: showAverageBar,
-            color: content.showingExpenses ? .red : .green
-        )
-    }
-}
-
 
 fileprivate struct TransactionSummaryPage: View {
     @State private var showAverageBar: Bool = false
@@ -76,7 +63,9 @@ fileprivate struct TransactionSummaryPage: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    TransactionOverviewChart(
+                    ExpenseBarChartWithHeader(
+                        isExpense: content.showingExpenses,
+                        color: content.showingExpenses ? .red : .green,
                         showAverageBar: showAverageBar
                     )
                     .frame(minHeight: 250)
@@ -179,7 +168,9 @@ fileprivate struct TransactionCategorySummaryView: View {
     var body: some View {
         List {
             VStack {
-                ExpenseBarChartWithHeader(data: content.dataPoints, color: color)
+                ExpenseBarChartWithHeader(
+                    category: category, isExpense: showExpenses, color: color
+                )
                     .frame(minHeight: 250)
                     .padding(.bottom)
             }

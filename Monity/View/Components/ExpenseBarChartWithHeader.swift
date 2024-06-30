@@ -10,25 +10,39 @@ import Charts
 import Accelerate
 
 struct ExpenseBarChartWithHeader: View {
-    @State private var selectedElement: ValueTimeDataPoint?
+    @State private var selectedElement: TimeSeriesTransactionData.DataPoint?
     @State private var dragGestureTick: Double = 0
     @State private var selectedLowerBoundDate: Date
     @State private var isDragging = false
-    var data: [ValueTimeDataPoint]
+    @ObservedObject private var timeSeriesData: TimeSeriesTransactionData
     var showAverageBar: Bool
     var color: Color
     var alwaysShowYmarks: Bool
     
-    init(data: [ValueTimeDataPoint], showAverageBar: Bool = false, color: Color = .green, alwaysShowYmarks: Bool = true) {
-        let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
-        self.data = data
+    var data: TimeSeriesTransactionData.Data {
+        self.timeSeriesData.data
+    }
+    
+    init(
+        category: TransactionCategory? = nil,
+        isExpense: Bool,
+        color: Color = .green,
+        showAverageBar: Bool = false,
+        alwaysShowYmarks: Bool = true
+    ) {
+        self.timeSeriesData = TimeSeriesTransactionData(
+            include: isExpense ? .expense : .income,
+            timeframe: .total,
+            category: category
+        )
         self.color = color
         self.showAverageBar = showAverageBar
         self.alwaysShowYmarks = alwaysShowYmarks
+        let oneYearAgo = Calendar.current.date(byAdding: DateComponents(year: -1), to: Date())!
         self._selectedLowerBoundDate = State(initialValue: oneYearAgo)
     }
     
-    private var slicedData: [ValueTimeDataPoint] {
+    private var slicedData: [TimeSeriesTransactionData.DataPoint] {
         data.filter { $0.date > selectedLowerBoundDate && $0.date <= upperBoundDate}
     }
     
@@ -74,7 +88,7 @@ struct ExpenseBarChartWithHeader: View {
         }
     }
     
-    func barChartOpacity(for dp: ValueTimeDataPoint) -> CGFloat {
+    func barChartOpacity(for dp: TimeSeriesTransactionData.DataPoint) -> CGFloat {
         let somethingIsSelected: Bool = selectedElement != nil
         let dpIsCurrentlySelected: Bool = somethingIsSelected && dp.id == selectedElement!.id
         if dpIsCurrentlySelected {
@@ -180,7 +194,7 @@ struct ExpenseBarChartWithHeader: View {
         }
     }
     
-    private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
+    private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> TimeSeriesTransactionData.DataPoint? {
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
         if let date: Date = proxy.value(atX: relativeXPosition) {
           for dataPoint in slicedData {

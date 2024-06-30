@@ -41,15 +41,24 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
-    convenience init(start: Date, end: Date, category: TransactionCategory? = nil) {
-        var predicate: NSPredicate
+    convenience init(start: Date, end: Date? = nil, category: TransactionCategory? = nil) {
+        var finalPredicate: NSPredicate
+        var datePredicate: NSPredicate = NSPredicate(format: "date >= %@", start as NSDate)
+        if let end {
+            let beforeEndPredicate = NSPredicate(format: "date <= %@", end as NSDate)
+            datePredicate = NSCompoundPredicate(
+                andPredicateWithSubpredicates: [datePredicate, beforeEndPredicate]
+            )
+        }
+        finalPredicate = datePredicate
         if let category {
-            predicate = NSPredicate(format: "date >= %@ && date <= %@ && category == %@", start as NSDate, end as NSDate, category)
-        } else {
-            predicate = NSPredicate(format: "date >= %@ && date <= %@", start as NSDate, end as NSDate)
+            let categoryPredicate = NSPredicate(format: "category == %@", category)
+            finalPredicate = NSCompoundPredicate(
+                andPredicateWithSubpredicates: [finalPredicate, categoryPredicate]
+            )
         }
         
-        self.init(predicate: predicate)
+        self.init(predicate: finalPredicate)
     }
     
     /// This initializer will create a FetchedResultsController for all transactions with the given category
