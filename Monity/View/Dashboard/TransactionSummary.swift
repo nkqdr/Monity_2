@@ -84,8 +84,10 @@ fileprivate struct TransactionSummaryPage: View {
             }
             
             Section("Categories") {
-                ForEach(content.retroDataPoints) { dataPoint in
-                    TransactionCategorySummaryTile(dataPoint: dataPoint, showExpenses: content.showingExpenses)
+                ForEach(content.retroDataPoints) { dp in
+                    TransactionCategorySummaryTile(
+                        dataPoint: dp
+                    )
                 }
             }
         }
@@ -97,11 +99,13 @@ fileprivate struct TransactionSummaryPage: View {
 }
 
 fileprivate struct TransactionCategorySummaryTile: View {
-    var dataPoint: CategoryRetroDataPoint
-    var showExpenses: Bool
+    @ObservedObject var dataPoint: CategoryRetroDataPoint
     
     var body: some View {
-        NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenses)) {
+        NavigationLink(destination: TransactionCategorySummaryView(
+            category: dataPoint.category,
+            showExpenses: dataPoint.isForExpenses)
+        ) {
             HStack {
                 if let icon = dataPoint.category.iconName {
                     Image(systemName: icon)
@@ -151,7 +155,8 @@ struct TransactionListPerCategory: View {
 }
 
 fileprivate struct TransactionCategorySummaryView: View {
-    @StateObject private var content: TransactionCategorySummaryViewModel
+    @ObservedObject private var totalRetroDP: CategoryRetroDataPoint
+    @ObservedObject private var pastYearRetroDP: CategoryRetroDataPoint
     var category: TransactionCategory
     var showExpenses: Bool
     
@@ -160,7 +165,16 @@ fileprivate struct TransactionCategorySummaryView: View {
     }
     
     init(category: TransactionCategory, showExpenses: Bool) {
-        self._content = StateObject(wrappedValue: TransactionCategorySummaryViewModel(category: category, showExpenses: showExpenses))
+        self._totalRetroDP = ObservedObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .total, isForExpenses: showExpenses
+            )
+        )
+        self._pastYearRetroDP = ObservedObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .pastYear, isForExpenses: showExpenses
+            )
+        )
         self.category = category
         self.showExpenses = showExpenses
     }
@@ -181,12 +195,12 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Total").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.retroDP.total, format: .customCurrency())
+                    Text(totalRetroDP.total, format: .customCurrency())
                 }
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.retroDP.average, format: .customCurrency())
+                    Text(totalRetroDP.average, format: .customCurrency())
                 }
             } header: {
                 Text("All-Time")
@@ -198,12 +212,12 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Total").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.lastYearRetroDP.total, format: .customCurrency())
+                    Text(pastYearRetroDP.total, format: .customCurrency())
                 }
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.lastYearRetroDP.average, format: .customCurrency())
+                    Text(pastYearRetroDP.average, format: .customCurrency())
                 }
             } header: {
                 Text("Last Year")

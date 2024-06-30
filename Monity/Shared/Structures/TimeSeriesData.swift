@@ -40,6 +40,7 @@ class TimeSeriesTransactionData: ObservableObject {
     private var include: IncludedTransactions
     private var timeframe: Timeframe
     private var category: TransactionCategory?
+    
     private var transactionCancellable: AnyCancellable?
     private var abstractTransactionWrapper: AbstractTransactionWrapper
     
@@ -52,6 +53,7 @@ class TimeSeriesTransactionData: ObservableObject {
         self.timeframe = timeframe
         self.category = category
         let startDate = timeframe.startDate ?? Date()
+        
         self.abstractTransactionWrapper = AbstractTransactionWrapper(
             startDate: startDate,
             category: category
