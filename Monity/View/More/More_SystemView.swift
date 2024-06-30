@@ -351,9 +351,22 @@ fileprivate struct ImportCSVWizard: View {
         } message: {
             Text("Please make sure to use a csv file with the correct format.")
         }
-        .sheet(isPresented: $csvImporter.showDocumentPicker) {
-            DocumentPicker(fileContent: $csvImporter.csvFileContent)
-                .ignoresSafeArea()
+        .fileImporter(isPresented: $csvImporter.showDocumentPicker, allowedContentTypes: [.commaSeparatedText]) { result in
+            switch result {
+               case .success(let fileURL):
+                // gain access to the directory
+                let gotAccess = fileURL.startAccessingSecurityScopedResource()
+                if !gotAccess { return }
+                // access the directory URL
+                let fileContent = try? String(contentsOf: fileURL, encoding: .utf8)
+                guard let fileContent else { return }
+                csvImporter.csvFileContent = fileContent
+                // release access
+                fileURL.stopAccessingSecurityScopedResource()
+               case .failure(let error):
+                   // handle error
+                   print(error)
+               }
         }
         .sheet(isPresented: $showAvailableFormatsView) {
             AvailableCSVFormatsView()
