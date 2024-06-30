@@ -98,10 +98,14 @@ struct AssetAllocationDataPoint: Identifiable {
 }
 
 struct ImportCSVSummary: Identifiable, Equatable {
+    struct CSVRow: Identifiable, Equatable {
+        var id = UUID()
+        var rowContent: String
+    }
     var id: UUID = UUID()
     var resource: CSVValidHeaders
     var rowsAmount: Int
-    var rows: [String]
+    var rows: [CSVRow]
     
     var resourceName: LocalizedStringKey {
         self.resource.resourceName
