@@ -21,14 +21,20 @@ class CategoryRetroDataPoint: ObservableObject, Identifiable {
     private var transactionCancellable: AnyCancellable?
     private var abstractTransactionWrapper: AbstractTransactionWrapper
     
-    init(category: TransactionCategory, timeframe: Timeframe, isForExpenses: Bool, now: Date = Date()) {
+    init(
+        category: TransactionCategory,
+        timeframe: Timeframe,
+        isForExpenses: Bool,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
         self.category = category
         self.timeframe = timeframe
         self.isForExpenses = isForExpenses
-        
+        let startDate = timeframe.startDate ?? Date()
         self.abstractTransactionWrapper = AbstractTransactionWrapper(
-            startDate: timeframe.startDate(now: now) ?? Date(),
-            category: category
+            startDate: startDate,
+            category: category,
+            controller: controller
         )
         let publisher = self.abstractTransactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { transactions in

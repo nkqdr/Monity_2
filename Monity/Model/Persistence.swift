@@ -26,6 +26,10 @@ class PersistenceController {
     }()
 
     let container: NSPersistentContainer
+    
+    var managedObjectContext: NSManagedObjectContext {
+        self.container.viewContext
+    }
 
     private init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(

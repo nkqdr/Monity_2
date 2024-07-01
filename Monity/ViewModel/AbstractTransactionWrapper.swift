@@ -69,14 +69,21 @@ class AbstractTransactionWrapper: ObservableObject {
     convenience init(
         startDate: Date,
         endDate: Date = Date.distantFuture,
-        category: TransactionCategory? = nil
+        category: TransactionCategory? = nil,
+        controller: PersistenceController = PersistenceController.shared
     ) {
         self.init(
             transactionController: TransactionFetchController(
-                start: startDate, end: endDate, category: category
+                start: startDate,
+                end: endDate,
+                category: category,
+                controller: controller
             ),
             recurringTransactionController: RecurringTransactionFetchController(
-                startDate: startDate, endDate: endDate, category: category
+                startDate: startDate, 
+                endDate: endDate,
+                category: category,
+                controller: controller
             ),
             startTimeframe: startDate,
             endTimeframe: endDate

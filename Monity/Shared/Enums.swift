@@ -55,8 +55,9 @@ enum Timeframe {
     case currentMonth
     case total
     
-    func startDate(now: Date = Date()) -> Date? {
+    var startDate: Date? {
         let calendar = Calendar.current
+        let now = Date().removeTimeStamp!
         switch self {
         case .pastYear:
             return calendar.date(byAdding: .year, value: -1, to: now)

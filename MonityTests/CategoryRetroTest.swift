@@ -9,18 +9,16 @@ import XCTest
 @testable import Monity
 
 final class CategoryRetroTest: XCTestCase {
-    let store = PersistenceController.preview.container
+    let persistenceController = PersistenceController.preview
     var transactions: [Transaction] = []
     var calendar: Calendar = Calendar.current
-    var todayTestComponents = DateComponents(year: 2024, month: 6, day: 16)
-    var today: Date = Date()
+    var today: Date = Date().removeTimeStamp!
     var category1: TransactionCategory?
     var category2: TransactionCategory?
 
 
     override func setUp() {
-        self.today = self.calendar.date(from: self.todayTestComponents)!
-        let viewContext = self.store.newBackgroundContext()
+        let viewContext = self.persistenceController.managedObjectContext
         
         viewContext.performAndWait {
             self.category1 = TransactionCategory(context: viewContext)
@@ -57,19 +55,99 @@ final class CategoryRetroTest: XCTestCase {
             category: self.category1!,
             timeframe: .pastYear,
             isForExpenses: true,
-            now: self.today
+            controller: self.persistenceController
         )
         XCTAssertEqual(sut.category, self.category1)
         XCTAssertEqual(sut.total, 100)
         XCTAssertEqual(sut.average, 100)
         XCTAssertEqual(sut.numTransactions, 1)
+        
+        let sut2 = CategoryRetroDataPoint(
+            category: self.category1!,
+            timeframe: .pastYear,
+            isForExpenses: false,
+            controller: self.persistenceController
+        )
+        XCTAssertEqual(sut2.category, self.category1)
+        XCTAssertEqual(sut2.total, 1000)
+        XCTAssertEqual(sut2.average, 1000)
+        XCTAssertEqual(sut2.numTransactions, 1)
     }
-
-//    func testPerformanceExample() throws {
-//        // This is an example of a performance test case.
-//        self.measure {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
+    
+    func testRetroDPShouldIgnoreTooOldTransactions() {
+        let viewContext = self.persistenceController.managedObjectContext
+        viewContext.performAndWait {
+            let t1 = Transaction(context: viewContext)
+            t1.category = self.category1
+            t1.amount = 500
+            t1.isExpense = true
+            t1.date = self.calendar.date(byAdding: DateComponents(month: -1, day: -1), to: today)
+            
+            let t2 = Transaction(context: viewContext)
+            t2.category = self.category1
+            t2.amount = 700
+            t2.isExpense = true
+            t2.date = self.calendar.date(byAdding: DateComponents(year: -1, day: -1), to: today)
+            
+            try? viewContext.save()
+        }
+        
+        let sut = CategoryRetroDataPoint(
+            category: self.category1!,
+            timeframe: .total,
+            isForExpenses: true,
+            controller: self.persistenceController
+        )
+        XCTAssertEqual(sut.total, 1300)
+        XCTAssertEqual(sut.average, 1300 / 3)
+        XCTAssertEqual(sut.numTransactions, 3)
+        
+        let sut2 = CategoryRetroDataPoint(
+            category: self.category1!,
+            timeframe: .pastYear,
+            isForExpenses: true,
+            controller: self.persistenceController
+        )
+        XCTAssertEqual(sut2.total, 600)
+        XCTAssertEqual(sut2.average, 300)
+        XCTAssertEqual(sut2.numTransactions, 2)
+        
+        let sut3 = CategoryRetroDataPoint(
+            category: self.category1!,
+            timeframe: .pastMonth,
+            isForExpenses: true,
+            controller: self.persistenceController
+        )
+        XCTAssertEqual(sut3.total, 100)
+        XCTAssertEqual(sut3.average, 100)
+        XCTAssertEqual(sut3.numTransactions, 1)
+    }
+    
+    func testRetroDPShouldBeUpdatedForNewTransaction() {
+        let sut = CategoryRetroDataPoint(
+            category: self.category1!,
+            timeframe: .total,
+            isForExpenses: true,
+            controller: self.persistenceController
+        )
+        XCTAssertEqual(sut.total, 100)
+        XCTAssertEqual(sut.average, 100)
+        XCTAssertEqual(sut.numTransactions, 1)
+        
+        let viewContext = self.persistenceController.managedObjectContext
+        viewContext.performAndWait {
+            let t1 = Transaction(context: viewContext)
+            t1.category = self.category1
+            t1.amount = 500
+            t1.isExpense = true
+            t1.date = self.calendar.date(byAdding: DateComponents(month: -1, day: -1), to: today)
+            
+            try? viewContext.save()
+        }
+        
+        XCTAssertEqual(sut.total, 600)
+        XCTAssertEqual(sut.average, 300)
+        XCTAssertEqual(sut.numTransactions, 2)
+    }
 
 }

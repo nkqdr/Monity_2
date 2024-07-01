@@ -11,10 +11,15 @@ import CoreData
 class RecurringTransactionFetchController: BaseFetchController<RecurringTransaction> {
     public static let all = RecurringTransactionFetchController()
     
-    private init() {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)
-        ])
+    private init(
+        controller: PersistenceController = PersistenceController.shared
+    ) {
+        super.init(
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)
+            ],
+            managedObjectContext: controller.managedObjectContext
+        )
     }
     
     /// FetchController for only those recurring transactions which are active at the given `date`.
@@ -31,7 +36,12 @@ class RecurringTransactionFetchController: BaseFetchController<RecurringTransact
     }
     
     /// FetchController for only those recurring transactions which were active somewhere in the given date range.
-    public init(startDate: Date, endDate: Date = Date.distantFuture, category: TransactionCategory? = nil) {
+    public init(
+        startDate: Date,
+        endDate: Date = Date.distantFuture,
+        category: TransactionCategory? = nil,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
         let hangingLeftPredicate = NSPredicate(format: "startDate <= %@ && endDate >= %@", startDate as NSDate, startDate as NSDate)
         let inBetweenPredicate = NSPredicate(format: "startDate >= %@ && endDate <= %@", startDate as NSDate, endDate as NSDate)
         let hangingRightPredicate = NSPredicate(format: "startDate <= %@ && endDate >= %@", endDate as NSDate, endDate as NSDate)
@@ -49,7 +59,8 @@ class RecurringTransactionFetchController: BaseFetchController<RecurringTransact
         }
         super.init(
             sortDescriptors: [NSSortDescriptor(keyPath: \RecurringTransaction.name, ascending: true)],
-            predicate: finalPredicate
+            predicate: finalPredicate,
+            managedObjectContext: controller.managedObjectContext
         )
     }
 }

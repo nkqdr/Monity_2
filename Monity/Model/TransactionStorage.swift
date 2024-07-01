@@ -26,9 +26,10 @@ class TransactionFetchController: BaseFetchController<Transaction> {
             #keyPath(Transaction.category.name),
             #keyPath(Transaction.category.iconName)
         ],
-        predicate: NSPredicate? = nil
+        predicate: NSPredicate? = nil,
+        controller: PersistenceController = PersistenceController.shared
     ) {
-        super.init(sortDescriptors: sortDescriptors, keyPathsForRefreshing: keyPathsForRefreshing, predicate: predicate)
+        super.init(sortDescriptors: sortDescriptors, keyPathsForRefreshing: keyPathsForRefreshing, predicate: predicate, managedObjectContext: controller.managedObjectContext)
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given month.
@@ -41,7 +42,12 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions in the given timeframe.
-    convenience init(start: Date, end: Date? = nil, category: TransactionCategory? = nil) {
+    convenience init(
+        start: Date,
+        end: Date? = nil,
+        category: TransactionCategory? = nil,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
         var finalPredicate: NSPredicate
         var datePredicate: NSPredicate = NSPredicate(format: "date >= %@", start as NSDate)
         if let end {
@@ -58,7 +64,7 @@ class TransactionFetchController: BaseFetchController<Transaction> {
             )
         }
         
-        self.init(predicate: finalPredicate)
+        self.init(predicate: finalPredicate, controller: controller)
     }
     
     /// This initializer will create a FetchedResultsController for all transactions with the given category
