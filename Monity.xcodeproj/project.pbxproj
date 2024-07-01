@@ -107,8 +107,6 @@
 		60BD9F1B28F35B70001FF5FF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1A28F35B70001FF5FF /* Persistence.swift */; };
 		60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F1C28F35B70001FF5FF /* Monity.xcdatamodeld */; };
 		60BD9F2928F35B70001FF5FF /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F2828F35B70001FF5FF /* DateTests.swift */; };
-		60BD9F3328F35B70001FF5FF /* MonityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3228F35B70001FF5FF /* MonityUITests.swift */; };
-		60BD9F3528F35B70001FF5FF /* MonityUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */; };
 		60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4228F35C27001FF5FF /* TransactionCategoryStorage.swift */; };
 		60BD9F4628F35C77001FF5FF /* TransactionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */; };
 		60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */; };
@@ -131,13 +129,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		60BD9F2528F35B70001FF5FF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 60BD9F0628F35B6F001FF5FF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 60BD9F0D28F35B6F001FF5FF;
-			remoteInfo = Monity;
-		};
-		60BD9F2F28F35B70001FF5FF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 60BD9F0628F35B6F001FF5FF /* Project object */;
 			proxyType = 1;
@@ -237,9 +228,6 @@
 		60BD9F1F28F35B70001FF5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60BD9F2428F35B70001FF5FF /* MonityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MonityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BD9F2828F35B70001FF5FF /* DateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTests.swift; sourceTree = "<group>"; };
-		60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MonityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		60BD9F3228F35B70001FF5FF /* MonityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITests.swift; sourceTree = "<group>"; };
-		60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonityUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		60BD9F4228F35C27001FF5FF /* TransactionCategoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryStorage.swift; sourceTree = "<group>"; };
 		60BD9F4528F35C77001FF5FF /* TransactionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditor.swift; sourceTree = "<group>"; };
 		60BD9F4828F35CCC001FF5FF /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
@@ -270,13 +258,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		60BD9F2128F35B70001FF5FF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		60BD9F2B28F35B70001FF5FF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -398,7 +379,6 @@
 			children = (
 				60BD9F1028F35B6F001FF5FF /* Monity */,
 				60BD9F2728F35B70001FF5FF /* MonityTests */,
-				60BD9F3128F35B70001FF5FF /* MonityUITests */,
 				60BD9F0F28F35B6F001FF5FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -408,7 +388,6 @@
 			children = (
 				60BD9F0E28F35B6F001FF5FF /* Monity.app */,
 				60BD9F2428F35B70001FF5FF /* MonityTests.xctest */,
-				60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -446,15 +425,6 @@
 				602493A12B0FEA6F000BAA9B /* SavingsCalculationTest.swift */,
 			);
 			path = MonityTests;
-			sourceTree = "<group>";
-		};
-		60BD9F3128F35B70001FF5FF /* MonityUITests */ = {
-			isa = PBXGroup;
-			children = (
-				60BD9F3228F35B70001FF5FF /* MonityUITests.swift */,
-				60BD9F3428F35B70001FF5FF /* MonityUITestsLaunchTests.swift */,
-			);
-			path = MonityUITests;
 			sourceTree = "<group>";
 		};
 		60BD9F4128F35B81001FF5FF /* Model */ = {
@@ -610,24 +580,6 @@
 			productReference = 60BD9F2428F35B70001FF5FF /* MonityTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		60BD9F2D28F35B70001FF5FF /* MonityUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 60BD9F3E28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityUITests" */;
-			buildPhases = (
-				60BD9F2A28F35B70001FF5FF /* Sources */,
-				60BD9F2B28F35B70001FF5FF /* Frameworks */,
-				60BD9F2C28F35B70001FF5FF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				60BD9F3028F35B70001FF5FF /* PBXTargetDependency */,
-			);
-			name = MonityUITests;
-			productName = MonityUITests;
-			productReference = 60BD9F2E28F35B70001FF5FF /* MonityUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -642,10 +594,6 @@
 						CreatedOnToolsVersion = 14.0.1;
 					};
 					60BD9F2328F35B70001FF5FF = {
-						CreatedOnToolsVersion = 14.0.1;
-						TestTargetID = 60BD9F0D28F35B6F001FF5FF;
-					};
-					60BD9F2D28F35B70001FF5FF = {
 						CreatedOnToolsVersion = 14.0.1;
 						TestTargetID = 60BD9F0D28F35B6F001FF5FF;
 					};
@@ -670,7 +618,6 @@
 			targets = (
 				60BD9F0D28F35B6F001FF5FF /* Monity */,
 				60BD9F2328F35B70001FF5FF /* MonityTests */,
-				60BD9F2D28F35B70001FF5FF /* MonityUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -688,13 +635,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		60BD9F2228F35B70001FF5FF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		60BD9F2C28F35B70001FF5FF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -831,15 +771,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		60BD9F2A28F35B70001FF5FF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				60BD9F3528F35B70001FF5FF /* MonityUITestsLaunchTests.swift in Sources */,
-				60BD9F3328F35B70001FF5FF /* MonityUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -847,11 +778,6 @@
 			isa = PBXTargetDependency;
 			target = 60BD9F0D28F35B6F001FF5FF /* Monity */;
 			targetProxy = 60BD9F2528F35B70001FF5FF /* PBXContainerItemProxy */;
-		};
-		60BD9F3028F35B70001FF5FF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 60BD9F0D28F35B6F001FF5FF /* Monity */;
-			targetProxy = 60BD9F2F28F35B70001FF5FF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1121,42 +1047,6 @@
 			};
 			name = Release;
 		};
-		60BD9F3F28F35B70001FF5FF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5BW79HX26Y;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Monity;
-			};
-			name = Debug;
-		};
-		60BD9F4028F35B70001FF5FF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5BW79HX26Y;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Monity;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1183,15 +1073,6 @@
 			buildConfigurations = (
 				60BD9F3C28F35B70001FF5FF /* Debug */,
 				60BD9F3D28F35B70001FF5FF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		60BD9F3E28F35B70001FF5FF /* Build configuration list for PBXNativeTarget "MonityUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				60BD9F3F28F35B70001FF5FF /* Debug */,
-				60BD9F4028F35B70001FF5FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
