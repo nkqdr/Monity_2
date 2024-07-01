@@ -48,6 +48,36 @@ enum CSVValidHeaders: String, CaseIterable {
     }
 }
 
+enum Timeframe {
+    case pastYear
+    case pastMonth
+    case currentYear
+    case currentMonth
+    case total
+    
+    var startDate: Date? {
+        let calendar = Calendar.current
+        let now = Date().removeTimeStamp!
+        switch self {
+        case .pastYear:
+            return calendar.date(byAdding: .year, value: -1, to: now)
+        case .pastMonth:
+            return calendar.date(byAdding: .month, value: -1, to: now)
+        case .currentYear:
+            let currentYear = calendar.component(.year, from: now)
+            let startComponents = DateComponents(year: currentYear, month: 1, day: 1)
+            return calendar.date(from: startComponents)
+        case .currentMonth:
+            let currentYear = calendar.component(.year, from: now)
+            let currentMonth = calendar.component(.month, from: now)
+            let startComponents = DateComponents(year: currentYear, month: currentMonth, day: 1)
+            return calendar.date(from: startComponents)
+        case .total:
+            return Date.distantPast
+        }
+    }
+}
+
 enum TransactionCycle: Int16, CaseIterable {
     case monthly = 0
     case yearly = 1

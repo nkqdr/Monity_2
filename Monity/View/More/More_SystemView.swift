@@ -80,8 +80,8 @@ struct ImportSummaryView: View {
             GeometryReader { proxy in
                 ScrollView {
                     LazyVStack {
-                        ForEach(summary.rows, id: \.self) { row in
-                            ImportSummaryRow(resource: summary.resource, row: row)
+                        ForEach(summary.rows) { row in
+                            ImportSummaryRow(resource: summary.resource, row: row.rowContent)
                         }
                     }
                     .padding()
@@ -100,87 +100,76 @@ struct ImportSummaryView: View {
     }
 }
 
-fileprivate struct CSVFile: FileDocument {
-    // tell the system we support only plain text
-    static var readableContentTypes = [UTType.commaSeparatedText]
-    static var writableContentTypes = [UTType.commaSeparatedText]
-
-    // by default our document is empty
-    var text = ""
-
-    // a simple initializer that creates new, empty documents
-    init(initialText: String = "") {
-        text = initialText
+fileprivate struct CSVExportedFile: Transferable {
+    enum ExportError: Error {
+        case invalidInitError(String)
     }
-
-    // this initializer loads data that has been saved previously
-    init(configuration: ReadConfiguration) throws {
-        if let data = configuration.file.regularFileContents {
-            text = String(decoding: data, as: UTF8.self)
+    enum ExportedData {
+        case transactions(TransactionFetchController)
+        case recurringTransactions(RecurringTransactionFetchController)
+        case savings(SavingsFetchController)
+        
+        var dataRows: [any CSVRepresentable] {
+            switch self {
+            case let .transactions(fetchController):
+                return fetchController.items.value
+            case let .recurringTransactions(fetchController):
+                return fetchController.items.value
+            case let .savings(fetchController):
+                return fetchController.items.value
+            }
+        }
+        
+        var headers: CSVValidHeaders {
+            switch self {
+            case .transactions:
+                return CSVValidHeaders.transactionCSV
+            case .recurringTransactions:
+                return CSVValidHeaders.recurringTransactionCSV
+            case .savings:
+                return CSVValidHeaders.savingsCSV
+            }
         }
     }
-
-    // this will be called when the system wants to write our data to disk
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = Data(text.utf8)
-        return FileWrapper(regularFileWithContents: data)
+    let dataType: ExportedData?
+    private var textContent: String?
+    
+    init(dataType: ExportedData) {
+        self.dataType = dataType
+        self.textContent = nil
     }
     
-}
-
-fileprivate struct ExportSection: View {
-    @ObservedObject private var dataExporter: DataExporter = DataExporter()
-    @State private var showExporter: Bool = false
-    @State private var fileContents: String = ""
-    @State private var fileName: String = ""
-    @State private var showErrorMessage: Bool = false
-    @State private var errorMessage: String = ""
+    init(data: Data) throws {
+        self.textContent = String(data: data, encoding: .utf8)
+        self.dataType = nil
+    }
     
-    var body: some View {
-        Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
-            Button {
-                let res = dataExporter.getTransactionCSVContent()
-                fileContents = res.0
-                fileName = res.1
-                showExporter = true
-            } label: {
-                Label("Transactions", systemImage: "square.and.arrow.up")
-            }
-            Button {
-                let res = dataExporter.getRecurringTransactionsCSVContent()
-                fileContents = res.0
-                fileName = res.1
-                showExporter = true
-            } label: {
-                Label("Recurring expenses", systemImage: "square.and.arrow.up")
-            }
-            Button {
-                let res = dataExporter.getSavingsCSVContent()
-                fileContents = res.0
-                fileName = res.1
-                showExporter = true
-            } label: {
-                Label("Savings", systemImage: "square.and.arrow.up")
-            }
+    func buildTextContent() throws -> String {
+        if let content = self.textContent {
+            return content
         }
-        .fileExporter(isPresented: $showExporter, document: CSVFile(initialText: fileContents), contentType: .commaSeparatedText, defaultFilename: fileName) { result in
-            switch (result) {
-            case .success:
-                return
-            case .failure(let error):
-                showErrorMessage = true
-                errorMessage = error.localizedDescription
-            }
+        guard let dataType = self.dataType else {
+            throw ExportError.invalidInitError("Couldn't find textContent or dataType value.")
         }
-        .alert("Export failed!", isPresented: $showErrorMessage) {
-            Button("OK", role: .cancel) {
-               
-            }
-        } message: {
-            Text("The export failed with this message: \(errorMessage)")
+        let csvRows = dataType.dataRows
+        let headers = dataType.headers.rawValue
+        var exportString: String = headers + "\n"
+        for item in csvRows {
+            exportString += item.commaSeparatedString + "\n"
         }
+        return exportString
+    }
+    
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(contentType: .commaSeparatedText) { exportedFile in
+            let content = try exportedFile.buildTextContent()
+            return Data(content.utf8)
+        } importing: { received in
+            try Self.init(data: received)
+        }.suggestedFileName("MonityExport")
     }
 }
+
 
 fileprivate struct ImportCSVWizard: View {
     @Environment(\.dismiss) var dismiss
@@ -351,9 +340,21 @@ fileprivate struct ImportCSVWizard: View {
         } message: {
             Text("Please make sure to use a csv file with the correct format.")
         }
-        .sheet(isPresented: $csvImporter.showDocumentPicker) {
-            DocumentPicker(fileContent: $csvImporter.csvFileContent)
-                .ignoresSafeArea()
+        .fileImporter(isPresented: $csvImporter.showDocumentPicker, allowedContentTypes: [.commaSeparatedText]) { result in
+            switch result {
+                case .success(let fileURL):
+                    let gotAccess = fileURL.startAccessingSecurityScopedResource()
+                    if !gotAccess { return }
+                    do {
+                        csvImporter.csvFileContent = try String(contentsOf: fileURL, encoding: .utf8)
+                    } catch let error {
+                        print(error.localizedDescription)
+                    }
+                    fileURL.stopAccessingSecurityScopedResource()
+              case .failure(let error):
+                    print(error)
+              }
+                
         }
         .sheet(isPresented: $showAvailableFormatsView) {
             AvailableCSVFormatsView()
@@ -406,44 +407,6 @@ fileprivate struct AvailableCSVFormatsView: View {
                         .frame(maxWidth: .infinity)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
                     }
-//                    LazyHGrid(rows: cols.map { _ in GridItem(alignment: .leading) }) {
-//                        ForEach(cols, id: \.hashValue) { col in
-//                            Text(col).font(.footnote.monospaced())
-//                        }
-//                        ForEach(Array(headers.types.split(separator: ",").enumerated()), id: \.0) { _, type in
-//                            Text(type).font(.footnote.monospaced())
-//                        }
-//                    }
-//                    .padding()
-//                    .frame(maxWidth: .infinity)
-//                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
-                    
-//                    VStack(alignment: .leading) {
-//                        Text(headers.resourceName).font(.subheadline.bold())
-//                        Group {
-//                            HStack(spacing: 8) {
-//                                VStack(alignment: .leading) {
-//                                    ForEach(headers.rawValue.split(separator: ","), id: \.hashValue) { col in
-//                                        VStack(spacing: 10) {
-//                                            Text(col).font(.footnote.monospaced())
-//                                        }
-//                                    }
-//                                }
-//                                Divider()
-//                                VStack(alignment: .leading) {
-//                                    ForEach(headers.types.split(separator: ","), id: \.hashValue) { col in
-//                                        VStack(spacing: 10) {
-//                                            Text(col).font(.footnote.monospaced())
-//                                        }
-//                                    }
-//                                }
-//                                .frame(maxWidth: .infinity)
-//                            }
-//                        }
-//                        .padding()
-//                        .frame(maxWidth: .infinity)
-//                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
-//                    }
                 }
                 .padding(.top, 20)
             }
@@ -462,7 +425,7 @@ struct More_SystemView: View {
         List {
             dataSection
             importSection
-            ExportSection()
+            exportSection
         }
         
         .sheet(isPresented: $content.showFilePicker) {
@@ -525,6 +488,32 @@ struct More_SystemView: View {
             } label: {
                 Label("Select CSV", systemImage: "square.and.arrow.down")
             }
+        }
+    }
+    
+    var exportSection: some View {
+        Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
+            ShareLink(
+                "Transactions",
+                item: CSVExportedFile(
+                    dataType: .transactions(TransactionFetchController.all)
+                ),
+                preview: SharePreview("Transactions")
+            )
+            ShareLink(
+                "Recurring expenses",
+                item: CSVExportedFile(
+                    dataType: .recurringTransactions(RecurringTransactionFetchController.all)
+                ),
+                preview: SharePreview("Recurring expenses")
+            )
+            ShareLink(
+                "Savings",
+                item: CSVExportedFile(
+                    dataType: .savings(SavingsFetchController.all)
+                ),
+                preview: SharePreview("Savings")
+            )
         }
     }
 }

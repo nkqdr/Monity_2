@@ -18,7 +18,7 @@ class BaseFetchController<ModelClass>: NSObject, ObservableObject, NSFetchedResu
         sortDescriptors: [NSSortDescriptor],
         keyPathsForRefreshing: Set<String> = [],
         predicate: NSPredicate? = nil,
-        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.managedObjectContext
     ) {
         let request = RichFetchRequest<ModelClass>(entityName: ModelClass.entity().name ?? "")
         request.sortDescriptors = sortDescriptors
