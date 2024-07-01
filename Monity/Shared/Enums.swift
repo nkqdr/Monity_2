@@ -49,11 +49,14 @@ enum CSVValidHeaders: String, CaseIterable {
 }
 
 enum Timeframe {
-    case pastYear, pastMonth, currentYear, currentMonth, total
+    case pastYear
+    case pastMonth
+    case currentYear
+    case currentMonth
+    case total
     
-    var startDate: Date? {
+    func startDate(now: Date = Date()) -> Date? {
         let calendar = Calendar.current
-        let now = Date()
         switch self {
         case .pastYear:
             return calendar.date(byAdding: .year, value: -1, to: now)

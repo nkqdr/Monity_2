@@ -47,12 +47,13 @@ class TimeSeriesTransactionData: ObservableObject {
     init(
         include: IncludedTransactions, 
         timeframe: Timeframe,
-        category: TransactionCategory? = nil
+        category: TransactionCategory? = nil,
+        now: Date = Date()
     ) {
         self.include = include
         self.timeframe = timeframe
         self.category = category
-        let startDate = timeframe.startDate ?? Date()
+        let startDate = timeframe.startDate(now: now) ?? Date()
         
         self.abstractTransactionWrapper = AbstractTransactionWrapper(
             startDate: startDate,

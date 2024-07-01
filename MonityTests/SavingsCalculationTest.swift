@@ -6,9 +6,10 @@
 //
 
 import XCTest
+@testable import Monity
 
 final class SavingsCalculationTest: XCTestCase {
-    let store = PersistenceController(inMemory: true).container
+    let store = PersistenceController.preview.container
     var savings: [SavingsEntry] = []
     
     override func setUp() {
@@ -38,10 +39,7 @@ final class SavingsCalculationTest: XCTestCase {
     }
 
     func testLineChartDataStaysCorrectEvenIfSomeEntriesFromTheBeginningAreNotShown() throws {
-        let fetchController = SavingsFetchController(since: Date.distantPast, managedObjectContext: store.viewContext)
-        let results = fetchController.items.value
-        
-        let result = LineChartDataBuilder.generateSavingsLineChartData(for: self.savings, granularity: .day)
+        let result = LineChartDataBuilder.generateSavingsLineChartData(for: self.savings, granularity: Calendar.Component.day)
         XCTAssertEqual(result.count, 15)
         XCTAssertEqual(result.first!.value, 66)
         XCTAssertEqual(result[2].value, 147)
@@ -50,7 +48,7 @@ final class SavingsCalculationTest: XCTestCase {
         let smallResult = LineChartDataBuilder.generateSavingsLineChartData(
             for: self.savings,
             lowerBound: Calendar.current.date(byAdding: DateComponents(month: -5), to: Date())!,
-            granularity: .day
+            granularity: Calendar.Component.day
         )
         XCTAssertEqual(smallResult.count, 5)
         XCTAssertEqual(smallResult.first!.value, 342)
@@ -60,7 +58,7 @@ final class SavingsCalculationTest: XCTestCase {
         let smallestResult = LineChartDataBuilder.generateSavingsLineChartData(
             for: self.savings,
             lowerBound: Calendar.current.date(byAdding: DateComponents(month: -1), to: Date())!,
-            granularity: .day
+            granularity: Calendar.Component.day
         )
         XCTAssertEqual(smallestResult.count, 1)
         XCTAssertEqual(smallestResult.first!.value, 1500)
