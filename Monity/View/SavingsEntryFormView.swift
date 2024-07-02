@@ -70,7 +70,9 @@ struct SavingsEntryFormView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        editor.save()
+                        withAnimation {
+                            editor.save()
+                        }
                         isPresented = false
                     }
                     .disabled(!editor.isValid)
