@@ -10,7 +10,7 @@ import Charts
 
 fileprivate struct SavingsCategoryTile: View {
     @EnvironmentObject private var entryManager: SavingsEntryManager
-    @ObservedObject var category: SavingsCategory
+    @StateObject var category: SavingsCategory
     @State private var showEditSheet: Bool = false
     
     private var currentAmount: Double? {
@@ -26,7 +26,7 @@ fileprivate struct SavingsCategoryTile: View {
     }
     
     var body: some View {
-        NavigationLink(destination: SavingsCategoryListView(category: category, entryManager: entryManager)) {
+        NavigationLink(destination: SavingsCategoryListProxy(category: category)) {
             GroupBox(label: groupBoxLabel) {
                 HStack(alignment: .top) {
                     Spacer()
@@ -84,17 +84,15 @@ fileprivate struct SavingsCategoryTile: View {
 }
 
 fileprivate struct SavingsCategoryList: View {
-    var categories: [SavingsCategory]
+    @StateObject private var viewModel: SavingsCategoryGridVM
     
-    private var sortedCategories: [SavingsCategory] {
-        categories.sorted { c1, c2 in
-            c1.lastEntry?.amount ?? 0 > c2.lastEntry?.amount ?? 0
-        }
+    init(isHidden: Bool) {
+        self._viewModel = StateObject(wrappedValue: SavingsCategoryGridVM(isHidden: isHidden))
     }
     
     var body: some View {
         LazyVGrid(columns: [GridItem(), GridItem()]) {
-            ForEach(sortedCategories, id: \.self) { category in
+            ForEach(viewModel.categories) { category in
                 SavingsCategoryTile(category: category)
             }
         }
@@ -230,7 +228,7 @@ struct SavingsDetailView: View {
             categorySectionHeader
                 .padding(.horizontal)
                 .padding(.top)
-            SavingsCategoryList(categories: content.shownCategories)
+            SavingsCategoryList(isHidden: false)
         }
     }
     
@@ -261,7 +259,7 @@ struct SavingsDetailView: View {
             NavigationView {
                 ListBase {
                     ScrollView {
-                        SavingsCategoryList(categories: content.hiddenCategories)
+                        SavingsCategoryList(isHidden: true)
                             .environmentObject(entryManager)
                     }
                 }

@@ -52,17 +52,26 @@ fileprivate struct SavingsEntryList: View {
     }
 }
 
-struct SavingsCategoryListView: View {
+struct SavingsCategoryListProxy: View {
     @ObservedObject var category: SavingsCategory
-    var entryManager: SavingsEntryManager
+    
+    var body: some View {
+        Group {
+            SavingsCategoryListView(category: category)
+        }
+    }
+}
+
+struct SavingsCategoryListView: View {
+    @EnvironmentObject private var entryManager: SavingsEntryManager
+    private var category: SavingsCategory
     @StateObject var content: SavingsViewModel
     @State private var showPredictions: Bool = false
     @State private var predictionYearsRange: Double = 1
     @State private var showEditSheet: Bool = false
     
-    init(category: SavingsCategory, entryManager: SavingsEntryManager) {
+    init(category: SavingsCategory) {
         self.category = category
-        self.entryManager = entryManager
         self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
     }
     
