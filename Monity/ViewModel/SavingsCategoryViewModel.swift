@@ -9,6 +9,24 @@ import Foundation
 import Combine
 import Accelerate
 
+class SavingsCategoryGridVM: ObservableObject {
+    @Published var categories: [SavingsCategory] = []
+    
+    private var categoryCancellable: AnyCancellable?
+    private var fetchController: SavingsCategoryFetchController
+    
+    init(isHidden: Bool) {
+        self.fetchController = SavingsCategoryFetchController(isHidden: isHidden)
+        let publisher = self.fetchController.items.eraseToAnyPublisher()
+        
+        self.categoryCancellable = publisher.sink { categories in
+            self.categories = categories.sorted(by: { c1, c2 in
+                (c1.lastEntry?.amount ?? 0) > (c2.lastEntry?.amount ?? 0)
+            })
+        }
+    }
+}
+
 class SavingsCategoryViewModel: ItemListViewModel<SavingsCategory> {
     static let shared = SavingsCategoryViewModel()
     @Published var shownCategories: [SavingsCategory] = []
