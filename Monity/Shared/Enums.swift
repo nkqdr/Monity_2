@@ -76,6 +76,23 @@ enum Timeframe {
             return Date.distantPast
         }
     }
+    
+    var numMonths: Int? {
+        if self == .total {
+            // In this case, the numMonths is dependent on the earliest
+            // date where data was stored in the DB.
+            // This case should be handled by whatever is accessing this property
+            return nil
+        }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        guard let startDate else {
+            return nil
+        }
+        let comps = calendar.dateComponents([.month], from: startDate, to: now)
+        return comps.month
+    }
 }
 
 enum TransactionCycle: Int16, CaseIterable {

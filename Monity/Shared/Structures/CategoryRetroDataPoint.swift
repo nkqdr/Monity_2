@@ -15,7 +15,7 @@ class CategoryRetroDataPoint: ObservableObject, Identifiable {
     var isForExpenses: Bool
     @Published var category: TransactionCategory
     @Published var total: Double = 0
-    @Published var average: Double = 0
+    @Published var averagePerMonth: Double = 0
     @Published var numTransactions: Int = 0
     
     private var transactionCancellable: AnyCancellable?
@@ -39,13 +39,31 @@ class CategoryRetroDataPoint: ObservableObject, Identifiable {
         let publisher = self.abstractTransactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { transactions in
             let filteredTransactions = transactions.filter { $0.isExpense == isForExpenses }
+            
             self.total = vDSP.sum(
                 filteredTransactions.map { $0.amount }
             )
-            self.average = vDSP.mean(
-                filteredTransactions.map { $0.amount }
-            )
             self.numTransactions = filteredTransactions.count
+            
+            if let numMonths = timeframe.numMonths {
+                self.averagePerMonth = self.total / Double(numMonths)
+            } else if timeframe == .total {
+                let sortedByDate = filteredTransactions.sorted {
+                    $0.wrappedDate < $1.wrappedDate
+                }
+                let firstTransactionDate: Date? = sortedByDate.first?.date
+                if firstTransactionDate == nil {
+                    self.averagePerMonth = 0
+                    return
+                }
+                
+                let comps = Calendar.current.dateComponents([.month], 
+                                                            from: firstTransactionDate!, to: Date())
+                self.averagePerMonth = self.total / Double(comps.month ?? 1)
+            } else {
+                // The calendar failed to calculate a range
+                self.averagePerMonth = 0
+            }
         }
     }
 }

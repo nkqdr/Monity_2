@@ -126,7 +126,7 @@ fileprivate struct TransactionCategorySummaryTile: View {
                         .font(.caption)
                     Text(dataPoint.total, format: .customCurrency())
                         .fontWeight(.semibold)
-                    Text("Ø\(dataPoint.average.formatted(.customCurrency())) p.m.")
+                    Text("Ø\(dataPoint.averagePerMonth.formatted(.customCurrency())) p.m.")
                         .font(.caption2)
                 }
                 .foregroundColor(Color.secondary)
@@ -200,7 +200,7 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(totalRetroDP.average, format: .customCurrency())
+                    Text(totalRetroDP.averagePerMonth, format: .customCurrency())
                 }
             } header: {
                 Text("All-Time")
@@ -217,7 +217,7 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(pastYearRetroDP.average, format: .customCurrency())
+                    Text(pastYearRetroDP.averagePerMonth, format: .customCurrency())
                 }
             } header: {
                 Text("Last Year")

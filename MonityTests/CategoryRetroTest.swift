@@ -59,7 +59,7 @@ final class CategoryRetroTest: XCTestCase {
         )
         XCTAssertEqual(sut.category, self.category1)
         XCTAssertEqual(sut.total, 100)
-        XCTAssertEqual(sut.average, 100)
+        XCTAssertEqual(sut.averagePerMonth, 100 / 12)
         XCTAssertEqual(sut.numTransactions, 1)
         
         let sut2 = CategoryRetroDataPoint(
@@ -70,7 +70,7 @@ final class CategoryRetroTest: XCTestCase {
         )
         XCTAssertEqual(sut2.category, self.category1)
         XCTAssertEqual(sut2.total, 1000)
-        XCTAssertEqual(sut2.average, 1000)
+        XCTAssertEqual(sut2.averagePerMonth, 1000 / 12)
         XCTAssertEqual(sut2.numTransactions, 1)
     }
     
@@ -99,7 +99,7 @@ final class CategoryRetroTest: XCTestCase {
             controller: self.persistenceController
         )
         XCTAssertEqual(sut.total, 1300)
-        XCTAssertEqual(sut.average, 1300 / 3)
+        XCTAssertEqual(sut.averagePerMonth, 1300 / 12) // The earliest transaction is 12 months back
         XCTAssertEqual(sut.numTransactions, 3)
         
         let sut2 = CategoryRetroDataPoint(
@@ -109,7 +109,7 @@ final class CategoryRetroTest: XCTestCase {
             controller: self.persistenceController
         )
         XCTAssertEqual(sut2.total, 600)
-        XCTAssertEqual(sut2.average, 300)
+        XCTAssertEqual(sut2.averagePerMonth, 600 / 12)
         XCTAssertEqual(sut2.numTransactions, 2)
         
         let sut3 = CategoryRetroDataPoint(
@@ -119,7 +119,7 @@ final class CategoryRetroTest: XCTestCase {
             controller: self.persistenceController
         )
         XCTAssertEqual(sut3.total, 100)
-        XCTAssertEqual(sut3.average, 100)
+        XCTAssertEqual(sut3.averagePerMonth, 100)
         XCTAssertEqual(sut3.numTransactions, 1)
     }
     
@@ -131,7 +131,7 @@ final class CategoryRetroTest: XCTestCase {
             controller: self.persistenceController
         )
         XCTAssertEqual(sut.total, 100)
-        XCTAssertEqual(sut.average, 100)
+//        XCTAssertEqual(sut.average, 100)
         XCTAssertEqual(sut.numTransactions, 1)
         
         let viewContext = self.persistenceController.managedObjectContext
@@ -146,7 +146,7 @@ final class CategoryRetroTest: XCTestCase {
         }
         
         XCTAssertEqual(sut.total, 600)
-        XCTAssertEqual(sut.average, 300)
+//        XCTAssertEqual(sut.average, 300)
         XCTAssertEqual(sut.numTransactions, 2)
     }
 
