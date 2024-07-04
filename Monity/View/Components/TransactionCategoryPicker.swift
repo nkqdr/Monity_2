@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct TransactionCategoryPicker: View {
+    @FetchRequest(
+        entity: TransactionCategory.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
+    ) private var allCategories: FetchedResults<TransactionCategory>
     @Binding var selection: TransactionCategory?
-    @State private var allCategories: [TransactionCategory] = []
     
     var body: some View {
         Picker("Category", selection: $selection) {
@@ -24,8 +27,6 @@ struct TransactionCategoryPicker: View {
                 }
                 .tag(category as TransactionCategory?)
             }
-        }.onReceive(TransactionCategoryFetchController.all.items.eraseToAnyPublisher()) { categories in
-            allCategories = categories
         }
     }
 }
