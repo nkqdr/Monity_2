@@ -10,10 +10,28 @@ import Foundation
 class SavingsCategoryFetchController: BaseFetchController<SavingsCategory> {
     static let all: SavingsCategoryFetchController = SavingsCategoryFetchController()
     
-    private init() {
-        super.init(sortDescriptors: [
-            NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)
-        ], keyPathsForRefreshing: [#keyPath(SavingsCategory.entries)])
+    private init(
+        predicate: NSPredicate? = nil,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
+        super.init(
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \SavingsCategory.name, ascending: true)
+            ], 
+            keyPathsForRefreshing: [#keyPath(SavingsCategory.entries)],
+            predicate: predicate,
+            managedObjectContext: controller.managedObjectContext
+        )
+    }
+    
+    convenience init(
+        isHidden: Bool,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
+        self.init(
+            predicate: NSPredicate(format: "isHidden == %@", NSNumber(booleanLiteral: isHidden)),
+            controller: controller
+        )
     }
 }
 

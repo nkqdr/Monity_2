@@ -54,19 +54,6 @@ struct TransactionSummaryTile: View {
     }
 }
 
-fileprivate struct TransactionOverviewChart: View {
-    @StateObject private var content = AverageMonthlyChartViewModel.shared
-    var showAverageBar: Bool
-    
-    var body: some View {
-        ExpenseBarChartWithHeader(
-            data: content.barChartDataPoints,
-            showAverageBar: showAverageBar,
-            color: content.showingExpenses ? .red : .green
-        )
-    }
-}
-
 
 fileprivate struct TransactionSummaryPage: View {
     @State private var showAverageBar: Bool = false
@@ -76,7 +63,9 @@ fileprivate struct TransactionSummaryPage: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    TransactionOverviewChart(
+                    ExpenseBarChartWithHeader(
+                        isExpense: content.showingExpenses,
+                        color: content.showingExpenses ? .red : .green,
                         showAverageBar: showAverageBar
                     )
                     .frame(minHeight: 250)
@@ -95,8 +84,10 @@ fileprivate struct TransactionSummaryPage: View {
             }
             
             Section("Categories") {
-                ForEach(content.retroDataPoints) { dataPoint in
-                    TransactionCategorySummaryTile(dataPoint: dataPoint, showExpenses: content.showingExpenses)
+                ForEach(content.retroDataPoints) { dp in
+                    TransactionCategorySummaryTile(
+                        dataPoint: dp
+                    )
                 }
             }
         }
@@ -108,11 +99,13 @@ fileprivate struct TransactionSummaryPage: View {
 }
 
 fileprivate struct TransactionCategorySummaryTile: View {
-    var dataPoint: CategoryRetroDataPoint
-    var showExpenses: Bool
+    @ObservedObject var dataPoint: CategoryRetroDataPoint
     
     var body: some View {
-        NavigationLink(destination: TransactionCategorySummaryView(category: dataPoint.category, showExpenses: showExpenses)) {
+        NavigationLink(destination: TransactionCategorySummaryView(
+            category: dataPoint.category,
+            showExpenses: dataPoint.isForExpenses)
+        ) {
             HStack {
                 if let icon = dataPoint.category.iconName {
                     Image(systemName: icon)
@@ -133,7 +126,7 @@ fileprivate struct TransactionCategorySummaryTile: View {
                         .font(.caption)
                     Text(dataPoint.total, format: .customCurrency())
                         .fontWeight(.semibold)
-                    Text("Ø\(dataPoint.average.formatted(.customCurrency())) p.m.")
+                    Text("Ø\(dataPoint.averagePerMonth.formatted(.customCurrency())) p.m.")
                         .font(.caption2)
                 }
                 .foregroundColor(Color.secondary)
@@ -162,7 +155,8 @@ struct TransactionListPerCategory: View {
 }
 
 fileprivate struct TransactionCategorySummaryView: View {
-    @StateObject private var content: TransactionCategorySummaryViewModel
+    @ObservedObject private var totalRetroDP: CategoryRetroDataPoint
+    @ObservedObject private var pastYearRetroDP: CategoryRetroDataPoint
     var category: TransactionCategory
     var showExpenses: Bool
     
@@ -171,7 +165,16 @@ fileprivate struct TransactionCategorySummaryView: View {
     }
     
     init(category: TransactionCategory, showExpenses: Bool) {
-        self._content = StateObject(wrappedValue: TransactionCategorySummaryViewModel(category: category, showExpenses: showExpenses))
+        self._totalRetroDP = ObservedObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .total, isForExpenses: showExpenses
+            )
+        )
+        self._pastYearRetroDP = ObservedObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .pastYear, isForExpenses: showExpenses
+            )
+        )
         self.category = category
         self.showExpenses = showExpenses
     }
@@ -179,7 +182,9 @@ fileprivate struct TransactionCategorySummaryView: View {
     var body: some View {
         List {
             VStack {
-                ExpenseBarChartWithHeader(data: content.dataPoints, color: color)
+                ExpenseBarChartWithHeader(
+                    category: category, isExpense: showExpenses, color: color
+                )
                     .frame(minHeight: 250)
                     .padding(.bottom)
             }
@@ -190,12 +195,12 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Total").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.retroDP.total, format: .customCurrency())
+                    Text(totalRetroDP.total, format: .customCurrency())
                 }
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.retroDP.average, format: .customCurrency())
+                    Text(totalRetroDP.averagePerMonth, format: .customCurrency())
                 }
             } header: {
                 Text("All-Time")
@@ -207,12 +212,12 @@ fileprivate struct TransactionCategorySummaryView: View {
                 HStack {
                     Text("Total").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.lastYearRetroDP.total, format: .customCurrency())
+                    Text(pastYearRetroDP.total, format: .customCurrency())
                 }
                 HStack {
                     Text("Average per month").foregroundStyle(.secondary)
                     Spacer()
-                    Text(content.lastYearRetroDP.average, format: .customCurrency())
+                    Text(pastYearRetroDP.averagePerMonth, format: .customCurrency())
                 }
             } header: {
                 Text("Last Year")

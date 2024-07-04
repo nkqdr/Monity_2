@@ -7,15 +7,34 @@
 
 import CoreData
 
-struct PersistenceController {
+class PersistenceController {
     static let shared = PersistenceController()
     static let preview = PersistenceController(inMemory: true)
-    static let test = PersistenceController()
+    
+    static var managedObjectModel: NSManagedObjectModel = {
+        let bundle = Bundle(for: PersistenceController.self)
+        
+        guard let url = bundle.url(forResource: "Monity", withExtension: "momd") else {
+            fatalError("Failed to locate momd file for Monity")
+        }
+        
+        guard let model = NSManagedObjectModel(contentsOf: url) else {
+            fatalError("Failed to load momd file for Monity")
+        }
+        
+        return model
+    }()
 
-    let container: NSPersistentCloudKitContainer
+    let container: NSPersistentContainer
+    
+    var managedObjectContext: NSManagedObjectContext {
+        self.container.viewContext
+    }
 
-    init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Monity")
+    private init(inMemory: Bool = false) {
+        container = NSPersistentCloudKitContainer(
+            name: "Monity", managedObjectModel: Self.managedObjectModel
+        )
         if inMemory {
             let description = NSPersistentStoreDescription()
             description.url = URL(fileURLWithPath: "/dev/null")

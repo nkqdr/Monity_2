@@ -18,12 +18,25 @@ class SavingsFetchController: BaseFetchController<SavingsEntry> {
         )
     }
     
-    init(since: Date, managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init(
+        since: Date? = nil,
+        category: SavingsCategory? = nil,
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
+    ) {
+        var predicate: NSPredicate = NSPredicate(value: true) // Initialize with an empty predicate
+        if let since {
+            let sincePredicate = NSPredicate(format: "date >= %@", since as NSDate)
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sincePredicate])
+        }
+        if let category {
+            let categoryPredicate = NSPredicate(format: "category == %@", category)
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, categoryPredicate])
+        }
         super.init(
             sortDescriptors: [
                 NSSortDescriptor(keyPath: \SavingsEntry.date, ascending: false)
             ],
-            predicate: NSPredicate(format: "date >= %@", since as NSDate),
+            predicate: predicate,
             managedObjectContext: managedObjectContext
         )
     }

@@ -46,7 +46,7 @@ class CSVImporter: ObservableObject {
                 return
             }
             DispatchQueue.main.async {
-                self.importSummary = ImportCSVSummary(resource: header, rowsAmount: rows.count-1, rows: rows[1...].map { String($0) })
+                self.importSummary = ImportCSVSummary(resource: header, rowsAmount: rows.count-1, rows: rows[1...].map { ImportCSVSummary.CSVRow(rowContent: String($0)) })
                 self.isReading = false
                 self.importHasError = false
             }
@@ -75,7 +75,7 @@ class CSVImporter: ObservableObject {
         }
         self.importProgress = 0.0001
         DispatchQueue.global(qos: .background).async {
-            let chunks = summary.rows.chunks(ofCount: 10_000)
+            let chunks = summary.rows.map{ $0.rowContent }.chunks(ofCount: 10_000)
             for (index, chunk) in chunks.enumerated() {
                 let result = storage.add(set: chunk)
                 DispatchQueue.main.async {
