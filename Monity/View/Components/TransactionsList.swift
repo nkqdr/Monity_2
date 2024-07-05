@@ -43,6 +43,7 @@ fileprivate struct TransactionListTile: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
+            Divider()
             Button(role: .destructive) {
                 showConfirmationDialog.toggle()
             } label: {

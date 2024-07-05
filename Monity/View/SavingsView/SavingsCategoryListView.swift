@@ -44,7 +44,6 @@ fileprivate struct SavingsEntryList: View {
             }
         } sheetContent: { showSheet, currentItem in
             SavingsEntryFormView(
-                isPresented: showSheet,
                 editor: SavingsEditor(entry: currentItem)
             )
         }
@@ -63,12 +62,12 @@ struct SavingsCategoryListProxy: View {
 }
 
 struct SavingsCategoryListView: View {
-    @EnvironmentObject private var entryManager: SavingsEntryManager
     private var category: SavingsCategory
     @StateObject var content: SavingsViewModel
     @State private var showPredictions: Bool = false
     @State private var predictionYearsRange: Double = 1
-    @State private var showEditSheet: Bool = false
+    @State private var editCategory: SavingsCategory? = nil
+    @State private var addWithCategory: SavingsCategory? = nil
     
     init(category: SavingsCategory) {
         self.category = category
@@ -192,14 +191,12 @@ struct SavingsCategoryListView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
-                        entryManager.editor = SavingsEditor(entry: nil)
-                        entryManager.editor.category = category
-                        entryManager.showSheet.toggle()
+                        addWithCategory = category
                     } label: {
                         Label("New entry", systemImage: "plus")
                     }
                     Button {
-                        showEditSheet.toggle()
+                        editCategory = category
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
@@ -208,11 +205,8 @@ struct SavingsCategoryListView: View {
                 }
             }
         }
-        .sheet(isPresented: $showEditSheet) {
-            SavingsCategoryFormView(
-                editor: SavingsCategoryEditor(category: category)
-            )
-        }
+        .addSavingsEntrySheet(category: $addWithCategory)
+        .editSavingsCategorySheet(category: $editCategory)
         .navigationTitle(category.wrappedName)
     }
 }

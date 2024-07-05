@@ -22,7 +22,7 @@ struct SavingsCategoryPicker: View {
 }
 
 struct SavingsEntryFormView: View {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) var dismiss
     @FocusState var amountInputIsFocussed: Bool
     @ObservedObject var editor: SavingsEditor
     
@@ -65,7 +65,7 @@ struct SavingsEntryFormView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        isPresented = false
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -73,7 +73,7 @@ struct SavingsEntryFormView: View {
                         withAnimation {
                             editor.save()
                         }
-                        isPresented = false
+                        dismiss()
                     }
                     .disabled(!editor.isValid)
                 }
@@ -82,8 +82,4 @@ struct SavingsEntryFormView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
-}
-
-#Preview {
-    SavingsEntryFormView(isPresented: .constant(true), editor: SavingsEditor())
 }
