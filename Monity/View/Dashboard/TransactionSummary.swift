@@ -219,7 +219,7 @@ struct TransactionListPerCategory: View {
     }
 }
 
-fileprivate struct TransactionCategorySummaryView: View {
+struct TransactionCategorySummaryView: View {
     @ObservedObject private var totalRetroDP: CategoryRetroDataPoint
     @ObservedObject private var pastYearRetroDP: CategoryRetroDataPoint
     var category: TransactionCategory
@@ -294,7 +294,10 @@ fileprivate struct TransactionCategorySummaryView: View {
             }
             
             Section {
-                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses).navigationBarTitleDisplayMode(.inline))
+                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .environment(\.showTransactionCategoryOption, false)
+                )
             }
         }
         .navigationTitle(category.wrappedName)

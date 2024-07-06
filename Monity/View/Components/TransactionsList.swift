@@ -7,7 +7,20 @@
 
 import SwiftUI
 
+struct ShowTransactionCategoryOptionKey: EnvironmentKey {
+  static let defaultValue = true
+}
+
+extension EnvironmentValues {
+  var showTransactionCategoryOption: Bool {
+    get { self[ShowTransactionCategoryOptionKey.self] }
+    set { self[ShowTransactionCategoryOptionKey.self] = newValue }
+  }
+}
+
+
 fileprivate struct TransactionListTile: View {
+    @Environment(\.showTransactionCategoryOption) var enableShowCategoryButton
     @ObservedObject var transaction: Transaction
     @Binding var shownCategory: TransactionCategory?
     @State var showEditView: Bool = false
@@ -39,10 +52,12 @@ fileprivate struct TransactionListTile: View {
             showEditView.toggle()
         }
         .contextMenu {
-            Button {
-                shownCategory = transaction.category
-            } label: {
-                Label("Show category", systemImage: "tray")
+            if enableShowCategoryButton {
+                Button {
+                    shownCategory = transaction.category
+                } label: {
+                    Label("Show category", systemImage: "tray")
+                }
             }
             Button {
                 showEditView.toggle()
@@ -82,7 +97,6 @@ fileprivate struct TransactionListTile: View {
 
 struct TransactionsList: View {
     @Binding var showAddTransactionView: Bool
-    @State private var presentCategoryDetail: Bool = false
     @State var categoryShown: TransactionCategory? = nil
     var transactionsByDate: [TransactionsByDate]
     var dateFormat: Date.FormatStyle = .dateTime.year().month().day()
@@ -114,13 +128,8 @@ struct TransactionsList: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $presentCategoryDetail) {
-            if let category = self.categoryShown {
-                Text(category.wrappedName)
-            }
-        }
-        .onChange(of: categoryShown) { newValue in
-            self.presentCategoryDetail = newValue != nil
+        .customNavigationDestination(item: $categoryShown) { category in
+            TransactionCategorySummaryView(category: category, showExpenses: nil)
         }
         .sheet(isPresented: $showAddTransactionView) {
             AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: nil))

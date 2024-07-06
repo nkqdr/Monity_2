@@ -32,6 +32,7 @@
 		60387388290AFB0D00AB7D0E /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */; };
 		603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF99290564F20075CB90 /* TransactionsList.swift */; };
 		603ADF9C290579E90075CB90 /* TransactionListPerCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ADF9B290579E90075CB90 /* TransactionListPerCategoryViewModel.swift */; };
+		603EC8242C396DEE00698D12 /* View+CustomNavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EC8232C396DEE00698D12 /* View+CustomNavigationDestination.swift */; };
 		603FDE7629012F1F000398C7 /* PieChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FDE7529012F1F000398C7 /* PieChartViewModel.swift */; };
 		6040E6ED29E694CE00939904 /* AssetAllocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040E6EC29E694CE00939904 /* AssetAllocationViewModel.swift */; };
 		6045379428FAC9A4002EFC7F /* ImportSummaryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */; };
@@ -152,6 +153,7 @@
 		60387387290AFB0D00AB7D0E /* CoreDataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
 		603ADF99290564F20075CB90 /* TransactionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsList.swift; sourceTree = "<group>"; };
 		603ADF9B290579E90075CB90 /* TransactionListPerCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListPerCategoryViewModel.swift; sourceTree = "<group>"; };
+		603EC8232C396DEE00698D12 /* View+CustomNavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CustomNavigationDestination.swift"; sourceTree = "<group>"; };
 		603FDE7529012F1F000398C7 /* PieChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewModel.swift; sourceTree = "<group>"; };
 		6040E6EC29E694CE00939904 /* AssetAllocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAllocationViewModel.swift; sourceTree = "<group>"; };
 		6045379328FAC9A4002EFC7F /* ImportSummaryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSummaryRow.swift; sourceTree = "<group>"; };
@@ -530,6 +532,7 @@
 				608B80BC29B6544500047F3D /* TypeExtensions.swift */,
 				60CE68762C373CF900C31605 /* View+SavingsEntryControls.swift */,
 				60CE68782C37443600C31605 /* View+SavingsCategoryControls.swift */,
+				603EC8232C396DEE00698D12 /* View+CustomNavigationDestination.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -665,6 +668,7 @@
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
 				60A4CFC028F9C175007F392D /* More_SavingsView.swift in Sources */,
 				60B50E102906F38100396308 /* SavingsCategoryStorage.swift in Sources */,
+				603EC8242C396DEE00698D12 /* View+CustomNavigationDestination.swift in Sources */,
 				60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */,
 				60387379290AC19B00AB7D0E /* Savings.swift in Sources */,
 				60E7605C28FD454D00FAB25A /* TransactionSummary.swift in Sources */,
