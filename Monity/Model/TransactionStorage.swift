@@ -66,7 +66,8 @@ class TransactionFetchController: BaseFetchController<Transaction> {
         category: TransactionCategory? = nil,
         isExpense: Bool? = nil,
         startDate: Date? = nil,
-        endDate: Date? = nil
+        endDate: Date? = nil,
+        controller: PersistenceController = PersistenceController.shared
     ) {
         var finalPredicate = NSPredicate(value: true)
         if let category {
@@ -89,7 +90,7 @@ class TransactionFetchController: BaseFetchController<Transaction> {
                 finalPredicate, NSPredicate(format: "date < %@", endDate as NSDate)
             ])
         }
-        self.init(predicate: finalPredicate)
+        self.init(predicate: finalPredicate, controller: controller)
     }
 }
 

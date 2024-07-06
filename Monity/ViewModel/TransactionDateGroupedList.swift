@@ -27,6 +27,7 @@ class TransactionDateGroupedList: ObservableObject {
     private var category: TransactionCategory?
     private var isExpense: Bool?
     private var groupingGranularity: Calendar.Component
+    private var persistenceController: PersistenceController
     
     private var fetchController: TransactionFetchController
     private var transactionCancellable: AnyCancellable?
@@ -36,7 +37,8 @@ class TransactionDateGroupedList: ObservableObject {
         category: TransactionCategory? = nil,
         isExpense: Bool? = nil,
         monthComponents: DateComponents? = nil,
-        groupingGranularity: Calendar.Component
+        groupingGranularity: Calendar.Component,
+        controller: PersistenceController = PersistenceController.shared
     ) {
         var startDate: Date? = nil
         var endDate: Date? = nil
@@ -49,11 +51,13 @@ class TransactionDateGroupedList: ObservableObject {
         self.category = category
         self.isExpense = isExpense
         self.groupingGranularity = groupingGranularity
+        self.persistenceController = controller
         self.fetchController = TransactionFetchController(
             category: category, 
             isExpense: isExpense,
             startDate: startDate,
-            endDate: endDate
+            endDate: endDate,
+            controller: controller
         )
         
         let publisher = self.fetchController.items.eraseToAnyPublisher()
@@ -82,7 +86,8 @@ class TransactionDateGroupedList: ObservableObject {
             category: self.category,
             isExpense: self.isExpense,
             startDate: dates.0,
-            endDate: dates.1
+            endDate: dates.1,
+            controller: self.persistenceController
         )
         let publisher = self.fetchController.items.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { transactions in
