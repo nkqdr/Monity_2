@@ -42,7 +42,7 @@ fileprivate struct TransactionListTile: View {
             Button {
                 shownCategory = transaction.category
             } label: {
-                Label("Show category", systemImage: "pencil")
+                Label("Show category", systemImage: "tray")
             }
             Button {
                 showEditView.toggle()
@@ -82,6 +82,7 @@ fileprivate struct TransactionListTile: View {
 
 struct TransactionsList: View {
     @Binding var showAddTransactionView: Bool
+    @State private var presentCategoryDetail: Bool = false
     @State var categoryShown: TransactionCategory? = nil
     var transactionsByDate: [TransactionsByDate]
     var dateFormat: Date.FormatStyle = .dateTime.year().month().day()
@@ -113,8 +114,13 @@ struct TransactionsList: View {
                 }
             }
         }
-        .navigationDestination(item: $categoryShown) { category in
-            Text(category.wrappedName)
+        .navigationDestination(isPresented: $presentCategoryDetail) {
+            if let category = self.categoryShown {
+                Text(category.wrappedName)
+            }
+        }
+        .onChange(of: categoryShown) { newValue in
+            self.presentCategoryDetail = newValue != nil
         }
         .sheet(isPresented: $showAddTransactionView) {
             AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: nil))
