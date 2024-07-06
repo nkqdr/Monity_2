@@ -36,6 +36,7 @@
         <attribute name="iconName" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="numTransactions" optional="YES" attributeType="Integer 32" derived="YES" derivationExpression="transactions.@count" usesScalarValueType="YES"/>
         <relationship name="recurringTransactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RecurringTransaction" inverseName="category" inverseEntity="RecurringTransaction"/>
         <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Transaction" inverseName="category" inverseEntity="Transaction"/>
     </entity>

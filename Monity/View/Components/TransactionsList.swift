@@ -9,6 +9,7 @@ import SwiftUI
 
 fileprivate struct TransactionListTile: View {
     @ObservedObject var transaction: Transaction
+    @Binding var shownCategory: TransactionCategory?
     @State var showEditView: Bool = false
     @State private var showConfirmationDialog: Bool = false
     
@@ -38,6 +39,11 @@ fileprivate struct TransactionListTile: View {
             showEditView.toggle()
         }
         .contextMenu {
+            Button {
+                shownCategory = transaction.category
+            } label: {
+                Label("Show category", systemImage: "pencil")
+            }
             Button {
                 showEditView.toggle()
             } label: {
@@ -76,6 +82,7 @@ fileprivate struct TransactionListTile: View {
 
 struct TransactionsList: View {
     @Binding var showAddTransactionView: Bool
+    @State var categoryShown: TransactionCategory? = nil
     var transactionsByDate: [TransactionsByDate]
     var dateFormat: Date.FormatStyle = .dateTime.year().month().day()
     
@@ -102,9 +109,12 @@ struct TransactionsList: View {
         List(transactionsByDate) { date in
             Section(header: sectionHeaderFor(date)) {
                 ForEach(date.transactions) { transaction in
-                    TransactionListTile(transaction: transaction)
+                    TransactionListTile(transaction: transaction, shownCategory: $categoryShown)
                 }
             }
+        }
+        .navigationDestination(item: $categoryShown) { category in
+            Text(category.wrappedName)
         }
         .sheet(isPresented: $showAddTransactionView) {
             AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: nil))

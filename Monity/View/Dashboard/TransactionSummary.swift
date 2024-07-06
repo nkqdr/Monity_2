@@ -54,6 +54,75 @@ struct TransactionSummaryTile: View {
     }
 }
 
+fileprivate struct TransactionCategoryTile: View {
+    @StateObject private var lastYearExpenses: CategoryRetroDataPoint
+    @StateObject private var lastYearIncome: CategoryRetroDataPoint
+    private var category: TransactionCategory
+    
+    init(category: TransactionCategory) {
+        self.category = category
+        self._lastYearExpenses = StateObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .pastYear, isForExpenses: true
+            )
+        )
+        self._lastYearIncome = StateObject(
+            wrappedValue: CategoryRetroDataPoint(
+                category: category, timeframe: .pastYear, isForExpenses: false
+            )
+        )
+    }
+    
+    var body: some View {
+        NavigationLink(
+            destination: TransactionCategorySummaryView(
+                category: category, showExpenses: true
+            )
+        ) {
+            VStack(alignment: .leading) {
+                Text(category.wrappedName)
+                    .font(.headline.bold())
+                Text("Last year")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                HStack {
+                    if lastYearIncome.total > 0 {
+                        Text(lastYearIncome.total, format: .customCurrency())
+                            .tintedBackground(.green)
+                    }
+                    Spacer()
+                    if lastYearExpenses.total > 0 {
+                        Text(lastYearExpenses.total, format: .customCurrency())
+                            .tintedBackground(.red)
+                    }
+                }
+            }
+        }
+    }
+}
+
+fileprivate struct TransactionCategoryList: View {
+    @FetchRequest(
+        entity: TransactionCategory.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)],
+        predicate: NSPredicate(
+            format: "ANY transactions.date > %@", Date.oneYearAgo as NSDate
+        )
+    ) private var allCategories: FetchedResults<TransactionCategory>
+    
+    var body: some View {
+        ForEach(allCategories) { category in
+            TransactionCategoryTile(category: category)
+        }
+        .padding(.bottom)
+    }
+}
+
+#Preview {
+    TransactionCategoryList()
+        .environment(\.managedObjectContext, PersistenceController.preview.managedObjectContext)
+}
+
 
 fileprivate struct TransactionSummaryPage: View {
     @State private var showAverageBar: Bool = false
@@ -84,11 +153,7 @@ fileprivate struct TransactionSummaryPage: View {
             }
             
             Section("Categories") {
-                ForEach(content.retroDataPoints) { dp in
-                    TransactionCategorySummaryTile(
-                        dataPoint: dp
-                    )
-                }
+                TransactionCategoryList()
             }
         }
         .onChange(of: content.showingExpenses) { _ in
@@ -158,13 +223,16 @@ fileprivate struct TransactionCategorySummaryView: View {
     @ObservedObject private var totalRetroDP: CategoryRetroDataPoint
     @ObservedObject private var pastYearRetroDP: CategoryRetroDataPoint
     var category: TransactionCategory
-    var showExpenses: Bool
+    var showExpenses: Bool?
     
     var color: Color {
-        showExpenses ? .red : .green
+        guard let showExpenses else {
+            return .primary
+        }
+        return showExpenses ? .red : .green
     }
     
-    init(category: TransactionCategory, showExpenses: Bool) {
+    init(category: TransactionCategory, showExpenses: Bool?) {
         self._totalRetroDP = ObservedObject(
             wrappedValue: CategoryRetroDataPoint(
                 category: category, timeframe: .total, isForExpenses: showExpenses

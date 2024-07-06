@@ -15,7 +15,7 @@ struct TransactionsView: View {
     @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             TransactionsList(
                 showAddTransactionView: $showAddTransactionView,
                 transactionsByDate: viewModel.currentTransactionsByDate

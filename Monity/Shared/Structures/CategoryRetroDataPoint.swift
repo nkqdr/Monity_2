@@ -12,7 +12,7 @@ import Combine
 class CategoryRetroDataPoint: ObservableObject, Identifiable {
     var id = UUID()
     var timeframe: Timeframe
-    var isForExpenses: Bool
+    var isForExpenses: Bool?
     @Published var category: TransactionCategory
     @Published var total: Double = 0
     @Published var averagePerMonth: Double = 0
@@ -24,7 +24,7 @@ class CategoryRetroDataPoint: ObservableObject, Identifiable {
     init(
         category: TransactionCategory,
         timeframe: Timeframe,
-        isForExpenses: Bool,
+        isForExpenses: Bool? = nil,
         controller: PersistenceController = PersistenceController.shared
     ) {
         self.category = category
@@ -38,7 +38,11 @@ class CategoryRetroDataPoint: ObservableObject, Identifiable {
         )
         let publisher = self.abstractTransactionWrapper.$wrappedTransactions.eraseToAnyPublisher()
         self.transactionCancellable = publisher.sink { transactions in
-            let filteredTransactions = transactions.filter { $0.isExpense == isForExpenses }
+            var filteredTransactions = transactions
+            if let isForExpenses {
+                filteredTransactions = transactions.filter { $0.isExpense == isForExpenses }
+            }
+            
             
             self.total = vDSP.sum(
                 filteredTransactions.map { $0.amount }
