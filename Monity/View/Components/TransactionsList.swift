@@ -58,6 +58,7 @@ fileprivate struct TransactionListTile: View {
                 } label: {
                     Label("Show category", systemImage: "tray")
                 }
+                .disabled(transaction.category == nil)
             }
             Button {
                 showEditView.toggle()

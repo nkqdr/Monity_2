@@ -82,7 +82,7 @@ fileprivate struct TransactionCategoryTile: View {
             VStack(alignment: .leading) {
                 Text(category.wrappedName)
                     .font(.headline.bold())
-                Text("Last year")
+                Text("Last Year")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 HStack {
@@ -204,24 +204,46 @@ fileprivate struct TransactionCategorySummaryTile: View {
 
 struct TransactionListPerCategory: View {
     @State var showEditTransactionView: Bool = false
-    @StateObject private var content: TransactionListPerCategoryViewModel
+    @StateObject private var content: TransactionDateGroupedList
     var category: TransactionCategory
     var showExpenses: Bool?
     
     init(category: TransactionCategory, showExpenses: Bool?) {
-        self._content = StateObject(wrappedValue: TransactionListPerCategoryViewModel(category: category, showExpenses: showExpenses))
+        self._content = StateObject(
+            wrappedValue: TransactionDateGroupedList(
+                category: category,
+                isExpense: showExpenses,
+                groupingGranularity: .month
+            )
+        )
         self.category = category
         self.showExpenses = showExpenses
     }
     
     var body: some View {
-        TransactionsList(showAddTransactionView: $showEditTransactionView, transactionsByDate: content.transactionsByDate, dateFormat: .dateTime.year().month())
+        TransactionsList(
+            showAddTransactionView: $showEditTransactionView,
+            transactionsByDate: content.groupedTransactions,
+            dateFormat: .dateTime.year().month()
+        )
+        .modifier(HackyFixVisualBugModifier())
+        .searchable(text: $content.searchText)
+    }
+}
+
+fileprivate struct HackyFixVisualBugModifier: ViewModifier {
+    @State private var toolbarVisibility : Visibility = .hidden
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear {toolbarVisibility = .automatic}
+            .toolbar(toolbarVisibility, for: .navigationBar)
     }
 }
 
 struct TransactionCategorySummaryView: View {
-    @ObservedObject private var totalRetroDP: CategoryRetroDataPoint
-    @ObservedObject private var pastYearRetroDP: CategoryRetroDataPoint
+    @ObservedObject private var totalExpenseRetro: CategoryRetroDataPoint
+    @ObservedObject private var totalIncomeRetro: CategoryRetroDataPoint
     var category: TransactionCategory
     var showExpenses: Bool?
     
@@ -233,14 +255,14 @@ struct TransactionCategorySummaryView: View {
     }
     
     init(category: TransactionCategory, showExpenses: Bool?) {
-        self._totalRetroDP = ObservedObject(
+        self._totalExpenseRetro = ObservedObject(
             wrappedValue: CategoryRetroDataPoint(
-                category: category, timeframe: .total, isForExpenses: showExpenses
+                category: category, timeframe: .total, isForExpenses: true
             )
         )
-        self._pastYearRetroDP = ObservedObject(
+        self._totalIncomeRetro = ObservedObject(
             wrappedValue: CategoryRetroDataPoint(
-                category: category, timeframe: .pastYear, isForExpenses: showExpenses
+                category: category, timeframe: .total, isForExpenses: false
             )
         )
         self.category = category
@@ -249,52 +271,56 @@ struct TransactionCategorySummaryView: View {
     
     var body: some View {
         List {
-            VStack {
-                ExpenseBarChartWithHeader(
-                    category: category, isExpense: showExpenses, color: color
-                )
-                    .frame(minHeight: 250)
-                    .padding(.bottom)
-            }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-            
-            Section {
-                HStack {
-                    Text("Total").foregroundStyle(.secondary)
-                    Spacer()
-                    Text(totalRetroDP.total, format: .customCurrency())
+            if totalExpenseRetro.total > 0 {
+                Section {
+                    VStack {
+                        ExpenseBarChartWithHeader(
+                            category: category, isExpense: true, color: .red, alwaysShowYmarks: false
+                        )
+                        .frame(minHeight: 180)
+                        .padding(.vertical)
+                    }
+                    HStack {
+                        Text("Total").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(totalExpenseRetro.total, format: .customCurrency())
+                    }
+                    HStack {
+                        Text("Average per month").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(totalExpenseRetro.averagePerMonth, format: .customCurrency())
+                    }
+                } header: {
+                    Text("Expenses")
                 }
-                HStack {
-                    Text("Average per month").foregroundStyle(.secondary)
-                    Spacer()
-                    Text(totalRetroDP.averagePerMonth, format: .customCurrency())
-                }
-            } header: {
-                Text("All-Time")
-            } footer: {
-                Text("These values are calculated with all entries you have ever entered")
             }
             
-            Section {
-                HStack {
-                    Text("Total").foregroundStyle(.secondary)
-                    Spacer()
-                    Text(pastYearRetroDP.total, format: .customCurrency())
+            if totalIncomeRetro.total > 0 {
+                Section {
+                    VStack {
+                        ExpenseBarChartWithHeader(
+                            category: category, isExpense: false, color: .green, alwaysShowYmarks: false
+                        )
+                        .frame(minHeight: 180)
+                        .padding(.vertical)
+                    }
+                    HStack {
+                        Text("Total").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(totalIncomeRetro.total, format: .customCurrency())
+                    }
+                    HStack {
+                        Text("Average per month").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(totalIncomeRetro.averagePerMonth, format: .customCurrency())
+                    }
+                } header: {
+                    Text("income.plural")
                 }
-                HStack {
-                    Text("Average per month").foregroundStyle(.secondary)
-                    Spacer()
-                    Text(pastYearRetroDP.averagePerMonth, format: .customCurrency())
-                }
-            } header: {
-                Text("Last Year")
-            } footer: {
-                Text("These values are calculated with all entries you have entered within the last 12 months")
             }
             
             Section {
-                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: showExpenses)
+                NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: nil)
                         .navigationBarTitleDisplayMode(.inline)
                         .environment(\.showTransactionCategoryOption, false)
                 )

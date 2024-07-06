@@ -11,7 +11,7 @@ import CoreData
 
 class BaseFetchController<ModelClass>: NSObject, ObservableObject, NSFetchedResultsControllerDelegate where ModelClass: NSManagedObject {
     var items = CurrentValueSubject<[ModelClass], Never>([])
-    private let itemFetchController: RichFetchedResultsController<ModelClass>
+    let itemFetchController: RichFetchedResultsController<ModelClass>
     private let managedObjectContext: NSManagedObjectContext
     
     init(
