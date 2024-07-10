@@ -31,6 +31,14 @@ class SavingsEditor: ObservableObject {
         }
     }
     
+    init(category: SavingsCategory? = nil) {
+        self.category = category
+        self.amount = nil
+        self.timestamp = Date()
+        self.navigationFormTitle = "New entry"
+        self.entry = nil
+    }
+    
     // MARK: - Intent
     
     public func save() {

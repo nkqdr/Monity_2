@@ -9,9 +9,9 @@ import SwiftUI
 import Charts
 
 fileprivate struct SavingsCategoryTile: View {
-    @EnvironmentObject private var entryManager: SavingsEntryManager
     @StateObject var category: SavingsCategory
-    @State private var showEditSheet: Bool = false
+    @Binding var addWithCategory: SavingsCategory?
+    @Binding var editCategory: SavingsCategory?
     
     private var currentAmount: Double? {
         category.lastEntry?.amount
@@ -40,24 +40,15 @@ fileprivate struct SavingsCategoryTile: View {
                 }
             }
             .groupBoxStyle(CustomGroupBox())
-            .sheet(isPresented: $showEditSheet) {
-                SavingsCategoryFormView(
-                    editor: SavingsCategoryEditor(category: category)
-                )
-            }
             .contextMenu {
                 if !category.isHidden {
                     Button {
-                        withAnimation(.spring()) {
-                            entryManager.editor = SavingsEditor(entry: nil)
-                            entryManager.editor.category = category
-                            entryManager.showSheet.toggle()
-                        }
+                        addWithCategory = category
                     } label: {
                         Label("New entry", systemImage: "plus")
                     }
                     Button {
-                        showEditSheet.toggle()
+                        editCategory = category
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
@@ -85,6 +76,8 @@ fileprivate struct SavingsCategoryTile: View {
 
 fileprivate struct SavingsCategoryList: View {
     @StateObject private var viewModel: SavingsCategoryGridVM
+    @State private var addWithCategory: SavingsCategory? = nil
+    @State private var editCategory: SavingsCategory? = nil
     
     init(isHidden: Bool) {
         self._viewModel = StateObject(wrappedValue: SavingsCategoryGridVM(isHidden: isHidden))
@@ -93,9 +86,11 @@ fileprivate struct SavingsCategoryList: View {
     var body: some View {
         LazyVGrid(columns: [GridItem(), GridItem()]) {
             ForEach(viewModel.categories) { category in
-                SavingsCategoryTile(category: category)
+                SavingsCategoryTile(category: category, addWithCategory: $addWithCategory, editCategory: $editCategory)
             }
         }
+        .addSavingsEntrySheet(category: $addWithCategory)
+        .editSavingsCategorySheet(category: $editCategory)
         .padding(.horizontal)
         .padding(.bottom)
     }
@@ -197,7 +192,6 @@ struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
     @StateObject private var content = SavingsCategoryViewModel.shared
-    @StateObject private var entryManager = SavingsEntryManager()
     
     var noCategories: some View {
         VStack {
@@ -238,7 +232,6 @@ struct SavingsDetailView: View {
                 noCategories
             } else {
                 scrollViewContent
-                    .environmentObject(entryManager)
             }
         }
         .toolbar {
@@ -260,7 +253,6 @@ struct SavingsDetailView: View {
                 ListBase {
                     ScrollView {
                         SavingsCategoryList(isHidden: true)
-                            .environmentObject(entryManager)
                     }
                 }
                 .navigationTitle("Hidden Categories")
@@ -273,11 +265,6 @@ struct SavingsDetailView: View {
                     .navigationTitle("Asset Allocation")
                     .navigationBarTitleDisplayMode(.inline)
             }
-        }
-        .sheet(isPresented: $entryManager.showSheet) {
-            SavingsEntryFormView(isPresented: $entryManager.showSheet, editor: entryManager.editor)
-                .presentationDetents([.height(240)])
-                .presentationDragIndicator(.hidden)
         }
         .navigationTitle("Savings Overview")
     }

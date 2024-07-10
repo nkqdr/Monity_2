@@ -15,6 +15,7 @@ struct MonityApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environment(\.managedObjectContext, persistenceController.managedObjectContext)
         }
     }
 }

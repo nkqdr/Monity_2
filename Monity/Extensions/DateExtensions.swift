@@ -32,6 +32,11 @@ extension DateComponents {
 }
 
 extension Date {
+    static var oneYearAgo: Date {
+        let calendar = Calendar.current
+        return calendar.date(byAdding: .year, value: -1, to: Date())!
+    }
+    
     public var removeTimeStamp : Date? {
        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else {
         return nil

@@ -25,13 +25,13 @@ struct ExpenseBarChartWithHeader: View {
     
     init(
         category: TransactionCategory? = nil,
-        isExpense: Bool,
+        isExpense: Bool? = nil,
         color: Color = .green,
         showAverageBar: Bool = false,
         alwaysShowYmarks: Bool = true
     ) {
         self.timeSeriesData = TimeSeriesTransactionData(
-            include: isExpense ? .expense : .income,
+            include: isExpense == nil ? .all : isExpense! ? .expense : .income,
             timeframe: .total,
             category: category
         )

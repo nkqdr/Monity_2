@@ -10,12 +10,6 @@ import CoreData
 
 class TransactionFetchController: BaseFetchController<Transaction> {
     static let all = TransactionFetchController()
-    static let currentMonth = TransactionFetchController.generateCurrentMonth()
-    
-    private static func generateCurrentMonth() -> TransactionFetchController {
-        let comps = Calendar.current.dateComponents([.month, .year], from: Date())
-        return TransactionFetchController(month: comps.month, year: comps.year)
-    }
     
     /// This initializer will create a FetchedResultsController for all transactions.
     private init(
@@ -26,7 +20,7 @@ class TransactionFetchController: BaseFetchController<Transaction> {
             #keyPath(Transaction.category.name),
             #keyPath(Transaction.category.iconName)
         ],
-        predicate: NSPredicate? = nil,
+        predicate: NSPredicate?,
         controller: PersistenceController = PersistenceController.shared
     ) {
         super.init(sortDescriptors: sortDescriptors, keyPathsForRefreshing: keyPathsForRefreshing, predicate: predicate, managedObjectContext: controller.managedObjectContext)
@@ -68,13 +62,35 @@ class TransactionFetchController: BaseFetchController<Transaction> {
     }
     
     /// This initializer will create a FetchedResultsController for all transactions with the given category
-    convenience init(category: TransactionCategory, isExpense: Bool) {
-        self.init(
-            predicate: NSPredicate(
-                format: "category == %@ && isExpense == %@",
-                category, NSNumber(booleanLiteral: isExpense)
-            )
-        )
+    convenience init(
+        category: TransactionCategory? = nil,
+        isExpense: Bool? = nil,
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        controller: PersistenceController = PersistenceController.shared
+    ) {
+        var finalPredicate = NSPredicate(value: true)
+        if let category {
+            finalPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                finalPredicate, NSPredicate(format: "category == %@", category)
+            ])
+        }
+        if let isExpense {
+            finalPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                finalPredicate, NSPredicate(format: "isExpense == %@", NSNumber(booleanLiteral: isExpense))
+            ])
+        }
+        if let startDate {
+            finalPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                finalPredicate, NSPredicate(format: "date >= %@", startDate as NSDate)
+            ])
+        }
+        if let endDate {
+            finalPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                finalPredicate, NSPredicate(format: "date < %@", endDate as NSDate)
+            ])
+        }
+        self.init(predicate: finalPredicate, controller: controller)
     }
 }
 

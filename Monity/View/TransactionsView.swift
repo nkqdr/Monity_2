@@ -8,31 +8,41 @@
 import SwiftUI
 
 struct TransactionsView: View {
-    @StateObject private var viewModel = MonthlyTransactionsViewModel()
+    @StateObject private var listContent: TransactionDateGroupedList
     @State var showAddTransactionView = false
-    @State private var searchValue: String = ""
     @State private var showFilterSettings = false
-    @State private var temporaryDateSelection = Calendar.current.dateComponents([.month, .year], from: Date())
+    
+    private var isCurrentMonthSelected: Bool {
+        let now = Date()
+        let currentMonthComps = Calendar.current.dateComponents([.year, .month], from: now)
+        return listContent.selectedDateComps.year == currentMonthComps.year && listContent.selectedDateComps.month == currentMonthComps.month
+    }
+    
+    init() {
+        let now = Date()
+        let calendar = Calendar.current
+        let currentMonthComps = calendar.dateComponents([.year, .month], from: now)
+        
+        self._listContent = StateObject(wrappedValue: 
+            TransactionDateGroupedList(monthComponents: currentMonthComps, groupingGranularity: .day)
+        )
+    }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             TransactionsList(
                 showAddTransactionView: $showAddTransactionView,
-                transactionsByDate: viewModel.currentTransactionsByDate
+                transactionsByDate: listContent.groupedTransactions
             )
-            .searchable(text: $searchValue)
-            .onChange(of: searchValue) { newValue in
-                viewModel.filterTransactionsByValue(newValue)
-            }
+            .searchable(text: $listContent.searchText)
             .navigationTitle("Transactions")
             .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        temporaryDateSelection = viewModel.filteredSelectedDate
                         showFilterSettings.toggle()
                     } label: {
-                        Image(systemName: viewModel.isCurrentMonthSelected ? "tray.full" : "tray.full.fill")
+                        Image(systemName: isCurrentMonthSelected ? "tray.full" : "tray.full.fill")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -43,7 +53,7 @@ struct TransactionsView: View {
                     }
                 }
             }
-            .monthYearSelectorSheet($showFilterSettings, selection: $viewModel.filteredSelectedDate)
+            .monthYearSelectorSheet($showFilterSettings, selection: $listContent.selectedDateComps)
         }
     }
 }
