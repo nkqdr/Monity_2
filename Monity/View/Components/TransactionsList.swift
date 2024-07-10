@@ -74,7 +74,6 @@ fileprivate struct TransactionListTile: View {
         }
         .sheet(isPresented: $showEditView) {
             AddTransactionView(
-                isPresented: $showEditView,
                 editor: TransactionEditor(transaction: transaction)
             )
             .presentationDetents([.medium, .large])
@@ -133,7 +132,7 @@ struct TransactionsList: View {
             TransactionCategorySummaryView(category: category, showExpenses: nil)
         }
         .sheet(isPresented: $showAddTransactionView) {
-            AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: nil))
+            AddTransactionView(editor: TransactionEditor(transaction: nil))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
         }
