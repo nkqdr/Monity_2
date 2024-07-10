@@ -68,7 +68,7 @@ final class TransactionListTest: XCTestCase {
         
         
         let e = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+        DispatchQueue.main.async { // scheduled after `setGroupedTransactions`
             XCTAssertEqual(yearGroup.groupedTransactions.count, 1)
             XCTAssertEqual(monthGroup.groupedTransactions.count, 2)
             XCTAssertEqual(dayGroup.groupedTransactions.count, 3)
@@ -83,7 +83,7 @@ final class TransactionListTest: XCTestCase {
             controller: self.persistenceController
         )
         let e1 = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.async {
             XCTAssertEqual(dayGroup.groupedTransactions.count, 3)
             e1.fulfill()
         }
@@ -92,7 +92,7 @@ final class TransactionListTest: XCTestCase {
         dayGroup.searchText = "Second"
         
         let e2 = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.async {
             XCTAssertEqual(dayGroup.groupedTransactions.count, 1)
             e2.fulfill()
         }
@@ -105,7 +105,7 @@ final class TransactionListTest: XCTestCase {
             controller: self.persistenceController
         )
         let e1 = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.async {
             XCTAssertEqual(dayGroup.groupedTransactions.count, 3)
             e1.fulfill()
         }
@@ -113,7 +113,7 @@ final class TransactionListTest: XCTestCase {
         
         dayGroup.searchText = "Something"
         let e2 = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.async {
             XCTAssertEqual(dayGroup.groupedTransactions.count, 2)
             e2.fulfill()
         }
@@ -121,7 +121,7 @@ final class TransactionListTest: XCTestCase {
         
         dayGroup.searchText = "Another"
         let e3 = XCTestExpectation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.async {
             XCTAssertEqual(dayGroup.groupedTransactions.count, 1)
             e3.fulfill()
         }

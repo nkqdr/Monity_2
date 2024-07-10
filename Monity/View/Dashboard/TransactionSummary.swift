@@ -1,5 +1,5 @@
 //
-//  TransactionSummaryTile.swift
+//  TransactionSummary.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 17.10.22.
@@ -73,30 +73,57 @@ fileprivate struct TransactionCategoryTile: View {
         )
     }
     
+    private var mainDataPoint: CategoryRetroDataPoint {
+        if lastYearExpenses.total > lastYearIncome.total {
+            return lastYearExpenses
+        }
+        return lastYearIncome
+    }
+    
+    private var tintColor: Color {
+        guard let isForExpenses = mainDataPoint.isForExpenses else {
+            return .secondary
+        }
+        return isForExpenses ? .red : .green
+    }
+    
     var body: some View {
         NavigationLink(
             destination: TransactionCategorySummaryView(
                 category: category, showExpenses: true
             )
         ) {
-            VStack(alignment: .leading) {
-                Text(category.wrappedName)
-                    .font(.headline.bold())
-                Text("Last Year")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                HStack {
-                    if lastYearIncome.total > 0 {
-                        Text(lastYearIncome.total, format: .customCurrency())
-                            .tintedBackground(.green)
+            HStack {
+                HStack(alignment: .center, spacing: 16) {
+                    if let icon = category.iconName {
+                        Image(systemName: icon)
+                            .frame(width: 20)
+                            .foregroundStyle(.secondary)
                     }
-                    Spacer()
-                    if lastYearExpenses.total > 0 {
-                        Text(lastYearExpenses.total, format: .customCurrency())
-                            .tintedBackground(.red)
+                    VStack(alignment: .leading) {
+                        Text(category.wrappedName)
+                            .fontWeight(.bold)
+                        Text("\(mainDataPoint.numTransactions) transactions")
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
                     }
                 }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text("Last Year")
+                        .font(.caption)
+                    VStack(alignment: .trailing) {
+                        Text(mainDataPoint.total, format: .customCurrency())
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                        Text("Ø\(mainDataPoint.averagePerMonth.formatted(.customCurrency())) p.m.")
+                            .font(.caption2)
+                    }
+                    
+                }
+                .tintedBackground(tintColor, backgroundOpacity: 0.05)
             }
+            .padding(.vertical, 2)
         }
     }
 }
@@ -114,13 +141,7 @@ fileprivate struct TransactionCategoryList: View {
         ForEach(allCategories) { category in
             TransactionCategoryTile(category: category)
         }
-        .padding(.bottom)
     }
-}
-
-#Preview {
-    TransactionCategoryList()
-        .environment(\.managedObjectContext, PersistenceController.preview.managedObjectContext)
 }
 
 
@@ -160,45 +181,6 @@ fileprivate struct TransactionSummaryPage: View {
             Haptics.shared.play(.soft)
         }
         .navigationTitle("Transaction Overview")
-    }
-}
-
-fileprivate struct TransactionCategorySummaryTile: View {
-    @ObservedObject var dataPoint: CategoryRetroDataPoint
-    
-    var body: some View {
-        NavigationLink(destination: TransactionCategorySummaryView(
-            category: dataPoint.category,
-            showExpenses: dataPoint.isForExpenses)
-        ) {
-            HStack {
-                if let icon = dataPoint.category.iconName {
-                    Image(systemName: icon)
-                        .frame(width: 40)
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                }
-                VStack(alignment: .leading) {
-                    Text(dataPoint.category.wrappedName)
-                        .fontWeight(.bold)
-                    Text("\(dataPoint.numTransactions) transactions")
-                        .foregroundColor(.secondary)
-                        .font(.footnote)
-                }
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text("Last Year")
-                        .font(.caption)
-                    Text(dataPoint.total, format: .customCurrency())
-                        .fontWeight(.semibold)
-                    Text("Ø\(dataPoint.averagePerMonth.formatted(.customCurrency())) p.m.")
-                        .font(.caption2)
-                }
-                .foregroundColor(Color.secondary)
-            }
-            .padding(.vertical, 2)
-        }
-        .listRowInsets(dataPoint.category.iconName != nil ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 16) : nil)
     }
 }
 

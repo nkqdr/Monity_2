@@ -122,7 +122,7 @@ class TransactionDateGroupedList: ObservableObject {
     
     private func setGroupedTransactions(for transactions: [Transaction]) {
         self.groupedTransactions = []
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.main.async {
             let chunkedTransactions = transactions.chunked(by: {
                 Calendar.current.isDate($0.wrappedDate, equalTo: $1.wrappedDate, toGranularity: self.groupingGranularity)
             }).filter { !$0.isEmpty }
@@ -148,9 +148,7 @@ class TransactionDateGroupedList: ObservableObject {
                 $0.date > $1.date
             }
             
-            DispatchQueue.main.async {
-                self.groupedTransactions = sortedGroupedTransactions
-            }
+            self.groupedTransactions = sortedGroupedTransactions
         }
     }
 }
