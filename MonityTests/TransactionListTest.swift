@@ -52,6 +52,11 @@ final class TransactionListTest: XCTestCase {
         }
     }
     
+    override func tearDown() {
+        let viewContext = self.persistenceController.managedObjectContext
+        TransactionStorage(managedObjectContext: viewContext).deleteAll()
+    }
+    
     func testDateGrouping() {
         let yearGroup = TransactionDateGroupedList(
             groupingGranularity: .year,
