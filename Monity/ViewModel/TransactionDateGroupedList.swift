@@ -121,7 +121,6 @@ class TransactionDateGroupedList: ObservableObject {
     }
     
     private func setGroupedTransactions(for transactions: [Transaction]) {
-        self.groupedTransactions = []
         DispatchQueue.main.async {
             let chunkedTransactions = transactions.chunked(by: {
                 Calendar.current.isDate($0.wrappedDate, equalTo: $1.wrappedDate, toGranularity: self.groupingGranularity)
@@ -133,8 +132,9 @@ class TransactionDateGroupedList: ObservableObject {
                 guard let chunkDate = chunk.first?.wrappedDate else {
                     continue
                 }
-                let transactionBlock = self.groupedTransactions.first(where: { Calendar.current.isDate(chunkDate, inSameDayAs: $0.date)})
-                
+                let transactionBlock = self.groupedTransactions.first(where: {
+                    Calendar.current.isDate(chunkDate, equalTo: $0.date, toGranularity: self.groupingGranularity)
+                })
                 guard let transactionBlock else {
                     byDate.append(TransactionsByDate(date: chunkDate, transactions: Array(chunk)))
                     continue
@@ -147,7 +147,6 @@ class TransactionDateGroupedList: ObservableObject {
             let sortedGroupedTransactions = byDate.sorted {
                 $0.date > $1.date
             }
-            
             self.groupedTransactions = sortedGroupedTransactions
         }
     }

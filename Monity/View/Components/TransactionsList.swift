@@ -128,6 +128,7 @@ struct TransactionsList: View {
                 }
             }
         }
+        .animation(.easeInOut, value: transactionsByDate)
         .customNavigationDestination(item: $categoryShown) { category in
             TransactionCategorySummaryView(category: category, showExpenses: nil)
         }
