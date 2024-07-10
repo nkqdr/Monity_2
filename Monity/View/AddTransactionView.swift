@@ -22,7 +22,7 @@ struct AddTransactionView: View {
                 VStack(spacing: 10) {
                     CurrencyInputField(value: $editor.givenAmount)
                         .focused($amountInputIsFocussed)
-                        .font(.system(size: 32, weight: .bold))
+                        .font(.largeTitle.bold())
                         .foregroundStyle(accentColor)
                         .autocorrectionDisabled()
                     Picker("Pick a transaction type", selection: $editor.isExpense) {

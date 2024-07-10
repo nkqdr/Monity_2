@@ -71,7 +71,9 @@ struct SavingsEntryFormView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         withAnimation {
-                            editor.save()
+                            DispatchQueue.main.async {
+                                editor.save()
+                            }
                         }
                         dismiss()
                     }
