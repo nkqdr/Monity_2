@@ -58,44 +58,6 @@ fileprivate let budgetLevels: [BudgetLevel] = [
         rangeMin: 10000, rangeMax: Int.max),
 ]
 
-fileprivate struct SetLimitSheet: View {
-    @Binding var isPresented: Bool
-    @FocusState private var limitInputIsFocussed: Bool
-    @State private var tmpMonthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Budget", value: $tmpMonthlyLimit, format: .customCurrency())
-                        .keyboardType(.decimalPad)
-                        .focused($limitInputIsFocussed)
-                } header: {
-                    Text("Monthly budget")
-                }
-            }
-            .onAppear {
-                limitInputIsFocussed = true
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
-                        withAnimation {
-                            UserDefaults.standard.set(tmpMonthlyLimit, forKey: AppStorageKeys.monthlyLimit)
-                        }
-                        isPresented.toggle()
-                    }
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel", role: .cancel, action: {
-                        isPresented.toggle()
-                    })
-                }
-            }
-        }
-    }
-}
-
 fileprivate struct MonthlyLimitSection: View {
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
     @State private var showingEditAlert: Bool = false
@@ -146,8 +108,8 @@ fileprivate struct MonthlyLimitSection: View {
             }
         }
         .sheet(isPresented: $showingEditAlert) {
-            SetLimitSheet(isPresented: $showingEditAlert)
-                .presentationDetents([.height(200)])
+            BudgetWizard()
+                .presentationDetents([.height(600)])
         }
         .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
