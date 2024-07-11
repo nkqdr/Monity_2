@@ -49,6 +49,10 @@ final class CategoryRetroTest: XCTestCase {
             try? viewContext.save()
         }
     }
+    
+    override func tearDown() {
+        TransactionStorage(managedObjectContext: self.persistenceController.managedObjectContext).deleteAll()
+    }
 
     func testPropertiesGetAssignedCorrectly() throws {
         let sut = CategoryRetroDataPoint(

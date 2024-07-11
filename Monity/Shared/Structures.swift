@@ -16,7 +16,7 @@ struct PieChartDataPoint: Identifiable {
     var color: Color
 }
 
-struct TransactionsByDate: Identifiable {
+struct TransactionsByDate: Identifiable, Equatable {
     var id = UUID()
     var date: Date
     var transactions: [Transaction]

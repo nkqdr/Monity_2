@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddTransactionView: View {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) var dismiss
     @FocusState var amountInputIsFocussed: Bool
     @StateObject var editor: TransactionEditor
     
@@ -20,10 +20,9 @@ struct AddTransactionView: View {
         NavigationView {
             Form {
                 VStack(spacing: 10) {
-                    TextField(0.formatted(.customCurrency()), value: $editor.givenAmount, format: .customCurrency())
-                        .keyboardType(.numbersAndPunctuation)
+                    CurrencyInputField(value: $editor.givenAmount)
                         .focused($amountInputIsFocussed)
-                        .font(.system(size: 32, weight: .bold))
+                        .font(.largeTitle.bold())
                         .foregroundStyle(accentColor)
                         .autocorrectionDisabled()
                     Picker("Pick a transaction type", selection: $editor.isExpense) {
@@ -59,7 +58,7 @@ struct AddTransactionView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        isPresented.toggle()
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -67,18 +66,10 @@ struct AddTransactionView: View {
                         withAnimation {
                             editor.save()
                         }
-                        isPresented.toggle()
+                        dismiss()
                     }
                     .disabled(!editor.isValid)
                 }
-//                ToolbarItemGroup(placement: .keyboard) {
-//                    Spacer()
-//                    Button {
-//                        hideKeyboard()
-//                    } label: {
-//                        Image(systemName: "keyboard.chevron.compact.down")
-//                    }
-//                }
             }
         }
     }
@@ -86,6 +77,6 @@ struct AddTransactionView: View {
 
 struct AddTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTransactionView(isPresented: .constant(true), editor: TransactionEditor())
+        AddTransactionView(editor: TransactionEditor())
     }
 }

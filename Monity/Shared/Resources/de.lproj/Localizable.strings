@@ -709,6 +709,9 @@
 /* No comment provided by engineer. */
 "Show prediction" = "Vorhersage anzeigen";
 
+/* No comment provided by engineer. */
+"Show category" = "Kategorie anzeigen";
+
 // MARK: - Onboarding default categories
 
 /* No comment provided by engineer. */

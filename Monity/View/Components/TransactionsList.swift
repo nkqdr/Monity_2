@@ -74,7 +74,6 @@ fileprivate struct TransactionListTile: View {
         }
         .sheet(isPresented: $showEditView) {
             AddTransactionView(
-                isPresented: $showEditView,
                 editor: TransactionEditor(transaction: transaction)
             )
             .presentationDetents([.medium, .large])
@@ -129,11 +128,12 @@ struct TransactionsList: View {
                 }
             }
         }
+        .animation(.easeInOut, value: transactionsByDate)
         .customNavigationDestination(item: $categoryShown) { category in
             TransactionCategorySummaryView(category: category, showExpenses: nil)
         }
         .sheet(isPresented: $showAddTransactionView) {
-            AddTransactionView(isPresented: $showAddTransactionView, editor: TransactionEditor(transaction: nil))
+            AddTransactionView(editor: TransactionEditor(transaction: nil))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)
         }
