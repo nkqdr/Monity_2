@@ -28,19 +28,6 @@ struct CurrencyInputField: View {
             TextField("", text: $text)
                 .focused($isFocussed)
                 .keyboardType(.numberPad)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button {
-                                isFocussed = false
-                            } label: {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                            }
-                            .font(.body)
-                        }
-                    }
-                }
                 .onChange(of: text) { newValue in
                     formatText()
                     prevText = text
