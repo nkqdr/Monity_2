@@ -143,6 +143,6 @@ fileprivate struct PreviewView: View {
 }
 
 #Preview {
-    AddTransactionView(editor: TransactionEditor())
+    PreviewView()
         .environment(\.managedObjectContext, PersistenceController.previewContext)
 }

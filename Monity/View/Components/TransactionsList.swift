@@ -22,6 +22,7 @@ extension EnvironmentValues {
 fileprivate struct TransactionListTile: View {
     @Environment(\.showTransactionCategoryOption) var enableShowCategoryButton
     @ObservedObject var transaction: Transaction
+    @Binding var editedTransaction: Transaction?
     @Binding var shownCategory: TransactionCategory?
     @State var showEditView: Bool = false
     @State private var showConfirmationDialog: Bool = false
@@ -49,7 +50,7 @@ fileprivate struct TransactionListTile: View {
             showConfirmationDialog.toggle()
         }
         .editSwipeAction {
-            showEditView.toggle()
+            editedTransaction = transaction
         }
         .contextMenu {
             if enableShowCategoryButton {
@@ -72,13 +73,6 @@ fileprivate struct TransactionListTile: View {
                 Label("Delete", systemImage: "trash")
             }
         }
-        .sheet(isPresented: $showEditView) {
-            AddTransactionView(
-                editor: TransactionEditor(transaction: transaction)
-            )
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.hidden)
-        }
         .confirmationDialog(
             "Delete transaction",
             isPresented: $showConfirmationDialog,
@@ -98,6 +92,7 @@ fileprivate struct TransactionListTile: View {
 struct TransactionsList: View {
     @Binding var showAddTransactionView: Bool
     @State var categoryShown: TransactionCategory? = nil
+    @State var editedTransaction: Transaction? = nil
     var transactionsByDate: [TransactionsByDate]
     var dateFormat: Date.FormatStyle = .dateTime.year().month().day()
     
@@ -124,13 +119,22 @@ struct TransactionsList: View {
         List(transactionsByDate) { date in
             Section(header: sectionHeaderFor(date)) {
                 ForEach(date.transactions) { transaction in
-                    TransactionListTile(transaction: transaction, shownCategory: $categoryShown)
+                    TransactionListTile(
+                        transaction: transaction,
+                        editedTransaction: $editedTransaction,
+                        shownCategory: $categoryShown
+                    )
                 }
             }
         }
         .animation(.easeInOut, value: transactionsByDate)
         .customNavigationDestination(item: $categoryShown) { category in
             TransactionCategorySummaryView(category: category, showExpenses: nil)
+        }
+        .sheet(item: $editedTransaction) { transaction in
+            AddTransactionView(editor: TransactionEditor(transaction: transaction))
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
         }
         .sheet(isPresented: $showAddTransactionView) {
             AddTransactionView(editor: TransactionEditor(transaction: nil))
