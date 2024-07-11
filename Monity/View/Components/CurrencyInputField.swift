@@ -30,8 +30,14 @@ struct CurrencyInputField: View {
                 .keyboardType(.numberPad)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        Button("Click me!") {
-                            print("Clicked")
+                        HStack {
+                            Spacer()
+                            Button {
+                                isFocussed = false
+                            } label: {
+                                Image(systemName: "keyboard.chevron.compact.down")
+                            }
+                            .font(.body)
                         }
                     }
                 }
