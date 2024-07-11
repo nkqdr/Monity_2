@@ -23,7 +23,8 @@ extension TransactionCategory {
     }
     
     var recentTransactionsCount: Int {
-        self.transactionArray.filter { $0.wrappedDate > Date.oneYearAgo }.count
+        let recentTransactionThreshold: Date = Date.nMonthsAgo(n: 4)
+        return self.transactionArray.filter { $0.wrappedDate > recentTransactionThreshold }.count
     }
 }
 

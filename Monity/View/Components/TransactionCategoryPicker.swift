@@ -16,21 +16,11 @@ fileprivate struct TagView: Layout {
     }
     
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let enumeratedViews = subviews.enumerated()
-        let firstRow = enumeratedViews.filter {
-            $0.offset % 2 == 0
-        }
-        let secondRow = enumeratedViews.filter {
-            $0.offset % 2 == 1
-        }
-        let row1Width: CGFloat = vDSP.sum(firstRow.map {
-            Double($0.element.sizeThatFits(proposal).width)
-        })
-        let row2Width: CGFloat = vDSP.sum(secondRow.map {
-            Double($0.element.sizeThatFits(proposal).width)
+        let subviewWidth: CGFloat = vDSP.sum(subviews.map {
+            Double($0.sizeThatFits(proposal).width)
         })
         let totalSubviews = subviews.count
-        let totalWidth = (CGFloat(totalSubviews) * self.spacing) + max(row1Width, row2Width)
+        let totalWidth = (CGFloat(totalSubviews) * self.spacing) + ((subviewWidth / 2) * 1.05)
         return .init(width: totalWidth, height: proposal.height ?? 0)
     }
     
@@ -41,7 +31,9 @@ fileprivate struct TagView: Layout {
         cache: inout ()
     ) {
         let row1Y: CGFloat = 0
-        let row2Y: CGFloat = subviews.map { $0.sizeThatFits(proposal).height }.max() ?? 0
+        let row2Y: CGFloat = (subviews.map {
+            $0.sizeThatFits(proposal).height
+        }.max() ?? 0) + spacing
         var row1X: CGFloat = 0
         var row2X: CGFloat = 0
         var currentY: CGFloat = row1Y
@@ -51,11 +43,15 @@ fileprivate struct TagView: Layout {
             
             let x: CGFloat = currentY == row1Y ? row1X : row2X
             view.place(at: CGPoint(x: x, y: currentY), proposal: proposal)
-            currentY = currentY == row1Y ? (row2Y + spacing) : row1Y
-            if x == row1X {
+            if currentY == row1Y {
                 row1X += (viewSize.width + spacing)
             } else {
                 row2X += (viewSize.width + spacing)
+            }
+            if row1X <= row2X {
+                currentY = row1Y
+            } else {
+                currentY = row2Y
             }
         }
     }
@@ -94,7 +90,7 @@ fileprivate struct CategoryLabel: View {
                 Text(category.wrappedName)
             } icon: {
                 if let icon = category.iconName {
-                    Image(systemName: icon)
+                    Image(systemName: icon).imageScale(.small)
                 }
             }
         }
