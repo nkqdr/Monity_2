@@ -36,11 +36,19 @@ struct AddTransactionView: View {
                 
                 Section {
                     TransactionCategoryPicker(selection: $editor.selectedCategory)
-                    if let _ = editor.transaction {
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .tint(accentColor)
+                } header: {
+                    Text("Category")
+                }
+                
+                if let _ = editor.transaction {
+                    Section {
                         DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
+                    .listRowBackground(accentColor.opacity(0.25))
                 }
-                .listRowBackground(accentColor.opacity(0.25))
                 Section("Optional") {
                     TextField("Description", text: $editor.description)
                 }

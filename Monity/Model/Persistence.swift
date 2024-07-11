@@ -24,6 +24,33 @@ class PersistenceController {
         
         return model
     }()
+    
+    static var previewContext: NSManagedObjectContext {
+        let controller = PersistenceController(inMemory: true)
+        let context = controller.managedObjectContext
+        let fetchRequest = TransactionCategory.fetchRequest()
+        let fetchResult: [TransactionCategory] = (try? context.fetch(fetchRequest)) ?? []
+        
+        for res in fetchResult {
+            context.performAndWait {
+                context.delete(res)
+                try? context.save()
+            }
+        }
+        
+        context.performAndWait {
+            for idx in 0...5 {
+                let t = TransactionCategory(context: context)
+                t.id = UUID()
+                t.name = "Category\(idx+1)"
+                if idx % 2 == 0 {
+                    t.iconName = "carrot.fill"
+                }
+            }
+            try? context.save()
+        }
+        return context
+    }
 
     let container: NSPersistentContainer
     

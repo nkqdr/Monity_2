@@ -28,6 +28,13 @@ struct CurrencyInputField: View {
             TextField("", text: $text)
                 .focused($isFocussed)
                 .keyboardType(.numberPad)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Button("Click me!") {
+                            print("Clicked")
+                        }
+                    }
+                }
                 .onChange(of: text) { newValue in
                     formatText()
                     prevText = text
@@ -65,7 +72,7 @@ struct CurrencyInputField: View {
     }
 }
 
-struct PreviewView: View {
+fileprivate struct PreviewView: View {
     @State var val: Double = 0
     var body: some View {
         CurrencyInputField(value: $val)

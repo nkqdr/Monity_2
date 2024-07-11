@@ -16,6 +16,15 @@ extension TransactionCategory {
     var wrappedTransactionsCount: Int {
         self.transactions?.count ?? 0
     }
+    
+    public var transactionArray: [Transaction] {
+        let entries = self.transactions as? Set<Transaction> ?? []
+        return Array(entries)
+    }
+    
+    var recentTransactionsCount: Int {
+        self.transactionArray.filter { $0.wrappedDate > Date.oneYearAgo }.count
+    }
 }
 
 extension Transaction {
