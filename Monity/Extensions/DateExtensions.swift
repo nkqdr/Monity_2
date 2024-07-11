@@ -37,6 +37,11 @@ extension Date {
         return calendar.date(byAdding: .year, value: -1, to: Date())!
     }
     
+    static func nMonthsAgo(n: Int) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(byAdding: .month, value: -1 * n, to: Date())!
+    }
+    
     public var removeTimeStamp : Date? {
        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else {
         return nil

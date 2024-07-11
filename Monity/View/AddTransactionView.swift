@@ -9,8 +9,13 @@ import SwiftUI
 
 struct AddTransactionView: View {
     @Environment(\.dismiss) var dismiss
-    @FocusState var amountInputIsFocussed: Bool
+    @FocusState var focusedField: Field?
     @StateObject var editor: TransactionEditor
+    
+    enum Field: Hashable {
+        case amount
+        case text
+    }
     
     var accentColor: Color {
         editor.isExpense ? .red : .green
@@ -21,7 +26,7 @@ struct AddTransactionView: View {
             Form {
                 VStack(spacing: 10) {
                     CurrencyInputField(value: $editor.givenAmount)
-                        .focused($amountInputIsFocussed)
+                        .focused($focusedField, equals: .amount)
                         .font(.largeTitle.bold())
                         .foregroundStyle(accentColor)
                         .autocorrectionDisabled()
@@ -36,13 +41,22 @@ struct AddTransactionView: View {
                 
                 Section {
                     TransactionCategoryPicker(selection: $editor.selectedCategory)
-                    if let _ = editor.transaction {
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .tint(accentColor)
+                } header: {
+                    Text("Category")
+                }
+                
+                if let _ = editor.transaction {
+                    Section {
                         DatePicker("Timestamp", selection: $editor.selectedDate)
                     }
+                    .listRowBackground(accentColor.opacity(0.25))
                 }
-                .listRowBackground(accentColor.opacity(0.25))
                 Section("Optional") {
                     TextField("Description", text: $editor.description)
+                        .focused($focusedField, equals: .text)
                 }
                 .listRowBackground(accentColor.opacity(0.25))
             }
@@ -52,8 +66,7 @@ struct AddTransactionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if editor.transaction == nil {
-                    amountInputIsFocussed = true
-                }
+                    focusedField = .amount                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -69,6 +82,16 @@ struct AddTransactionView: View {
                         dismiss()
                     }
                     .disabled(!editor.isValid)
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button {
+                            focusedField = nil
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                    }
                 }
             }
         }
