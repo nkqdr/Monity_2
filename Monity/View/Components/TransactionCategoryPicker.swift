@@ -78,13 +78,12 @@ fileprivate struct CategoryLabel: View {
     
     var body: some View {
         Button {
-            withAnimation {
-                if selectedCategory == category {
-                    selectedCategory = nil
-                } else {
-                    selectedCategory = category
-                }
+            if selectedCategory == category {
+                selectedCategory = nil
+            } else {
+                selectedCategory = category
             }
+            Haptics.shared.play(.soft)
         } label: {
             Label {
                 Text(category.wrappedName)
