@@ -59,20 +59,16 @@ fileprivate let budgetLevels: [BudgetLevel] = [
 ]
 
 fileprivate struct MonthlyLimitSection: View {
+    @Binding var showBudgetWizard: Bool
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
-    @State private var showingEditAlert: Bool = false
     @State private var showingDeleteConfirmation: Bool = false
     
     private var budgetLevel: BudgetLevel? {
         BudgetLevel.getDetails(for: monthlyLimit ?? -1)
     }
     
-    private var monthlyLimitFooter: some View {
-        Text("Establish a monthly budget and aim to stay within your limits.")
-    }
-    
     var body: some View {
-        Section(footer: monthlyLimitFooter) {
+        Section {
             if let budgetLevel {
                 HStack(alignment: .top) {
                     Text(budgetLevel.emoji)
@@ -97,7 +93,7 @@ fileprivate struct MonthlyLimitSection: View {
             }
             HStack {
                 Button("Change budget") {
-                    showingEditAlert.toggle()
+                    showBudgetWizard.toggle()
                 }
                 .buttonStyle(.borderless)
                 Spacer()
@@ -106,10 +102,8 @@ fileprivate struct MonthlyLimitSection: View {
                 }
                 .buttonStyle(.borderless)
             }
-        }
-        .sheet(isPresented: $showingEditAlert) {
-            BudgetWizard()
-                .presentationDetents([.height(600)])
+        } footer: {
+            Text("Establish a monthly budget and aim to stay within your limits.")
         }
         .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
@@ -120,85 +114,113 @@ fileprivate struct MonthlyLimitSection: View {
         } message: {
             Text("This has no effect on your stored transactions.")
         }
-        .textCase(nil) // To avoid dialogs appearing in all-uppercase
+    }
+}
+
+fileprivate struct TransactionCategoryTile: View {
+    @ObservedObject var category: TransactionCategory
+    @Binding var categoryToEdit: TransactionCategory?
+    @State private var showConfirmationDialog: Bool = false
+    
+    var body: some View {
+        HStack {
+            if let icon = category.iconName {
+                Image(systemName: icon)
+                    .padding(.trailing, 10)
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+            }
+            VStack(alignment: .leading) {
+                Text(category.wrappedName)
+                Text("Associated transactions: \(category.wrappedTransactionsCount)")
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .deleteSwipeAction {
+            showConfirmationDialog.toggle()
+        }
+        .editSwipeAction {
+            categoryToEdit = category
+        }
+        .contextMenu {
+            Button {
+                categoryToEdit = category
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            Divider()
+            Button(role: .destructive) {
+                showConfirmationDialog.toggle()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .confirmationDialog(
+            "Delete transaction",
+            isPresented: $showConfirmationDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                withAnimation(.easeInOut) {
+                    TransactionCategoryStorage.main.delete(category)
+                }
+            }
+        } message: {
+            Text("Are you sure you want to delete this transaction?")
+        }
     }
 }
 
 struct More_TransactionsView: View {
-    @StateObject private var content = SettingsTransactionsViewModel()
-    @State private var transactionCategoryForList: TransactionCategory? = nil
+    @FetchRequest(
+        entity: TransactionCategory.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \TransactionCategory.numTransactions, ascending: false)
+        ]
+    ) private var allCategories: FetchedResults<TransactionCategory>
+    @State private var categoryToEdit: TransactionCategory? = nil
+    @State private var showAddCategoryForm: Bool = false
+    @State var showBudgetWizard: Bool = false
     
     var body: some View {
-        EditableDeletableItemList(viewModel: content) { create, edit, delete in
-            MonthlyLimitSection()
-            Section(header: categorySectionHeader(create), footer: categorySectionFooter) {
-                ForEach(content.items) { category in
-                    EditableDeletableItem(
-                        item: category,
-                        confirmationTitle: "Are you sure you want to delete \(category.wrappedName)?",
-                        confirmationMessage: "\(category.wrappedTransactionsCount) related transactions will be deleted.",
-                        onEdit: edit,
-                        onDelete: delete) { item in
-                            HStack {
-                                if let icon = item.iconName {
-                                    Image(systemName: icon)
-                                        .padding(.trailing, 10)
-                                        .font(.headline)
-                                        .foregroundStyle(.secondary)
-                                }
-                                VStack(alignment: .leading) {
-                                    Text(item.wrappedName)
-                                    Text("Associated transactions: \(item.wrappedTransactionsCount)")
-                                        .font(.callout)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            self.transactionCategoryForList = category
-                        } label: {
-                            Label("Show transactions", systemImage: "list.bullet")
-                        }
-                        .tint(.mint)
+        List {
+            MonthlyLimitSection(showBudgetWizard: $showBudgetWizard)
+            Section {
+                ForEach(allCategories) { category in
+                    TransactionCategoryTile(category: category, categoryToEdit: $categoryToEdit)
+                }
+            } header: {
+                HStack {
+                    Text("Categories")
+                    Spacer()
+                    Button {
+                        showAddCategoryForm.toggle()
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
+            } footer: {
+                Text("These will help you categorize all of your expenses and income")
             }
-        } sheetContent: { showAddItemSheet, currentItem in
+        }
+        .sheet(isPresented: $showBudgetWizard) {
+            BudgetWizard()
+                .interactiveDismissDisabled()
+//                .presentationDetents([.height(400)])
+        }
+        .sheet(isPresented: $showAddCategoryForm) {
             TransactionCategoryFormView(
-                editor: TransactionCategoryEditor(category: currentItem)
+                editor: TransactionCategoryEditor()
             )
         }
-        .sheet(item: $transactionCategoryForList) { val in
-            NavigationStack {
-                TransactionListPerCategory(category: val, showExpenses: nil)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button("Close", role: .cancel) {
-                                transactionCategoryForList = nil
-                            }
-                        }
-                    }
-                    .navigationTitle(val.wrappedName)
-                    .navigationBarTitleDisplayMode(.large)
-            }
+        .sheet(item: $categoryToEdit) { category in
+            TransactionCategoryFormView(
+                editor: TransactionCategoryEditor(category: category)
+            )
         }
         .navigationTitle("Transactions")
         .navigationBarTitleDisplayMode(.inline)
-    }
-    
-    func categorySectionHeader(_ createFunc: @escaping () -> Void) -> some View {
-        HStack {
-            Text("Categories")
-            Spacer()
-            Button(action: createFunc) {
-                Image(systemName: "plus")
-            }
-        }
-    }
-    
-    private var categorySectionFooter: some View {
-        Text("These will help you categorize all of your expenses and income")
     }
 }
 

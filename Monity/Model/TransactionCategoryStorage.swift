@@ -11,9 +11,12 @@ import CoreData
 class TransactionCategoryFetchController: BaseFetchController<TransactionCategory> {
     static let all = TransactionCategoryFetchController()
     
-    private init() {
+    init(
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.managedObjectContext
+    ) {
         super.init(
-            sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
+            sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)],
+            managedObjectContext: managedObjectContext
         )
     }
 }

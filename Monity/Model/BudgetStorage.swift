@@ -36,14 +36,21 @@ class BudgetStorage: ResettableStorage<Budget> {
         managedObjectContext: PersistenceController.shared.managedObjectContext
         )
     
-    func add(amount: Double, category: TransactionCategory?, validFrom: Date = Date()) -> Budget {
+    func add(
+        amount: Double,
+        category: TransactionCategory?,
+        validFrom: Date = Date(),
+        save: Bool = true
+    ) -> Budget {
         self.context.performAndWait {
             let budget = Budget(context: self.context)
             budget.id = UUID()
             budget.validFrom = validFrom
             budget.amount = amount
             budget.category = category
-            try? self.context.save()
+            if save {
+                try? self.context.save()
+            }
             return budget
         }
     }

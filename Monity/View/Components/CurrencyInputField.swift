@@ -44,6 +44,8 @@ struct CurrencyInputField: View {
                 .tint(.clear)
                 .padding(4)
         }
+        .fixedSize()
+        .lineLimit(1)
     }
     
     private static func format(value: Double) -> String {

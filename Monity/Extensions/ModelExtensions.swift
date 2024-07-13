@@ -8,6 +8,12 @@
 import Foundation
 import SwiftUI
 
+extension Budget {
+    var wrappedValidFrom: Date {
+        self.validFrom ?? Date()
+    }
+}
+
 extension TransactionCategory {
     var wrappedName: String {
         self.name ?? ""
@@ -15,6 +21,11 @@ extension TransactionCategory {
     
     var wrappedTransactionsCount: Int {
         self.transactions?.count ?? 0
+    }
+    
+    public var budgetsArray: [Budget] {
+        let entries = self.budgets as? Set<Budget> ?? []
+        return Array(entries)
     }
     
     public var transactionArray: [Transaction] {
