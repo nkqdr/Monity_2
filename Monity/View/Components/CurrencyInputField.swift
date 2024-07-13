@@ -24,7 +24,12 @@ struct CurrencyInputField: View {
         ZStack(alignment: .leadingFirstTextBaseline) {
             Text(text)
                 .hidden()
-                .tintedBackground(backgroundOpacity: isFocussed ? 0.2 : 0, padding: 4)
+                .padding(4)
+                .background {
+                    RoundedRectangle(cornerRadius: 5)
+                        .opacity(isFocussed ? 0.2 : 0)
+                        .tint(nil)
+                }
             TextField("", text: $text)
                 .focused($isFocussed)
                 .keyboardType(.numberPad)

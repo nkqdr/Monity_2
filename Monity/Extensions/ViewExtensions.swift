@@ -91,7 +91,7 @@ extension View {
             .padding(padding)
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .tint(tint)
+                    .foregroundColor(tint)
                     .opacity(backgroundOpacity)
             }
     }
