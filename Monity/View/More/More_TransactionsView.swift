@@ -58,55 +58,6 @@ fileprivate let budgetLevels: [BudgetLevel] = [
         rangeMin: 10000, rangeMax: Int.max),
 ]
 
-fileprivate struct BudgetListTile: View {
-    @ObservedObject var budget: Budget
-    @State private var showConfirmationDialog: Bool = false
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("Valid from: ")
-                    .foregroundStyle(.secondary)
-                Text(budget.wrappedValidFrom, format: .dateTime)
-            }
-            Spacer()
-            if budget.amount != 0 {
-                Text(budget.amount, format: .customCurrency())
-                    .tintedBackground(.green)
-            } else {
-                Text("No budget")
-                    .tintedBackground(.secondary)
-            }
-        }
-        .deleteSwipeAction {
-            showConfirmationDialog.toggle()
-        }
-        .confirmationDialog("Delete Budget", isPresented: $showConfirmationDialog) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
-                withAnimation {
-                    BudgetStorage.main.delete(budget)
-                }
-            }
-        } message: {
-            Text("Are you sure that you want to delete this budget? \nThis cannot be undone.")
-        }
-    }
-}
-
-fileprivate struct BudgetList: View {
-    @ObservedObject private var viewModel = MonthlyBudgetViewModel()
-    
-    var body: some View {
-        List {
-            ForEach(viewModel.allMonthlyBudgets) { budget in
-                BudgetListTile(budget: budget)
-            }
-        }
-        .navigationTitle("Budget history")
-    }
-}
-
 fileprivate struct MonthlyLimitSection: View {
     @Binding var showBudgetWizard: Bool
     @ObservedObject private var viewModel = MonthlyBudgetViewModel()
@@ -129,7 +80,7 @@ fileprivate struct MonthlyLimitSection: View {
                 }
             }
             NavigationLink {
-                BudgetList()
+                BudgetHistoryList()
             } label: {
                 Text("Budget history")
             }
@@ -265,12 +216,12 @@ struct More_TransactionsView: View {
                 .interactiveDismissDisabled()
         }
         .sheet(isPresented: $showAddCategoryForm) {
-            TransactionCategoryFormView(
+            TransactionCategoryForm(
                 editor: TransactionCategoryEditor()
             )
         }
         .sheet(item: $categoryToEdit) { category in
-            TransactionCategoryFormView(
+            TransactionCategoryForm(
                 editor: TransactionCategoryEditor(category: category)
             )
         }

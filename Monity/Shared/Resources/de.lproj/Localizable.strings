@@ -47,7 +47,16 @@
 "Archive" = "Archiv";
 
 /* No comment provided by engineer. */
+"New" = "Neu";
+
+/* No comment provided by engineer. */
+"Delete category" = "Kategorie löschen";
+
+/* No comment provided by engineer. */
 "Are you sure you want to delete %@?" = "Sind Sie sicher, dass Sie %@ löschen wollen?";
+
+/* No comment provided by engineer. */
+"%lld transactions will be lost." = "%lld Transaktionen gehen dabei verloren.";
 
 /* No comment provided by engineer. */
 "Are you sure you want to delete all App-Data?" = "Sind Sie sicher, dass Sie alle App-Daten löschen wollen?";
@@ -713,7 +722,10 @@
 "Show category" = "Kategorie anzeigen";
 
 /* No comment provided by engineer. */
-"Budget history" = "Budget-historie";
+"Budget history" = "Budget-Historie";
+
+/* No comment provided by engineer. */
+"%lld registered transactions" = "%lld registrierte Transaktionen";
 
 // MARK: - Onboarding default categories
 

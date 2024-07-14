@@ -129,7 +129,7 @@ struct TransactionsList: View {
         }
         .animation(.easeInOut, value: transactionsByDate)
         .customNavigationDestination(item: $categoryShown) { category in
-            TransactionCategorySummaryView(category: category, showExpenses: nil)
+            TransactionCategoryShow(category: category, showExpenses: nil)
         }
         .sheet(item: $editedTransaction) { transaction in
             AddTransactionView(editor: TransactionEditor(transaction: transaction))

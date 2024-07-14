@@ -103,6 +103,7 @@ struct TransactionCategoryPicker: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
     ) private var allCategories: FetchedResults<TransactionCategory>
     @Binding var selection: TransactionCategory?
+    @State private var showAddCategory: Bool = false
     
     var sortedCategories: [TransactionCategory] {
         return allCategories.sorted { c1, c2 in
@@ -122,8 +123,19 @@ struct TransactionCategoryPicker: View {
                     ForEach(sortedCategories) { category in
                         CategoryLabel(category: category, selectedCategory: $selection)
                     }
+                    Button {
+                        showAddCategory.toggle()
+                    } label: {
+                        Label("New", systemImage: "plus")
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.accentColor)
                 }
                 .frame(minHeight: 80)
+            }
+            .sheet(isPresented: $showAddCategory) {
+                TransactionCategoryForm(editor: TransactionCategoryEditor())
+                    .tint(.accentColor)
             }
         }
     }

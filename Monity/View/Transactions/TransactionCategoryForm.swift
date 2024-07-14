@@ -1,8 +1,8 @@
 //
-//  TransactionCategoryFormView.swift
+//  TransactionCategoryForm.swift
 //  Monity
 //
-//  Created by Niklas Kuder on 09.10.22.
+//  Created by Niklas Kuder on 14.07.24.
 //
 
 import SwiftUI
@@ -40,7 +40,7 @@ fileprivate struct IconSelectionView: View {
     }
 }
 
-struct TransactionCategoryFormView: View {
+struct TransactionCategoryForm: View {
     @FocusState private var focusNameField
     @Environment(\.dismiss) var dismiss
     @StateObject var editor: TransactionCategoryEditor
@@ -98,11 +98,5 @@ struct TransactionCategoryFormView: View {
                 }
             }
         }
-    }
-}
-
-struct TransactionCategoryFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        TransactionCategoryFormView(editor: TransactionCategoryEditor())
     }
 }
