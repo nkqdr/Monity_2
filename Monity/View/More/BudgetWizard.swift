@@ -9,6 +9,7 @@ import SwiftUI
 
 fileprivate struct CategoryBudgetLine: View {
     @ObservedObject var budgetDefinition: CategoryBudgetMap
+    @FocusState var focusedField: Field?
     
     var body: some View {
         HStack {
@@ -23,6 +24,7 @@ fileprivate struct CategoryBudgetLine: View {
             if budgetDefinition.hasBudget {
                 CurrencyInputField(value: $budgetDefinition.budget)
                     .font(.title2.bold())
+                    .focused($focusedField, equals: .categoryBudget(budgetDefinition.id))
                 
                 Button {
                     budgetDefinition.hasBudget = false
@@ -48,13 +50,14 @@ fileprivate struct CategoryBudgetLine: View {
 }
 
 fileprivate struct SplitBudgetView: View {
+    @FocusState var focusedInput: Field?
     @ObservedObject var viewModel: BudgetWizardViewModel
     
     var body: some View {
         ScrollView {
             Text(viewModel.tmpMonthlyBudget, format: .customCurrency())
             ForEach(viewModel.budgetMaps) { budgetMap in
-                CategoryBudgetLine(budgetDefinition: budgetMap)
+                CategoryBudgetLine(budgetDefinition: budgetMap, focusedField: _focusedInput)
             }
             .padding(.horizontal)
         }
@@ -104,8 +107,14 @@ fileprivate struct WizardControls: View {
                     handleBackward()
                 }
             } label: {
-                Image(systemName: backIcon)
-                    .padding(5)
+                Label {
+                    if selection == 0 {
+                        Text("Cancel")
+                    }
+                } icon: {
+                    Image(systemName: backIcon)
+                }
+                .padding(5)
             }
             .buttonStyle(.bordered)
             .tint(selection == 0 ? .red : nil)
@@ -117,8 +126,14 @@ fileprivate struct WizardControls: View {
                     handleForward()
                 }
             } label: {
-                Image(systemName: forwardIcon)
-                    .padding(5)
+                Label {
+                    if selection == maxIndex {
+                        Text("Save")
+                    }
+                } icon: {
+                    Image(systemName: forwardIcon)
+                }
+                .padding(5)
             }
             .buttonStyle(.bordered)
             .tint(selection == maxIndex ? .green : nil)
@@ -140,42 +155,39 @@ struct BudgetWizard: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            TabView(selection: $selectedPage) {
-                Form {
-                    Section {
-                        CurrencyInputField(value: $viewModel.tmpMonthlyBudget)
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(.green)
-                            .focused($focusedInput, equals: .monthlyBudget)
-                    } header: {
-                        Text("Monthly budget")
-                    }
-                    .listRowBackground(Color.clear)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button {
-                                focusedInput = nil
-                            } label: {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                            }
+            NavigationView {
+                TabView(selection: $selectedPage) {
+                    Form {
+                        Section {
+                            CurrencyInputField(value: $viewModel.tmpMonthlyBudget)
+                                .font(.largeTitle.bold())
+                                .foregroundStyle(.green)
+                                .focused($focusedInput, equals: .monthlyBudget)
+                        } header: {
+                            Text("Monthly budget")
                         }
+                        .listRowBackground(Color.clear)
                     }
+                    .tag(0)
+                    
+                    SplitBudgetView(focusedInput: _focusedInput, viewModel: viewModel)
+                        .tag(1)
                 }
                 .onAppear {
-                    focusedInput = .monthlyBudget
+                    UIScrollView.appearance().isScrollEnabled = false
                 }
-                .tag(0)
-                
-                SplitBudgetView(viewModel: viewModel)
-                    .tag(1)
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .toolbar {
+                    ToolbarItem(placement: .keyboard) {
+                        Button {
+                            focusedInput = nil
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
+                }
             }
-            .onAppear {
-                UIScrollView.appearance().isScrollEnabled = false
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
             
             WizardControls(selection: $selectedPage, maxIndex: 1) {
                 print("Saving...")
@@ -183,6 +195,22 @@ struct BudgetWizard: View {
                     dismiss()
                 }
             }
+        }
+        .onAppear {
+            focusedInput = .monthlyBudget
+        }
+        .onChange(of: selectedPage) { _ in
+            focusedInput = nil
+        }
+        .alert(Text("Budgets don't match"), isPresented: $viewModel.showWarning) {
+            Button("Cancel", role: .cancel) {}
+            Button("Save anyway") {
+                viewModel.save(force: true) {
+                    dismiss()
+                }
+            }
+        } message: {
+            Text("Your monthly budget is \(viewModel.tmpMonthlyBudget.formatted(.customCurrency())) while the sum of your category budgets is \(viewModel.categoryBudgetSum.formatted(.customCurrency())).\n\nThis may be an error, but you can also just save it like this.")
         }
     }
 }

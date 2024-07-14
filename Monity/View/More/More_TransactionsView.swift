@@ -60,11 +60,11 @@ fileprivate let budgetLevels: [BudgetLevel] = [
 
 fileprivate struct MonthlyLimitSection: View {
     @Binding var showBudgetWizard: Bool
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
+    @ObservedObject private var viewModel = MonthlyBudgetViewModel()
     @State private var showingDeleteConfirmation: Bool = false
     
     private var budgetLevel: BudgetLevel? {
-        BudgetLevel.getDetails(for: monthlyLimit ?? -1)
+        BudgetLevel.getDetails(for: self.viewModel.currentMonthlyLimit ?? -1)
     }
     
     var body: some View {
@@ -82,7 +82,7 @@ fileprivate struct MonthlyLimitSection: View {
             HStack {
                 Text("Your monthly budget:")
                 Spacer()
-                if let limit = monthlyLimit {
+                if let limit = self.viewModel.currentMonthlyLimit {
                     Text(limit, format: .customCurrency())
                         .foregroundColor(.green)
                         .fontWeight(.bold)
@@ -108,7 +108,7 @@ fileprivate struct MonthlyLimitSection: View {
         .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {
-                    UserDefaults.standard.removeObject(forKey: AppStorageKeys.monthlyLimit)
+                    self.viewModel.removeMonthlyBudget()
                 }
             }
         } message: {
@@ -207,7 +207,6 @@ struct More_TransactionsView: View {
         .sheet(isPresented: $showBudgetWizard) {
             BudgetWizard()
                 .interactiveDismissDisabled()
-//                .presentationDetents([.height(400)])
         }
         .sheet(isPresented: $showAddCategoryForm) {
             TransactionCategoryFormView(

@@ -108,12 +108,13 @@
 		60BD9F5628F35D7A001FF5FF /* SavingsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5528F35D7A001FF5FF /* SavingsDetailView.swift */; };
 		60BD9F5828F35ECB001FF5FF /* TransactionCategoryFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */; };
 		60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */; };
-		60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */; };
 		60BD9F5F28F36244001FF5FF /* ModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */; };
 		60BDA7482C42A72200680B8F /* BudgetWizardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BDA7472C42A72200680B8F /* BudgetWizardViewModel.swift */; };
 		60CCD21F2AF2A1F100DA0DCB /* LineChartDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CCD21E2AF2A1F100DA0DCB /* LineChartDataBuilder.swift */; };
 		60CE68772C373CF900C31605 /* View+SavingsEntryControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE68762C373CF900C31605 /* View+SavingsEntryControls.swift */; };
 		60CE68792C37443600C31605 /* View+SavingsCategoryControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE68782C37443600C31605 /* View+SavingsCategoryControls.swift */; };
+		60D177122C43E0A2002B65AF /* MonthlyBudgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D177112C43E0A2002B65AF /* MonthlyBudgetViewModel.swift */; };
+		60D177142C43EB19002B65AF /* BudgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D177132C43EB19002B65AF /* BudgetViewModel.swift */; };
 		60D8B2632A7FD416009BAA96 /* SavingsLineChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8B2622A7FD416009BAA96 /* SavingsLineChartViewModel.swift */; };
 		60E7605A28FD412100FAB25A /* BudgetBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605928FD412100FAB25A /* BudgetBattery.swift */; };
 		60E7605C28FD454D00FAB25A /* TransactionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7605B28FD454D00FAB25A /* TransactionSummary.swift */; };
@@ -237,12 +238,13 @@
 		60BD9F5528F35D7A001FF5FF /* SavingsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsDetailView.swift; sourceTree = "<group>"; };
 		60BD9F5728F35ECB001FF5FF /* TransactionCategoryFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryFormView.swift; sourceTree = "<group>"; };
 		60BD9F5928F35F28001FF5FF /* TransactionCategoryEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryEditor.swift; sourceTree = "<group>"; };
-		60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTransactionsViewModel.swift; sourceTree = "<group>"; };
 		60BD9F5E28F36244001FF5FF /* ModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtensions.swift; sourceTree = "<group>"; };
 		60BDA7472C42A72200680B8F /* BudgetWizardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetWizardViewModel.swift; sourceTree = "<group>"; };
 		60CCD21E2AF2A1F100DA0DCB /* LineChartDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartDataBuilder.swift; sourceTree = "<group>"; };
 		60CE68762C373CF900C31605 /* View+SavingsEntryControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SavingsEntryControls.swift"; sourceTree = "<group>"; };
 		60CE68782C37443600C31605 /* View+SavingsCategoryControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SavingsCategoryControls.swift"; sourceTree = "<group>"; };
+		60D177112C43E0A2002B65AF /* MonthlyBudgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyBudgetViewModel.swift; sourceTree = "<group>"; };
+		60D177132C43EB19002B65AF /* BudgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewModel.swift; sourceTree = "<group>"; };
 		60D8B2622A7FD416009BAA96 /* SavingsLineChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsLineChartViewModel.swift; sourceTree = "<group>"; };
 		60E7605928FD412100FAB25A /* BudgetBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetBattery.swift; sourceTree = "<group>"; };
 		60E7605B28FD454D00FAB25A /* TransactionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSummary.swift; sourceTree = "<group>"; };
@@ -466,7 +468,6 @@
 				6038737E290AD84D00AB7D0E /* Editors */,
 				60552B0229081C9C001F2B39 /* Generics */,
 				6000FF7828F5FECF0083595D /* DashboardTiles */,
-				60BD9F5B28F3615F001FF5FF /* SettingsTransactionsViewModel.swift */,
 				60A4CFB828F9A685007F392D /* SettingsSystemViewModel.swift */,
 				60B50E152906F73A00396308 /* SettingsSavingsViewModel.swift */,
 				60B50E192907020E00396308 /* SavingsCategoryViewModel.swift */,
@@ -479,6 +480,8 @@
 				6040E6EC29E694CE00939904 /* AssetAllocationViewModel.swift */,
 				602026AF2C399FDC005A6913 /* TransactionDateGroupedList.swift */,
 				60BDA7472C42A72200680B8F /* BudgetWizardViewModel.swift */,
+				60D177112C43E0A2002B65AF /* MonthlyBudgetViewModel.swift */,
+				60D177132C43EB19002B65AF /* BudgetViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -680,6 +683,7 @@
 				60BD9F4928F35CCC001FF5FF /* AddTransactionView.swift in Sources */,
 				60A4CFC028F9C175007F392D /* More_SavingsView.swift in Sources */,
 				60B50E102906F38100396308 /* SavingsCategoryStorage.swift in Sources */,
+				60D177142C43EB19002B65AF /* BudgetViewModel.swift in Sources */,
 				603EC8242C396DEE00698D12 /* View+CustomNavigationDestination.swift in Sources */,
 				60A4CFB428F9A15D007F392D /* BundleExtensions.swift in Sources */,
 				60387379290AC19B00AB7D0E /* Savings.swift in Sources */,
@@ -731,7 +735,6 @@
 				60A4CFBB28F9ABF2007F392D /* DateExtensions.swift in Sources */,
 				60BD9F5628F35D7A001FF5FF /* SavingsDetailView.swift in Sources */,
 				60804B9629AE673F00F45E5F /* RecurringTransactionEditor.swift in Sources */,
-				60BD9F5C28F3615F001FF5FF /* SettingsTransactionsViewModel.swift in Sources */,
 				60B50E0E2906F19C00396308 /* SavingStorage.swift in Sources */,
 				60552B0429081CB0001F2B39 /* ItemListViewModel.swift in Sources */,
 				60387388290AFB0D00AB7D0E /* CoreDataExtensions.swift in Sources */,
@@ -746,6 +749,7 @@
 				60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */,
 				60BA8EED29E07BAC00DA4A9C /* MonthCashflowCalculator.swift in Sources */,
 				60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */,
+				60D177122C43E0A2002B65AF /* MonthlyBudgetViewModel.swift in Sources */,
 				60BD9F5A28F35F28001FF5FF /* TransactionCategoryEditor.swift in Sources */,
 				60B50E1A2907020E00396308 /* SavingsCategoryViewModel.swift in Sources */,
 				60CCD21F2AF2A1F100DA0DCB /* LineChartDataBuilder.swift in Sources */,

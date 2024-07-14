@@ -19,6 +19,12 @@ extension TransactionCategory {
         self.name ?? ""
     }
     
+    var lastSavedBudget: Budget? {
+        self.budgetsArray.sorted {
+            $0.wrappedValidFrom > $1.wrappedValidFrom
+        }.first
+    }
+    
     var wrappedTransactionsCount: Int {
         self.transactions?.count ?? 0
     }

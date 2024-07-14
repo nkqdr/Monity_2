@@ -8,14 +8,13 @@
 import SwiftUI
 
 fileprivate struct BudgetDisplayString: View {
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
-    var remainingAmount: Double
+    var remainingAmount: Double?
     
     var body: some View {
-        if monthlyLimit != 0 {
-            Text(remainingAmount, format: .customCurrency())
+        if let amount = remainingAmount {
+            Text(amount, format: .customCurrency())
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(remainingAmount >= 0 ? .green : .red)
+                .foregroundColor(amount >= 0 ? .green : .red)
         } else {
             Text("-")
                 .font(.system(size: 22, weight: .bold))
@@ -25,8 +24,6 @@ fileprivate struct BudgetDisplayString: View {
 }
 
 struct CurrentMonthOverviewTile: View {
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
-    @State private var remainingAmount: Double = 0
     @ObservedObject private var content = CurrentMonthViewModel()
     
     @ViewBuilder
@@ -44,7 +41,7 @@ struct CurrentMonthOverviewTile: View {
                 VStack(alignment: .leading) {
                     Text("Budget:")
                         .font(.system(size: 18, weight: .semibold))
-                    BudgetDisplayString(remainingAmount: remainingAmount)
+                    BudgetDisplayString(remainingAmount: content.remainingAmount)
                 }
             }
         }
@@ -68,22 +65,19 @@ struct CurrentMonthOverviewTile: View {
             }
         }
         .buttonStyle(.plain)
-        .onChange(of: monthlyLimit) { newValue in
-            remainingAmount = newValue - content.spentThisMonth
-        }
-        .onAppear {
-            remainingAmount = monthlyLimit - content.spentThisMonth
-        }
     }
 }
 
 
 
 fileprivate struct CurrentMonthDetailView: View {
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
-    @State private var remainingAmount: Double = 0
     @State private var showDateSelectorSheet: Bool = false
     @StateObject private var content = CurrentMonthViewModel()
+    
+    private var predictedExpensesColor: Color {
+        guard let limit = content.currentMonthlyLimit else { return .primary }
+        return content.predictedTotalSpendings > limit ? .red : .green
+    }
     
     var overviewHeader: some View {
         VStack(alignment: .leading) {
@@ -99,11 +93,11 @@ fileprivate struct CurrentMonthDetailView: View {
                     VStack(alignment: .leading) {
                         Text("Budget:")
                             .font(.system(size: 18, weight: .semibold))
-                        BudgetDisplayString(remainingAmount: remainingAmount)
+                        BudgetDisplayString(remainingAmount: content.remainingAmount)
                     }
                 }
                 Spacer()
-                BudgetBattery()
+                BudgetBattery(monthlyLimit: content.currentMonthlyLimit)
             }
             HStack(alignment: .top) {
                 Text("Predicted total expenses:").groupBoxLabelTextStyle()
@@ -111,7 +105,7 @@ fileprivate struct CurrentMonthDetailView: View {
                 VStack(alignment: .trailing) {
                     Text(content.predictedTotalSpendings, format: .customCurrency())
                         .fontWeight(.bold)
-                        .foregroundColor(content.predictedTotalSpendings > monthlyLimit ? .red : .green)
+                        .foregroundColor(predictedExpensesColor)
                     Group {
                         Text("Ø ") + Text(content.spendingsPerDay, format: .customCurrency()) + Text(" / Day")
                     }
@@ -143,12 +137,6 @@ fileprivate struct CurrentMonthDetailView: View {
             }
         }
         .monthYearSelectorSheet($showDateSelectorSheet, selection: $content.selectedDate)
-        .onChange(of: monthlyLimit) { newValue in
-            remainingAmount = newValue - content.spentThisMonth
-        }
-        .onAppear {
-            remainingAmount = monthlyLimit - content.spentThisMonth
-        }
         .navigationTitle(LocalizedStringKey(content.currentMonthSelected ? "Current Month" : content.selectedDate.toDate.formatted(.dateTime.year().month())))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

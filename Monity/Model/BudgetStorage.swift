@@ -14,7 +14,7 @@ class BudgetFetchController: BaseFetchController<Budget> {
         managedObjectContext: NSManagedObjectContext = PersistenceController.shared.managedObjectContext
     ) {
         super.init(
-            sortDescriptors: [NSSortDescriptor(keyPath: \Budget.validFrom, ascending: true)],
+            sortDescriptors: [NSSortDescriptor(keyPath: \Budget.validFrom, ascending: false)],
             predicate: predicate,
             managedObjectContext: managedObjectContext
         )
@@ -26,6 +26,17 @@ class BudgetFetchController: BaseFetchController<Budget> {
     ) {
         self.init(
             predicate: NSPredicate(format: "category == %@", category),
+            managedObjectContext: managedObjectContext
+        )
+    }
+}
+
+class MonthlyBudgetFetchController: BudgetFetchController {
+    init(
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.managedObjectContext
+    ) {
+        super.init(
+            predicate: NSPredicate(format: "category == NULL"),
             managedObjectContext: managedObjectContext
         )
     }
