@@ -203,7 +203,7 @@ struct More_TransactionsView: View {
                 }
             }
         } sheetContent: { showAddItemSheet, currentItem in
-            TransactionCategoryFormView(
+            TransactionCategoryForm(
                 editor: TransactionCategoryEditor(category: currentItem)
             )
         }
