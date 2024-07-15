@@ -62,11 +62,8 @@ class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
         self.context.performAndWait {
             category.name = name ?? category.name
             category.iconName = iconName
-            if (try? self.context.save()) != nil {
-                return category
-            } else {
-                return category
-            }
+            try? self.context.save()
+            return category
         }
     }
 }

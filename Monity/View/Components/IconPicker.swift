@@ -38,7 +38,7 @@ fileprivate struct IconPickerDetail: View {
     @State private var allIcons: [String] = []
     @State private var filteredIcons: [String] = []
     @State private var searchText: String = ""
-    
+
     private func select(_ name: String?) {
         Haptics.shared.play(.soft)
         withAnimation(.easeInOut(duration: 0.2)) {
@@ -50,7 +50,7 @@ fileprivate struct IconPickerDetail: View {
             dismiss()
         }
     }
-    
+
     var body: some View {
         ScrollView {
             if searchText.isEmpty {
@@ -84,8 +84,8 @@ fileprivate struct IconPickerDetail: View {
                 }
                 .padding(.horizontal)
             }
-            
-            
+
+
             HStack {
                 Text("All")
                     .textCase(.uppercase)
@@ -126,10 +126,10 @@ fileprivate struct IconPickerDetail: View {
         }
         .searchable(text: $searchText)
     }
-    
+
     private func getAllSymbols() -> [String] {
-        guard 
-            let resourcePath = Bundle.main.path(forResource: "CategoryList", ofType: "plist"),
+        guard
+            let resourcePath = Bundle.main.path(forResource: "CategoryIconList", ofType: "plist"),
             let data = try? Data(contentsOf: URL(filePath: resourcePath)),
             let plist = try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? [String]
         else {

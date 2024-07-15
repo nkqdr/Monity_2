@@ -93,7 +93,7 @@ struct TransactionCategoryShow: View {
                     Text("income.plural")
                 }
             }
-            
+
             Section {
                 NavigationLink("All transactions", destination: TransactionListPerCategory(category: category, showExpenses: nil)
                         .navigationBarTitleDisplayMode(.inline)
