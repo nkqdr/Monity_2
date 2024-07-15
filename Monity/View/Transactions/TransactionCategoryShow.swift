@@ -130,6 +130,9 @@ struct TransactionCategoryShow: View {
             TransactionCategoryForm(
                 editor: TransactionCategoryEditor(category: category)
             )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.hidden)
+            .interactiveDismissDisabled()
         }
         .sheet(isPresented: $showBudgetHistory) {
             NavigationStack {

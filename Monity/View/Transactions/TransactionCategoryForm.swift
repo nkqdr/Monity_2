@@ -7,8 +7,12 @@
 
 import SwiftUI
 
+fileprivate enum Field {
+    case name, budget
+}
+
 struct TransactionCategoryForm: View {
-    @FocusState private var focusNameField
+    @FocusState private var focusedField: Field?
     @Environment(\.dismiss) var dismiss
     @StateObject var editor: TransactionCategoryEditor
     var onSave: (TransactionCategory) -> Void = { _ in }
@@ -20,15 +24,17 @@ struct TransactionCategoryForm: View {
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                     .font(.largeTitle.bold())
-                    .focused($focusNameField)
+                    .focused($focusedField, equals: .name)
                 Section {
                     IconPicker(selection: $editor.selectedIcon, title: "Icon")
+                    BudgetInput("Budget", value: $editor.budgetAmount)
+                        .focused($focusedField, equals: .budget)
                 } header: {
                     Text("Details")
                 }
             }
             .onAppear {
-                self.focusNameField = true
+                self.focusedField = .name
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -44,6 +50,14 @@ struct TransactionCategoryForm: View {
                         dismiss()
                     }
                     .disabled(!editor.isValid)
+                }
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = nil
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
         }
