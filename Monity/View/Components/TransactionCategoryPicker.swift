@@ -134,8 +134,12 @@ struct TransactionCategoryPicker: View {
                 .frame(minHeight: 80)
             }
             .sheet(isPresented: $showAddCategory) {
-                TransactionCategoryForm(editor: TransactionCategoryEditor())
-                    .tint(.accentColor)
+                TransactionCategoryForm(
+                    editor: TransactionCategoryEditor()
+                ) { category in
+                    self.selection = category
+                }
+                .tint(.accentColor)
             }
         }
     }

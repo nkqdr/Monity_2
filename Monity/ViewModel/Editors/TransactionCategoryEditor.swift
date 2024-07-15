@@ -38,12 +38,13 @@ class TransactionCategoryEditor: ObservableObject {
     
     // MARK: - Intent
     
-    public func save() {
+    public func save() -> TransactionCategory {
         if let c = category {
-            let _ = TransactionCategoryStorage.main.update(c, name: name, iconName: selectedIcon)
+            return TransactionCategoryStorage.main.update(c, name: name, iconName: selectedIcon)
         } else {
             let category = TransactionCategoryStorage.main.add(name: name, iconName: selectedIcon)
             print("Added category \(category.wrappedName)")
+            return category
         }
     }
 }

@@ -54,14 +54,18 @@ class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
         return true
     }
     
-    func update(_ category: TransactionCategory, name: String?, iconName: String?) -> Bool {
+    func update(
+        _ category: TransactionCategory,
+        name: String?,
+        iconName: String?
+    ) -> TransactionCategory {
         self.context.performAndWait {
             category.name = name ?? category.name
             category.iconName = iconName
-            if let _ = try? self.context.save() {
-                return true
+            if (try? self.context.save()) != nil {
+                return category
             } else {
-                return false
+                return category
             }
         }
     }
