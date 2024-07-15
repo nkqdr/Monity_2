@@ -18,6 +18,7 @@
 		600DEA5D2C443B0A00CE9F56 /* TransactionCategoryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600DEA5C2C443B0A00CE9F56 /* TransactionCategoryForm.swift */; };
 		600DEA602C443D4F00CE9F56 /* BudgetHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600DEA5F2C443D4F00CE9F56 /* BudgetHistoryList.swift */; };
 		600DEA622C44592C00CE9F56 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600DEA612C44592C00CE9F56 /* IconPicker.swift */; };
+		600DEA6D2C44E2CB00CE9F56 /* CategoryList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 600DEA6C2C44E2CB00CE9F56 /* CategoryList.plist */; };
 		60100B202ABEE69A0057ECA4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */; };
 		6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		6019B5652B3B3A5D00EF9138 /* EOY_Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6019B5642B3B3A5D00EF9138 /* EOY_Review.swift */; };
@@ -147,6 +148,7 @@
 		600DEA5C2C443B0A00CE9F56 /* TransactionCategoryForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryForm.swift; sourceTree = "<group>"; };
 		600DEA5F2C443D4F00CE9F56 /* BudgetHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetHistoryList.swift; sourceTree = "<group>"; };
 		600DEA612C44592C00CE9F56 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
+		600DEA6C2C44E2CB00CE9F56 /* CategoryList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = CategoryList.plist; sourceTree = "<group>"; };
 		60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		6019B5642B3B3A5D00EF9138 /* EOY_Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOY_Review.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 			children = (
 				608C4D38290D640100FFB45A /* Localizable.strings */,
 				608B80C229B656CC00047F3D /* Localizable.stringsdict */,
+				600DEA6C2C44E2CB00CE9F56 /* CategoryList.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */,
 				608B80C029B656CC00047F3D /* Localizable.stringsdict in Resources */,
 				608C4D36290D640100FFB45A /* Localizable.strings in Resources */,
+				600DEA6D2C44E2CB00CE9F56 /* CategoryList.plist in Resources */,
 				60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

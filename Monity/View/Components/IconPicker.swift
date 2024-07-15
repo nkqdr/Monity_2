@@ -12,7 +12,7 @@ fileprivate let favoriteIcons: [String] = [
     "cart.fill", "car.fill", "bus.fill", "bag.fill", "house.fill", "fuelpump.fill",
     "graduationcap.fill", "gym.bag.fill", "hammer.fill", "tag.fill", "shippingbox.fill",
     "book.fill", "rectangle.3.group.fill", "heart.fill", "shield.checkered",
-    "ellipsis.circle.fill", "basket.fill", "creditcard.fill", "suitcase.fill",
+    "ellipsis", "basket.fill", "creditcard.fill", "suitcase.fill",
     "lock.fill", "airplane", "carrot.fill", "birthday.cake.fill"
 ]
 
@@ -35,6 +35,7 @@ fileprivate struct IconSelectionView: View {
 fileprivate struct IconPickerDetail: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selection: String?
+    @State private var allIcons: [String] = []
     @State private var filteredIcons: [String] = []
     @State private var searchText: String = ""
     
@@ -109,14 +110,15 @@ fileprivate struct IconPickerDetail: View {
             .padding(.horizontal)
         }
         .onAppear {
-            self.filteredIcons = getAllSymbols()
+            self.allIcons = getAllSymbols()
+            self.filteredIcons = self.allIcons
         }
         .onChange(of: searchText) { newValue in
             DispatchQueue.global(qos: .userInteractive).async {
                 if searchText.isEmpty {
-                    self.filteredIcons = getAllSymbols()
+                    self.filteredIcons = allIcons
                 } else {
-                    self.filteredIcons = getAllSymbols().filter {
+                    self.filteredIcons = allIcons.filter {
                         $0.contains(newValue.lowercased())
                     }
                 }
@@ -125,83 +127,15 @@ fileprivate struct IconPickerDetail: View {
         .searchable(text: $searchText)
     }
     
-    // Loads all symbols from the plist file
     private func getAllSymbols() -> [String] {
-        let forbiddenStrings = [
-            "icloud", 
-            "digitalcrown",
-            "pencil.tip",
-            "person.badge.key",
-            "person.2.badge.key",
-            "shareplay",
-            "shared.with.you",
-            "accessibility",
-            "voiceover",
-            "swift",
-            "message",
-            "video.bubble",
-            "translate",
-            "teletype",
-            "video",
-            "deskview",
-            "applescript",
-            "homekit",
-            "safari",
-            "faceid",
-            "airtag",
-            "macpro",
-            "xserve",
-            "mac",
-            "airport",
-            "ipod",
-            "iphone",
-            "ipad",
-            "visionpro",
-            "opticid",
-            "applepencil",
-            "magicmouse",
-            "applewatch",
-            "airpod",
-            "beats",
-            "earpods",
-            "homepod",
-            "appletv",
-            "magsafe",
-            "airplay",
-            "shazam",
-            "apple",
-            "arkit",
-            "livephoto",
-            "playstation",
-            "xbox",
-            "touchid",
-            "bonjour"
-        ]
-        var allSymbols = [String]()
-        if let bundle = Bundle(identifier: "com.apple.CoreGlyphs"),
-            let resourcePath = bundle.path(forResource: "name_availability", ofType: "plist"),
-            let plist = NSDictionary(contentsOfFile: resourcePath),
-            let plistSymbols = plist["symbols"] as? [String: String]
-        {
-
-            // Get all symbol names
-            allSymbols = Array(plistSymbols.keys)
+        guard 
+            let resourcePath = Bundle.main.path(forResource: "CategoryList", ofType: "plist"),
+            let data = try? Data(contentsOf: URL(filePath: resourcePath)),
+            let plist = try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? [String]
+        else {
+            return []
         }
-        let filteredSymbols = allSymbols.filter {
-            !$0.contains(".circle")
-        }.filter {
-            $0.split(separator: ".").count < 3
-        }.filter {
-            for string in forbiddenStrings {
-                if $0.contains(string) {
-                    return false
-                }
-            }
-            return true
-        }
-        print(filteredSymbols.count)
-//        print(filledSymbols)
-        return filteredSymbols
+        return Array(plist)
     }
 }
 
