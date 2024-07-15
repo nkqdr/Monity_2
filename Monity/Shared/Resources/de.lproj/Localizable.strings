@@ -722,9 +722,6 @@
 "Show category" = "Kategorie anzeigen";
 
 /* No comment provided by engineer. */
-"Budget history" = "Budget-Historie";
-
-/* No comment provided by engineer. */
 "%lld registered transactions" = "%lld registrierte Transaktionen";
 
 // MARK: - Onboarding default categories
