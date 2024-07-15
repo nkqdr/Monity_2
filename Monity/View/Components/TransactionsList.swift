@@ -24,7 +24,6 @@ fileprivate struct TransactionListTile: View {
     @ObservedObject var transaction: Transaction
     @Binding var editedTransaction: Transaction?
     @Binding var shownCategory: TransactionCategory?
-    @State var showEditView: Bool = false
     @State private var showConfirmationDialog: Bool = false
     
     var body: some View {
@@ -62,7 +61,7 @@ fileprivate struct TransactionListTile: View {
                 .disabled(transaction.category == nil)
             }
             Button {
-                showEditView.toggle()
+                editedTransaction = transaction
             } label: {
                 Label("Edit", systemImage: "pencil")
             }

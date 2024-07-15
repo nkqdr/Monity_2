@@ -46,6 +46,7 @@ struct BudgetInput: View {
                 .buttonStyle(.bordered)
             }
         }
+        .controlSize(.small)
         .onChange(of: hasBudget) { newValue in
             if !newValue {
                 self.value = 0
