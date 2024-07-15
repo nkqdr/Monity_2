@@ -11,9 +11,12 @@ import CoreData
 class TransactionCategoryFetchController: BaseFetchController<TransactionCategory> {
     static let all = TransactionCategoryFetchController()
     
-    private init() {
+    init(
+        managedObjectContext: NSManagedObjectContext = PersistenceController.shared.managedObjectContext
+    ) {
         super.init(
-            sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
+            sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)],
+            managedObjectContext: managedObjectContext
         )
     }
 }
@@ -51,15 +54,16 @@ class TransactionCategoryStorage: ResettableStorage<TransactionCategory> {
         return true
     }
     
-    func update(_ category: TransactionCategory, name: String?, iconName: String?) -> Bool {
+    func update(
+        _ category: TransactionCategory,
+        name: String?,
+        iconName: String?
+    ) -> TransactionCategory {
         self.context.performAndWait {
             category.name = name ?? category.name
             category.iconName = iconName
-            if let _ = try? self.context.save() {
-                return true
-            } else {
-                return false
-            }
+            try? self.context.save()
+            return category
         }
     }
 }

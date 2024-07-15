@@ -24,7 +24,7 @@ struct AddTransactionView: View {
     var body: some View {
         NavigationView {
             Form {
-                VStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 10) {
                     CurrencyInputField(value: $editor.givenAmount)
                         .focused($focusedField, equals: .amount)
                         .font(.largeTitle.bold())
