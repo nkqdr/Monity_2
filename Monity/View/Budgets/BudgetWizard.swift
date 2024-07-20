@@ -9,7 +9,7 @@ import SwiftUI
 
 fileprivate struct CategoryBudgetLine: View {
     @ObservedObject var budgetDefinition: CategoryBudgetMap
-    @FocusState var focusedField: Field?
+    @FocusState.Binding var focusedField: Field?
     
     var body: some View {
         HStack {
@@ -50,14 +50,22 @@ fileprivate struct CategoryBudgetLine: View {
 }
 
 fileprivate struct SplitBudgetView: View {
-    @FocusState var focusedInput: Field?
+    @FocusState.Binding var focusedInput: Field?
     @ObservedObject var viewModel: BudgetWizardViewModel
     
     var body: some View {
         ScrollView {
-            Text(viewModel.tmpMonthlyBudget, format: .customCurrency())
+            VStack(alignment: .leading) {
+                Text("Category budgets")
+                    .font(.largeTitle.bold())
+                Text("Now, let’s allocate your monthly budget across your transaction categories. Feel free to enter the amount you plan to spend in each category for the month!")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+            .padding()
+            .padding(.vertical)
             ForEach(viewModel.budgetMaps) { budgetMap in
-                CategoryBudgetLine(budgetDefinition: budgetMap, focusedField: _focusedInput)
+                CategoryBudgetLine(budgetDefinition: budgetMap, focusedField: $focusedInput)
             }
             .padding(.horizontal)
         }
@@ -67,11 +75,11 @@ fileprivate struct SplitBudgetView: View {
 fileprivate struct WizardControls: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selection: Int
-    var maxIndex: Int
+    var maxSelection: Int
     var save: () -> Void
     
     func handleBackward() {
-        if selection > 0 {
+        if selection > 1 {
             selection -= 1
         } else {
             dismiss()
@@ -79,7 +87,7 @@ fileprivate struct WizardControls: View {
     }
     
     func handleForward() {
-        if selection < maxIndex {
+        if selection < maxSelection {
             selection += 1
         } else {
             save()
@@ -87,14 +95,14 @@ fileprivate struct WizardControls: View {
     }
     
     var backIcon: String {
-        if selection == 0 {
+        if selection == 1 {
             return "xmark"
         }
         return "chevron.backward"
     }
     
     var forwardIcon: String {
-        if selection == maxIndex {
+        if selection == maxSelection {
             return "checkmark"
         }
         return "chevron.forward"
@@ -108,7 +116,7 @@ fileprivate struct WizardControls: View {
                 }
             } label: {
                 Label {
-                    if selection == 0 {
+                    if selection == 1 {
                         Text("Cancel")
                     }
                 } icon: {
@@ -117,7 +125,7 @@ fileprivate struct WizardControls: View {
                 .padding(5)
             }
             .buttonStyle(.bordered)
-            .tint(selection == 0 ? .red : nil)
+            .tint(selection == 1 ? .red : nil)
             
             Spacer()
             
@@ -127,7 +135,7 @@ fileprivate struct WizardControls: View {
                 }
             } label: {
                 Label {
-                    if selection == maxIndex {
+                    if selection == maxSelection {
                         Text("Save")
                     }
                 } icon: {
@@ -136,9 +144,34 @@ fileprivate struct WizardControls: View {
                 .padding(5)
             }
             .buttonStyle(.bordered)
-            .tint(selection == maxIndex ? .green : nil)
+            .tint(selection == maxSelection ? .green : nil)
         }
         .padding()
+    }
+}
+
+fileprivate struct MonthlyBudgetForm: View {
+    @ObservedObject var viewModel: BudgetWizardViewModel
+    @FocusState.Binding var focusedInput: Field?
+    
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading) {
+                Text("Monthly budget")
+                    .font(.largeTitle.bold())
+                Text("To help you manage your finances effectively, please enter your desired monthly budget below.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                
+                CurrencyInputField(value: $viewModel.tmpMonthlyBudget)
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.green)
+                    .focused($focusedInput, equals: .monthlyBudget)
+                    .padding(.top)
+            }
+            .padding()
+            .padding(.top)
+        }
     }
 }
 
@@ -149,32 +182,19 @@ fileprivate enum Field: Hashable {
 
 struct BudgetWizard: View {
     @Environment(\.dismiss) var dismiss
-    @FocusState private var focusedInput: Field?
-    @State private var selectedPage: Int = 0
+    @FocusState fileprivate var focusedInput: Field?
+    @State private var selectedPage: Int = 1
     @StateObject var viewModel = BudgetWizardViewModel()
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        VStack {
             NavigationView {
                 TabView(selection: $selectedPage) {
-                    Form {
-                        Section {
-                            CurrencyInputField(value: $viewModel.tmpMonthlyBudget)
-                                .font(.largeTitle.bold())
-                                .foregroundStyle(.green)
-                                .focused($focusedInput, equals: .monthlyBudget)
-                        } header: {
-                            Text("Monthly budget")
-                        }
-                        .listRowBackground(Color.clear)
-                    }
-                    .tag(0)
-                    
-                    SplitBudgetView(focusedInput: _focusedInput, viewModel: viewModel)
+                    MonthlyBudgetForm(viewModel: viewModel, focusedInput: $focusedInput)
                         .tag(1)
-                }
-                .onAppear {
-                    UIScrollView.appearance().isScrollEnabled = false
+                    
+                    SplitBudgetView(focusedInput: $focusedInput, viewModel: viewModel)
+                        .tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .toolbar {
@@ -187,20 +207,24 @@ struct BudgetWizard: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                 }
+                .onChange(of: selectedPage) { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        focusedInput = nil
+                    }
+                }
+                .onAppear {
+                    // So that the user cannot horizontally scroll between TabView pages
+                    UIScrollView.appearance().isScrollEnabled = false
+                    focusedInput = .monthlyBudget
+                }
             }
             
-            WizardControls(selection: $selectedPage, maxIndex: 1) {
+            WizardControls(selection: $selectedPage, maxSelection: 2) {
                 print("Saving...")
                 viewModel.save {
                     dismiss()
                 }
             }
-        }
-        .onAppear {
-            focusedInput = .monthlyBudget
-        }
-        .onChange(of: selectedPage) { _ in
-            focusedInput = nil
         }
         .alert(Text("Budgets don't match"), isPresented: $viewModel.showWarning) {
             Button("Cancel", role: .cancel) {}

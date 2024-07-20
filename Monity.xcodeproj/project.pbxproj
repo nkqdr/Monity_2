@@ -297,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				600DEA5F2C443D4F00CE9F56 /* BudgetHistoryList.swift */,
+				60019B1C2C40180700C20C8E /* BudgetWizard.swift */,
 			);
 			path = Budgets;
 			sourceTree = "<group>";
@@ -403,7 +404,6 @@
 				60A4CFBF28F9C175007F392D /* More_SavingsView.swift */,
 				604CF433290EDF13009B6D08 /* More_OptionsView.swift */,
 				602E999529E18E970063BBC7 /* DashboardSettingsView.swift */,
-				60019B1C2C40180700C20C8E /* BudgetWizard.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -805,7 +805,6 @@
 				60BD9F1E28F35B70001FF5FF /* Monity.xcdatamodeld in Sources */,
 				60387384290AE54400AB7D0E /* SavingsCategoryListView.swift in Sources */,
 				60BA8EE729E06E3700DA4A9C /* MonthExpenseCalculator.swift in Sources */,
-				600DEA5B2C443AB100CE9F56 /* TransactionCategoryShow.swift in Sources */,
 				60BD9F5228F35D52001FF5FF /* MoreView.swift in Sources */,
 				60BA8EE529E06A5A00DA4A9C /* TransactionCategoryPicker.swift in Sources */,
 				608B80BD29B6544500047F3D /* TypeExtensions.swift in Sources */,
