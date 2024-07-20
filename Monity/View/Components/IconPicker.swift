@@ -19,11 +19,11 @@ fileprivate let favoriteIcons: [String] = [
 fileprivate struct IconSelectionView: View {
     var name: String
     var isActive: Bool = false
-
+    
     var iconColor: Color {
         isActive ? .accentColor : .secondary
     }
-
+    
     var body: some View {
         Image(systemName: name)
             .font(.system(size: 20))
@@ -142,7 +142,7 @@ fileprivate struct IconPickerDetail: View {
 struct IconPicker: View {
     @Binding var selection: String?
     var title: LocalizedStringKey
-
+    
     var body: some View {
         NavigationLink {
             IconPickerDetail(selection: $selection)

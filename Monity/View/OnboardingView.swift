@@ -190,7 +190,7 @@ fileprivate struct MonthlyLimitPage: View {
                 .buttonStyle(.bordered)
                 Spacer()
                 Button("Save & Continue") {
-                    UserDefaults.standard.set(monthlyLimit, forKey: AppStorageKeys.monthlyLimit)
+                    let _ = BudgetStorage.main.add(amount: monthlyLimit ?? 0, category: nil)
                     let delayTime: Double = isFocused ? 0.65 : 0
                     isFocused = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {

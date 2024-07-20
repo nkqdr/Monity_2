@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetBattery: View {
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double = 0
+    var monthlyLimit: Double?
     @ObservedObject private var expenseCalculator = MonthExpenseCalculator.current
     
     private var alreadySpent: Double {
@@ -16,8 +16,8 @@ struct BudgetBattery: View {
     }
     
     @ViewBuilder
-    private var mainBody: some View {
-        let remainingPercentage: Double = monthlyLimit > 0 ? (1 - alreadySpent / monthlyLimit) : 0
+    private func mainBody(limit: Double) -> some View {
+        let remainingPercentage: Double = limit > 0 ? (1 - alreadySpent / limit) : 0
         let batteryColor: Color = remainingPercentage > 0.1 ? .green : .red
         let remainingBatteryHeight: Double = remainingPercentage > 0 ? 120 * remainingPercentage : 0
         let textColor: Color? = remainingPercentage > 0 ? nil : .red
@@ -51,8 +51,8 @@ struct BudgetBattery: View {
     }
     
     var body: some View {
-        if monthlyLimit != 0 {
-            mainBody
+        if let limit = monthlyLimit {
+            mainBody(limit: limit)
         } else {
             noBudgetBody
         }

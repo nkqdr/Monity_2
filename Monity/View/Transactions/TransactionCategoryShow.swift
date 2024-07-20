@@ -12,17 +12,18 @@ struct TransactionCategoryShow: View {
     @ObservedObject private var totalExpenseRetro: CategoryRetroDataPoint
     @ObservedObject private var totalIncomeRetro: CategoryRetroDataPoint
     @State private var showEditSheet: Bool = false
+    @State private var showBudgetHistory: Bool = false
     @State private var showConfirmationDialog: Bool = false
     var category: TransactionCategory
     var showExpenses: Bool?
-
+    
     var color: Color {
         guard let showExpenses else {
             return .primary
         }
         return showExpenses ? .red : .green
     }
-
+    
     init(category: TransactionCategory, showExpenses: Bool?) {
         self._totalExpenseRetro = ObservedObject(
             wrappedValue: CategoryRetroDataPoint(
@@ -37,7 +38,7 @@ struct TransactionCategoryShow: View {
         self.category = category
         self.showExpenses = showExpenses
     }
-
+    
     var body: some View {
         List {
             Text("Associated transactions: \(Int(category.numTransactions))")
@@ -68,7 +69,7 @@ struct TransactionCategoryShow: View {
                     Text("Expenses")
                 }
             }
-
+            
             if totalIncomeRetro.total > 0 {
                 Section {
                     VStack {
@@ -109,6 +110,11 @@ struct TransactionCategoryShow: View {
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
+                    Button {
+                        showBudgetHistory.toggle()
+                    } label: {
+                        Label("Budget history", systemImage: "clock.arrow.circlepath")
+                    }
                     Divider()
                     Button(role: .destructive) {
                         showConfirmationDialog.toggle()
@@ -127,6 +133,11 @@ struct TransactionCategoryShow: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.hidden)
             .interactiveDismissDisabled()
+        }
+        .sheet(isPresented: $showBudgetHistory) {
+            NavigationStack {
+                BudgetHistoryList(category: category)
+            }
         }
         .confirmationDialog(
             "Delete category",
