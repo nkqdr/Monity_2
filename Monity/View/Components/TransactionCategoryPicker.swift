@@ -155,5 +155,4 @@ fileprivate struct PreviewView: View {
 
 #Preview {
     PreviewView()
-        .environment(\.managedObjectContext, PersistenceController.previewContext)
 }
