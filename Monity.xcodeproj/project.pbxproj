@@ -53,6 +53,7 @@
 		6069D1E52AE8252B00EA8CCB /* EOYViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */; };
 		60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60724E8B2AFAA84800FA7409 /* AppDelegate.swift */; };
 		6078317329E70573001FEC51 /* MonthYearPickerForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078317229E70573001FEC51 /* MonthYearPickerForm.swift */; };
+		607FE9882CC1255000C9ED3A /* ZipBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FE9872CC1255000C9ED3A /* ZipBackup.swift */; };
 		60804B8C29AE5FE500F45E5F /* RecurringTransactionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8B29AE5FE500F45E5F /* RecurringTransactionStorage.swift */; };
 		60804B8E29AE608B00F45E5F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B8D29AE608B00F45E5F /* Enums.swift */; };
 		60804B9229AE642700F45E5F /* RecurringTransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */; };
@@ -177,6 +178,7 @@
 		6069D1E42AE8252B00EA8CCB /* EOYViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOYViewModel.swift; sourceTree = "<group>"; };
 		60724E8B2AFAA84800FA7409 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078317229E70573001FEC51 /* MonthYearPickerForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthYearPickerForm.swift; sourceTree = "<group>"; };
+		607FE9872CC1255000C9ED3A /* ZipBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipBackup.swift; sourceTree = "<group>"; };
 		60804B8B29AE5FE500F45E5F /* RecurringTransactionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionStorage.swift; sourceTree = "<group>"; };
 		60804B8D29AE608B00F45E5F /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		60804B9129AE642700F45E5F /* RecurringTransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionsViewModel.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				60A4CFB128F99ED8007F392D /* Haptics.swift */,
 				6045379528FAD065002EFC7F /* Utils.swift */,
 				60804B8D29AE608B00F45E5F /* Enums.swift */,
+				607FE9872CC1255000C9ED3A /* ZipBackup.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -745,6 +748,7 @@
 				603ADF9A290564F20075CB90 /* TransactionsList.swift in Sources */,
 				60BD9F4328F35C27001FF5FF /* TransactionCategoryStorage.swift in Sources */,
 				60B50E142906F5F400396308 /* SavingsCategoryFormView.swift in Sources */,
+				607FE9882CC1255000C9ED3A /* ZipBackup.swift in Sources */,
 				608C4D2D290D2AFC00FFB45A /* ListBase.swift in Sources */,
 				60387380290AD86400AB7D0E /* SavingsEditor.swift in Sources */,
 				60724E8C2AFAA84800FA7409 /* AppDelegate.swift in Sources */,

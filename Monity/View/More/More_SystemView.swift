@@ -100,76 +100,6 @@ struct ImportSummaryView: View {
     }
 }
 
-fileprivate struct CSVExportedFile: Transferable {
-    enum ExportError: Error {
-        case invalidInitError(String)
-    }
-    enum ExportedData {
-        case transactions(TransactionFetchController)
-        case recurringTransactions(RecurringTransactionFetchController)
-        case savings(SavingsFetchController)
-        
-        var dataRows: [any CSVRepresentable] {
-            switch self {
-            case let .transactions(fetchController):
-                return fetchController.items.value
-            case let .recurringTransactions(fetchController):
-                return fetchController.items.value
-            case let .savings(fetchController):
-                return fetchController.items.value
-            }
-        }
-        
-        var headers: CSVValidHeaders {
-            switch self {
-            case .transactions:
-                return CSVValidHeaders.transactionCSV
-            case .recurringTransactions:
-                return CSVValidHeaders.recurringTransactionCSV
-            case .savings:
-                return CSVValidHeaders.savingsCSV
-            }
-        }
-    }
-    let dataType: ExportedData?
-    private var textContent: String?
-    
-    init(dataType: ExportedData) {
-        self.dataType = dataType
-        self.textContent = nil
-    }
-    
-    init(data: Data) throws {
-        self.textContent = String(data: data, encoding: .utf8)
-        self.dataType = nil
-    }
-    
-    func buildTextContent() throws -> String {
-        if let content = self.textContent {
-            return content
-        }
-        guard let dataType = self.dataType else {
-            throw ExportError.invalidInitError("Couldn't find textContent or dataType value.")
-        }
-        let csvRows = dataType.dataRows
-        let headers = dataType.headers.rawValue
-        var exportString: String = headers + "\n"
-        for item in csvRows {
-            exportString += item.commaSeparatedString + "\n"
-        }
-        return exportString
-    }
-    
-    static var transferRepresentation: some TransferRepresentation {
-        DataRepresentation(contentType: .commaSeparatedText) { exportedFile in
-            let content = try exportedFile.buildTextContent()
-            return Data(content.utf8)
-        } importing: { received in
-            try Self.init(data: received)
-        }.suggestedFileName("MonityExport")
-    }
-}
-
 
 fileprivate struct ImportCSVWizard: View {
     @Environment(\.dismiss) var dismiss
@@ -494,25 +424,9 @@ struct More_SystemView: View {
     var exportSection: some View {
         Section(header: Text("Export Data"), footer: Text("Export your App-Data into .csv format and save it on your device.")) {
             ShareLink(
-                "Transactions",
-                item: CSVExportedFile(
-                    dataType: .transactions(TransactionFetchController.all)
-                ),
-                preview: SharePreview("Transactions")
-            )
-            ShareLink(
-                "Recurring expenses",
-                item: CSVExportedFile(
-                    dataType: .recurringTransactions(RecurringTransactionFetchController.all)
-                ),
-                preview: SharePreview("Recurring expenses")
-            )
-            ShareLink(
-                "Savings",
-                item: CSVExportedFile(
-                    dataType: .savings(SavingsFetchController.all)
-                ),
-                preview: SharePreview("Savings")
+                "Create Backup",
+                item: ZipBackup(),
+                preview: SharePreview("Backup")
             )
         }
     }
