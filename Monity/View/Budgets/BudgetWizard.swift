@@ -44,6 +44,7 @@ fileprivate struct CategoryBudgetLine: View {
                 .buttonStyle(.bordered)
             }
         }
+        .controlSize(.small)
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
     }
@@ -64,6 +65,16 @@ fileprivate struct SplitBudgetView: View {
             }
             .padding()
             .padding(.vertical)
+            HStack {
+                Spacer()
+                Text("Total: ").font(.title3.bold())
+                Text(viewModel.categoryBudgetSum, format: .customCurrency())
+                    .font(.title3.bold())
+                    .foregroundStyle(.green)
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            Divider().padding(.horizontal)
             ForEach(viewModel.budgetMaps) { budgetMap in
                 CategoryBudgetLine(budgetDefinition: budgetMap, focusedField: $focusedInput)
             }
@@ -192,6 +203,11 @@ struct BudgetWizard: View {
                 TabView(selection: $selectedPage) {
                     MonthlyBudgetForm(viewModel: viewModel, focusedInput: $focusedInput)
                         .tag(1)
+                        .onAppear {
+                            // So that the user cannot horizontally scroll between TabView pages
+                            UIScrollView.appearance().isScrollEnabled = false
+                            focusedInput = .monthlyBudget
+                        }
                     
                     SplitBudgetView(focusedInput: $focusedInput, viewModel: viewModel)
                         .tag(2)
@@ -211,11 +227,6 @@ struct BudgetWizard: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                         focusedInput = nil
                     }
-                }
-                .onAppear {
-                    // So that the user cannot horizontally scroll between TabView pages
-                    UIScrollView.appearance().isScrollEnabled = false
-                    focusedInput = .monthlyBudget
                 }
             }
             

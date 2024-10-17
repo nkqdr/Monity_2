@@ -31,6 +31,7 @@ struct CurrencyInputField: View {
                         .tint(nil)
                 }
             TextField("", text: $text)
+                .textSelection(.disabled)
                 .focused($isFocussed)
                 .keyboardType(.numberPad)
                 .onChange(of: text) { newValue in
@@ -54,20 +55,38 @@ struct CurrencyInputField: View {
     }
 
     private func formatText() {
-        if text.count > self.maxLength {
+        guard text.count <= self.maxLength else {
             text = prevText
+            return
+        }
+        guard self.text != self.prevText else {
+            return
         }
         
         var digits: String = text.filter { $0.isWholeNumber }
+        let prevDigits: String = prevText.filter { $0.isWholeNumber }
         
-        if prevText.count > text.count, digits.count > 0 {
+        guard let p = Double(prevDigits), p > 0 || text.count > prevText.count else {
+            text = prevText
+            return
+        }
+        
+        if prevText.count > text.count {
+            // User has pressed the delete key
             digits = String(digits.dropLast())
+        } else {
+            // User has added some char to the text value
+            // Check if the user has placed the cursor in an invalid position
+            // If so, make sure the new character is appended to the text
+            if digits.first != prevDigits.first {
+                let f = digits.removeFirst()
+                digits.append(f)
+            }
         }
         
         // Convert the filtered text to a Double value
         let doubleValue = (Double(digits) ?? 0) / 100.0
         value = doubleValue
-        
         text = Self.format(value: doubleValue)
     }
 }
@@ -75,7 +94,7 @@ struct CurrencyInputField: View {
 fileprivate struct PreviewView: View {
     @State var val: Double = 0
     var body: some View {
-        CurrencyInputField(value: $val)
+        CurrencyInputField(value: $val).font(.largeTitle.bold())
     }
 }
 

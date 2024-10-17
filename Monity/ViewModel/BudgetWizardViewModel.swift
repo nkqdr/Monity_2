@@ -13,7 +13,7 @@ class CategoryBudgetMap: ObservableObject, Identifiable {
     var category: TransactionCategory
     @Published var budget: Double
     @Published var hasBudget: Bool {
-        didSet {
+        willSet {
             self.budget = 0
         }
     }
@@ -36,14 +36,13 @@ class CategoryBudgetMap: ObservableObject, Identifiable {
 }
 
 class BudgetWizardViewModel: ObservableObject {
-    @Published var allCategories: [TransactionCategory] = []
     @Published var budgetMaps: [CategoryBudgetMap] = []
-    @Published var tmpMonthlyBudget: Double //= UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
+    @Published var tmpMonthlyBudget: Double
     @Published var showWarning: Bool = false
     @Published var categoryBudgetSum: Double = 0
     
     private var lastKnownBudget: Budget?
-    private var categoryCancellable: AnyCancellable?
+    private var budgetMapCancellables: [AnyCancellable?] = []
     private var fetchController: TransactionCategoryFetchController
     private var persistenceController: PersistenceController
     
@@ -56,10 +55,13 @@ class BudgetWizardViewModel: ObservableObject {
         self.tmpMonthlyBudget = lastKnownBudget?.amount ?? 0
         self.persistenceController = controller
         self.fetchController = TransactionCategoryFetchController(managedObjectContext: controller.managedObjectContext)
-        let publisher = self.fetchController.items.eraseToAnyPublisher()
-        self.categoryCancellable = publisher.sink { categories in
-            self.allCategories = categories
-            self.budgetMaps = categories.map { CategoryBudgetMap(category: $0) }
+        let allCategories = fetchController.items.value
+        self.budgetMaps = allCategories.map { CategoryBudgetMap(category: $0) }
+        self.categoryBudgetSum = vDSP.sum(self.budgetMaps.map { $0.budget })
+        self.budgetMapCancellables = self.budgetMaps.map {
+            $0.objectWillChange.receive(on: RunLoop.main).sink {
+                self.categoryBudgetSum = vDSP.sum(self.budgetMaps.map { $0.budget })
+            }
         }
     }
     
