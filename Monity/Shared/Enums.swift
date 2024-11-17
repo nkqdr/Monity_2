@@ -148,4 +148,5 @@ struct AppStorageKeys {
     static let integrateRecurringExpensesInCalculations = "integrate_recurring_expenses_in_month_overview"
     static let showSavingsProjections = "show_projections_in_savings_overview"
     static let onboardingDone = "onboarding_done"
+    static let ignoreBudgetSuggestionsDate = "ignore_budget_suggestions_date"
 }

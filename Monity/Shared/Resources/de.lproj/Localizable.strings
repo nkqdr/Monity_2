@@ -724,6 +724,21 @@
 /* No comment provided by engineer. */
 "%lld registered transactions" = "%lld registrierte Transaktionen";
 
+/* No comment provided by engineer. */
+"Adjust Budget" = "Budget anpassen";
+
+/* No comment provided by engineer. */
+"Ignore" = "Ignorieren";
+
+/* No comment provided by engineer. */
+"It's time to rethink your budget" = "Es ist Zeit, Ihr Budget zu überdenken";
+
+/* No comment provided by engineer. */
+"You spent %@ on average in the past four months while your budget is %@" = "Sie haben in den letzten vier Monaten durchschnittlich %@ ausgegeben, aber Ihr Budget beträgt %@";
+
+/* No comment provided by engineer. */
+"Suggested budget: " = "Empfohlenes Budget: ";
+
 // MARK: - Onboarding default categories
 
 /* No comment provided by engineer. */

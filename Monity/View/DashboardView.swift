@@ -24,6 +24,7 @@ struct DashboardView: View {
             ListBase {
                 ScrollView {
                     Group {
+                        Suggestions()
                         if showEOYreview {
                             EOY_ReviewTile()
                         }
