@@ -197,6 +197,12 @@ struct BudgetWizard: View {
     @State private var selectedPage: Int = 1
     @StateObject var viewModel = BudgetWizardViewModel()
     
+    private var onBudgetSet: (Double) -> Void = { _ in }
+    
+    init(onBudgetSet: @escaping (Double) -> Void = {_ in }) {
+        self.onBudgetSet = onBudgetSet
+    }
+    
     var body: some View {
         VStack {
             NavigationView {
@@ -232,16 +238,18 @@ struct BudgetWizard: View {
             
             WizardControls(selection: $selectedPage, maxSelection: 2) {
                 print("Saving...")
-                viewModel.save {
+                viewModel.save { newMonthlyBudget in
                     dismiss()
+                    self.onBudgetSet(newMonthlyBudget)
                 }
             }
         }
         .alert(Text("Budgets don't match"), isPresented: $viewModel.showWarning) {
             Button("Cancel", role: .cancel) {}
             Button("Save anyway") {
-                viewModel.save(force: true) {
+                viewModel.save(force: true) { newMonthlyBudget in
                     dismiss()
+                    self.onBudgetSet(newMonthlyBudget)
                 }
             }
         } message: {

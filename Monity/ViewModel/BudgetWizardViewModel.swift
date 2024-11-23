@@ -88,13 +88,13 @@ class BudgetWizardViewModel: ObservableObject {
         let _ = storage.add(amount: tmpMonthlyBudget, category: nil)
     }
     
-    public func save(force: Bool = false, callback: () -> Void) {
+    public func save(force: Bool = false, callback: (Double) -> Void) {
         self.categoryBudgetSum = vDSP.sum(budgetMaps.map { $0.budget })
         if self.categoryBudgetSum != self.tmpMonthlyBudget && !force {
             self.showWarning = true
             return
         }
         performSave()
-        callback()
+        callback(self.tmpMonthlyBudget)
     }
 }
