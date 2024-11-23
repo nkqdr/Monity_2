@@ -58,10 +58,17 @@ fileprivate let budgetLevels: [BudgetLevel] = [
         rangeMin: 10000, rangeMax: Int.max),
 ]
 
-fileprivate struct SetLimitSheet: View {
+struct SetLimitSheet: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var limitInputIsFocussed: Bool
     @State private var tmpMonthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
+    private var budgetSuggestion: Double?
+    private var onLimitSet: (Double) -> Void = { _ in }
+    
+    init(budgetSuggestion: Double? = nil, onLimitSet: @escaping (Double) -> Void = {_ in }) {
+        self.budgetSuggestion = budgetSuggestion
+        self.onLimitSet = onLimitSet
+    }
     
     var body: some View {
         NavigationView {
@@ -73,6 +80,10 @@ fileprivate struct SetLimitSheet: View {
                         .focused($limitInputIsFocussed)
                 } header: {
                     Text("Monthly budget")
+                } footer: {
+                    if let suggestion = self.budgetSuggestion {
+                        Text("Suggested budget: ") + Text(suggestion, format: .customCurrency())
+                    }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
@@ -86,6 +97,7 @@ fileprivate struct SetLimitSheet: View {
                         withAnimation {
                             UserDefaults.standard.set(tmpMonthlyLimit, forKey: AppStorageKeys.monthlyLimit)
                         }
+                        self.onLimitSet(tmpMonthlyLimit)
                         dismiss()
                     }
                 }
