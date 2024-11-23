@@ -58,74 +58,13 @@ fileprivate let budgetLevels: [BudgetLevel] = [
         rangeMin: 10000, rangeMax: Int.max),
 ]
 
-struct SetLimitSheet: View {
-    @Environment(\.dismiss) var dismiss
-    @FocusState private var limitInputIsFocussed: Bool
-    @State private var tmpMonthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
-    private var budgetSuggestion: Double?
-    private var onLimitSet: (Double) -> Void = { _ in }
-    
-    init(budgetSuggestion: Double? = nil, onLimitSet: @escaping (Double) -> Void = {_ in }) {
-        self.budgetSuggestion = budgetSuggestion
-        self.onLimitSet = onLimitSet
-    }
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    CurrencyInputField(value: $tmpMonthlyLimit)
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(.green)
-                        .focused($limitInputIsFocussed)
-                } header: {
-                    Text("Monthly budget")
-                } footer: {
-                    if let suggestion = self.budgetSuggestion {
-                        Text("Suggested budget: ") + Text(suggestion, format: .customCurrency())
-                    }
-                }
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
-            }
-            .onAppear {
-                limitInputIsFocussed = true
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
-                        withAnimation {
-                            UserDefaults.standard.set(tmpMonthlyLimit, forKey: AppStorageKeys.monthlyLimit)
-                        }
-                        self.onLimitSet(tmpMonthlyLimit)
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel", role: .cancel, action: {
-                        dismiss()
-                    })
-                }
-                ToolbarItem(placement: .keyboard) {
-                    Button {
-                        limitInputIsFocussed = false
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                }
-            }
-        }
-    }
-}
-
 fileprivate struct MonthlyLimitSection: View {
     @Binding var showBudgetWizard: Bool
-    @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
+    @ObservedObject private var viewModel = MonthlyBudgetViewModel()
     @State private var showingDeleteConfirmation: Bool = false
     
     private var budgetLevel: BudgetLevel? {
-        BudgetLevel.getDetails(for: monthlyLimit ?? -1)
+        BudgetLevel.getDetails(for: self.viewModel.currentMonthlyLimit ?? -1)
     }
     
     var body: some View {
@@ -140,10 +79,15 @@ fileprivate struct MonthlyLimitSection: View {
                     }
                 }
             }
+            NavigationLink {
+                BudgetHistoryList()
+            } label: {
+                Text("Budget history")
+            }
             HStack {
                 Text("Your monthly budget:")
                 Spacer()
-                if let limit = monthlyLimit {
+                if let limit = self.viewModel.currentMonthlyLimit {
                     Text(limit, format: .customCurrency())
                         .foregroundColor(.green)
                         .fontWeight(.bold)
@@ -171,7 +115,7 @@ fileprivate struct MonthlyLimitSection: View {
         .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {
-                    UserDefaults.standard.removeObject(forKey: AppStorageKeys.monthlyLimit)
+                    self.viewModel.removeMonthlyBudget()
                 }
             }
         } message: {
@@ -184,7 +128,7 @@ fileprivate struct TransactionCategoryTile: View {
     @ObservedObject var category: TransactionCategory
     @Binding var categoryToEdit: TransactionCategory?
     @State private var showConfirmationDialog: Bool = false
-
+    
     var body: some View {
         HStack {
             if let icon = category.iconName {
@@ -268,8 +212,8 @@ struct More_TransactionsView: View {
             }
         }
         .sheet(isPresented: $showBudgetWizard) {
-            SetLimitSheet()
-                .presentationDetents([.height(200)])
+            BudgetWizard()
+                .interactiveDismissDisabled()
         }
         .sheet(isPresented: $showAddCategoryForm) {
             TransactionCategoryForm(

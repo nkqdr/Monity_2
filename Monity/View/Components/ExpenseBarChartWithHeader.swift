@@ -15,9 +15,11 @@ struct ExpenseBarChartWithHeader: View {
     @State private var selectedLowerBoundDate: Date
     @State private var isDragging = false
     @ObservedObject private var timeSeriesData: TimeSeriesTransactionData
+    @ObservedObject private var budgetsData: BudgetViewModel
     var showAverageBar: Bool
     var color: Color
     var alwaysShowYmarks: Bool
+    private var showsExpenses: Bool?
     
     var data: TimeSeriesTransactionData.Data {
         self.timeSeriesData.data
@@ -30,11 +32,13 @@ struct ExpenseBarChartWithHeader: View {
         showAverageBar: Bool = false,
         alwaysShowYmarks: Bool = true
     ) {
+        self.showsExpenses = isExpense
         self.timeSeriesData = TimeSeriesTransactionData(
             include: isExpense == nil ? .all : isExpense! ? .expense : .income,
             timeframe: .total,
             category: category
         )
+        self.budgetsData = BudgetViewModel(for: category)
         self.color = color
         self.showAverageBar = showAverageBar
         self.alwaysShowYmarks = alwaysShowYmarks
@@ -44,6 +48,12 @@ struct ExpenseBarChartWithHeader: View {
     
     private var slicedData: [TimeSeriesTransactionData.DataPoint] {
         data.filter { $0.date > selectedLowerBoundDate && $0.date <= upperBoundDate}
+    }
+    
+    private var slicedBudgetData: [BudgetViewModel.DateRangeDataPoint] {
+        budgetsData.data.filter {
+            ($0.endDate > selectedLowerBoundDate && $0.endDate <= upperBoundDate) || $0.startDate <= upperBoundDate && $0.startDate > selectedLowerBoundDate
+        }
     }
     
     private var upperBoundDate: Date {
@@ -105,21 +115,32 @@ struct ExpenseBarChartWithHeader: View {
     var body: some View {
         VStack(alignment: .leading) {
             chartHeader
-            Chart(slicedData) {
-                if showAverageBar {
-                    RuleMark(y: .value("Average", averageValue))
-                        .foregroundStyle(color)
-                        .lineStyle(StrokeStyle(lineWidth: 2))
-                        .annotation(position: .top, alignment: .leading) {
-                            Text("Ø \(averageValue.formatted(.customCurrency()))")
-                                .font(.footnote)
-                                .foregroundColor(color)
-                        }
+            Chart {
+                ForEach(slicedData) {
+                    if showAverageBar {
+                        RuleMark(y: .value("Average", averageValue))
+                            .foregroundStyle(color)
+                            .lineStyle(StrokeStyle(lineWidth: 2))
+                            .annotation(position: .top, alignment: .leading) {
+                                Text("Ø \(averageValue.formatted(.customCurrency()))")
+                                    .font(.footnote)
+                                    .foregroundColor(color)
+                            }
+                    }
+                    BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
+                        .foregroundStyle(color.gradient)
+                        .opacity(barChartOpacity(for: $0))
+                        .cornerRadius(5)
                 }
-                BarMark(x: .value("Month", $0.date, unit: .month), y: .value("Expenses", $0.value))
-                    .foregroundStyle(color.gradient)
-                    .opacity(barChartOpacity(for: $0))
-                    .cornerRadius(5)
+                    ForEach(slicedBudgetData) {
+                        RuleMark(
+                            xStart: .value("Start", max($0.startDate, self.selectedLowerBoundDate)),
+                            xEnd: .value("End", min($0.endDate, self.upperBoundDate)),
+                            y: .value("Amount", $0.amount)
+                        )
+                        .foregroundStyle(color.opacity(0.7))
+                        .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round))
+                    }
             }
             .chartYAxis {
                 AxisMarks { value in

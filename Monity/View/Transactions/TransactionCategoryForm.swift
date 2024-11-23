@@ -16,7 +16,7 @@ struct TransactionCategoryForm: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var editor: TransactionCategoryEditor
     var onSave: (TransactionCategory) -> Void = { _ in }
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -27,6 +27,8 @@ struct TransactionCategoryForm: View {
                     .focused($focusedField, equals: .name)
                 Section {
                     IconPicker(selection: $editor.selectedIcon, title: "Icon")
+                    BudgetInput("Budget", value: $editor.budgetAmount)
+                        .focused($focusedField, equals: .budget)
                 } header: {
                     Text("Details")
                 }

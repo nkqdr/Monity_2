@@ -141,7 +141,6 @@ enum TransactionCycle: Int16, CaseIterable {
 }
 
 struct AppStorageKeys {
-    static let monthlyLimit = "monthly_limit"
     static let selectedCurrency = "user_selected_currency"
     static let appIcon = "active_app_icon"
     static let showSavingsOnDashboard = "show_savings_on_dashboard"

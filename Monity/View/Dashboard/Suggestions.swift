@@ -42,9 +42,11 @@ class CUSUMBudgetTracker: ObservableObject {
     private var expensesCancellable: AnyCancellable?
     private var expensesFetchController: TransactionFetchController
     private var ignoreBudgetSuggestionCancellable: AnyCancellable?
+    private var budgetCancellable: AnyCancellable?
+    private var budgetFetchController: MonthlyBudgetFetchController
     
     init() {
-        self.currentBudget = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
+//        self.currentBudget = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
         
         let startOfMonth: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
         let startOfMonthDate = Calendar.current.date(from: startOfMonth)!
@@ -56,6 +58,16 @@ class CUSUMBudgetTracker: ObservableObject {
             endDate: startOfMonthDate
         )
         self.expensesFetchController = controller
+        self.budgetFetchController = MonthlyBudgetFetchController()
+        
+        let budgetPublisher = self.budgetFetchController.items.eraseToAnyPublisher()
+        self.budgetCancellable = budgetPublisher.sink { budgets in
+            if let b = budgets.first, b.amount != 0 {
+                self.currentBudget = b.amount
+            } else {
+                self.currentBudget = 0
+            }
+        }
         
         let ignoreSuggestionPublisher = UserDefaults.standard.publisher(for: \.ignoreBudgetSuggestion).eraseToAnyPublisher()
         self.ignoreBudgetSuggestionCancellable = ignoreSuggestionPublisher.sink { newValue in
@@ -180,7 +192,7 @@ struct Suggestions: View {
             .padding()
             .background(Color.orange.opacity(0.15), in: RoundedRectangle(cornerRadius: 16))
             .sheet(isPresented: $showBudgetWizard) {
-                SetLimitSheet(budgetSuggestion: viewModel.suggestedBudget) { newBudgetValue in
+                BudgetWizard { newBudgetValue in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation {
                             showNotification = false
@@ -188,7 +200,6 @@ struct Suggestions: View {
                         viewModel.budgetDidChange(to: newBudgetValue)
                     }
                 }
-                .presentationDetents([.height(200)])
             }
             .padding(.bottom, 5)
     }

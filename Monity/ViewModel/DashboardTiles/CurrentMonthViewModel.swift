@@ -7,46 +7,63 @@
 
 import Foundation
 import Combine
+import Accelerate
 
 class CurrentMonthViewModel: ObservableObject {
     @Published var remainingDays: Int = 0
     @Published var predictedTotalSpendings: Double = 0
-    @Published var spendingsPerDay: Double = 0 {
-        didSet {
-            let daysInMonth: Int = Calendar.current.range(of: .day, in: .month, for: Date())?.count ?? 0
-            predictedTotalSpendings = spendingsPerDay * Double(daysInMonth)
-        }
-    }
-    @Published var spentThisMonth: Double = 0 {
-        didSet {
-            let currentDay: Int = Calendar.current.dateComponents([.day], from: Date()).day ?? 1
-            spendingsPerDay = spentThisMonth / Double(currentDay)
-        }
-    }
-    @Published var selectedDate: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
-    
+    @Published var spendingsPerDay: Double = 0
+    @Published var spentThisMonth: Double = 0
+    @Published var selectedDate: DateComponents
+    @Published var currentMonthlyLimit: Double?
+    @Published var remainingAmount: Double?
     private let currentComps: DateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date())
-    private var transactions: [AbstractTransaction] = [] {
-        didSet {
-            spentThisMonth = transactions.filter { $0.isExpense }.map { $0.amount }.reduce(0, +)
-        }
-    }
     
     var currentMonthSelected: Bool {
         selectedDate.toDate.isSameMonthAs(Date())
     }
     private var transactionCancellable: AnyCancellable?
-    private var startOfNextMonth: Date {
-        let correctYear: Int = currentComps.month == 12 ? (currentComps.year ?? 0) + 1 : currentComps.year ?? 1
-        let correctMonth: Int = currentComps.month == 12 ? 1 : (currentComps.month ?? 0) + 1
-        return Calendar.current.date(from: DateComponents(year: correctYear, month: correctMonth, day: 1)) ?? Date()
-    }
+    private var budgetCancellable: AnyCancellable?
+    private var budgetFetchController: MonthlyBudgetFetchController
     
     public init() {
-        let publisher = AbstractTransactionWrapper(date: Date()).$wrappedTransactions.eraseToAnyPublisher()
-        transactionCancellable = publisher.sink { items in
-            self.transactions = items
+        let now = Date()
+        self.selectedDate = Calendar.current.dateComponents([.year, .month], from: now)
+        self.remainingDays = Calendar.current.numberOfDaysBetween(now, and: now.endOfThisMonth) + 1
+        
+        self.budgetFetchController = MonthlyBudgetFetchController()
+        let budgetPublisher = self.budgetFetchController.items.eraseToAnyPublisher()
+        self.budgetCancellable = budgetPublisher.sink { budgets in
+            if let b = budgets.first, b.amount != 0 {
+                self.currentMonthlyLimit = b.amount
+            } else {
+                self.currentMonthlyLimit = nil
+            }
+            self.calculateRemainingAmount()
         }
-        remainingDays = (Calendar.current.dateComponents([.day], from: Date(), to: startOfNextMonth).day ?? 0) + 1
+        
+        let publisher = AbstractTransactionWrapper(
+            date: now
+        ).$wrappedTransactions.eraseToAnyPublisher()
+        self.transactionCancellable = publisher.sink { items in
+            let now = Date()
+            self.spentThisMonth = vDSP.sum(items.filter { $0.isExpense }.map { $0.amount })
+            
+            let currentDay: Int = Calendar.current.dateComponents([.day], from: now).day ?? 1
+            self.spendingsPerDay = self.spentThisMonth / Double(currentDay)
+            
+            let daysInMonth: Int = Calendar.current.range(
+                of: .day, in: .month, for: now)?.count ?? 0
+            self.predictedTotalSpendings = self.spendingsPerDay * Double(daysInMonth)
+            self.calculateRemainingAmount()
+        }
+    }
+    
+    private func calculateRemainingAmount() {
+        guard let limit = self.currentMonthlyLimit else {
+            self.remainingAmount = nil
+            return
+        }
+        self.remainingAmount = limit - self.spentThisMonth
     }
 }
