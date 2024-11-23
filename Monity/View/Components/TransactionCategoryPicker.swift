@@ -152,8 +152,3 @@ fileprivate struct PreviewView: View {
         TransactionCategoryPicker(selection: $selection)
     }
 }
-
-#Preview {
-    PreviewView()
-        .environment(\.managedObjectContext, PersistenceController.previewContext)
-}
