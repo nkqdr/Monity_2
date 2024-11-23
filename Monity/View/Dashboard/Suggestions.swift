@@ -158,8 +158,7 @@ struct Suggestions: View {
         let nowComps = Calendar.current.dateComponents([.year, .month], from: Date())
         let now = Calendar.current.date(from: nowComps)!
         // Ignore the suggestions if the user clicked "ignore" within the three months
-        let threeMonthsAgo = Calendar.current.date(byAdding: .second, value: -3, to: Date())!
-        print(threeMonthsAgo, ignoreBudgetStoredDate)
+        let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: now)!
         return threeMonthsAgo < ignoreBudgetStoredDate
     }
     
