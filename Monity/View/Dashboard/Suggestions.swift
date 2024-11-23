@@ -11,43 +11,63 @@ import Foundation
 import Combine
 import Accelerate
 
-class BudgetSuggestionViewModel: ObservableObject {
-    @Published var averageExpensesInLast4Months: Double = 0 {
-        didSet {
-            setSuggestedBudget()
+extension UserDefaults {
+    @objc var ignoreBudgetSuggestion: Double {
+        get {
+            return double(forKey: "ignore_budget_suggestion")
+        }
+        set {
+            set(newValue, forKey: "ignore_budget_suggestion")
         }
     }
-    @Published var suggestedBudget: Double? = nil
+}
+
+
+class CUSUMBudgetTracker: ObservableObject {
+    ///S^{+} := 0
+    ///S^{-} := 0
+    ///for t := 1, 2, 3, ...:
+    ///    S^{+} := max(S^{+} + x_t - k, 0)
+    ///    S^{-} := min(S^{-} + x_t + k, 0)
+    ///    if (S^{+} > h or S^{-}  < -h):
+    ///        Recommend budget change
+    ///        S^{+} := 0
+    ///        S^{-} := 0
+    ///
+    @Published var suggestedBudget: Double = 0
     @Published var currentBudget: Double = 0
+    @Published var suggestNewBudget: Bool = false
+    @Published var ignoreBudgetSuggestionDate: Date? = nil
+    private var transactions: [Transaction] = []
     private var expensesCancellable: AnyCancellable?
     private var expensesFetchController: TransactionFetchController
+    private var ignoreBudgetSuggestionCancellable: AnyCancellable?
     
     init() {
-        let nowComponents: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
-        let nowDate = Calendar.current.date(from: nowComponents)!
-        let fourMonthsAgo = Calendar.current.date(byAdding: .month, value: -4, to: nowDate)!
-        let controller = TransactionFetchController(isExpense: true, startDate: fourMonthsAgo, endDate: nowDate)
-        self.expensesFetchController = controller
-        let publisher = self.expensesFetchController.items.eraseToAnyPublisher()
+        self.currentBudget = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
         
-        self.expensesCancellable = publisher.sink { transactions in
-            // Group transactions by month and sum up their amounts within each month
-            let groupedTransactions = transactions.grouped(by: { t in
-                let date = t.wrappedDate
-                let comps = Calendar.current.dateComponents([.year, .month], from: date)
-                return comps
-            })
-            let monthlyExpenses = groupedTransactions.mapValues {
-                $0.map(\.amount).reduce(0, +)
-            }
-            // sort by the date key
-            let sortedExpenses = monthlyExpenses.sorted {
-                $0.key.year! <= $1.key.year! && $0.key.month! <= $1.key.month!
-            }.map(\.value)
-            print(sortedExpenses)
-            self.averageExpensesInLast4Months = vDSP.mean(sortedExpenses)
+        let startOfMonth: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
+        let startOfMonthDate = Calendar.current.date(from: startOfMonth)!
+        let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: startOfMonthDate)!
+        
+        let controller = TransactionFetchController(
+            isExpense: true,
+            startDate: sixMonthsAgo,
+            endDate: startOfMonthDate
+        )
+        self.expensesFetchController = controller
+        
+        let ignoreSuggestionPublisher = UserDefaults.standard.publisher(for: \.ignoreBudgetSuggestion).eraseToAnyPublisher()
+        self.ignoreBudgetSuggestionCancellable = ignoreSuggestionPublisher.sink { newValue in
+            let ignoreSuggestionDate = Date(timeIntervalSince1970: newValue)
+            self.ignoreBudgetSuggestionDate = ignoreSuggestionDate
         }
-        self.budgetDidChange()
+        
+        let transactionsPublisher = self.expensesFetchController.items.eraseToAnyPublisher()
+        self.expensesCancellable = transactionsPublisher.sink { transactions in
+            self.transactions = transactions
+            self.calculateBudgetSuggestion(transactions, currentBudget: self.currentBudget)
+        }
     }
     
     private func roundToNextQuarter(_ value: Double) -> Double {
@@ -58,45 +78,76 @@ class BudgetSuggestionViewModel: ObservableObject {
         return res
     }
     
-    public func setSuggestedBudget(validDiscrepancy: Double = 0.1) {
-        // If the average expenses in the last four months is outside of current budget
-        // +- {validDiscrepancy}% of the current budget, suggest the budget to be the average expenses of
-        // the past four months rounded to a value that ends with 0, 25, 50, or 75.
-        let upperBound = currentBudget * (1 + validDiscrepancy)
-        let lowerBound = currentBudget * (1 - validDiscrepancy)
-        if (lowerBound <= averageExpensesInLast4Months && averageExpensesInLast4Months <= upperBound) {
-            self.suggestedBudget = nil
-            return
+    private func calculateMonthlyExpenses(_ transactions: [Transaction]) -> [Double] {
+        // Group transactions by month and sum up their amounts within each month
+        let groupedTransactions = transactions.grouped(by: { t in
+            let date = t.wrappedDate
+            let comps = Calendar.current.dateComponents([.year, .month], from: date)
+            return comps
+        })
+        let monthlyExpenses = groupedTransactions.mapValues {
+            $0.map(\.amount).reduce(0, +)
         }
-        self.suggestedBudget = self.roundToNextQuarter(self.averageExpensesInLast4Months)
+        return Array(monthlyExpenses.values)
     }
     
-    public func budgetDidChange() {
-        self.currentBudget = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
-        self.setSuggestedBudget()
+    private func calculateMeanAndStandardDeviation(_ expenses: [Double]) -> (mean: Double, standardDeviation: Double) {
+        var mean = 0.0
+        var sddev = 0.0
+        vDSP_normalizeD(expenses, 1, nil, 1, &mean, &sddev, vDSP_Length(expenses.count))
+        sddev *= sqrt(Double(expenses.count)/Double(expenses.count - 1))
+        return (mean: mean, standardDeviation: sddev)
+    }
+    
+    private func calculateBudgetSuggestion(_ transactions: [Transaction], currentBudget: Double) {
+        let expensesList = self.calculateMonthlyExpenses(transactions)
+        let (mean, sddev) = self.calculateMeanAndStandardDeviation(expensesList)
+        print("Std: \(sddev), Mean: \(mean)")
+        
+        let h = 5.0 * sddev
+        let k = 0.2 * sddev
+        let x = expensesList.map {$0 - currentBudget}
+        print("h: \(h), k: \(k), x: (\(x))")
+        self.suggestNewBudget = false
+        var s_plus = 0.0
+        var s_minus = 0.0
+        for x_i in x {
+            s_plus = max(s_plus + x_i - k, 0.0)
+            s_minus = min(s_minus + x_i + k, 0.0)
+            print("x: \(x_i), s_plus: \(s_plus), s_minus: \(s_minus)")
+            if s_plus > h || s_minus < -h {
+                print("HIT")
+                self.suggestNewBudget = true
+                self.suggestedBudget = self.roundToNextQuarter(vDSP.mean(expensesList))
+                break
+            }
+        }
+    }
+    
+    public func budgetDidChange(to newBudget: Double) {
+        self.currentBudget = newBudget
+        self.calculateBudgetSuggestion(self.transactions, currentBudget: self.currentBudget)
+        self.handleIgnore() // Make sure that we start the CUSUM algorithm from the current date
+    }
+    
+    public func handleIgnore() {
+        UserDefaults.standard.ignoreBudgetSuggestion = Date().timeIntervalSince1970
     }
 }
 
+
 struct Suggestions: View {
     @State var showNotification: Bool = false
-    @ObservedObject var viewModel: BudgetSuggestionViewModel = .init()
-    @AppStorage(
-        AppStorageKeys.ignoreBudgetSuggestionsDate
-    ) private var ignoreBudgetSuggestionsDouble: Double = 0
     @State var showBudgetWizard: Bool = false
-    
-    var ignoreBudgetStoredDate: Date? {
-        if ignoreBudgetSuggestionsDouble == 0 {
-            return nil
-        }
-        return Date(timeIntervalSince1970: ignoreBudgetSuggestionsDouble)
-    }
+    @ObservedObject var viewModel: CUSUMBudgetTracker = .init()
     
     var ignoreBudgetSuggestions: Bool {
-        guard let ignoreBudgetStoredDate else { return false }
-        // Ignore the suggestions if the user clicked "ignore" within the last month
-        let oneMonthAgo = Date().addingTimeInterval(-60 * 60 * 24 * 30)
-        return oneMonthAgo < ignoreBudgetStoredDate
+        guard let ignoreBudgetStoredDate = viewModel.ignoreBudgetSuggestionDate else { return false }
+        let nowComps = Calendar.current.dateComponents([.year, .month], from: Date())
+        let now = Calendar.current.date(from: nowComps)!
+        // Ignore the suggestions if the user clicked "ignore" within the three months
+        let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: now)!
+        return threeMonthsAgo < ignoreBudgetStoredDate
     }
     
     @ViewBuilder
@@ -107,7 +158,7 @@ struct Suggestions: View {
             }
             .font(.headline)
             .padding(.bottom, 4)
-            Text("You spent \(viewModel.averageExpensesInLast4Months.formatted(.customCurrency())) on average in the past four months while your budget is \(viewModel.currentBudget.formatted(.customCurrency()))")
+            Text("Your current budget is set at \(viewModel.currentBudget.formatted(.customCurrency())). To better align with your financial habits, we recommend adjusting it to \(viewModel.suggestedBudget.formatted(.customCurrency())).")
                 .foregroundStyle(.secondary)
                 .font(.callout)
                 .padding(.bottom, 16)
@@ -117,7 +168,7 @@ struct Suggestions: View {
                         withAnimation {
                             showNotification = false
                         }
-                        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: AppStorageKeys.ignoreBudgetSuggestionsDate)
+                        viewModel.handleIgnore()
                     }
                     .buttonStyle(.bordered)
                     Button("Adjust Budget") {
@@ -129,12 +180,12 @@ struct Suggestions: View {
             .padding()
             .background(Color.orange.opacity(0.15), in: RoundedRectangle(cornerRadius: 16))
             .sheet(isPresented: $showBudgetWizard) {
-                SetLimitSheet(budgetSuggestion: viewModel.suggestedBudget) { _ in
+                SetLimitSheet(budgetSuggestion: viewModel.suggestedBudget) { newBudgetValue in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation {
                             showNotification = false
-                            viewModel.budgetDidChange()
                         }
+                        viewModel.budgetDidChange(to: newBudgetValue)
                     }
                 }
                 .presentationDetents([.height(200)])
@@ -143,7 +194,7 @@ struct Suggestions: View {
     }
     
     var body: some View {
-        if viewModel.suggestedBudget != nil {
+        if viewModel.suggestNewBudget {
             if !self.ignoreBudgetSuggestions {
                 VStack {
                     if showNotification {
