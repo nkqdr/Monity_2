@@ -73,9 +73,9 @@ fileprivate struct SavingsCategoryTile: View {
                     }
                 } label: {
                     if category.isHidden {
-                        Label("Show", systemImage: "eye.fill")
+                        Label("Restore", systemImage: "tray.and.arrow.up")
                     } else {
-                        Label("Hide", systemImage: "eye.slash.fill")
+                        Label("Archive", systemImage: "archivebox")
                     }
                 }
                 if category.isHidden {
@@ -269,7 +269,7 @@ struct SavingsDetailView: View {
                     }
                     Divider()
                     Button { showHiddenCategories.toggle() } label: {
-                        Label("Hidden Categories", systemImage: "eye.slash.fill")
+                        Label("Archived", systemImage: "archivebox")
                     }
                 } label: {
                     Label("More", systemImage: "ellipsis.circle")
@@ -283,7 +283,7 @@ struct SavingsDetailView: View {
                         SavingsCategoryList(isHidden: true)
                     }
                 }
-                .navigationTitle("Hidden Categories")
+                .navigationTitle("Archived")
                 .navigationBarTitleDisplayMode(.inline)
             }
         }

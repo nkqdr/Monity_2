@@ -74,7 +74,7 @@ extension View {
             Button {
                 // Do nothing because contextMenu closes automatically
             } label: {
-                Label("Hide", systemImage: "eye.slash.fill")
+                Label("Archive", systemImage: "archivebox")
             }
         } preview: {
             content()

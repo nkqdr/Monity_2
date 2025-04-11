@@ -302,10 +302,10 @@
 "Here you can add all of your savings categories, so that you can later add entries to these categories." = "Hier können Sie alle Ihre Vermögenskategorien hinzufügen, so dass Sie später Einträge zu diesen Kategorien hinzufügen können.";
 
 /* No comment provided by engineer. */
-"Hidden Categories" = "Versteckte Kategorien";
+"Archived" = "Archiviert";
 
 /* No comment provided by engineer. */
-"Hide" = "Verstecken";
+"Archive" = "Archivieren";
 
 /* No comment provided by engineer. */
 "How to import .csv files" = "Wie importiere ich .csv-Dateien?";
@@ -530,7 +530,7 @@
 "Share of total wealth" = "Anteil an Gesamtvermögen";
 
 /* No comment provided by engineer. */
-"Show" = "Anzeigen";
+"Restore" = "Wiederherstellen";
 
 /* No comment provided by engineer. */
 "Show average" = "Durchschnitt anzeigen";
