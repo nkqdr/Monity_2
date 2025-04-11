@@ -2,24 +2,28 @@ name: iOS starter workflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-latest
+    runs-on: macos-latest # Ensure we're using macOS for build and test steps
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Set Default Scheme
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
+
+      # Build
       - name: Build
         env:
           scheme: ${{ 'default' }}
@@ -31,6 +35,8 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+
+      # Test
       - name: Test
         env:
           scheme: ${{ 'default' }}
@@ -42,3 +48,24 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+
+  # This is the additional job to run on Linux, where necessary dependencies will be installed
+  check-linux-dependencies:
+    name: Ensure necessary dependencies for Linux build
+    runs-on: ubuntu-latest # This runs on Linux, where we check dependencies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies on Linux
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libswift-stdlib
+
+      - name: Check Swift version
+        run: swift --version
+
+      - name: Run additional build steps on Linux (if necessary)
+        run: |
+          # Here you can add any build steps that need to be run on Linux or for testing Linux-only behavior.
+          echo "Checking dependencies and configuration for Linux environment."
