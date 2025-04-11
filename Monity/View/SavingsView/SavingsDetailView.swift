@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 
 fileprivate struct SavingsCategoryTile: View {
+    @State private var showDeleteConfirmation: Bool = false
     @StateObject var category: SavingsCategory
     @Binding var addWithCategory: SavingsCategory?
     @Binding var editCategory: SavingsCategory?
@@ -40,6 +41,15 @@ fileprivate struct SavingsCategoryTile: View {
                 }
             }
             .groupBoxStyle(CustomGroupBox())
+            .confirmationDialog("Are you sure you want to delete \(category.wrappedName)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    withAnimation(.easeInOut) {
+                        SavingsCategoryStorage.main.delete(category)
+                    }
+                }
+            } message: {
+                Text("\(category.wrappedEntryCount) related entries will be deleted.")
+            }
             .contextMenu {
                 if !category.isHidden {
                     Button {
@@ -52,8 +62,8 @@ fileprivate struct SavingsCategoryTile: View {
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
+                    Divider()
                 }
-                Divider()
                 Button(role: category.isHidden ? .cancel : .destructive) {
                     withAnimation(.spring()) {
                         let _ = SavingsCategoryStorage.main.update(
@@ -63,9 +73,17 @@ fileprivate struct SavingsCategoryTile: View {
                     }
                 } label: {
                     if category.isHidden {
-                        Label("Show", systemImage: "eye.fill")
+                        Label("Restore", systemImage: "tray.and.arrow.up")
                     } else {
-                        Label("Hide", systemImage: "eye.slash.fill")
+                        Label("Archive", systemImage: "archivebox")
+                    }
+                }
+                if category.isHidden {
+                    Divider()
+                    Button(role: .destructive) {
+                        showDeleteConfirmation.toggle()
+                    } label: {
+                        Label("Delete permanently", systemImage: "trash")
                     }
                 }
             }
@@ -191,16 +209,22 @@ fileprivate struct SavingsPredictionBox: View {
 struct SavingsDetailView: View {
     @State private var showHiddenCategories: Bool = false
     @State private var showAssetAllocation: Bool = false
+    @State private var showNewCategoryForm: Bool = false
     @StateObject private var content = SavingsCategoryViewModel.shared
     
     var noCategories: some View {
         VStack {
             Text("No Savings categories defined.")
-            Text("Go to Settings > Savings to define your categories.")
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            Button {
+                showNewCategoryForm.toggle()
+            } label: {
+                Label("New category", systemImage: "plus")
+            }
+            .buttonStyle(.bordered)
         }
-        .foregroundColor(.secondary)
         .padding()
-        .multilineTextAlignment(.center)
     }
     
     var categorySectionHeader: some View {
@@ -228,7 +252,7 @@ struct SavingsDetailView: View {
     
     var body: some View {
         ListBase {
-            if content.items.isEmpty {
+            if content.shownCategories.isEmpty {
                 noCategories
             } else {
                 scrollViewContent
@@ -237,11 +261,15 @@ struct SavingsDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
-                    Button { showHiddenCategories.toggle() } label: {
-                        Label("Hidden Categories", systemImage: "eye.slash.fill")
+                    Button { showNewCategoryForm.toggle() } label: {
+                        Label("New category", systemImage: "plus")
                     }
                     Button { showAssetAllocation.toggle() } label: {
                         Label("Asset Allocation", systemImage: "chart.pie.fill")
+                    }
+                    Divider()
+                    Button { showHiddenCategories.toggle() } label: {
+                        Label("Archived", systemImage: "archivebox")
                     }
                 } label: {
                     Label("More", systemImage: "ellipsis.circle")
@@ -255,7 +283,7 @@ struct SavingsDetailView: View {
                         SavingsCategoryList(isHidden: true)
                     }
                 }
-                .navigationTitle("Hidden Categories")
+                .navigationTitle("Archived")
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
@@ -265,6 +293,11 @@ struct SavingsDetailView: View {
                     .navigationTitle("Asset Allocation")
                     .navigationBarTitleDisplayMode(.inline)
             }
+        }
+        .sheet(isPresented: $showNewCategoryForm) {
+            SavingsCategoryFormView(
+                editor: SavingsCategoryEditor()
+            )
         }
         .navigationTitle("Savings Overview")
     }

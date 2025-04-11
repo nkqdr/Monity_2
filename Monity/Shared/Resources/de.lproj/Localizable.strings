@@ -263,9 +263,6 @@
 "eoy_review.transactions.3" = "Diese sorgfältige Verfolgung bildet die Grundlage für eine aufschlussreiche Finanzanalyse. Mit diesen Daten sind Sie in der Lage, strategische Entscheidungen zu treffen und eine erfolgreiche finanzielle Zukunft zu gestalten. Ihr Engagement für finanzielle Umsicht ist lobenswert, und wir sind hier, um Ihren anhaltenden Erfolg zu unterstützen.";
 
 /* No comment provided by engineer. */
-"Establish a monthly budget and aim to stay within your limits." = "Legen Sie ein monatliches Budget fest und versuchen Sie, es einzuhalten.";
-
-/* No comment provided by engineer. */
 "Expense" = "Ausgabe";
 
 /* No comment provided by engineer. */
@@ -299,19 +296,16 @@
 "Get started" = "Los geht's!";
 
 /* No comment provided by engineer. */
-"Go to Settings > Savings to define your categories." = "Gehen Sie zu Einstellungen > Vermögen, um Ihre Kategorien zu definieren.";
-
-/* No comment provided by engineer. */
 "Help" = "Hilfe";
 
 /* No comment provided by engineer. */
 "Here you can add all of your savings categories, so that you can later add entries to these categories." = "Hier können Sie alle Ihre Vermögenskategorien hinzufügen, so dass Sie später Einträge zu diesen Kategorien hinzufügen können.";
 
 /* No comment provided by engineer. */
-"Hidden Categories" = "Versteckte Kategorien";
+"Archived" = "Archiviert";
 
 /* No comment provided by engineer. */
-"Hide" = "Verstecken";
+"Archive" = "Archivieren";
 
 /* No comment provided by engineer. */
 "How to import .csv files" = "Wie importiere ich .csv-Dateien?";
@@ -536,7 +530,7 @@
 "Share of total wealth" = "Anteil an Gesamtvermögen";
 
 /* No comment provided by engineer. */
-"Show" = "Anzeigen";
+"Restore" = "Wiederherstellen";
 
 /* No comment provided by engineer. */
 "Show average" = "Durchschnitt anzeigen";
@@ -738,6 +732,9 @@
 
 /* No comment provided by engineer. */
 "Suggested budget: " = "Empfohlenes Budget: ";
+
+/* No comment provided by engineer. */
+"Delete permanently" = "Endgültig löschen";
 
 // MARK: - Onboarding default categories
 

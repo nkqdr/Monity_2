@@ -1,10 +1,9 @@
 //
-//  SettingsTransactionsView.swift
+//  MonthlyBudgetSection.swift
 //  Monity
 //
-//  Created by Niklas Kuder on 09.10.22.
+//  Created by Niklas Kuder on 11.04.25.
 //
-
 import SwiftUI
 
 fileprivate struct BudgetLevel {
@@ -119,7 +118,7 @@ struct SetLimitSheet: View {
     }
 }
 
-fileprivate struct MonthlyLimitSection: View {
+struct MonthlyBudgetSection: View {
     @Binding var showBudgetWizard: Bool
     @AppStorage(AppStorageKeys.monthlyLimit) private var monthlyLimit: Double?
     @State private var showingDeleteConfirmation: Bool = false
@@ -165,9 +164,7 @@ fileprivate struct MonthlyLimitSection: View {
             }
         } header: {
             Text("Budget")
-        } footer: {
-            Text("Establish a monthly budget and aim to stay within your limits.")
-        }
+        } 
         .confirmationDialog("Delete monthly budget", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 withAnimation(.easeInOut) {
@@ -179,116 +176,3 @@ fileprivate struct MonthlyLimitSection: View {
         }
     }
 }
-
-fileprivate struct TransactionCategoryTile: View {
-    @ObservedObject var category: TransactionCategory
-    @Binding var categoryToEdit: TransactionCategory?
-    @State private var showConfirmationDialog: Bool = false
-
-    var body: some View {
-        HStack {
-            if let icon = category.iconName {
-                Image(systemName: icon)
-                    .padding(.trailing, 10)
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
-            }
-            VStack(alignment: .leading) {
-                Text(category.wrappedName)
-                Text("Associated transactions: \(category.wrappedTransactionsCount)")
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .deleteSwipeAction {
-            showConfirmationDialog.toggle()
-        }
-        .editSwipeAction {
-            categoryToEdit = category
-        }
-        .contextMenu {
-            Button {
-                categoryToEdit = category
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-            Divider()
-            Button(role: .destructive) {
-                showConfirmationDialog.toggle()
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        }
-        .confirmationDialog(
-            "Delete transaction",
-            isPresented: $showConfirmationDialog,
-            titleVisibility: .visible
-        ) {
-            Button("Delete", role: .destructive) {
-                withAnimation(.easeInOut) {
-                    TransactionCategoryStorage.main.delete(category)
-                }
-            }
-        } message: {
-            Text("Are you sure you want to delete this transaction?")
-        }
-    }
-}
-
-struct More_TransactionsView: View {
-    @FetchRequest(
-        entity: TransactionCategory.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \TransactionCategory.numTransactions, ascending: false)
-        ]
-    ) private var allCategories: FetchedResults<TransactionCategory>
-    @State private var categoryToEdit: TransactionCategory? = nil
-    @State private var showAddCategoryForm: Bool = false
-    @State var showBudgetWizard: Bool = false
-    
-    var body: some View {
-        List {
-            MonthlyLimitSection(showBudgetWizard: $showBudgetWizard)
-            Section {
-                ForEach(allCategories) { category in
-                    TransactionCategoryTile(category: category, categoryToEdit: $categoryToEdit)
-                }
-            } header: {
-                HStack {
-                    Text("Categories")
-                    Spacer()
-                    Button {
-                        showAddCategoryForm.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            } footer: {
-                Text("These will help you categorize all of your expenses and income")
-            }
-        }
-        .sheet(isPresented: $showBudgetWizard) {
-            SetLimitSheet()
-                .presentationDetents([.height(200)])
-        }
-        .sheet(isPresented: $showAddCategoryForm) {
-            TransactionCategoryForm(
-                editor: TransactionCategoryEditor()
-            )
-        }
-        .sheet(item: $categoryToEdit) { category in
-            TransactionCategoryForm(
-                editor: TransactionCategoryEditor(category: category)
-            )
-        }
-        .navigationTitle("Transactions")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct Settings_TransactionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        More_TransactionsView()
-    }
-}
-
