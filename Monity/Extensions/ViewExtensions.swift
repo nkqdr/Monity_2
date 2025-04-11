@@ -69,18 +69,6 @@ extension View {
         }
     }
     
-    func onlyHideContextMenu<T: View>(@ViewBuilder content: @escaping () -> T) -> some View {
-        self.contextMenu {
-            Button {
-                // Do nothing because contextMenu closes automatically
-            } label: {
-                Label("Archive", systemImage: "archivebox")
-            }
-        } preview: {
-            content()
-        }
-    }
-    
     func tintedBackground(
         _ tint: Color? = nil,
         cornerRadius: CGFloat = 5,
