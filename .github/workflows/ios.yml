@@ -9,21 +9,17 @@ on:
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-latest # Ensure we're using macOS for build and test steps
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Set Default Scheme
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
-
-      # Build
       - name: Build
         env:
           scheme: ${{ 'default' }}
@@ -35,8 +31,6 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
-
-      # Test
       - name: Test
         env:
           scheme: ${{ 'default' }}
@@ -48,34 +42,3 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
-
-  # This is the additional job to run on Linux, where necessary dependencies will be installed
-  check-linux-dependencies:
-    name: Ensure necessary dependencies for Linux build
-    runs-on: ubuntu-latest # This runs on Linux
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Swift on Linux
-        run: |
-          # Install Swift dependencies for Ubuntu
-          sudo apt-get update
-          sudo apt-get install -y clang libicu-dev
-
-          # Download and install Swift toolchain
-          SWIFT_VERSION=5.7  # You can change this to the required version
-          wget https://swift.org/builds/swift-${SWIFT_VERSION}-release/ubuntu2004/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04.tar.gz
-          tar xzf swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04.tar.gz
-          sudo mv swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04 /usr/share/swift
-
-          # Set up Swift environment variables
-          echo "export PATH=/usr/share/swift/usr/bin:$PATH" >> ~/.bashrc
-          source ~/.bashrc
-
-      - name: Check Swift version
-        run: swift --version
-
-      - name: Run additional build steps on Linux (if necessary)
-        run: |
-          echo "Checking dependencies and configuration for Linux environment."
