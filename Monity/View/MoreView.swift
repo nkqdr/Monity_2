@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct MoreView: View {
+    @State private var showBudgetWizard: Bool = false
+    
     var body: some View {
         NavigationView {
             List {
+                MonthlyBudgetSection(showBudgetWizard: $showBudgetWizard)
                 generalSection
-                configurationSection
                 helpSection
+            }
+            .sheet(isPresented: $showBudgetWizard) {
+                SetLimitSheet()
+                    .presentationDetents([.height(200)])
             }
             .navigationTitle("More")
         }
@@ -26,17 +32,6 @@ struct MoreView: View {
             }
             NavigationLink("Settings") {
                 More_OptionsView()
-            }
-        }
-    }
-    
-    private var configurationSection: some View {
-        Section("Configuration") {
-            NavigationLink("Transactions") {
-                More_TransactionsView()
-            }
-            NavigationLink("Savings") {
-                More_SavingsView()
             }
         }
     }

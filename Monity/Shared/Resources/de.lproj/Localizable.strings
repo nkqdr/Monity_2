@@ -263,9 +263,6 @@
 "eoy_review.transactions.3" = "Diese sorgfältige Verfolgung bildet die Grundlage für eine aufschlussreiche Finanzanalyse. Mit diesen Daten sind Sie in der Lage, strategische Entscheidungen zu treffen und eine erfolgreiche finanzielle Zukunft zu gestalten. Ihr Engagement für finanzielle Umsicht ist lobenswert, und wir sind hier, um Ihren anhaltenden Erfolg zu unterstützen.";
 
 /* No comment provided by engineer. */
-"Establish a monthly budget and aim to stay within your limits." = "Legen Sie ein monatliches Budget fest und versuchen Sie, es einzuhalten.";
-
-/* No comment provided by engineer. */
 "Expense" = "Ausgabe";
 
 /* No comment provided by engineer. */
@@ -297,9 +294,6 @@
 
 /* No comment provided by engineer. */
 "Get started" = "Los geht's!";
-
-/* No comment provided by engineer. */
-"Go to Settings > Savings to define your categories." = "Gehen Sie zu Einstellungen > Vermögen, um Ihre Kategorien zu definieren.";
 
 /* No comment provided by engineer. */
 "Help" = "Hilfe";
@@ -738,6 +732,9 @@
 
 /* No comment provided by engineer. */
 "Suggested budget: " = "Empfohlenes Budget: ";
+
+/* No comment provided by engineer. */
+"Delete permanently" = "Endgültig löschen";
 
 // MARK: - Onboarding default categories
 
