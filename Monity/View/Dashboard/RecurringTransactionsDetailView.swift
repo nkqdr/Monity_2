@@ -98,7 +98,7 @@ struct RecurringTransactionsDetailView: View {
         .sheet(isPresented: $showArchivedTransactions) {
             NavigationView {
                 archivedTransactionsList
-                    .navigationTitle("Archive")
+                    .navigationTitle("Archived")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
