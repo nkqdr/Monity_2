@@ -108,11 +108,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
             self.entries = entries
         }
     }
-    
-    static let shared = SavingsViewModel()
-    static func forCategory(_ category: SavingsCategory) -> SavingsViewModel {
-        return SavingsViewModel(category: category)
-    }
+
     @Published var groupedItems: [EntryGroup] = []
     @Published var lineChartDataPoints: [ValueTimeDataPoint] = []
     
@@ -128,13 +124,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
     private var category: SavingsCategory?
     private var fetchController: SavingsFetchController
     
-    private init() {
-        self.fetchController = SavingsFetchController.all
-        let publisher = self.fetchController.items.eraseToAnyPublisher()
-        super.init(itemPublisher: publisher)
-    }
-    
-    private init(category: SavingsCategory) {
+    public init(category: SavingsCategory) {
         self.fetchController = SavingsFetchController(category: category)
         let publisher = self.fetchController.items.eraseToAnyPublisher()
         self.category = category
