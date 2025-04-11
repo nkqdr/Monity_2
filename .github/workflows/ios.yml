@@ -52,20 +52,30 @@ jobs:
   # This is the additional job to run on Linux, where necessary dependencies will be installed
   check-linux-dependencies:
     name: Ensure necessary dependencies for Linux build
-    runs-on: ubuntu-latest # This runs on Linux, where we check dependencies
+    runs-on: ubuntu-latest # This runs on Linux
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies on Linux
+      - name: Install Swift on Linux
         run: |
+          # Install Swift dependencies for Ubuntu
           sudo apt-get update
-          sudo apt-get install -y libswift-stdlib
+          sudo apt-get install -y clang libicu-dev
+
+          # Download and install Swift toolchain
+          SWIFT_VERSION=5.7  # You can change this to the required version
+          wget https://swift.org/builds/swift-${SWIFT_VERSION}-release/ubuntu2004/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04.tar.gz
+          tar xzf swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04.tar.gz
+          sudo mv swift-${SWIFT_VERSION}-RELEASE-ubuntu20.04 /usr/share/swift
+
+          # Set up Swift environment variables
+          echo "export PATH=/usr/share/swift/usr/bin:$PATH" >> ~/.bashrc
+          source ~/.bashrc
 
       - name: Check Swift version
         run: swift --version
 
       - name: Run additional build steps on Linux (if necessary)
         run: |
-          # Here you can add any build steps that need to be run on Linux or for testing Linux-only behavior.
           echo "Checking dependencies and configuration for Linux environment."
