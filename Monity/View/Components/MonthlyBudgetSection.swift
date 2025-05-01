@@ -59,7 +59,7 @@ fileprivate let budgetLevels: [BudgetLevel] = [
 
 struct SetLimitSheet: View {
     @Environment(\.dismiss) var dismiss
-    @FocusState private var limitInputIsFocussed: Bool
+    @FocusState private var limitInputIsFocused: Bool
     @State private var tmpMonthlyLimit: Double = UserDefaults.standard.double(forKey: AppStorageKeys.monthlyLimit)
     private var budgetSuggestion: Double?
     private var onLimitSet: (Double) -> Void = { _ in }
@@ -76,7 +76,7 @@ struct SetLimitSheet: View {
                     CurrencyInputField(value: $tmpMonthlyLimit)
                         .font(.largeTitle.bold())
                         .foregroundStyle(.green)
-                        .focused($limitInputIsFocussed)
+                        .focused($limitInputIsFocused)
                 } header: {
                     Text("Monthly budget")
                 } footer: {
@@ -88,7 +88,7 @@ struct SetLimitSheet: View {
                 .listRowInsets(EdgeInsets())
             }
             .onAppear {
-                limitInputIsFocussed = true
+                limitInputIsFocused = true
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -107,7 +107,7 @@ struct SetLimitSheet: View {
                 }
                 ToolbarItem(placement: .keyboard) {
                     Button {
-                        limitInputIsFocussed = false
+                        limitInputIsFocused = false
                     } label: {
                         Image(systemName: "keyboard.chevron.compact.down")
                     }

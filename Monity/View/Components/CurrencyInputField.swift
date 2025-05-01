@@ -11,8 +11,8 @@ struct CurrencyInputField: View {
     @Binding var value: Double
     @State private var text: String
     @State private var prevText: String
-    @State private var showFocussedBackground: Bool = false
-    @FocusState private var isFocussed: Bool
+    @State private var showFocusedBackground: Bool = false
+    @FocusState private var isFocused: Bool
     private var maxDigits: Int
 
     init(value: Binding<Double>, maxDigits: Int? = nil) {
@@ -27,15 +27,15 @@ struct CurrencyInputField: View {
         ZStack(alignment: .leadingFirstTextBaseline) {
             Text(text)
                 .hidden()
-                .padding(.horizontal, showFocussedBackground ? 4 : 0)
+                .padding(.horizontal, showFocusedBackground ? 4 : 0)
                 .padding(.vertical, 4)
                 .background {
                     RoundedRectangle(cornerRadius: 5)
-                        .opacity(showFocussedBackground ? 0.2 : 0)
+                        .opacity(showFocusedBackground ? 0.2 : 0)
                         .tint(nil)
                 }
             TextField("", text: $text)
-                .focused($isFocussed)
+                .focused($isFocused)
                 .keyboardType(.numberPad)
                 .onChange(of: text) { newValue in
                     formatText()
@@ -46,12 +46,12 @@ struct CurrencyInputField: View {
                     prevText = text
                 }
                 .tint(.clear)
-                .padding(.horizontal, showFocussedBackground ? 4 : 0)
+                .padding(.horizontal, showFocusedBackground ? 4 : 0)
                 .padding(.vertical, 4)
         }
-        .onChange(of: isFocussed) { newValue in
+        .onChange(of: isFocused) { newValue in
             withAnimation {
-                showFocussedBackground = newValue
+                showFocusedBackground = newValue
             }
         }
         .fixedSize()

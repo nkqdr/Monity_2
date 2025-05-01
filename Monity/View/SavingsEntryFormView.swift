@@ -23,7 +23,7 @@ struct SavingsCategoryPicker: View {
 
 struct SavingsEntryFormView: View {
     @Environment(\.dismiss) var dismiss
-    @FocusState var amountInputIsFocussed: Bool
+    @FocusState var amountInputIsFocused: Bool
     @ObservedObject var editor: SavingsEditor
     
     var textColor: Color {
@@ -40,7 +40,7 @@ struct SavingsEntryFormView: View {
         NavigationView {
             Form {
                 CurrencyInputField(value: $editor.amount, maxDigits: 13)
-                    .focused($amountInputIsFocussed)
+                    .focused($amountInputIsFocused)
                     .font(.title.bold())
                     .foregroundStyle(textColor)
                     .listRowInsets(EdgeInsets())
@@ -58,7 +58,7 @@ struct SavingsEntryFormView: View {
                 
             }
             .onAppear {
-                amountInputIsFocussed = true
+                amountInputIsFocused = true
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
