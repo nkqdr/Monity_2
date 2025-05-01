@@ -40,7 +40,7 @@ struct AddTransactionView: View {
                 .listRowBackground(Color.clear)
                 
                 Section {
-                    TransactionCategoryPicker(selection: $editor.selectedCategory)
+                    TransactionCategoryPicker(selection: $editor.selectedCategory, userSelectedAmount: $editor.givenAmount, userSelectedIsExpense: $editor.isExpense)
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
                         .tint(accentColor)
