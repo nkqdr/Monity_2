@@ -27,11 +27,10 @@ struct SavingsEntryFormView: View {
     @ObservedObject var editor: SavingsEditor
     
     var textColor: Color {
-        guard let amount = editor.amount, amount != 0 else {
-            return .primary
-        }
-        if amount > 0 {
+        if editor.amount > 0 {
             return .green
+        } else if editor.amount == 0 {
+            return .primary
         } else {
             return .red
         }
@@ -40,10 +39,9 @@ struct SavingsEntryFormView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField(0.formatted(.customCurrency()), value: $editor.amount, format: .customCurrency())
-                    .keyboardType(.numbersAndPunctuation)
+                CurrencyInputField(value: $editor.amount, maxDigits: 13)
                     .focused($amountInputIsFocussed)
-                    .font(.system(size: 32, weight: .bold))
+                    .font(.title.bold())
                     .foregroundStyle(textColor)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)

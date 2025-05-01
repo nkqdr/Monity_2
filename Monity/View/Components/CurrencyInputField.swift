@@ -12,12 +12,14 @@ struct CurrencyInputField: View {
     @State private var text: String
     @State private var prevText: String
     @FocusState private var isFocussed: Bool
-    private let maxLength: Int = 16
-    
-    init(value: Binding<Double>) {
+    private var maxDigits: Int
+
+    init(value: Binding<Double>, maxDigits: Int? = nil) {
         self._value = value
-        self.text = Self.format(value: value.wrappedValue)
-        self.prevText = Self.format(value: value.wrappedValue)
+        let initialText = Self.format(value: value.wrappedValue)
+        self.text = initialText
+        self.prevText = initialText
+        self.maxDigits = maxDigits ?? 11
     }
 
     var body: some View {
@@ -54,11 +56,12 @@ struct CurrencyInputField: View {
     }
 
     private func formatText() {
-        if text.count > self.maxLength {
-            text = prevText
-        }
-        
         var digits: String = text.filter { $0.isWholeNumber }
+        
+        if digits.count > self.maxDigits {
+            text = prevText
+            return
+        }
         
         if prevText.count > text.count, digits.count > 0 {
             digits = String(digits.dropLast())

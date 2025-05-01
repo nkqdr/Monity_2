@@ -97,7 +97,7 @@ class SavingStorage: ResettableStorage<SavingsEntry> {
     func update(_ entry: SavingsEntry, editor: SavingsEditor) -> Bool {
         self.context.performAndWait {
             guard let category = editor.category else { return false }
-            entry.amount = editor.amount ?? 0
+            entry.amount = editor.amount
             entry.category = category
             entry.date = editor.timestamp
             if let _ = try? self.context.save() {
