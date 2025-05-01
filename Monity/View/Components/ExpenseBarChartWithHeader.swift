@@ -27,7 +27,7 @@ struct TransactionBarChart: View {
     }
     
     init(
-        category: TransactionCategory? = nil,
+        category: TransactionCategory? = nil
     ) {
         self.timeSeriesData = TimeSeriesTransactionData(
             include: .income,
