@@ -10,19 +10,19 @@ import SwiftUI
 
 class SavingsEditor: ObservableObject {
     @Published var category: SavingsCategory?
-    @Published var amount: Double?
+    @Published var amount: Double
     @Published var disableSave: Bool = true
     @Published var navigationFormTitle: LocalizedStringKey
     @Published var timestamp: Date
     var entry: SavingsEntry?
     
     var isValid: Bool {
-        amount != nil && category != nil
+        category != nil
     }
     
     init(entry: SavingsEntry? = nil) {
         self.category = entry?.category
-        self.amount = entry?.amount ?? nil
+        self.amount = entry?.amount ?? 0
         self.timestamp = entry?.date ?? Date()
         self.navigationFormTitle = (entry != nil) ? "Edit entry" : "New entry"
         self.entry = entry
@@ -33,7 +33,7 @@ class SavingsEditor: ObservableObject {
     
     init(category: SavingsCategory? = nil) {
         self.category = category
-        self.amount = nil
+        self.amount = 0
         self.timestamp = Date()
         self.navigationFormTitle = "New entry"
         self.entry = nil
@@ -44,7 +44,7 @@ class SavingsEditor: ObservableObject {
     public func save() {
         if let entry {
             let _ = SavingStorage.main.update(entry, editor: self)
-        } else if let amount {
+        } else {
             let entry = SavingStorage.main.add(amount: amount, category: category)
             print("Added entry \(entry.wrappedDate)")
         }

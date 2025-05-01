@@ -11,27 +11,31 @@ struct CurrencyInputField: View {
     @Binding var value: Double
     @State private var text: String
     @State private var prevText: String
-    @FocusState private var isFocussed: Bool
-    private let maxLength: Int = 16
-    
-    init(value: Binding<Double>) {
+    @State private var showFocusedBackground: Bool = false
+    @FocusState private var isFocused: Bool
+    private var maxDigits: Int
+
+    init(value: Binding<Double>, maxDigits: Int? = nil) {
         self._value = value
-        self.text = Self.format(value: value.wrappedValue)
-        self.prevText = Self.format(value: value.wrappedValue)
+        let initialText = Self.format(value: value.wrappedValue)
+        self.text = initialText
+        self.prevText = initialText
+        self.maxDigits = maxDigits ?? 11
     }
 
     var body: some View {
         ZStack(alignment: .leadingFirstTextBaseline) {
             Text(text)
                 .hidden()
-                .padding(4)
+                .padding(.horizontal, showFocusedBackground ? 4 : 0)
+                .padding(.vertical, 4)
                 .background {
                     RoundedRectangle(cornerRadius: 5)
-                        .opacity(isFocussed ? 0.2 : 0)
+                        .opacity(showFocusedBackground ? 0.2 : 0)
                         .tint(nil)
                 }
             TextField("", text: $text)
-                .focused($isFocussed)
+                .focused($isFocused)
                 .keyboardType(.numberPad)
                 .onChange(of: text) { newValue in
                     formatText()
@@ -42,7 +46,13 @@ struct CurrencyInputField: View {
                     prevText = text
                 }
                 .tint(.clear)
-                .padding(4)
+                .padding(.horizontal, showFocusedBackground ? 4 : 0)
+                .padding(.vertical, 4)
+        }
+        .onChange(of: isFocused) { newValue in
+            withAnimation {
+                showFocusedBackground = newValue
+            }
         }
         .fixedSize()
         .lineLimit(1)
@@ -54,11 +64,12 @@ struct CurrencyInputField: View {
     }
 
     private func formatText() {
-        if text.count > self.maxLength {
-            text = prevText
-        }
-        
         var digits: String = text.filter { $0.isWholeNumber }
+        
+        if digits.count > self.maxDigits {
+            text = prevText
+            return
+        }
         
         if prevText.count > text.count, digits.count > 0 {
             digits = String(digits.dropLast())
