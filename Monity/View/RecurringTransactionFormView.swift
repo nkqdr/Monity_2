@@ -8,18 +8,33 @@
 import SwiftUI
 
 struct RecurringTransactionFormView: View {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) var dismiss
+    @FocusState var focusedField: Field?
     @ObservedObject var editor: RecurringTransactionEditor
     @State private var isStillActive: Bool = true
+    
+    enum Field: Hashable {
+        case amount
+        case name
+    }
     
     var body: some View {
         NavigationView {
             Form {
                 TextField("Name", text: $editor.name)
-                TransactionCategoryPicker(selection: $editor.category)
+                    .textFieldStyle(.plain)
+                    .focused($focusedField, equals: .name)
+                    .font(.title.bold())
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                Section("Kategorie") {
+                    TransactionCategoryPicker(selection: $editor.category)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                }
                 Section("Payment details") {
-                    TextField("Amount", value: $editor.amount, format: .customCurrency())
-                        .keyboardType(.decimalPad)
+                    CurrencyInputField(value: $editor.amount)
+                        .focused($focusedField, equals: .amount)
                     Picker("Cycle", selection: $editor.cycle) {
                         ForEach(TransactionCycle.allCases, id: \.self) { cycle in
                             Text(cycle.name).tag(cycle)
@@ -50,18 +65,31 @@ struct RecurringTransactionFormView: View {
                     .listRowBackground(Color.clear)
                 }
             }
+            .onAppear {
+                focusedField = .name
+            }
             .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        isPresented = false
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         editor.save()
-                        isPresented = false
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button {
+                            focusedField = nil
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
                     }
                 }
             }

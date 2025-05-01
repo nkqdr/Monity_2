@@ -63,7 +63,7 @@ struct RecurringTransactionsDetailView: View {
                     }
             }
         } sheetContent: { showAddSheet, currentItem in
-            RecurringTransactionFormView(isPresented: showAddSheet, editor: RecurringTransactionEditor(transaction: currentItem))
+            RecurringTransactionFormView(editor: RecurringTransactionEditor(transaction: currentItem))
         }
     }
     
@@ -93,7 +93,7 @@ struct RecurringTransactionsDetailView: View {
                 }
             }
         } sheetContent: { showAddSheet, currentItem in
-            RecurringTransactionFormView(isPresented: showAddSheet, editor: RecurringTransactionEditor(transaction: currentItem))
+            RecurringTransactionFormView(editor: RecurringTransactionEditor(transaction: currentItem))
         }
         .sheet(isPresented: $showArchivedTransactions) {
             NavigationView {
