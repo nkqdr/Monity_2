@@ -19,7 +19,7 @@ struct MoreView: View {
             }
             .sheet(isPresented: $showBudgetWizard) {
                 SetLimitSheet()
-                    .presentationDetents([.height(200)])
+                    .presentationDetents([.medium])
             }
             .navigationTitle("More")
         }
