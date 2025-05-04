@@ -108,7 +108,7 @@ class SavingsViewModel: ItemListViewModel<SavingsEntry> {
             self.entries = entries
         }
     }
-    
+
     @Published var groupedItems: [EntryGroup] = []
     @Published var lineChartDataPoints: [ValueTimeDataPoint] = []
     

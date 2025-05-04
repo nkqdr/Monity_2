@@ -97,18 +97,69 @@ fileprivate struct CategoryLabel: View {
     }
 }
 
+func sortedCategoriesByLikelihood(
+    categories: [TransactionCategory],
+    for amount: Double,
+    isExpense: Bool,
+    recentLimit: Int = 40
+) -> [TransactionCategory] {
+    return categories.sorted { catA, catB in
+        let scoreA = averageDistance(
+            from: amount,
+            in: Array(catA.transactionArray.sorted(by: {$0.wrappedDate > $1.wrappedDate}) .prefix(recentLimit)),
+            isExpense: isExpense
+        )
+        let scoreB = averageDistance(
+            from: amount,
+            in: Array(catB.transactionArray.sorted(by: {$0.wrappedDate > $1.wrappedDate}) .prefix(recentLimit)),
+            isExpense: isExpense
+        )
+        return scoreA < scoreB // lower distance = higher likelihood
+    }
+}
+
+private func averageDistance(
+    from amount: Double,
+    in transactions: [Transaction],
+    isExpense: Bool
+) -> Double {
+    let matching = transactions.filter { $0.isExpense == isExpense }
+    
+    guard !matching.isEmpty else {
+        // Penalize categories that don’t match the type at all
+        return Double.greatestFiniteMagnitude
+    }
+    let totalDistance = vDSP.mean(matching.map { abs($0.amount - amount )})
+    
+    return totalDistance
+}
+
 struct TransactionCategoryPicker: View {
     @FetchRequest(
         entity: TransactionCategory.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \TransactionCategory.name, ascending: true)]
     ) private var allCategories: FetchedResults<TransactionCategory>
     @Binding var selection: TransactionCategory?
+    @Binding var userSelectedAmount: Double
+    @Binding var userSelectedIsExpense: Bool
     @State private var showAddCategory: Bool = false
     
-    var sortedCategories: [TransactionCategory] {
-        return allCategories.sorted { c1, c2 in
-            c1.recentTransactionsCount > c2.recentTransactionsCount
-        }
+    init(
+        selection: Binding<TransactionCategory?>,
+        userSelectedAmount: Binding<Double>? = nil,
+        userSelectedIsExpense: Binding<Bool>? = nil
+    ) {
+        self._selection = selection
+        self._userSelectedAmount = userSelectedAmount ?? .constant(-1)
+        self._userSelectedIsExpense = userSelectedIsExpense ?? .constant(false)
+    }
+    
+    private var sortedCategories: [TransactionCategory] {
+        sortedCategoriesByLikelihood(
+            categories: Array(allCategories),
+            for: userSelectedAmount,
+            isExpense: userSelectedIsExpense
+        )
     }
     
     var body: some View {
