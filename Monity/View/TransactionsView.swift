@@ -35,7 +35,7 @@ struct TransactionsView: View {
                 transactionsByDate: listContent.groupedTransactions
             )
             .searchable(text: $listContent.searchText)
-            .navigationTitle("Transactions")
+            .navigationTitle(Calendar.current.date(from: listContent.selectedDateComps)?.formatted(.dateTime.year().month()) ?? "Transactions")
             .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
