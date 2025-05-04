@@ -187,9 +187,11 @@ struct TransactionBarChart: View {
                 AxisMarks { value in
                     if let doubleValue = value.as(Double.self) {
                         AxisGridLine()
-                        AxisValueLabel {
-                            let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency) ?? "EUR"
-                            CompactCurrencyAxisLabel(value: doubleValue, currencyCode: currencyCode)
+                        if doubleValue != 0 {
+                            AxisValueLabel {
+                                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency) ?? "EUR"
+                                CompactCurrencyAxisLabel(value: doubleValue, currencyCode: currencyCode)
+                            }
                         }
                     }
                 }
@@ -426,7 +428,7 @@ struct ExpenseBarChartWithHeader: View {
                 AxisMarks { value in
                     if let doubleValue = value.as(Double.self) {
                         AxisGridLine()
-                        if selectedElement != nil || isDragging || alwaysShowYmarks {
+                        if doubleValue != 0 && (selectedElement != nil || isDragging || alwaysShowYmarks) {
                             let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency) ?? "USD"
                             AxisValueLabel {
                                 CompactCurrencyAxisLabel(value: doubleValue, currencyCode: currencyCode)
