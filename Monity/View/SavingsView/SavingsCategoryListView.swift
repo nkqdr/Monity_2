@@ -71,7 +71,7 @@ struct SavingsCategoryListView: View {
     
     init(category: SavingsCategory) {
         self.category = category
-        self._content = StateObject(wrappedValue: SavingsViewModel.forCategory(category))
+        self._content = StateObject(wrappedValue: SavingsViewModel(category: category))
     }
     
     var dataPoints: [ValueTimeDataPoint] {
