@@ -100,11 +100,20 @@ fileprivate struct CategoryLabel: View {
 func sortedCategoriesByLikelihood(
     categories: [TransactionCategory],
     for amount: Double,
-    isExpense: Bool
+    isExpense: Bool,
+    recentLimit: Int = 40
 ) -> [TransactionCategory] {
     return categories.sorted { catA, catB in
-        let scoreA = averageDistance(from: amount, in: catA.transactionArray, isExpense: isExpense)
-        let scoreB = averageDistance(from: amount, in: catB.transactionArray, isExpense: isExpense)
+        let scoreA = averageDistance(
+            from: amount,
+            in: Array(catA.transactionArray.sorted(by: {$0.wrappedDate > $1.wrappedDate}) .prefix(recentLimit)),
+            isExpense: isExpense
+        )
+        let scoreB = averageDistance(
+            from: amount,
+            in: Array(catB.transactionArray.sorted(by: {$0.wrappedDate > $1.wrappedDate}) .prefix(recentLimit)),
+            isExpense: isExpense
+        )
         return scoreA < scoreB // lower distance = higher likelihood
     }
 }
