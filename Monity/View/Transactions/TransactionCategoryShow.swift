@@ -49,7 +49,7 @@ struct TransactionCategoryShow: View {
                 Section {
                     VStack {
                         ExpenseBarChartWithHeader(
-                            category: category, isExpense: true, color: .red, alwaysShowYmarks: false
+                            category: category, isExpense: true, color: .red
                         )
                         .frame(minHeight: 180)
                         .padding(.vertical)
@@ -73,7 +73,7 @@ struct TransactionCategoryShow: View {
                 Section {
                     VStack {
                         ExpenseBarChartWithHeader(
-                            category: category, isExpense: false, color: .green, alwaysShowYmarks: false
+                            category: category, isExpense: false, color: .green
                         )
                         .frame(minHeight: 180)
                         .padding(.vertical)
