@@ -66,16 +66,17 @@ fileprivate struct CompactCurrencyAxisLabel: View {
 struct TransactionBarChart: View {
     typealias TimeSeriesGroup = (type: String, data: TimeSeriesTransactionData.Data)
     typealias TimeSeriesGroupElement = (expense: TimeSeriesTransactionData.DataPoint, income: TimeSeriesTransactionData.DataPoint, date: Date)
+    
     @State private var selectedElement: TimeSeriesGroupElement?
     @State private var dragGestureTick: Double = 0
     @State private var selectedLowerBoundDate: Date
     @State private var isDragging = false
-    @ObservedObject private var timeSeriesData: TimeSeriesTransactionData
+    @ObservedObject private var timeSeriesIncome: TimeSeriesTransactionData
     @ObservedObject private var timeSeriesExpenses: TimeSeriesTransactionData
     
     var groupedData: [TimeSeriesGroup] {
         return [
-            (type: String(localized: "income.plural"), data: self.timeSeriesData.data),
+            (type: String(localized: "income.plural"), data: self.timeSeriesIncome.data),
             (type: String(localized: "Expenses"), data: self.timeSeriesExpenses.data)
         ]
     }
@@ -83,7 +84,7 @@ struct TransactionBarChart: View {
     init(
         category: TransactionCategory? = nil,
     ) {
-        self.timeSeriesData = TimeSeriesTransactionData(
+        self.timeSeriesIncome = TimeSeriesTransactionData(
             include: .income,
             timeframe: .total,
             category: category
@@ -230,7 +231,7 @@ struct TransactionBarChart: View {
                             withAnimation {
                                 isDragging = true
                             }
-                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedGroupedData[0].data.count * 2) + 4
+                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedGroupedData[0].data.count ) + 4
                             let dragDiff = value.location.x - value.startLocation.x
                             let dragAmount = (dragDiff / barWidth).rounded()
                             if (dragAmount != dragGestureTick) {
@@ -325,13 +326,13 @@ struct ExpenseBarChartWithHeader: View {
     
     init(
         category: TransactionCategory? = nil,
-        isExpense: Bool? = nil,
+        isExpense: Bool,
         color: Color = .green,
         showAverageBar: Bool = false,
         alwaysShowYmarks: Bool = true
     ) {
         self.timeSeriesData = TimeSeriesTransactionData(
-            include: isExpense == nil ? .all : isExpense! ? .expense : .income,
+            include: isExpense ? .expense : .income,
             timeframe: .total,
             category: category
         )
