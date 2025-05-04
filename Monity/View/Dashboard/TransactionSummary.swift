@@ -152,7 +152,6 @@ fileprivate struct TransactionSummaryPage: View {
                 VStack(alignment: .leading) {
                     TransactionBarChart()
                         .frame(minHeight: 300)
-                        .padding(.bottom)
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
