@@ -146,39 +146,20 @@ fileprivate struct TransactionCategoryList: View {
 
 
 fileprivate struct TransactionSummaryPage: View {
-//    @State private var showAverageBar: Bool = false
-    @StateObject private var content = AverageMonthlyChartViewModel.shared
-    
     var body: some View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    TransactionBarChart(
-//                        isExpense: content.showingExpenses,
-//                        color: content.showingExpenses ? .red : .green,
-//                        showAverageBar: showAverageBar
-                    )
-                    .frame(minHeight: 300)
-                    .padding(.bottom)
-//                    Picker("", selection: $content.showingExpenses) {
-//                        Text("Expenses").tag(true)
-//                        Text("income.plural").tag(false)
-//                    }
-//                    .pickerStyle(.segmented)
+                    TransactionBarChart()
+                        .frame(minHeight: 300)
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
             }
-//            Section {
-//                Toggle("Show average", isOn: $showAverageBar)
-//            }
             
             Section("Categories") {
                 TransactionCategoryList()
             }
-        }
-        .onChange(of: content.showingExpenses) { _ in
-            Haptics.shared.play(.soft)
         }
         .navigationTitle("Transactions")
     }

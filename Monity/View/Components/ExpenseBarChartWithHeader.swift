@@ -9,27 +9,82 @@ import SwiftUI
 import Charts
 import Accelerate
 
+fileprivate struct CompactCurrencyAxisLabel: View {
+    enum CurrencySymbolPlacement {
+        case prefix
+        case suffix
+    }
+    
+    let value: Double
+    let currencyCode: String
+
+    var body: some View {
+        let symbol = Self.currencySymbol(for: currencyCode)
+        let placement = Self.getCurrencySymbolPlacement(for: currencyCode)
+
+        let compact = value.formatted(.number
+            .locale(Locale(identifier: "en_US"))
+            .notation(.compactName))
+
+        let label: String = {
+            switch placement {
+            case .prefix: return symbol + compact
+            case .suffix: return compact + " " + symbol
+            }
+        }()
+
+        Text(label)
+    }
+
+    private static func getCurrencySymbolPlacement(for currencyCode: String) -> CurrencySymbolPlacement {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+
+        if let example = formatter.string(from: 1.0),
+           let symbol = formatter.currencySymbol {
+            return example.hasPrefix(symbol) ? .prefix : .suffix
+        }
+
+        return .suffix
+    }
+
+    private static func currencySymbol(for currencyCode: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+
+        if let _ = formatter.string(from: 1),
+           let symbol = formatter.currencySymbol {
+            return symbol
+        }
+
+        return currencyCode
+    }
+}
+
 struct TransactionBarChart: View {
     typealias TimeSeriesGroup = (type: String, data: TimeSeriesTransactionData.Data)
     typealias TimeSeriesGroupElement = (expense: TimeSeriesTransactionData.DataPoint, income: TimeSeriesTransactionData.DataPoint, date: Date)
+    
     @State private var selectedElement: TimeSeriesGroupElement?
     @State private var dragGestureTick: Double = 0
     @State private var selectedLowerBoundDate: Date
     @State private var isDragging = false
-    @ObservedObject private var timeSeriesData: TimeSeriesTransactionData
+    @ObservedObject private var timeSeriesIncome: TimeSeriesTransactionData
     @ObservedObject private var timeSeriesExpenses: TimeSeriesTransactionData
     
     var groupedData: [TimeSeriesGroup] {
         return [
-            (type: String(localized: "income.plural"), data: self.timeSeriesData.data),
+            (type: String(localized: "income.plural"), data: self.timeSeriesIncome.data),
             (type: String(localized: "Expenses"), data: self.timeSeriesExpenses.data)
         ]
     }
-    
+
     init(
         category: TransactionCategory? = nil
     ) {
-        self.timeSeriesData = TimeSeriesTransactionData(
+        self.timeSeriesIncome = TimeSeriesTransactionData(
             include: .income,
             timeframe: .total,
             category: category
@@ -42,25 +97,25 @@ struct TransactionBarChart: View {
         let oneYearAgo = Calendar.current.date(byAdding: DateComponents(month: -6), to: Date())!
         self._selectedLowerBoundDate = State(initialValue: oneYearAgo)
     }
-    
+
     private var slicedGroupedData: [(type: String, data: [TimeSeriesTransactionData.DataPoint])] {
         groupedData.map { (type: String, data: TimeSeriesTransactionData.Data) in
             (type: type, data: data.filter { $0.date > selectedLowerBoundDate && $0.date <= upperBoundDate})
         }
     }
-    
+
     private var upperBoundDate: Date {
         Calendar.current.date(byAdding: DateComponents(month: 6), to: selectedLowerBoundDate)!
     }
-    
+
     var timeframeString: String {
         (slicedGroupedData[0].data.first?.date.formatted(.dateTime.year().month()) ?? "") + " - " + (slicedGroupedData[0].data.last?.date.formatted(.dateTime.year().month()) ?? "")
     }
-    
+
     var totalValue: (income: Double, expenses: Double) {
         (income: vDSP.sum(slicedGroupedData[0].data.map { $0.value }), expenses: vDSP.sum(slicedGroupedData[1].data.map { $0.value }))
     }
-    
+
     @ViewBuilder
     var chartHeader: some View {
         if let selectedElement {
@@ -96,7 +151,7 @@ struct TransactionBarChart: View {
             .animation(.none, value: timeframeString)
         }
     }
-    
+
     func barChartOpacity(for dp: TimeSeriesTransactionData.DataPoint) -> CGFloat {
         let somethingIsSelected: Bool = selectedElement != nil
         let dpIsCurrentlySelected: Bool = somethingIsSelected && dp.date.isSameMonthAs(selectedElement!.date)
@@ -110,7 +165,7 @@ struct TransactionBarChart: View {
         // Nothing is currently selected
         return 1
     }
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             chartHeader
@@ -130,16 +185,20 @@ struct TransactionBarChart: View {
             ])
             .chartYAxis {
                 AxisMarks { value in
-                    let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
-                    AxisGridLine()
-//                    if selectedElement != nil || isDragging {
-                    AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
-//                    }
+                    if let doubleValue = value.as(Double.self) {
+                        AxisGridLine()
+                        if doubleValue != 0 {
+                            AxisValueLabel {
+                                let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency) ?? "EUR"
+                                CompactCurrencyAxisLabel(value: doubleValue, currencyCode: currencyCode)
+                            }
+                        }
+                    }
                 }
             }
             .chartXAxis {
                 AxisMarks(values: .stride(by: .month)) { value in
-                    AxisValueLabel(format: .dateTime.month(.narrow))
+                    AxisValueLabel(format: .dateTime.month(.abbreviated))
                 }
             }
             .chartOverlay { proxy in
@@ -168,13 +227,13 @@ struct TransactionBarChart: View {
                                   selectedElement = element
                               }
                           }
-                          
+
                       }
                         .exclusively(before: DragGesture().onChanged { value in
                             withAnimation {
                                 isDragging = true
                             }
-                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedGroupedData[0].data.count * 2) + 4
+                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedGroupedData[0].data.count ) + 4
                             let dragDiff = value.location.x - value.startLocation.x
                             let dragAmount = (dragDiff / barWidth).rounded()
                             if (dragAmount != dragGestureTick) {
@@ -197,12 +256,9 @@ struct TransactionBarChart: View {
                   )
               }
             }
-//            .onChange(of: data) { newValue in
-//                selectedElement = nil
-//            }
         }
     }
-    
+
     private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> TimeSeriesGroupElement? {
       let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
         var incomeDP: TimeSeriesTransactionData.DataPoint? = nil
@@ -226,7 +282,7 @@ struct TransactionBarChart: View {
         }
       return nil
     }
-    
+
     private func dragChartRight() -> Bool {
         if (slicedGroupedData[0].data.first?.date == groupedData[0].data.first?.date) {
             return false
@@ -238,7 +294,7 @@ struct TransactionBarChart: View {
         selectedLowerBoundDate = newVal
         return true
     }
-    
+
     private func dragChartLeft() -> Bool {
         if (upperBoundDate.isSameMonthAs(Date())) {
             return false
@@ -246,7 +302,7 @@ struct TransactionBarChart: View {
         selectedLowerBoundDate = Calendar.current.date(byAdding: DateComponents(month: 1), to: selectedLowerBoundDate) ?? Date()
         return true
     }
-    
+
     private func drag(direction: Double) -> Bool {
         if (direction > 0) {
             return dragChartRight()
@@ -272,13 +328,13 @@ struct ExpenseBarChartWithHeader: View {
     
     init(
         category: TransactionCategory? = nil,
-        isExpense: Bool? = nil,
+        isExpense: Bool,
         color: Color = .green,
         showAverageBar: Bool = false,
         alwaysShowYmarks: Bool = true
     ) {
         self.timeSeriesData = TimeSeriesTransactionData(
-            include: isExpense == nil ? .all : isExpense! ? .expense : .income,
+            include: isExpense ? .expense : .income,
             timeframe: .total,
             category: category
         )
@@ -370,10 +426,14 @@ struct ExpenseBarChartWithHeader: View {
             }
             .chartYAxis {
                 AxisMarks { value in
-                    let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency)
-                    AxisGridLine()
-                    if selectedElement != nil || isDragging || alwaysShowYmarks {
-                        AxisValueLabel(format: .currency(code: currencyCode ?? "EUR"))
+                    if let doubleValue = value.as(Double.self) {
+                        AxisGridLine()
+                        if doubleValue != 0 && (selectedElement != nil || isDragging || alwaysShowYmarks) {
+                            let currencyCode = UserDefaults.standard.string(forKey: AppStorageKeys.selectedCurrency) ?? "USD"
+                            AxisValueLabel {
+                                CompactCurrencyAxisLabel(value: doubleValue, currencyCode: currencyCode)
+                            }
+                        }
                     }
                 }
             }
