@@ -73,7 +73,7 @@ struct MainTabView: View {
                 showOnboarding = true
             }
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase != .active {
                 sceneDelegate.show()
             } else {

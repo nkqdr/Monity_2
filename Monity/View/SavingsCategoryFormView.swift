@@ -79,9 +79,9 @@ struct SavingsCategoryFormView: View {
                             .keyboardType(.decimalPad)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: 115)
-                            .onChange(of: editor.interestRate) {
-                                editor.interestRate = Double(String($0).prefix(5))!
-                            }
+//                            .onChange(of: editor.interestRate) {
+//                                editor.interestRate = Double(String($0).prefix(5))!
+//                            }
                         Text("% p.a.").foregroundStyle(.secondary).padding(.trailing, 6)
                     }
                     .font(.headline)

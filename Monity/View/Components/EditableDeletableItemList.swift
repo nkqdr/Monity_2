@@ -55,7 +55,7 @@ struct EditableDeletableItemList<ListItem, ListContent, SheetContent>: View wher
                 .presentationDetents(presentationDetents)
                 .presentationDragIndicator(.hidden)
         }
-        .onChange(of: showAddItemSheet) { newValue in
+        .onChange(of: showAddItemSheet) { oldValue, newValue in
             if !newValue {
                 viewModel.currentItem = nil
             }

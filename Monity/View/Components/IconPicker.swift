@@ -113,7 +113,7 @@ fileprivate struct IconPickerDetail: View {
             self.allIcons = getAllSymbols()
             self.filteredIcons = self.allIcons
         }
-        .onChange(of: searchText) { newValue in
+        .onChange(of: searchText) { oldValue, newValue in
             DispatchQueue.global(qos: .userInteractive).async {
                 if searchText.isEmpty {
                     self.filteredIcons = allIcons

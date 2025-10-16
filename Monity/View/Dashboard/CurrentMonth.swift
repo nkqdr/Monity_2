@@ -68,7 +68,7 @@ struct CurrentMonthOverviewTile: View {
             }
         }
         .buttonStyle(.plain)
-        .onChange(of: monthlyLimit) { newValue in
+        .onChange(of: monthlyLimit) { oldValue, newValue in
             remainingAmount = newValue - content.spentThisMonth
         }
         .onAppear {
@@ -143,7 +143,7 @@ fileprivate struct CurrentMonthDetailView: View {
             }
         }
         .monthYearSelectorSheet($showDateSelectorSheet, selection: $content.selectedDate)
-        .onChange(of: monthlyLimit) { newValue in
+        .onChange(of: monthlyLimit) { oldValue, newValue in
             remainingAmount = newValue - content.spentThisMonth
         }
         .onAppear {
