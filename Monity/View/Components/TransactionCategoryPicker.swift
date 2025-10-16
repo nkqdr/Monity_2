@@ -112,35 +112,40 @@ struct TransactionCategoryPicker: View {
     }
     
     var body: some View {
-        if sortedCategories.isEmpty {
-            Text("No categories found")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .padding(.leading)
-        } else {
-            ScrollView(.horizontal, showsIndicators: false) {
-                TagView(spacing: 4) {
-                    ForEach(sortedCategories) { category in
-                        CategoryLabel(category: category, selectedCategory: $selection)
-                    }
-                    Button {
-                        showAddCategory.toggle()
-                    } label: {
-                        Label("New", systemImage: "plus")
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.accentColor)
+        VStack {
+            if sortedCategories.isEmpty {
+                Button {
+                    showAddCategory.toggle()
+                } label: {
+                    Label("New", systemImage: "plus")
                 }
-                .frame(minHeight: 80)
-            }
-            .sheet(isPresented: $showAddCategory) {
-                TransactionCategoryForm(
-                    editor: TransactionCategoryEditor()
-                ) { category in
-                    self.selection = category
-                }
+                .buttonStyle(.bordered)
                 .tint(.accentColor)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    TagView(spacing: 4) {
+                        ForEach(sortedCategories) { category in
+                            CategoryLabel(category: category, selectedCategory: $selection)
+                        }
+                        Button {
+                            showAddCategory.toggle()
+                        } label: {
+                            Label("New", systemImage: "plus")
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(.accentColor)
+                    }
+                    .frame(minHeight: 80)
+                }
             }
+        }
+        .sheet(isPresented: $showAddCategory) {
+            TransactionCategoryForm(
+                editor: TransactionCategoryEditor()
+            ) { category in
+                self.selection = category
+            }
+            .tint(.accentColor)
         }
     }
 }

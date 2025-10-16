@@ -130,15 +130,7 @@ struct TransactionsList: View {
         .customNavigationDestination(item: $categoryShown) { category in
             TransactionCategoryShow(category: category, showExpenses: nil)
         }
-        .sheet(item: $editedTransaction) { transaction in
-            AddTransactionView(editor: TransactionEditor(transaction: transaction))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.hidden)
-        }
-        .sheet(isPresented: $showAddTransactionView) {
-            AddTransactionView(editor: TransactionEditor(transaction: nil))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.hidden)
-        }
+        .transactionFormSheet(transaction: $editedTransaction)
+        .transactionFormSheet(isPresented: $showAddTransactionView)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  AddTransactionView.swift
+//  TransactionForm.swift
 //  Monity
 //
 //  Created by Niklas Kuder on 09.10.22.
@@ -7,18 +7,15 @@
 
 import SwiftUI
 
-struct AddTransactionView: View {
+fileprivate struct TransactionForm: View {
     @Environment(\.dismiss) var dismiss
     @FocusState var focusedField: Field?
     @StateObject var editor: TransactionEditor
+    @Binding var accentColor: Color
     
     enum Field: Hashable {
         case amount
         case text
-    }
-    
-    var accentColor: Color {
-        editor.isExpense ? .red : .green
     }
     
     var body: some View {
@@ -36,12 +33,10 @@ struct AddTransactionView: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
                 
                 Section {
                     TransactionCategoryPicker(selection: $editor.selectedCategory)
-                        .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
                         .tint(accentColor)
                 } header: {
@@ -94,12 +89,59 @@ struct AddTransactionView: View {
                     }
                 }
             }
+            .onChange(of: editor.isExpense) {
+                if editor.isExpense {
+                    accentColor = .red
+                } else {
+                    accentColor = .green
+                }
+            }
         }
+    }
+}
+
+fileprivate struct CreateTransactionFormModifier: ViewModifier {
+    @State var accentColor: Color = .red
+    @Binding var isPresented: Bool
+    
+    func body(content: Content) -> some View {
+        content.sheet(isPresented: $isPresented) {
+            TransactionForm(
+                editor: TransactionEditor(transaction: nil),
+                accentColor: $accentColor
+            )
+                .presentationDragIndicator(.hidden)
+        }
+    }
+}
+
+fileprivate struct EditTransactionFormModifier: ViewModifier {
+    @State var accentColor: Color = .red
+    @Binding var transaction: Transaction?
+    
+    func body(content: Content) -> some View {
+        content.sheet(item: $transaction) { t in
+            TransactionForm(
+                editor: TransactionEditor(transaction: t),
+                accentColor: $accentColor
+            )
+                .presentationDragIndicator(.hidden)
+        }
+    }
+}
+
+extension View {
+    func transactionFormSheet(isPresented: Binding<Bool>) -> some View {
+        self.modifier(CreateTransactionFormModifier(isPresented: isPresented))
+    }
+    
+    func transactionFormSheet(transaction: Binding<Transaction?>) -> some View {
+        self.modifier(EditTransactionFormModifier(transaction: transaction))
     }
 }
 
 struct AddTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTransactionView(editor: TransactionEditor())
+        TransactionForm(editor: TransactionEditor(), accentColor: .constant(.red))
     }
 }
