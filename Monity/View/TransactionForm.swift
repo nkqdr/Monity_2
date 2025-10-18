@@ -90,11 +90,7 @@ fileprivate struct TransactionForm: View {
                 }
             }
             .onChange(of: editor.isExpense) {
-                if editor.isExpense {
-                    accentColor = .red
-                } else {
-                    accentColor = .green
-                }
+                accentColor = editor.isExpense ? .red : .green
             }
         }
     }
