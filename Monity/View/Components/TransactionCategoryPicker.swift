@@ -85,13 +85,16 @@ fileprivate struct CategoryLabel: View {
             }
             Haptics.shared.play(.soft)
         } label: {
-            Label {
-                Text(category.wrappedName)
-            } icon: {
-                if let icon = category.iconName {
+            if let icon = category.iconName {
+                Label {
+                    Text(category.wrappedName)
+                } icon: {
                     Image(systemName: icon).imageScale(.small)
                 }
+            } else {
+                Text(category.wrappedName)
             }
+            
         }
         .buttonStyle(for: isSelected)
     }

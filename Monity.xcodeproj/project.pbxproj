@@ -15,6 +15,7 @@
 		600C39B928F54E9800688149 /* MonthYearPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600C39B828F54E9800688149 /* MonthYearPicker.swift */; };
 		600D8850291698B0002BE3F5 /* AssetAllocationPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600D884F291698B0002BE3F5 /* AssetAllocationPieChart.swift */; };
 		60100B202ABEE69A0057ECA4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */; };
+		601484612E7AB70F0029BDEC /* MonityIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 601484602E7AB70E0029BDEC /* MonityIcon.icon */; };
 		6014FF4528F96E7F00413CE2 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014FF4428F96E7F00413CE2 /* Structures.swift */; };
 		6019B5652B3B3A5D00EF9138 /* EOY_Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6019B5642B3B3A5D00EF9138 /* EOY_Review.swift */; };
 		601E84102A5A0B7000067A65 /* CSVRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600921EE290EB3E4004897F7 /* CSVRepresentable.swift */; };
@@ -138,6 +139,7 @@
 		600C39B828F54E9800688149 /* MonthYearPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthYearPicker.swift; sourceTree = "<group>"; };
 		600D884F291698B0002BE3F5 /* AssetAllocationPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAllocationPieChart.swift; sourceTree = "<group>"; };
 		60100B1F2ABEE69A0057ECA4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		601484602E7AB70E0029BDEC /* MonityIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = MonityIcon.icon; sourceTree = "<group>"; };
 		6014FF4428F96E7F00413CE2 /* Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		6019B5642B3B3A5D00EF9138 /* EOY_Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOY_Review.swift; sourceTree = "<group>"; };
 		602026AF2C399FDC005A6913 /* TransactionDateGroupedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDateGroupedList.swift; sourceTree = "<group>"; };
@@ -384,6 +386,7 @@
 		60BD9F0528F35B6F001FF5FF = {
 			isa = PBXGroup;
 			children = (
+				601484602E7AB70E0029BDEC /* MonityIcon.icon */,
 				60BD9F1028F35B6F001FF5FF /* Monity */,
 				60BD9F2728F35B70001FF5FF /* MonityTests */,
 				60BD9F0F28F35B6F001FF5FF /* Products */,
@@ -650,6 +653,7 @@
 				60BD9F1928F35B70001FF5FF /* Preview Assets.xcassets in Resources */,
 				608B80C029B656CC00047F3D /* Localizable.stringsdict in Resources */,
 				60EEF4DD2C457A6A00026A54 /* CategoryIconList.plist in Resources */,
+				601484612E7AB70F0029BDEC /* MonityIcon.icon in Resources */,
 				608C4D36290D640100FFB45A /* Localizable.strings in Resources */,
 				60BD9F1628F35B70001FF5FF /* Assets.xcassets in Resources */,
 			);
@@ -945,7 +949,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon 1";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MonityIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Monity/Monity.entitlements;
@@ -964,7 +968,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -986,7 +990,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon 1";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MonityIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Monity/Monity.entitlements;
@@ -1005,7 +1009,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1030,7 +1034,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1048,7 +1052,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niklaskuder.MonityTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

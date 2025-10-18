@@ -22,7 +22,6 @@ struct TransactionCategoryForm: View {
             Form {
                 TextField("Category name", text: $editor.name)
                     .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
                     .font(.largeTitle.bold())
                     .focused($focusedField, equals: .name)
                 Section {
@@ -36,28 +35,28 @@ struct TransactionCategoryForm: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         let category = editor.save()
                         onSave(category)
                         dismiss()
                     }
+                    .buttonStyle(.glassProminent)
                     .disabled(!editor.isValid)
                 }
-                ToolbarItem(placement: .keyboard) {
-                    Button {
-                        focusedField = nil
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                }
             }
+            .closeKeyboardToolbar()
         }
+    }
+}
+
+struct TransactionCategoryForm_Previews: PreviewProvider {
+    static var previews: some View {
+        TransactionCategoryForm(editor: TransactionCategoryEditor())
     }
 }

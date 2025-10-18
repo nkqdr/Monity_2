@@ -27,10 +27,10 @@ struct CurrencyInputField: View {
         ZStack(alignment: .leadingFirstTextBaseline) {
             Text(text)
                 .hidden()
-                .padding(.horizontal, showFocusedBackground ? 4 : 0)
-                .padding(.vertical, 4)
+                .padding(.horizontal, showFocusedBackground ? 8 : 0)
+                .padding(.vertical, 8)
                 .background {
-                    RoundedRectangle(cornerRadius: 5)
+                    Capsule()
                         .opacity(showFocusedBackground ? 0.2 : 0)
                         .tint(nil)
                 }
@@ -46,8 +46,8 @@ struct CurrencyInputField: View {
                     prevText = text
                 }
                 .tint(.clear)
-                .padding(.horizontal, showFocusedBackground ? 4 : 0)
-                .padding(.vertical, 4)
+                .padding(.horizontal, showFocusedBackground ? 8 : 0)
+                .padding(.vertical, 8)
         }
         .onChange(of: isFocused) {
             withAnimation {

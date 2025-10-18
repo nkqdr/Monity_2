@@ -23,42 +23,56 @@ struct MonthYearPickerForm: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(label)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .textCase(.uppercase)
-                .padding([.top, .horizontal])
-            MonthYearPicker(dateSelection: $internalSelection)
-                .frame(height: 150)
-                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
-                .padding(.horizontal)
-//            Button("Today") {
-//                withAnimation(.spring()) {
-//                    internalSelection = Calendar.current.dateComponents([.month, .year], from: Date())
-//                }
-//            }
-//            .buttonStyle(.bordered)
-            Spacer()
-            HStack {
-                Button("Reset", role: .destructive) {
-                    isPresented = false
-                    withAnimation(.spring()) {
-                        selection = Calendar.current.dateComponents([.month, .year], from: Date())
-                    }
-                }
-                .buttonStyle(.borderless)
-                Spacer()
-                Button("Apply") {
-                    isPresented = false
-                    withAnimation(.spring()) {
-                        selection = internalSelection
-                    }
-                    onApply()
-                }
-                .buttonStyle(.borderedProminent)
+        NavigationStack {
+            VStack(alignment: .leading) {
+                Text(label)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .textCase(.uppercase)
+                    .padding([.top, .horizontal])
+                MonthYearPicker(dateSelection: $internalSelection)
+//                    .frame(height: 150)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal)
+    //            Button("Today") {
+    //                withAnimation(.spring()) {
+    //                    internalSelection = Calendar.current.dateComponents([.month, .year], from: Date())
+    //                }
+    //            }
+    //            .buttonStyle(.bordered)
             }
-            .padding()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
+                        isPresented = false
+                    }
+                }
+                ToolbarSpacer(placement: .cancellationAction)
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Reset", systemImage: "arrow.counterclockwise") {
+                        isPresented = false
+                        withAnimation(.spring()) {
+                            selection = Calendar.current.dateComponents([.month, .year], from: Date())
+                        }
+                        onApply()
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Apply", systemImage: "checkmark") {
+                        isPresented = false
+                        withAnimation(.spring()) {
+                            selection = internalSelection
+                        }
+                        onApply()
+                    }
+                    .buttonStyle(.glassProminent)
+                }
+            }
         }
+        
     }
+}
+
+#Preview {
+    TransactionsView()
 }

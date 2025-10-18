@@ -43,7 +43,6 @@ struct SavingsEntryFormView: View {
                     .focused($amountInputIsFocused)
                     .font(.title.bold())
                     .foregroundStyle(textColor)
-                    .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
                     .autocorrectionDisabled()
 
@@ -61,13 +60,13 @@ struct SavingsEntryFormView: View {
                 amountInputIsFocused = true
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         withAnimation {
                             DispatchQueue.main.async {
                                 editor.save()
@@ -75,11 +74,18 @@ struct SavingsEntryFormView: View {
                         }
                         dismiss()
                     }
+                    .buttonStyle(.glassProminent)
                     .disabled(!editor.isValid)
                 }
             }
             .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+}
+
+struct SavingsEntryFormView_Previews: PreviewProvider {
+    static var previews: some View {
+        SavingsEntryFormView(editor: SavingsEditor(entry: nil))
     }
 }
