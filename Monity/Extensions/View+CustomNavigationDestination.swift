@@ -24,10 +24,10 @@ fileprivate struct CustomNavigationDestinationModifier<D, C>: ViewModifier where
                 destination(d)
             }
         }
-        .onChange(of: item) { newValue in
+        .onChange(of: item) { oldValue, newValue in
             self.isPresented = newValue != nil
         }
-        .onChange(of: isPresented) { newValue in
+        .onChange(of: isPresented) {
             if !isPresented {
                 item = nil
             }

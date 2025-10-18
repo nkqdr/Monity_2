@@ -38,7 +38,7 @@ struct DashboardView: View {
             }
             .navigationTitle("Dashboard")
         }
-        .onChange(of: scenePhase) { newValue in
+        .onChange(of: scenePhase) {
             if (scenePhase == .active) {
                 currentDate = Date()
             }

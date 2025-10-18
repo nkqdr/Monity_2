@@ -169,7 +169,7 @@ struct SavingsDPLineChart: View {
             }
             actualChart
         }
-        .onChange(of: self.dataPoints) { dps in
+        .onChange(of: self.dataPoints) { oldValue, dps in
             self.selectedElement = nil
             self.localDataPoints = dps
             animateLineChart()
@@ -193,7 +193,8 @@ struct SavingsDPLineChart: View {
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
       // Figure out the X position by offseting gesture location with chart frame
-      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+        guard let plotFrame = proxy.plotFrame else { return nil }
+        let relativeXPosition = location.x - geometry[plotFrame].origin.x
       // Use value(atX:) to find plotted value for the given X axis position.
       // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
         if let date: Date = proxy.value(atX: relativeXPosition) {
@@ -228,7 +229,7 @@ struct SavingsLineChart: View {
                 }
             }
             .pickerStyle(.segmented)
-            .onChange(of: viewModel.selectedTimeframe) { _ in
+            .onChange(of: viewModel.selectedTimeframe) {
                 Haptics.shared.play(.soft)
             }
             

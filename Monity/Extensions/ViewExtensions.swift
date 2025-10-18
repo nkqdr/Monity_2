@@ -47,14 +47,14 @@ extension View {
     
     func sync<T:Equatable>(_ published:Binding<T>, with binding:Binding<T>, delay: Double = 0) -> some View {
         self
-            .onChange(of: published.wrappedValue) { published in
+            .onChange(of: published.wrappedValue) { oldValue, newValue in
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    binding.wrappedValue = published
+                    binding.wrappedValue = newValue
                 }
             }
-            .onChange(of: binding.wrappedValue) { binding in
+            .onChange(of: binding.wrappedValue) { oldValue, newValue in
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    published.wrappedValue = binding
+                    published.wrappedValue = newValue
                 }
             }
     }
@@ -91,3 +91,4 @@ extension View {
         }
     }
 }
+

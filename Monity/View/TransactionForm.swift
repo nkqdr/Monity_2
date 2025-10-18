@@ -88,12 +88,8 @@ fileprivate struct TransactionForm: View {
                     }
                 }
             }
-        }
-        .onChange(of: editor.isExpense) {
-            if editor.isExpense {
-                accentColor = .red
-            } else {
-                accentColor = .green
+            .onChange(of: editor.isExpense) {
+                accentColor = editor.isExpense ? .red : .green
             }
         }
     }

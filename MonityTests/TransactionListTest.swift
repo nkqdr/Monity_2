@@ -9,7 +9,7 @@ import XCTest
 @testable import Monity
 
 final class TransactionListTest: XCTestCase {
-    let persistenceController = PersistenceController.preview
+    let persistenceController = PersistenceController.testing
     var transactions: [Transaction] = []
     var calendar: Calendar = Calendar.current
     var today: Date = Date().removeTimeStamp!

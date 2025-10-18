@@ -233,7 +233,7 @@ struct TransactionBarChart: View {
                             withAnimation {
                                 isDragging = true
                             }
-                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedGroupedData[0].data.count ) + 4
+                            let barWidth = Double(proxy.plotSize.width) / Double(slicedGroupedData[0].data.count ) + 4
                             let dragDiff = value.location.x - value.startLocation.x
                             let dragAmount = (dragDiff / barWidth).rounded()
                             if (dragAmount != dragGestureTick) {
@@ -260,7 +260,8 @@ struct TransactionBarChart: View {
     }
 
     private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> TimeSeriesGroupElement? {
-      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+        guard let plotFrame = proxy.plotFrame else { return nil }
+        let relativeXPosition = location.x - geometry[plotFrame].origin.x
         var incomeDP: TimeSeriesTransactionData.DataPoint? = nil
         var expenseDP: TimeSeriesTransactionData.DataPoint? = nil
         if let date: Date = proxy.value(atX: relativeXPosition) {
@@ -472,7 +473,7 @@ struct ExpenseBarChartWithHeader: View {
                             withAnimation {
                                 isDragging = true
                             }
-                            let barWidth = Double(proxy.plotAreaSize.width) / Double(slicedData.count) + 4
+                            let barWidth = Double(proxy.plotSize.width) / Double(slicedData.count) + 4
                             let dragDiff = value.location.x - value.startLocation.x
                             let dragAmount = (dragDiff / barWidth).rounded()
                             if (dragAmount != dragGestureTick) {
@@ -495,14 +496,15 @@ struct ExpenseBarChartWithHeader: View {
                   )
               }
             }
-            .onChange(of: data) { newValue in
+            .onChange(of: data) {
                 selectedElement = nil
             }
         }
     }
     
     private func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> TimeSeriesTransactionData.DataPoint? {
-      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+        guard let plotFrame = proxy.plotFrame else { return nil }
+      let relativeXPosition = location.x - geometry[plotFrame].origin.x
         if let date: Date = proxy.value(atX: relativeXPosition) {
           for dataPoint in slicedData {
               if dataPoint.date.isSameMonthAs(date) {
