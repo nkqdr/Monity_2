@@ -37,7 +37,7 @@ struct CurrencyInputField: View {
             TextField("", text: $text)
                 .focused($isFocused)
                 .keyboardType(.numberPad)
-                .onChange(of: text) { newValue in
+                .onChange(of: text) {
                     formatText()
                     prevText = text
                 }
@@ -49,9 +49,9 @@ struct CurrencyInputField: View {
                 .padding(.horizontal, showFocusedBackground ? 4 : 0)
                 .padding(.vertical, 4)
         }
-        .onChange(of: isFocused) { newValue in
+        .onChange(of: isFocused) {
             withAnimation {
-                showFocusedBackground = newValue
+                showFocusedBackground = isFocused
             }
         }
         .fixedSize()

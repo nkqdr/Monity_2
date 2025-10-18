@@ -9,5 +9,7 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Monity saves images to your photo library to let you export and share reports.</string>
 </dict>
 </plist>

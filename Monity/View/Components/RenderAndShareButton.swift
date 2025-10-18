@@ -50,7 +50,7 @@ struct RenderAndShareButton<C>: View where C: View {
         .onAppear {
             renderImage(with: colorScheme)
         }
-        .onChange(of: colorScheme) { newScheme in
+        .onChange(of: colorScheme) { oldScheme, newScheme in
             renderImage(with: newScheme)
         }
     }

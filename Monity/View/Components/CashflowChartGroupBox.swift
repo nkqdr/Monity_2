@@ -114,21 +114,23 @@ struct CashflowChartGroupBox: View {
                     Spacer()
                 }
                 Spacer()
-            GeometryReader { geo in
-              if let selectedElement {
-                // Map date to chart X position
-                  let startPositionX = proxy.position(forX: selectedElement.date) ?? 0
-                // Offset the chart X position by chart frame
-                let midStartPositionX = startPositionX + geo[proxy.plotAreaFrame].origin.x
-                let lineHeight = geo[proxy.plotAreaFrame].maxY
+                if let plotFrame = proxy.plotFrame {
+                    GeometryReader { geo in
+                      if let selectedElement {
+                        // Map date to chart X position
+                          let startPositionX = proxy.position(forX: selectedElement.date) ?? 0
+                        // Offset the chart X position by chart frame
+                        let midStartPositionX = startPositionX + geo[plotFrame].origin.x
+                        let lineHeight = geo[plotFrame].maxY
 
-                // Draw the scan line
-                Rectangle()
-                  .fill(.quaternary)
-                  .frame(width: 2, height: lineHeight)
-                  .position(x: midStartPositionX, y: lineHeight / 2)
-              }
-            }
+                        // Draw the scan line
+                        Rectangle()
+                          .fill(.quaternary)
+                          .frame(width: 2, height: lineHeight)
+                          .position(x: midStartPositionX, y: lineHeight / 2)
+                      }
+                    }
+                }
           }
           .foregroundColor(nil)
         }
@@ -142,7 +144,8 @@ struct CashflowChartGroupBox: View {
     
     func findElement(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ValueTimeDataPoint? {
       // Figure out the X position by offseting gesture location with chart frame
-      let relativeXPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+        guard let plotFrame = proxy.plotFrame else { return nil }
+        let relativeXPosition = location.x - geometry[plotFrame].origin.x
       // Use value(atX:) to find plotted value for the given X axis position.
       // Since FoodIntake chart plots `date` on the X axis, we'll get a Date back.
       if let date = proxy.value(atX: relativeXPosition) as Date? {

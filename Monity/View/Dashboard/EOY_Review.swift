@@ -502,7 +502,7 @@ fileprivate struct ReviewProgressButtons: View {
             .padding(.horizontal, 25)
             .padding(.bottom, 8)
         }
-        .onChange(of: content.currentlyDisplayedTabIndex) { _ in
+        .onChange(of: content.currentlyDisplayedTabIndex) {
             renderImage()
             playHaptics()
         }

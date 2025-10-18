@@ -124,7 +124,7 @@ struct SavingsCategoryListView: View {
                             .frame(minWidth: 100, alignment: .leading)
                         Spacer()
                         Slider(value: $predictionYearsRange, in: 1...50, step: 1)
-                            .onChange(of: predictionYearsRange) { _ in
+                            .onChange(of: predictionYearsRange) {
                                 Haptics.shared.play(.soft)
                             }
                     }

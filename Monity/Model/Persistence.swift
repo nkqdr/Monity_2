@@ -10,6 +10,7 @@ import CoreData
 class PersistenceController {
     static let shared = PersistenceController()
     static let preview = PersistenceController(inMemory: true)
+    static let testing = PersistenceController(inMemory: true)
     
     static var managedObjectModel: NSManagedObjectModel = {
         let bundle = Bundle(for: PersistenceController.self)
