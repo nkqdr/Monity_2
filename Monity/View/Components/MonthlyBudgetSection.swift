@@ -91,29 +91,23 @@ struct SetLimitSheet: View {
                 limitInputIsFocused = true
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         withAnimation {
                             UserDefaults.standard.set(tmpMonthlyLimit, forKey: AppStorageKeys.monthlyLimit)
                         }
                         self.onLimitSet(tmpMonthlyLimit)
                         dismiss()
                     }
+                    .buttonStyle(.glassProminent)
                 }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel", role: .cancel, action: {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark", role: .cancel, action: {
                         dismiss()
                     })
                 }
-                ToolbarItem(placement: .keyboard) {
-                    Button {
-                        limitInputIsFocused = false
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                }
             }
+            .closeKeyboardToolbar()
         }
     }
 }

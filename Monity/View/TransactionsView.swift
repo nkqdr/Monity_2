@@ -38,14 +38,14 @@ struct TransactionsView: View {
             .navigationTitle(Calendar.current.date(from: listContent.selectedDateComps)?.formatted(.dateTime.year().month()) ?? "Transactions")
             .listStyle(.insetGrouped)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button {
                         showFilterSettings.toggle()
                     } label: {
                         Image(systemName: isCurrentMonthSelected ? "tray.full" : "tray.full.fill")
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showAddTransactionView.toggle()
                     } label: {

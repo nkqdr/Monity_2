@@ -80,7 +80,6 @@ struct RecurringTransactionsDetailView: View {
                     .padding(.vertical)
             }
             .listRowBackground(Color(UIColor.systemGroupedBackground))
-            .listRowInsets(EdgeInsets())
             Section(header: savingsCategoriesHeader(create)) {
                 ForEach(content.activeTransactions) { entry in
                     EditableDeletableItem(
@@ -102,7 +101,7 @@ struct RecurringTransactionsDetailView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Close") {
+                            Button("Close", systemImage: "xmark") {
                                 showArchivedTransactions.toggle()
                             }
                         }

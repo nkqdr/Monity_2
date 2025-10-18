@@ -20,6 +20,21 @@ extension FormatStyle where Self == FloatingPointFormatStyle<Double> {
 }
 
 extension View {
+    func closeKeyboardToolbar() -> some View {
+        self.toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button {
+                    self.hideKeyboard()
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
+                }
+            }
+        }
+    }
+}
+
+extension View {
     #if canImport(UIKit)
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

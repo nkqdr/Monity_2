@@ -25,11 +25,9 @@ struct RecurringTransactionFormView: View {
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .name)
                     .font(.title.bold())
-                    .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
                 Section("Kategorie") {
                     TransactionCategoryPicker(selection: $editor.category)
-                        .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
                 }
                 Section("Payment details") {
@@ -71,28 +69,20 @@ struct RecurringTransactionFormView: View {
             .navigationTitle(editor.navigationFormTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         editor.save()
                         dismiss()
                     }
-                }
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button {
-                            focusedField = nil
-                        } label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                        }
-                    }
+                    .buttonStyle(.glassProminent)
                 }
             }
+            .closeKeyboardToolbar()
         }
     }
 }

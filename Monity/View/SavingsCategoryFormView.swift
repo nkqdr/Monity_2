@@ -63,7 +63,6 @@ struct SavingsCategoryFormView: View {
             Form {
                 TextField("Category name", text: $editor.name)
                     .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
                     .font(.largeTitle.bold())
                     .focused($focusNameField)
                 Section {
@@ -94,16 +93,17 @@ struct SavingsCategoryFormView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         editor.save()
                         dismiss()
                     }
+                    .buttonStyle(.glassProminent)
                     .disabled(editor.disableSave)
                 }
             }

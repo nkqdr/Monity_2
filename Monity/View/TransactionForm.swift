@@ -60,34 +60,27 @@ fileprivate struct TransactionForm: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if editor.transaction == nil {
-                    focusedField = .amount                }
+                    focusedField = .amount
+                }
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save", systemImage: "checkmark") {
                         withAnimation {
                             editor.save()
                         }
                         dismiss()
                     }
                     .disabled(!editor.isValid)
-                }
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button {
-                            focusedField = nil
-                        } label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                        }
-                    }
+                    .buttonStyle(.glassProminent)
                 }
             }
+            .closeKeyboardToolbar()
             .onChange(of: editor.isExpense) {
                 accentColor = editor.isExpense ? .red : .green
             }
